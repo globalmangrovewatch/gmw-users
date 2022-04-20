@@ -8,7 +8,7 @@ function ProjectDetailsForm() {
   // form validation rules
   const validationSchema = Yup.object().shape({
     projectTitle: Yup.string().required('Project title is required'),
-    projectAims: Yup.string().required('Project aims are required')
+    projectAims: Yup.array().of(Yup.string()).required('Project aims are required')
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -19,6 +19,8 @@ function ProjectDetailsForm() {
   const onSubmit = (data: any) => console.log('data: ', data)
 
   const options = ['Restoration/Rehabilitation', 'Afforestation', 'Protection', 'Other']
+
+  console.log('aims: ', watch('projectAims'))
 
   return (
     <div className="project-details-form">
@@ -31,9 +33,20 @@ function ProjectDetailsForm() {
         </div>
         <div className={styles.formGroup}>
           <label>What is the overall aim for the project area?</label>
-          <input {...register('projectAims', { required: true })} />
-          {errors.projectAims?.message && <span>This field is required</span>}
+          {options.map((value) => (
+            <label key={value}>
+              <input
+                key={value}
+                type="checkbox"
+                value={value}
+                {...register('projectAims', { required: true })}
+              />
+              {value}
+            </label>
+          ))}
+          <div className={styles.invalid}>{errors.projectAims?.message}</div>
         </div>
+
         <input type="submit" />
       </form>
     </div>
