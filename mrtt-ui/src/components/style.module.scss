@@ -1,0 +1,11 @@
+@import '../styles/var';
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+}
+
+label {
+  margin-bottom: 0.5em;
+}
