@@ -54,11 +54,6 @@
     "lint-staged": "^12.4.0",
     "prettier": "^2.6.2"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "src/**/*.{json,md}": [
       "prettier --write"
@@ -67,5 +62,11 @@
       "prettier --write",
       "eslint --fix"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run lint && npm run test"
+    }
   }
 }
