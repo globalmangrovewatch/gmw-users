@@ -1,6 +1,6 @@
 import React from 'react'
 
-function App(): JSX.Element {
+function App() {
   return <div className="App">MRTT UI</div>
 }
 
