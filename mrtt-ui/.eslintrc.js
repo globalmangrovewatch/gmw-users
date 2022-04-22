@@ -5,13 +5,7 @@ module.exports = {
     node: true,
     jest: true
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-    'plugin:react-app/jest'
-  ],
+  extends: ['eslint:recommended', 'plugin:react/recommended', 'plugin:prettier/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -20,7 +14,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  plugins: ['react', '@typescript-eslint', 'react-hooks'],
+  plugins: ['react', 'react-hooks'],
   rules: {
     'react/react-in-jsx-scope': 'off'
   }
