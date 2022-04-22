@@ -56,7 +56,16 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run prettier:check"
+      "pre-commit": "npm run prettier"
     }
+  },
+  "lint-staged": {
+    "src/**/*.{json,md}": [
+      "prettier --write"
+    ],
+    "src/**/*.{js,jsx,tsx,ts}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   }
 }
