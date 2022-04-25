@@ -1,7 +1,11 @@
 import React from 'react'
 
 function App() {
-  return <div className="App">MRTT UI</div>
+  return (
+    <div className="App">
+      <h1>MRTT UI</h1>
+    </div>
+  )
 }
 
 export default App
