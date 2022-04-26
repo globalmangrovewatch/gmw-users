@@ -4,7 +4,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 // import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
+import { TextField, Checkbox, FormLabel } from '@mui/material'
 
 function ProjectDetailsForm() {
   // form validation rules
@@ -47,30 +47,16 @@ function ProjectDetailsForm() {
         </div>
         <div className={styles.formGroup}>
           <label>What is the overall aim for the project area?</label>
-          <Controller
-            name="projectAims"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField
-                required
-                id="outlined-required"
-                label="Required"
-                variant="outlined"
-                {...field}
-              />
-            )}
-          />
           {options.map((value) => (
-            <label key={value}>
-              <input
+            <FormLabel key={value}>
+              <Checkbox
                 key={value}
                 type="checkbox"
                 value={value}
                 {...register('projectAims', { required: true })}
               />
               {value}
-            </label>
+            </FormLabel>
           ))}
           <div className={styles.invalid}>{errors.projectAims?.message}</div>
           <div className={styles.formGroup}>
