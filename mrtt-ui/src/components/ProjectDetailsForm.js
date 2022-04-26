@@ -3,7 +3,7 @@ import styles from './style.module.scss'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-import { TextField, Checkbox, FormLabel, InputLabel, Select, MenuItem } from '@mui/material'
+import { TextField, Checkbox, FormLabel, InputLabel, Select, MenuItem, Button } from '@mui/material'
 
 function ProjectDetailsForm() {
   // form validation rules
@@ -101,8 +101,9 @@ function ProjectDetailsForm() {
           />
           <div className={styles.invalid}>{errors.projectDurationUnit?.message}</div>
         </div>
-
-        <input type="submit" />
+        <Button variant="contained" type="submit">
+          Submit
+        </Button>
       </form>
     </div>
   )
