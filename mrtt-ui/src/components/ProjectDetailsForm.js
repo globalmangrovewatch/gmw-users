@@ -87,7 +87,7 @@ function ProjectDetailsForm() {
           <Controller
             name="projectDurationUnit"
             control={control}
-            defaultValue=""
+            defaultValue="months"
             render={({ field }) => (
               <Select
                 labelId="demo-simple-select-label"
