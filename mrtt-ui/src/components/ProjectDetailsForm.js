@@ -66,7 +66,7 @@ function ProjectDetailsForm() {
         </div>
         {/* Project Duration */}
         <div className={styles.formGroup}>
-          <InputLabel sx={{ color: 'black' }}>Project duration</InputLabel>
+          <InputLabel sx={{ color: 'black' }}>Project duration (number)</InputLabel>
           <Controller
             name="projectDuration"
             control={control}
@@ -85,14 +85,14 @@ function ProjectDetailsForm() {
           {/* Project Period */}
           <InputLabel sx={{ color: 'black' }}>Period</InputLabel>
           <Controller
-            name="projectDuration"
+            name="projectDurationUnit"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="Period"
-                defaultValue="Months(s)"
                 {...field}>
                 <MenuItem value="months">Month(s)</MenuItem>
                 <MenuItem value="years">Year(s)</MenuItem>
