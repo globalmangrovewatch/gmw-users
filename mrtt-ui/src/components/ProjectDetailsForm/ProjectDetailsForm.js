@@ -24,9 +24,12 @@ function ProjectDetailsForm() {
   const validationSchema = Yup.object().shape({
     projectTitle: Yup.string().required('Project title is required'),
     projectAims: Yup.array().of(Yup.string()).typeError('Select at least one item'),
-    hasProjectEndDate: Yup.string().required(),
+    hasProjectEndDate: Yup.boolean(),
     projectStartDate: Yup.string().required('Select a start date'),
-    projectEndDate: Yup.string()
+    projectEndDate: Yup.string().when('hasProjectEndDate', {
+      is: true,
+      then: Yup.string().required('Please select an end date')
+    })
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -123,6 +126,7 @@ function ProjectDetailsForm() {
               </LocalizationProvider>
             )}
           />
+          <div className={styles.invalid}>{errors.projectStartDate?.message}</div>
         </div>
         {/* End Date */}
         {watchHasProjectEndDate && (
@@ -130,7 +134,6 @@ function ProjectDetailsForm() {
             <Controller
               name="projectEndDate"
               control={control}
-              defaultValue={new Date()}
               render={({ field }) => (
                 <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                   <Stack spacing={3}>
@@ -146,6 +149,7 @@ function ProjectDetailsForm() {
                 </LocalizationProvider>
               )}
             />
+            <div className={styles.invalid}>{errors.projectEndDate?.message}</div>
           </div>
         )}
         <Button sx={{ marginTop: '1em' }} variant="contained" type="submit">
