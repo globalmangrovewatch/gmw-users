@@ -1,4 +1,4 @@
-import React from 'react'
+// import { useEffect } from 'react'
 import styles from './style.module.scss'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -31,8 +31,11 @@ function ProjectDetailsForm() {
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() hook
-  const { register, control, handleSubmit, formState } = useForm(formOptions)
+  const { register, control, handleSubmit, formState, watch } = useForm(formOptions)
   const { errors } = formState
+  const watchHasProjectEndDate = watch('hasProjectEndDate', false)
+
+  console.log('watcher', watchHasProjectEndDate)
 
   const onSubmit = (data) => console.log('data: ', data)
 
@@ -86,15 +89,14 @@ function ProjectDetailsForm() {
           <Controller
             name="hasProjectEndDate"
             control={control}
-            defaultValue="true"
+            defaultValue={false}
             render={({ field }) => (
               <RadioGroup
                 aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="yes"
                 name="radio-buttons-group"
                 {...field}>
-                <FormControlLabel value="true" control={<Radio />} label="Yes" />
-                <FormControlLabel value="false" control={<Radio />} label="No" />
+                <FormControlLabel value={true} control={<Radio />} label="Yes" />
+                <FormControlLabel value={false} control={<Radio />} label="No" />
               </RadioGroup>
             )}
           />
@@ -122,26 +124,28 @@ function ProjectDetailsForm() {
           />
         </div>
         {/* End Date */}
-        <div className={styles.formGroup}>
-          <Controller
-            name="projectEndDate"
-            control={control}
-            render={({ field }) => (
-              <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                <Stack spacing={3}>
-                  <MobileDatePicker
-                    label="Project end date"
-                    value={field.value}
-                    onChange={(newValue) => {
-                      field.onChange(newValue)
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </Stack>
-              </LocalizationProvider>
-            )}
-          />
-        </div>
+        {watchHasProjectEndDate && (
+          <div className={styles.formGroup}>
+            <Controller
+              name="projectEndDate"
+              control={control}
+              render={({ field }) => (
+                <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
+                  <Stack spacing={3}>
+                    <MobileDatePicker
+                      label="Project end date"
+                      value={field.value}
+                      onChange={(newValue) => {
+                        field.onChange(newValue)
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </Stack>
+                </LocalizationProvider>
+              )}
+            />
+          </div>
+        )}
         <Button sx={{ marginTop: '1em' }} variant="contained" type="submit">
           Submit
         </Button>
