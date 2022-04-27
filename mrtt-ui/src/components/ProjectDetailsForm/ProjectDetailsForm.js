@@ -8,15 +8,15 @@ import {
   Checkbox,
   FormLabel,
   InputLabel,
-  Select,
-  MenuItem,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
   Button,
   Stack
 } from '@mui/material'
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-// import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 
 function ProjectDetailsForm() {
@@ -24,8 +24,9 @@ function ProjectDetailsForm() {
   const validationSchema = Yup.object().shape({
     projectTitle: Yup.string().required('Project title is required'),
     projectAims: Yup.array().of(Yup.string()).typeError('Select at least one item'),
-    projectDuration: Yup.number().required('Number is required').typeError('Must be a number'),
-    projectDurationUnit: Yup.string().required('Project period is required')
+    hasProjectEndDate: Yup.string().required(),
+    projectStartDate: Yup.string().required(),
+    projectEndDate: Yup.string()
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -62,9 +63,9 @@ function ProjectDetailsForm() {
         </div>
         {/* Project Aims */}
         <div className={styles.formGroup}>
-          <InputLabel sx={{ color: 'black' }}>
+          <FormLabel sx={{ color: 'black' }}>
             What is the overall aim for the project area?
-          </InputLabel>
+          </FormLabel>
           {options.map((value) => (
             <FormLabel key={value}>
               <Checkbox
@@ -79,47 +80,37 @@ function ProjectDetailsForm() {
           <div className={styles.invalid}>{errors.projectAims?.message}</div>
         </div>
         {/* Project Duration */}
+        {/* Has project end date radio group */}
         <div className={styles.formGroup}>
-          <InputLabel sx={{ color: 'black' }}>Project duration (number)</InputLabel>
+          <FormLabel sx={{ color: 'black' }}>Does the project have an end date?</FormLabel>
           <Controller
-            name="projectDuration"
+            name="hasProjectEndDate"
             control={control}
-            defaultValue=""
+            defaultValue="true"
             render={({ field }) => (
-              <TextField
-                required
-                id="outlined-required"
-                label="Required"
-                variant="outlined"
-                {...field}
-              />
-            )}
-          />
-          <div className={styles.invalid}>{errors.projectDuration?.message}</div>
-          {/* Project Period */}
-          <InputLabel sx={{ color: 'black' }}>Period</InputLabel>
-          <Controller
-            name="projectDurationUnit"
-            control={control}
-            defaultValue="months"
-            render={({ field }) => (
-              <Select labelId="demo-simple-select-label" label="Period" {...field}>
-                <MenuItem value="months">Month(s)</MenuItem>
-                <MenuItem value="years">Year(s)</MenuItem>
-              </Select>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                defaultValue="yes"
+                name="radio-buttons-group"
+                {...field}>
+                <FormControlLabel value="true" control={<Radio />} label="Yes" />
+                <FormControlLabel value="false" control={<Radio />} label="No" />
+              </RadioGroup>
             )}
           />
         </div>
+        {/* Start Date */}
         <div className={styles.formGroup}>
+          <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>Project Duration</FormLabel>
           <Controller
             name="projectStartDate"
             control={control}
-            defaultValue="months"
             render={({ field }) => (
               <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                 <Stack spacing={3}>
                   <MobileDatePicker
                     label="Project start date"
+                    value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue)
                     }}
@@ -129,18 +120,27 @@ function ProjectDetailsForm() {
               </LocalizationProvider>
             )}
           />
-          {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Stack spacing={3}>
-              <MobileDatePicker
-                label="Project start date"
-                // value={value}
-                // onChange={(newValue) => {
-                //   setValue(newValue)
-                // }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </Stack>
-          </LocalizationProvider> */}
+        </div>
+        {/* End Date */}
+        <div className={styles.formGroup}>
+          <Controller
+            name="projectEndDate"
+            control={control}
+            render={({ field }) => (
+              <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
+                <Stack spacing={3}>
+                  <MobileDatePicker
+                    label="Project end date"
+                    value={field.value}
+                    onChange={(newValue) => {
+                      field.onChange(newValue)
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </Stack>
+              </LocalizationProvider>
+            )}
+          />
         </div>
         <Button sx={{ marginTop: '1em' }} variant="contained" type="submit">
           Submit
