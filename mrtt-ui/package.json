@@ -8,7 +8,7 @@
     "@mui/styled-engine-sc": "^5.6.1",
     "@mui/x-date-pickers": "^5.0.0-alpha.2",
     "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.0.1",
+    "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.4.1",
     "@types/node": "^16.11.27",
@@ -53,11 +53,13 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/dom": "^8.13.0",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
     "husky": "^4.3.8",
+    "jest": "^27.5.1",
     "lint-staged": "^12.4.0",
     "prettier": "^2.6.2"
   },
