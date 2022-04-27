@@ -25,7 +25,7 @@ function ProjectDetailsForm() {
     projectTitle: Yup.string().required('Project title is required'),
     projectAims: Yup.array().of(Yup.string()).typeError('Select at least one item'),
     hasProjectEndDate: Yup.string().required(),
-    projectStartDate: Yup.string().required(),
+    projectStartDate: Yup.string().required('Select a start date'),
     projectEndDate: Yup.string()
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
@@ -107,6 +107,7 @@ function ProjectDetailsForm() {
           <Controller
             name="projectStartDate"
             control={control}
+            defaultValue={new Date()}
             render={({ field }) => (
               <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                 <Stack spacing={3}>
@@ -129,6 +130,7 @@ function ProjectDetailsForm() {
             <Controller
               name="projectEndDate"
               control={control}
+              defaultValue={new Date()}
               render={({ field }) => (
                 <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                   <Stack spacing={3}>
