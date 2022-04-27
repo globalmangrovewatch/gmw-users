@@ -3,7 +3,21 @@ import styles from './style.module.scss'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-import { TextField, Checkbox, FormLabel, InputLabel, Select, MenuItem, Button } from '@mui/material'
+import {
+  TextField,
+  Checkbox,
+  FormLabel,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  Stack
+} from '@mui/material'
+
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+// import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 
 function ProjectDetailsForm() {
   // form validation rules
@@ -89,19 +103,46 @@ function ProjectDetailsForm() {
             control={control}
             defaultValue="months"
             render={({ field }) => (
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="Period"
-                {...field}>
+              <Select labelId="demo-simple-select-label" label="Period" {...field}>
                 <MenuItem value="months">Month(s)</MenuItem>
                 <MenuItem value="years">Year(s)</MenuItem>
               </Select>
             )}
           />
-          <div className={styles.invalid}>{errors.projectDurationUnit?.message}</div>
         </div>
-        <Button variant="contained" type="submit">
+        <div className={styles.formGroup}>
+          <Controller
+            name="projectStartDate"
+            control={control}
+            defaultValue="months"
+            render={({ field }) => (
+              <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
+                <Stack spacing={3}>
+                  <MobileDatePicker
+                    label="Project start date"
+                    onChange={(newValue) => {
+                      field.onChange(newValue)
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </Stack>
+              </LocalizationProvider>
+            )}
+          />
+          {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Stack spacing={3}>
+              <MobileDatePicker
+                label="Project start date"
+                // value={value}
+                // onChange={(newValue) => {
+                //   setValue(newValue)
+                // }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </Stack>
+          </LocalizationProvider> */}
+        </div>
+        <Button sx={{ marginTop: '1em' }} variant="contained" type="submit">
           Submit
         </Button>
       </form>

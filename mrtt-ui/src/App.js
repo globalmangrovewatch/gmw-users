@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './views/Home'
-import ProjectDetailsForm from './components/ProjectDetailsForm'
+import ProjectDetailsForm from './components/ProjectDetailsForm/ProjectDetailsForm'
 
 function App() {
   return (
