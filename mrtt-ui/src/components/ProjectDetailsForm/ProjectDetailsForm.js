@@ -30,7 +30,8 @@ function ProjectDetailsForm() {
     projectEndDate: Yup.string().when('hasProjectEndDate', {
       is: true,
       then: Yup.string().required('Please select an end date')
-    })
+    }),
+    countries: Yup.array().of(Yup.string()).typeError('Select at least one item')
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -44,7 +45,7 @@ function ProjectDetailsForm() {
   const options = ['Restoration/Rehabilitation', 'Afforestation', 'Protection', 'Other']
 
   return (
-    <div className="project-details-form">
+    <div className={styles.projectDetailsForm}>
       <h1>Project Details Form</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Project Title */}
@@ -156,14 +157,28 @@ function ProjectDetailsForm() {
           <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
             What country is the site located in?
           </FormLabel>
-          <Autocomplete
+          <Controller
+            name="countries"
+            control={control}
+            defaultValue={[]}
+            render={({ field }) => (
+              <Autocomplete
+                {...field}
+                disablePortal
+                multiple
+                options={countries}
+                getOptionLabel={(option) => (option ? option.name : '')}
+                renderInput={(params) => <TextField {...params} label="Country" />}
+              />
+            )}
+          />
+          {/* <Autocomplete
             disablePortal
-            id="combo-box-demo"
+            multiple
             options={countries}
             getOptionLabel={(option) => (option ? option.name : '')}
-            sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} label="Country" />}
-          />
+          /> */}
         </div>
         <Button sx={{ marginTop: '1em' }} variant="contained" type="submit">
           Submit
