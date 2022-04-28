@@ -14,7 +14,6 @@ import {
   Button,
   Stack
 } from '@mui/material'
-
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
@@ -150,6 +149,11 @@ function ProjectDetailsForm() {
             <div className={styles.invalid}>{errors.projectEndDate?.message}</div>
           </div>
         )}
+        <div className={styles.formGroup}>
+          <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
+            What country is the site located in?
+          </FormLabel>
+        </div>
         <Button sx={{ marginTop: '1em' }} variant="contained" type="submit">
           Submit
         </Button>
