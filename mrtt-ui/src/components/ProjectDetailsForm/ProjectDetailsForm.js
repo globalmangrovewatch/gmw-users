@@ -36,9 +36,7 @@ function ProjectDetailsForm() {
   // get functions to build form with useForm() hook
   const { register, control, handleSubmit, formState, watch } = useForm(formOptions)
   const { errors } = formState
-  const watchHasProjectEndDate = watch('hasProjectEndDate', false)
-
-  console.log('watcher', watchHasProjectEndDate)
+  const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
 
   const onSubmit = (data) => console.log('data: ', data)
 
@@ -129,7 +127,7 @@ function ProjectDetailsForm() {
           <div className={styles.invalid}>{errors.projectStartDate?.message}</div>
         </div>
         {/* End Date */}
-        {watchHasProjectEndDate && (
+        {watchHasProjectEndDate === 'true' && (
           <div className={styles.formGroup}>
             <Controller
               name="projectEndDate"
