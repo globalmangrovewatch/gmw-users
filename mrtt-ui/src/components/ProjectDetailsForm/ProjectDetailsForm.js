@@ -3,6 +3,7 @@ import styles from './style.module.scss'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
+import countries from '../../data/countries.json'
 import {
   TextField,
   Checkbox,
@@ -17,6 +18,7 @@ import {
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
+import Autocomplete from '@mui/material/Autocomplete'
 
 function ProjectDetailsForm() {
   // form validation rules
@@ -149,10 +151,19 @@ function ProjectDetailsForm() {
             <div className={styles.invalid}>{errors.projectEndDate?.message}</div>
           </div>
         )}
+        {/* Countries selector */}
         <div className={styles.formGroup}>
           <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
             What country is the site located in?
           </FormLabel>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={countries}
+            getOptionLabel={(option) => (option ? option.name : '')}
+            sx={{ width: 300 }}
+            renderInput={(params) => <TextField {...params} label="Country" />}
+          />
         </div>
         <Button sx={{ marginTop: '1em' }} variant="contained" type="submit">
           Submit
