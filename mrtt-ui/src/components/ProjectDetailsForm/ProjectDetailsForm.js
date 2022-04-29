@@ -38,8 +38,8 @@ function ProjectDetailsForm() {
           code: Yup.string()
         })
       )
-      .typeError('Select at least one item')
       .min(1)
+      .typeError('Select at least one item')
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -103,9 +103,9 @@ function ProjectDetailsForm() {
             defaultValue={false}
             render={({ field }) => (
               <RadioGroup
+                {...field}
                 aria-labelledby="demo-radio-buttons-group-label"
-                name="radio-buttons-group"
-                {...field}>
+                name="radio-buttons-group">
                 <FormControlLabel value={true} control={<Radio />} label="Yes" />
                 <FormControlLabel value={false} control={<Radio />} label="No" />
               </RadioGroup>
@@ -165,7 +165,7 @@ function ProjectDetailsForm() {
         {/* Countries selector */}
         <div className={styles.formGroup}>
           <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
-            1.3 What country is the site located in?
+            1.3 What country/countries is the site located in?
           </FormLabel>
           <Controller
             name="countries"
