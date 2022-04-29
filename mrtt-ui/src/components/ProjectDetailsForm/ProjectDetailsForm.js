@@ -1,5 +1,6 @@
 // import { useEffect } from 'react'
 import styles from './style.module.scss'
+import axios from 'axios'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
@@ -48,10 +49,20 @@ function ProjectDetailsForm() {
   const { errors } = formState
   const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    let formData = data
+    let preppedData
     // set up data structure for api
-    // POST to api route
-    console.log('data: ', data)
+    console.log('data: ', formData, preppedData)
+
+    // make axios post request
+    axios
+      .post(`https://test-route/route`, preppedData)
+      .then((res) => {
+        console.log(res)
+        console.log(res.data)
+      })
+      .catch((error) => console.log(error))
   }
 
   const options = ['Restoration/Rehabilitation', 'Afforestation', 'Protection', 'Other']
@@ -128,7 +139,7 @@ function ProjectDetailsForm() {
               <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                 <Stack spacing={3}>
                   <MobileDatePicker
-                    label="1.2b Project start date"
+                    label="Project start date"
                     value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue)
