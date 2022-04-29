@@ -31,7 +31,15 @@ function ProjectDetailsForm() {
       is: true,
       then: Yup.string().required('Please select an end date')
     }),
-    countries: Yup.array().of(Yup.string()).typeError('Select at least one item')
+    countries: Yup.array()
+      .of(
+        Yup.object().shape({
+          name: Yup.string(),
+          code: Yup.string()
+        })
+      )
+      .typeError('Select at least one item')
+      .min(1)
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -171,19 +179,13 @@ function ProjectDetailsForm() {
                 options={countries}
                 getOptionLabel={(option) => (option ? option.name : '')}
                 renderInput={(params) => <TextField {...params} label="Country" />}
+                onChange={(e, values) => {
+                  field.onChange(values)
+                }}
               />
             )}
           />
-          <Autocomplete
-            disablePortal
-            multiple
-            options={countries}
-            getOptionLabel={(option) => (option ? option.name : '')}
-            renderInput={(params) => {
-              console.log('params', params)
-              return <TextField {...params} label="Country" />
-            }}
-          />
+          <div className={styles.invalid}>{errors.countries?.message}</div>
         </div>
         <Button sx={{ marginTop: '1em' }} variant="contained" type="submit">
           Submit
