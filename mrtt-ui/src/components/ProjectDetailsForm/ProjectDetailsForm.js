@@ -50,7 +50,7 @@ function ProjectDetailsForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Project Title */}
         <div className={styles.formGroup}>
-          <InputLabel sx={{ color: 'black' }}>Project title</InputLabel>
+          <InputLabel sx={{ color: 'black' }}>1.1 Project title</InputLabel>
           <Controller
             name="projectTitle"
             control={control}
@@ -70,7 +70,7 @@ function ProjectDetailsForm() {
         {/* Project Aims */}
         <div className={styles.formGroup}>
           <FormLabel sx={{ color: 'black' }}>
-            What is the overall aim for the project area?
+            1.2 What is the overall aim for the project area?
           </FormLabel>
           {options.map((value) => (
             <FormLabel key={value}>
@@ -88,7 +88,7 @@ function ProjectDetailsForm() {
         {/* Project Duration */}
         {/* Has project end date radio group */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black' }}>Does the project have an end date?</FormLabel>
+          <FormLabel sx={{ color: 'black' }}>1.2a Does the project have an end date?</FormLabel>
           <Controller
             name="hasProjectEndDate"
             control={control}
@@ -107,6 +107,7 @@ function ProjectDetailsForm() {
         {/* Start Date */}
         <div className={styles.formGroup}>
           <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>Project Duration</FormLabel>
+          <FormLabel sx={{ color: 'black' }}>1.2b</FormLabel>
           <Controller
             name="projectStartDate"
             control={control}
@@ -115,7 +116,7 @@ function ProjectDetailsForm() {
               <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                 <Stack spacing={3}>
                   <MobileDatePicker
-                    label="Project start date"
+                    label="1.2b Project start date"
                     value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue)
@@ -131,6 +132,7 @@ function ProjectDetailsForm() {
         {/* End Date */}
         {watchHasProjectEndDate === 'true' && (
           <div className={styles.formGroup}>
+            <FormLabel sx={{ color: 'black' }}>1.2c</FormLabel>
             <Controller
               name="projectEndDate"
               control={control}
@@ -155,7 +157,7 @@ function ProjectDetailsForm() {
         {/* Countries selector */}
         <div className={styles.formGroup}>
           <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
-            What country is the site located in?
+            1.3 What country is the site located in?
           </FormLabel>
           <Controller
             name="countries"
@@ -172,13 +174,16 @@ function ProjectDetailsForm() {
               />
             )}
           />
-          {/* <Autocomplete
+          <Autocomplete
             disablePortal
             multiple
             options={countries}
             getOptionLabel={(option) => (option ? option.name : '')}
-            renderInput={(params) => <TextField {...params} label="Country" />}
-          /> */}
+            renderInput={(params) => {
+              console.log('params', params)
+              return <TextField {...params} label="Country" />
+            }}
+          />
         </div>
         <Button sx={{ marginTop: '1em' }} variant="contained" type="submit">
           Submit
