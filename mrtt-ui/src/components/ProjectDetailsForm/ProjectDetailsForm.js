@@ -48,7 +48,11 @@ function ProjectDetailsForm() {
   const { errors } = formState
   const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
 
-  const onSubmit = (data) => console.log('data: ', data)
+  const onSubmit = (data) => {
+    // set up data structure for api
+    // POST to api route
+    console.log('data: ', data)
+  }
 
   const options = ['Restoration/Rehabilitation', 'Afforestation', 'Protection', 'Other']
 
