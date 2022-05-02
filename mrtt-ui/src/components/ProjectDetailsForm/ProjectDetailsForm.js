@@ -1,4 +1,3 @@
-// import { useEffect } from 'react'
 import styles from './style.module.scss'
 import axios from 'axios'
 import { useForm, Controller } from 'react-hook-form'
@@ -6,15 +5,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import countries from '../../data/countries.json'
 import {
-  TextField,
+  Button,
   Checkbox,
+  FormControlLabel,
   FormLabel,
   InputLabel,
-  RadioGroup,
   Radio,
-  FormControlLabel,
-  Button,
-  Stack
+  RadioGroup,
+  Stack,
+  TextField
 } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -25,7 +24,7 @@ function ProjectDetailsForm() {
   // form validation rules
   const validationSchema = Yup.object().shape({
     projectTitle: Yup.string().required('Project title is required'),
-    projectAims: Yup.array().of(Yup.string()).typeError('Select at least one item'),
+    projectAims: Yup.array().of(Yup.string()).typeError('Select at least one project aim'),
     hasProjectEndDate: Yup.boolean(),
     projectStartDate: Yup.string().required('Select a start date'),
     projectEndDate: Yup.string().when('hasProjectEndDate', {
@@ -40,7 +39,7 @@ function ProjectDetailsForm() {
         })
       )
       .min(1)
-      .typeError('Select at least one item')
+      .typeError('Select at least one country')
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
