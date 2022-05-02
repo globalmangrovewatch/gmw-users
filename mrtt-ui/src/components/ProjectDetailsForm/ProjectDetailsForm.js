@@ -49,14 +49,21 @@ function ProjectDetailsForm() {
   const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
 
   const onSubmit = async (data) => {
-    let formData = data
-    let preppedData
-    // set up data structure for api
-    console.log('data: ', formData, preppedData)
+    let preppedData = []
+    const url = 'https://mrtt-api-test.herokuapp.com/api/v2/sites/1/registration_answers'
 
-    // make axios post request
+    if (!data) return
+
+    // set up data structure for api
+    for (const [key, value] of Object.entries(data)) {
+      preppedData.push({ question_id: key, answer_value: value })
+    }
+
+    console.log('data: ', preppedData)
+
+    // make axios patch request
     axios
-      .post(`https://test-route/route`, preppedData)
+      .put(url, preppedData)
       .then((res) => {
         console.log(res)
         console.log(res.data)
@@ -138,7 +145,7 @@ function ProjectDetailsForm() {
               <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                 <Stack spacing={3}>
                   <MobileDatePicker
-                    label="1.2b Project start date"
+                    label="Project start date"
                     value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue)
