@@ -138,7 +138,7 @@ function ProjectDetailsForm() {
               <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                 <Stack spacing={3}>
                   <MobileDatePicker
-                    label="Project start date"
+                    label="1.2b Project start date"
                     value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue)
