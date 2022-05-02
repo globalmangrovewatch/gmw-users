@@ -1,19 +1,18 @@
-// import { useEffect } from 'react'
 import styles from './style.module.scss'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import countries from '../../data/countries.json'
 import {
-  TextField,
+  Button,
   Checkbox,
   FormLabel,
-  InputLabel,
-  RadioGroup,
-  Radio,
   FormControlLabel,
-  Button,
-  Stack
+  InputLabel,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField
 } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
