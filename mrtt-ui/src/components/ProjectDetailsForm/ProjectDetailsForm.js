@@ -59,14 +59,12 @@ function ProjectDetailsForm() {
       preppedData.push({ question_id: key, answer_value: value })
     }
 
-    console.log('data: ', preppedData)
-
     // make axios patch request
+    // TODO: decide on how to handle error and response
     axios
       .put(url, preppedData)
       .then((res) => {
         console.log(res)
-        console.log(res.data)
       })
       .catch((error) => console.log(error))
   }
