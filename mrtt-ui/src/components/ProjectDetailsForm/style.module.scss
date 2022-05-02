@@ -1,0 +1,30 @@
+// @import '../styles/var';
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+label {
+  margin-bottom: 0.5em;
+}
+
+input {
+  margin-bottom: 0.5em;
+}
+
+.invalid {
+  margin-bottom: 1em;
+  margin-top: 0.5em;
+  color: red;
+}
+
+.projectDetailsForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5em;
+}
