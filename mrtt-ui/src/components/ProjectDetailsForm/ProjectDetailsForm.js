@@ -61,7 +61,7 @@ function ProjectDetailsForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Project Title */}
         <div className={styles.formGroup}>
-          <InputLabel sx={{ color: 'black' }}>1.1 Project title</InputLabel>
+          <InputLabel>1.1 Project title</InputLabel>
           <Controller
             name="projectTitle"
             control={control}
@@ -80,9 +80,7 @@ function ProjectDetailsForm() {
         </div>
         {/* Project Aims */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black' }}>
-            1.2 What is the overall aim for the project area?
-          </FormLabel>
+          <FormLabel>1.2 What is the overall aim for the project area?</FormLabel>
           {options.map((value) => (
             <FormLabel key={value}>
               <Checkbox
@@ -99,7 +97,7 @@ function ProjectDetailsForm() {
         {/* Project Duration */}
         {/* Has project end date radio group */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black' }}>1.2a Does the project have an end date?</FormLabel>
+          <FormLabel>1.2a Does the project have an end date?</FormLabel>
           <Controller
             name="hasProjectEndDate"
             control={control}
@@ -117,8 +115,8 @@ function ProjectDetailsForm() {
         </div>
         {/* Start Date */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>Project Duration</FormLabel>
-          <FormLabel sx={{ color: 'black' }}>1.2b</FormLabel>
+          <FormLabel sx={{ marginBottom: '1.5em' }}>Project Duration</FormLabel>
+          <FormLabel>1.2b</FormLabel>
           <Controller
             name="projectStartDate"
             control={control}
@@ -143,7 +141,7 @@ function ProjectDetailsForm() {
         {/* End Date */}
         {watchHasProjectEndDate === 'true' && (
           <div className={styles.formGroup}>
-            <FormLabel sx={{ color: 'black' }}>1.2c</FormLabel>
+            <FormLabel>1.2c</FormLabel>
             <Controller
               name="projectEndDate"
               control={control}
@@ -167,7 +165,7 @@ function ProjectDetailsForm() {
         )}
         {/* Countries selector */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
+          <FormLabel sx={{ marginBottom: '1.5em' }}>
             1.3 What country/countries is the site located in?
           </FormLabel>
           <Controller
