@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styles from './style.module.scss'
 import axios from 'axios'
 import { useForm, Controller } from 'react-hook-form'
@@ -47,8 +48,10 @@ function ProjectDetailsForm() {
   const { register, control, handleSubmit, formState, watch } = useForm(formOptions)
   const { errors } = formState
   const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
+  const [isSubmitting, setisSubmitting] = useState(false)
 
   const onSubmit = async (data) => {
+    setisSubmitting(true)
     let preppedData = []
     const url = 'https://mrtt-api-test.herokuapp.com/api/v2/sites/1/registration_answers'
 
@@ -65,6 +68,7 @@ function ProjectDetailsForm() {
       .put(url, preppedData)
       .then((res) => {
         console.log(res)
+        setisSubmitting(false)
       })
       .catch((error) => console.log(error))
   }
@@ -206,8 +210,8 @@ function ProjectDetailsForm() {
           />
           <div className={styles.invalid}>{errors.countries?.message}</div>
         </div>
-        <Button sx={{ marginTop: '1em' }} variant="contained" type="submit">
-          Submit
+        <Button sx={{ marginTop: '1em' }} variant="contained" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? `Submitting...` : `Submit`}
         </Button>
       </form>
     </div>
