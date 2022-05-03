@@ -49,9 +49,11 @@ function ProjectDetailsForm() {
   const { errors } = formState
   const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
   const [isSubmitting, setisSubmitting] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   const onSubmit = async (data) => {
     setisSubmitting(true)
+    setIsError(false)
     let preppedData = []
     const url = 'https://mrtt-api-test.herokuapp.com/api/v2/sites/1/registration_answers'
 
@@ -70,7 +72,10 @@ function ProjectDetailsForm() {
         console.log(res)
         setisSubmitting(false)
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        setIsError(true)
+        console.log(error)
+      })
   }
 
   const options = ['Restoration/Rehabilitation', 'Afforestation', 'Protection', 'Other']
@@ -210,6 +215,7 @@ function ProjectDetailsForm() {
           />
           <div className={styles.invalid}>{errors.countries?.message}</div>
         </div>
+        {isError && <div className={styles.invalid}>{'Submit failed, please try again'}</div>}
         <Button sx={{ marginTop: '1em' }} variant="contained" type="submit" disabled={isSubmitting}>
           {isSubmitting ? `Submitting...` : `Submit`}
         </Button>
