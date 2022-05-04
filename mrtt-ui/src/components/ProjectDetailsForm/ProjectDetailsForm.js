@@ -21,7 +21,7 @@ import styles from './style.module.scss'
 import countries from '../../data/countries.json'
 import { questionMapping } from '../../data/questionMapping'
 
-function ProjectDetailsForm() {
+const ProjectDetailsForm = () => {
   // form validation rules
   const validationSchema = Yup.object().shape({
     hasProjectEndDate: Yup.boolean(),
