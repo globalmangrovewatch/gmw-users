@@ -1,11 +1,8 @@
 import { useState } from 'react'
-import styles from './style.module.scss'
 import axios from 'axios'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-import countries from '../../data/countries.json'
-import { projectDetailsMapping } from '../../data/questionMappingProjectDetails'
 import {
   Button,
   FormControlLabel,
@@ -19,6 +16,10 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import Autocomplete from '@mui/material/Autocomplete'
+
+import styles from './style.module.scss'
+import countries from '../../data/countries.json'
+import { projectDetailsMapping } from '../../data/questionMappingProjectDetails'
 
 function ProjectDetailsForm() {
   // form validation rules
