@@ -5,12 +5,11 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import countries from '../../data/countries.json'
+import { projectDetailsMapping } from '../../data/questionMappingProjectDetails'
 import {
   Button,
-  Checkbox,
   FormControlLabel,
   FormLabel,
-  InputLabel,
   Radio,
   RadioGroup,
   Stack,
@@ -24,8 +23,6 @@ import Autocomplete from '@mui/material/Autocomplete'
 function ProjectDetailsForm() {
   // form validation rules
   const validationSchema = Yup.object().shape({
-    projectTitle: Yup.string().required('Project title is required'),
-    projectAims: Yup.array().of(Yup.string()).typeError('Select at least one project aim'),
     hasProjectEndDate: Yup.boolean(),
     projectStartDate: Yup.string().required('Select a start date'),
     projectEndDate: Yup.string().when('hasProjectEndDate', {
@@ -45,7 +42,7 @@ function ProjectDetailsForm() {
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() hook
-  const { register, control, handleSubmit, formState, watch } = useForm(formOptions)
+  const { control, handleSubmit, formState, watch } = useForm(formOptions)
   const { errors } = formState
   const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
   const [isSubmitting, setisSubmitting] = useState(false)
@@ -61,7 +58,11 @@ function ProjectDetailsForm() {
 
     // set up data structure for api
     for (const [key, value] of Object.entries(data)) {
-      preppedData.push({ question_id: key, answer_value: value })
+      // map question ids with keys
+      // eslint-disable-next-line no-prototype-builtins
+      if (projectDetailsMapping.hasOwnProperty(key)) {
+        preppedData.push({ question_id: projectDetailsMapping[key], answer_value: value })
+      }
     }
 
     // make axios patch request
@@ -78,53 +79,13 @@ function ProjectDetailsForm() {
       })
   }
 
-  const options = ['Restoration/Rehabilitation', 'Afforestation', 'Protection', 'Other']
-
   return (
     <div className={styles.projectDetailsForm}>
       <h1>Project Details Form</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Project Title */}
-        <div className={styles.formGroup}>
-          <InputLabel sx={{ color: 'black' }}>1.1 Project title</InputLabel>
-          <Controller
-            name="projectTitle"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField
-                required
-                id="outlined-required"
-                label="Required"
-                variant="outlined"
-                {...field}
-              />
-            )}
-          />
-          <div className={styles.invalid}>{errors.projectTitle?.message}</div>
-        </div>
-        {/* Project Aims */}
-        <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black' }}>
-            1.2 What is the overall aim for the project area?
-          </FormLabel>
-          {options.map((value) => (
-            <FormLabel key={value}>
-              <Checkbox
-                key={value}
-                type="checkbox"
-                value={value}
-                {...register('projectAims', { required: true })}
-              />
-              {value}
-            </FormLabel>
-          ))}
-          <div className={styles.invalid}>{errors.projectAims?.message}</div>
-        </div>
-        {/* Project Duration */}
         {/* Has project end date radio group */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black' }}>1.2a Does the project have an end date?</FormLabel>
+          <FormLabel sx={{ color: 'black' }}>1.1a Does the project have an end date?</FormLabel>
           <Controller
             name="hasProjectEndDate"
             control={control}
@@ -142,8 +103,8 @@ function ProjectDetailsForm() {
         </div>
         {/* Start Date */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>Project Duration</FormLabel>
-          <FormLabel sx={{ color: 'black' }}>1.2b</FormLabel>
+          <FormLabel sx={{ color: 'black', marginBottom: '0.5em' }}>Project Duration</FormLabel>
+          <FormLabel sx={{ color: 'black' }}>1.1b</FormLabel>
           <Controller
             name="projectStartDate"
             control={control}
@@ -168,7 +129,7 @@ function ProjectDetailsForm() {
         {/* End Date */}
         {watchHasProjectEndDate === 'true' && (
           <div className={styles.formGroup}>
-            <FormLabel sx={{ color: 'black' }}>1.2c</FormLabel>
+            <FormLabel sx={{ color: 'black' }}>1.1c</FormLabel>
             <Controller
               name="projectEndDate"
               control={control}
@@ -193,7 +154,7 @@ function ProjectDetailsForm() {
         {/* Countries selector */}
         <div className={styles.formGroup}>
           <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
-            1.3 What country/countries is the site located in?
+            1.2 What country/countries is the site located in?
           </FormLabel>
           <Controller
             name="countries"
@@ -214,6 +175,12 @@ function ProjectDetailsForm() {
             )}
           />
           <div className={styles.invalid}>{errors.countries?.message}</div>
+        </div>
+        {/* Draw Pologon - TO BE INSERTED */}
+        <div className={styles.formGroup}>
+          <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
+            1.3 What is the overall site area?
+          </FormLabel>
         </div>
         {isError && <div className={styles.invalid}>{'Submit failed, please try again'}</div>}
         <Button sx={{ marginTop: '1em' }} variant="contained" type="submit" disabled={isSubmitting}>
