@@ -65,8 +65,7 @@ function ProjectDetailsForm() {
       }
     }
 
-    // make axios patch request
-    // TODO: decide on how to handle error and response
+    // make axios PUT request
     axios
       .put(url, preppedData)
       .then((res) => {
