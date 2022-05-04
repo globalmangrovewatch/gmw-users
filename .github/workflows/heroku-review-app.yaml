@@ -20,6 +20,10 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           fetch-depth: 0
+      - name: Run Tests
+        run: |
+          cd mrrt-ui/
+          npm test -- --watchAll=false
       - name: Create review app
         run: |
 
