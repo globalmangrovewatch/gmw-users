@@ -29,21 +29,35 @@ jobs:
           echo "SOURCE_BRANCH_REF=$SOURCE_BRANCH_REF"
           echo "REVIEW_APP_NAME=$REVIEW_APP_NAME"
 
+          # create review app
           curl -X POST https://api.heroku.com/apps \
               -H "Accept: application/vnd.heroku+json; version=3" \
               -H "Authorization: Bearer $HEROKU_API_KEY" \
               -H "Content-Type: application/json" \
               -d "{\"name\":\"$REVIEW_APP_NAME\", \"region\":\"eu\"}"
 
-          # curl -X PUT https://api.heroku.com/apps/$REVIEW_APP_NAME/buildpack-installations \
-          #     -H "Accept: application/vnd.heroku+json; version=3" \
-          #     -H "Authorization: Bearer $HEROKU_API_KEY" \
-          #     -H "Content-Type: application/json" \
-          #     -d "{\"updates\":[{\"buildpack\":\"https://github.com/mars/create-react-app-buildpack\"}]}"
+          # set APP_BASE to be ./mrtt-ui
+          curl -X PATCH https://api.heroku.com/apps/$REVIEW_APP_NAME/config-vars \
+              -H "Accept: application/vnd.heroku+json; version=3" \
+              -H "Authorization: Bearer $HEROKU_API_KEY" \
+              -H "Content-Type: application/json" \
+              -d "{\"APP_BASE\":\"mrtt-ui\"}"
 
-          git push \
+          # set the buildpack to be used
+          curl -X PUT https://api.heroku.com/apps/$REVIEW_APP_NAME/buildpack-installations \
+              -H "Accept: application/vnd.heroku+json; version=3" \
+              -H "Authorization: Bearer $HEROKU_API_KEY" \
+              -H "Content-Type: application/json" \
+              -d "{\"updates\":[{\"buildpack\":\"https://github.com/mars/create-react-app-buildpack\"}]}"
+
+          # git push \
+          #     https://heroku:$HEROKU_API_KEY@git.heroku.com/$REVIEW_APP_NAME.git \
+          #     $SOURCE_BRANCH_REF:refs/heads/main
+
+          # git push the subdirectory mrtt-ui
+          git subtree push --prefix mrtt-ui \
               https://heroku:$HEROKU_API_KEY@git.heroku.com/$REVIEW_APP_NAME.git \
-              $SOURCE_BRANCH_REF:refs/heads/main
+              main
 
           REVIEW_APP_URL="https://$REVIEW_APP_NAME.herokuapp.com/"
 
