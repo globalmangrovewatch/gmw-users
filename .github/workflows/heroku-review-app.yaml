@@ -22,7 +22,8 @@ jobs:
           fetch-depth: 0
       - name: Run Tests
         run: |
-          cd mrrt-ui/
+          cd mrtt-ui/
+          npm install 
           npm test -- --watchAll=false
       - name: Create review app
         run: |
