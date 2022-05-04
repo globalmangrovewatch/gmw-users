@@ -86,16 +86,16 @@ function ProjectDetailsForm() {
         <div className={styles.formGroup}>
           <FormLabel sx={{ color: 'black' }}>1.1a Does the project have an end date?</FormLabel>
           <Controller
-            name='hasProjectEndDate'
+            name="hasProjectEndDate"
             control={control}
             defaultValue={false}
             render={({ field }) => (
               <RadioGroup
                 {...field}
-                aria-labelledby='demo-radio-buttons-group-label'
-                name='radio-buttons-group'>
-                <FormControlLabel value={true} control={<Radio />} label='Yes' />
-                <FormControlLabel value={false} control={<Radio />} label='No' />
+                aria-labelledby="demo-radio-buttons-group-label"
+                name="radio-buttons-group">
+                <FormControlLabel value={true} control={<Radio />} label="Yes" />
+                <FormControlLabel value={false} control={<Radio />} label="No" />
               </RadioGroup>
             )}
           />
@@ -105,14 +105,14 @@ function ProjectDetailsForm() {
           <FormLabel sx={{ color: 'black', marginBottom: '0.5em' }}>Project Duration</FormLabel>
           <FormLabel sx={{ color: 'black' }}>1.1b</FormLabel>
           <Controller
-            name='projectStartDate'
+            name="projectStartDate"
             control={control}
             defaultValue={new Date()}
             render={({ field }) => (
               <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                 <Stack spacing={3}>
                   <MobileDatePicker
-                    label='Project start date'
+                    label="Project start date"
                     value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue)
@@ -130,13 +130,13 @@ function ProjectDetailsForm() {
           <div className={styles.formGroup}>
             <FormLabel sx={{ color: 'black' }}>1.1c</FormLabel>
             <Controller
-              name='projectEndDate'
+              name="projectEndDate"
               control={control}
               render={({ field }) => (
                 <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                   <Stack spacing={3}>
                     <MobileDatePicker
-                      label='Project end date'
+                      label="Project end date"
                       value={field.value}
                       onChange={(newValue) => {
                         field.onChange(newValue)
@@ -156,7 +156,7 @@ function ProjectDetailsForm() {
             1.2 What country/countries is the site located in?
           </FormLabel>
           <Controller
-            name='countries'
+            name="countries"
             control={control}
             defaultValue={[]}
             render={({ field }) => (
@@ -166,7 +166,7 @@ function ProjectDetailsForm() {
                 multiple
                 options={countries}
                 getOptionLabel={(option) => (option ? option.name : '')}
-                renderInput={(params) => <TextField {...params} label='Country' />}
+                renderInput={(params) => <TextField {...params} label="Country" />}
                 onChange={(e, values) => {
                   field.onChange(values)
                 }}
@@ -182,7 +182,7 @@ function ProjectDetailsForm() {
           </FormLabel>
         </div>
         {isError && <div className={styles.invalid}>Submit failed, please try again.</div>}
-        <Button sx={{ marginTop: '1em' }} variant='contained' type='submit' disabled={isSubmitting}>
+        <Button sx={{ marginTop: '1em' }} variant="contained" type="submit" disabled={isSubmitting}>
           {isSubmitting ? 'Submitting...' : 'Submit'}
         </Button>
       </form>
