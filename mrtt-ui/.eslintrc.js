@@ -15,6 +15,7 @@ module.exports = {
   },
   plugins: ['react', 'react-hooks'],
   rules: {
-    'react/react-in-jsx-scope': 'off'
+    'react/react-in-jsx-scope': 'off',
+    'prettier/prettier': ['error', { jsxSingleQuote: true }]
   }
 }
