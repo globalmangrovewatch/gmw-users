@@ -19,7 +19,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 
 import styles from './style.module.scss'
 import countries from '../../data/countries.json'
-import { projectDetailsMapping } from '../../data/questionMappingProjectDetails'
+import { questionMapping } from '../../data/questionMapping'
 
 function ProjectDetailsForm() {
   // form validation rules
@@ -61,8 +61,8 @@ function ProjectDetailsForm() {
     for (const [key, value] of Object.entries(data)) {
       // map question ids with keys
       // eslint-disable-next-line no-prototype-builtins
-      if (projectDetailsMapping.hasOwnProperty(key)) {
-        preppedData.push({ question_id: projectDetailsMapping[key], answer_value: value })
+      if (questionMapping.projectDetails.hasOwnProperty(key)) {
+        preppedData.push({ question_id: questionMapping.projectDetails[key], answer_value: value })
       }
     }
 
