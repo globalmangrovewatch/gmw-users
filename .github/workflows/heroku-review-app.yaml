@@ -31,6 +31,11 @@ jobs:
                   -H "Accept: application/vnd.heroku+json; version=3" \
                   -H "Authorization: Bearer $HEROKU_API_KEY"
           done
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          COMMENTS_URL: ${{ github.event.pull_request.comments_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_NAME: gmw-users-staging
       - name: Check out repository code
         uses: actions/checkout@v3
         with:
