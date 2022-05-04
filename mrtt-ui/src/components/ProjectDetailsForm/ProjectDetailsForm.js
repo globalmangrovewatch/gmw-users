@@ -52,8 +52,8 @@ function ProjectDetailsForm() {
   const onSubmit = async (data) => {
     setisSubmitting(true)
     setIsError(false)
-    let preppedData = []
-    const url = 'https://mrtt-api-test.herokuapp.com/api/v2/sites/1/registration_answers'
+    const preppedData = []
+    const url = `${process.env.REACT_APP_API_URL}sites/1/registration_answers`
 
     if (!data) return
 
@@ -70,8 +70,8 @@ function ProjectDetailsForm() {
     axios
       .put(url, preppedData)
       .then((res) => {
-        console.log(res)
         setisSubmitting(false)
+        console.log(res)
       })
       .catch((error) => {
         setIsError(true)
