@@ -84,7 +84,7 @@ const ProjectDetailsForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Has project end date radio group */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black' }}>1.1a Does the project have an end date?</FormLabel>
+          <FormLabel>1.1a Does the project have an end date?</FormLabel>
           <Controller
             name='hasProjectEndDate'
             control={control}
@@ -102,8 +102,8 @@ const ProjectDetailsForm = () => {
         </div>
         {/* Start Date */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black', marginBottom: '0.5em' }}>Project Duration</FormLabel>
-          <FormLabel sx={{ color: 'black' }}>1.1b</FormLabel>
+          <FormLabel>Project Duration</FormLabel>
+          <FormLabel>1.1b</FormLabel>
           <Controller
             name='projectStartDate'
             control={control}
@@ -128,7 +128,7 @@ const ProjectDetailsForm = () => {
         {/* End Date */}
         {watchHasProjectEndDate === 'true' && (
           <div className={styles.formGroup}>
-            <FormLabel sx={{ color: 'black' }}>1.1c</FormLabel>
+            <FormLabel>1.1c</FormLabel>
             <Controller
               name='projectEndDate'
               control={control}
@@ -152,9 +152,7 @@ const ProjectDetailsForm = () => {
         )}
         {/* Countries selector */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
-            1.2 What country/countries is the site located in?
-          </FormLabel>
+          <FormLabel>1.2 What country/countries is the site located in?</FormLabel>
           <Controller
             name='countries'
             control={control}
@@ -177,9 +175,7 @@ const ProjectDetailsForm = () => {
         </div>
         {/* Draw Pologon - TO BE INSERTED */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
-            1.3 What is the overall site area?
-          </FormLabel>
+          <FormLabel>1.3 What is the overall site area?</FormLabel>
         </div>
         {isError && <div className={styles.invalid}>Submit failed, please try again.</div>}
         <Button sx={{ marginTop: '1em' }} variant='contained' type='submit' disabled={isSubmitting}>
