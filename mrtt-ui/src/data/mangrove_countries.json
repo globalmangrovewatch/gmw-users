@@ -1,0 +1,1493 @@
+{
+  "features": [
+    {
+      "bbox": ["-70.06346893", "12.41236115", "-69.86541748", "12.62402916"],
+      "geometry": { "coordinates": [-69.970276, 12.509315], "type": "Point" },
+      "properties": { "country": "Aruba", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["60.50486755", "29.36157227", "74.89412689", "38.49092483"],
+      "geometry": { "coordinates": [66.029586, 33.828415], "type": "Point" },
+      "properties": { "country": "Afghanistan", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["11.66847324", "-18.04208183", "24.08211708", "-4.372591019"],
+      "geometry": { "coordinates": [17.549158, -12.297964], "type": "Point" },
+      "properties": { "country": "Angola", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-63.4295845", "18.15430641", "-62.92402649", "18.59541702"],
+      "geometry": { "coordinates": [-63.058133, 18.223382], "type": "Point" },
+      "properties": { "country": "Anguilla", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["19.3046875", "59.74792099", "21.32861137", "60.65208435"],
+      "geometry": { "coordinates": [20.164848, 60.201927], "type": "Point" },
+      "properties": { "country": "\u00c5land Islands", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["19.26319695", "39.65032959", "21.04966545", "42.6607132"],
+      "geometry": { "coordinates": [20.062842, 41.140601], "type": "Point" },
+      "properties": { "country": "Albania", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["1.413715959", "42.42884445", "1.784208894", "42.65231705"],
+      "geometry": { "coordinates": [1.575153, 42.5438], "type": "Point" },
+      "properties": { "country": "Andorra", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["51.49797821", "22.64440918", "56.38116074", "26.0693264"],
+      "geometry": { "coordinates": [54.32728, 23.914678], "type": "Point" },
+      "properties": { "country": "United Arab Emirates", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-73.57778168", "-55.06153107", "-53.59183502", "-21.77854729"],
+      "geometry": { "coordinates": [-65.166998, -35.38996], "type": "Point" },
+      "properties": { "country": "Argentina", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["43.44977951", "38.83052063", "46.6300354", "41.30183792"],
+      "geometry": { "coordinates": [44.93878, 40.294333], "type": "Point" },
+      "properties": { "country": "Armenia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-171.090271", "-14.54888916", "-168.1430511", "-11.04777813"],
+      "geometry": { "coordinates": [-170.314226, -14.222993], "type": "Point" },
+      "properties": { "country": "American Samoa", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-180", "-90", "180", "-59.59375"],
+      "geometry": { "coordinates": [19.872526, -80.506957], "type": "Point" },
+      "properties": { "country": "Antarctica", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["40.32819366", "-50.01889038", "77.60327149", "-11.51375008"],
+      "geometry": { "coordinates": [68.62746, -48.977063], "type": "Point" },
+      "properties": { "country": "French Southern Territories", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-62.34902954", "16.93152809", "-61.65652847", "17.72958374"],
+      "geometry": { "coordinates": [-61.798268, 17.270961], "type": "Point" },
+      "properties": { "country": "Antigua and Barbuda", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["112.9211121", "-55.11694336", "159.1092224", "-9.142175675"],
+      "geometry": { "coordinates": [134.49102, -25.729095], "type": "Point" },
+      "properties": { "country": "Australia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["9.533723831", "46.37481689", "17.16236115", "49.01704407"],
+      "geometry": { "coordinates": [14.143039, 47.588125], "type": "Point" },
+      "properties": { "country": "Austria", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["44.77260208", "38.39704514", "50.60782623", "41.90748215"],
+      "geometry": { "coordinates": [47.530254, 40.287484], "type": "Point" },
+      "properties": { "country": "Azerbaijan", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["29.00034523", "-4.470001221", "30.85022545", "-2.30982256"],
+      "geometry": { "coordinates": [29.889816, -3.367655], "type": "Point" },
+      "properties": { "country": "Burundi", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["2.55535555", "49.49721527", "6.407870293", "51.50382233"],
+      "geometry": { "coordinates": [4.662171, 50.640943], "type": "Point" },
+      "properties": { "country": "Belgium", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["0.774573983", "6.235139846", "3.851701021", "12.41835117"],
+      "geometry": { "coordinates": [2.339713, 9.654223], "type": "Point" },
+      "properties": { "country": "Benin", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-68.42069244", "12.0243063", "-62.94180679", "17.65069389"],
+      "geometry": { "coordinates": [-67.668213, 12.823159], "type": "Point" },
+      "properties": { "country": "Bonaire Sint Eustatius and Saba", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-5.518918037", "9.401107788", "2.405400038", "15.08259201"],
+      "geometry": { "coordinates": [-1.74566, 12.274291], "type": "Point" },
+      "properties": { "country": "Burkina Faso", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["88.01056671", "20.74111176", "92.67366028", "26.63407326"],
+      "geometry": { "coordinates": [90.277384, 23.836762], "type": "Point" },
+      "properties": { "country": "Bangladesh", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["22.34374809", "41.23480988", "28.60902786", "44.212677"],
+      "geometry": { "coordinates": [25.224652, 42.755921], "type": "Point" },
+      "properties": { "country": "Bulgaria", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["50.27466965", "25.55624962", "50.82485962", "26.2887516"],
+      "geometry": { "coordinates": [50.560584, 26.038855], "type": "Point" },
+      "properties": { "country": "Bahrain", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-80.47597504", "20.91208267", "-72.71208191", "27.27138901"],
+      "geometry": { "coordinates": [-76.646532, 24.259337], "type": "Point" },
+      "properties": { "country": "Bahamas", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["15.72738648", "42.56530762", "19.61470985", "45.27468109"],
+      "geometry": { "coordinates": [17.788759, 44.175639], "type": "Point" },
+      "properties": { "country": "Bosnia and Herzegovina", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-62.9481926", "17.87013817", "-62.78763962", "17.96152878"],
+      "geometry": { "coordinates": [-62.833741, 17.906343], "type": "Point" },
+      "properties": { "country": "Saint Barth\u00e9lemy", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["23.1783371", "51.2695694", "32.79460907", "56.16836166"],
+      "geometry": { "coordinates": [28.055908, 53.545465], "type": "Point" },
+      "properties": { "country": "Belarus", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-89.2241745", "15.89265823", "-87.48596954", "18.49728966"],
+      "geometry": { "coordinates": [-88.69052, 17.208113], "type": "Point" },
+      "properties": { "country": "Belize", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-64.88777924", "32.24666595", "-64.64620209", "32.47722626"],
+      "geometry": { "coordinates": [-64.767185, 32.309413], "type": "Point" },
+      "properties": { "country": "Bermuda", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-69.63902283", "-22.89612961", "-57.45384979", "-9.669329644"],
+      "geometry": { "coordinates": [-64.656757, -16.713338], "type": "Point" },
+      "properties": { "country": "Bolivia, Plurinational State of", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-73.98970795", "-33.74708176", "-28.84694481", "5.264877796"],
+      "geometry": { "coordinates": [-53.076588, -10.743661], "type": "Point" },
+      "properties": { "country": "Brazil", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-59.6506958", "13.04458427", "-59.41930389", "13.33514023"],
+      "geometry": { "coordinates": [-59.55639, 13.172262], "type": "Point" },
+      "properties": { "country": "Barbados", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["114.1280518", "4.022199153", "115.3759613", "5.046019077"],
+      "geometry": { "coordinates": [114.756095, 4.528176], "type": "Point" },
+      "properties": { "country": "Brunei Darussalam", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["88.74604034", "26.70065498", "92.12475586", "28.24767876"],
+      "geometry": { "coordinates": [90.428407, 27.395672], "type": "Point" },
+      "properties": { "country": "Bhutan", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["3.284445048", "-54.46458435", "3.487485885", "-54.38639069"],
+      "geometry": { "coordinates": [3.382171, -54.428321], "type": "Point" },
+      "properties": { "country": "Bouvet Island", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["19.99953461", "-26.90737915", "29.36831093", "-17.7808094"],
+      "geometry": { "coordinates": [23.813533, -22.188061], "type": "Point" },
+      "properties": { "country": "Botswana", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["14.41774082", "2.220515013", "27.46342087", "11.00757027"],
+      "geometry": { "coordinates": [20.485532, 6.574472], "type": "Point" },
+      "properties": { "country": "Central African Republic", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-141.0068665", "41.67692566", "-52.61888885", "83.11042023"],
+      "geometry": { "coordinates": [-98.269303, 61.36744], "type": "Point" },
+      "properties": { "country": "Canada", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["96.81694031", "-12.20872307", "96.92948151", "-11.81462002"],
+      "geometry": { "coordinates": [96.862236, -12.134576], "type": "Point" },
+      "properties": { "country": "Cocos (Keeling) Islands", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["5.956063271", "45.81705856", "10.49511242", "47.80848312"],
+      "geometry": { "coordinates": [8.230252, 46.801067], "type": "Point" },
+      "properties": { "country": "Switzerland", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-109.4549866", "-55.98402786", "-66.41471863", "-17.50754547"],
+      "geometry": { "coordinates": [-71.391895, -38.027143], "type": "Point" },
+      "properties": { "country": "Chile", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["73.55770111", "18.15930557", "134.7739258", "53.56085968"],
+      "geometry": { "coordinates": [103.857934, 36.560699], "type": "Point" },
+      "properties": { "country": "China", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-8.599302291", "4.361806869", "-2.494896888", "10.73663998"],
+      "geometry": { "coordinates": [-5.554446, 7.625538], "type": "Point" },
+      "properties": { "country": "Cote d'Ivoire", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["8.499454498", "1.652267099", "16.19104576", "13.07739067"],
+      "geometry": { "coordinates": [12.741504, 5.693973], "type": "Point" },
+      "properties": { "country": "Cameroon", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["12.2066288", "-13.45567608", "31.30572319", "5.386097908"],
+      "geometry": { "coordinates": [23.660758, -2.88119], "type": "Point" },
+      "properties": { "country": "The Democratic Republic of the Congo", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["11.20085812", "-5.030663968", "18.64999962", "3.703082084"],
+      "geometry": { "coordinates": [15.24467, -0.833253], "type": "Point" },
+      "properties": { "country": "Congo", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-165.8794403", "-21.95908737", "-157.3205566", "-8.914978981"],
+      "geometry": { "coordinates": [-158.929475, -19.182795], "type": "Point" },
+      "properties": { "country": "Cook Islands", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-81.84152985", "-4.228428841", "-66.87033081", "15.91247463"],
+      "geometry": { "coordinates": [-73.086731, 3.902581], "type": "Point" },
+      "properties": { "country": "Colombia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["43.22874832", "-12.42263985", "44.54097366", "-11.36486053"],
+      "geometry": { "coordinates": [43.683955, -11.894292], "type": "Point" },
+      "properties": { "country": "Comoros", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-25.36180305", "14.80180454", "-22.65680504", "17.20541573"],
+      "geometry": { "coordinates": [-23.978197, 15.947378], "type": "Point" },
+      "properties": { "country": "Cabo Verde", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-87.09486389", "5.499026775", "-82.55322266", "11.21691799"],
+      "geometry": { "coordinates": [-84.195574, 9.971239], "type": "Point" },
+      "properties": { "country": "Costa Rica", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-84.95236206", "19.8259716", "-74.13118744", "23.27763939"],
+      "geometry": { "coordinates": [-79.029797, 21.625477], "type": "Point" },
+      "properties": { "country": "Cuba", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-69.1626358", "11.97819519", "-68.63930512", "12.39291763"],
+      "geometry": { "coordinates": [-68.971544, 12.193378], "type": "Point" },
+      "properties": { "country": "Curacao", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["105.5327759", "-10.57083321", "105.7133331", "-10.41207027"],
+      "geometry": { "coordinates": [105.636553, -10.485344], "type": "Point" },
+      "properties": { "country": "Christmas Island", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-81.4201355", "19.26263809", "-79.72264099", "19.75736046"],
+      "geometry": { "coordinates": [-80.873584, 19.425436], "type": "Point" },
+      "properties": { "country": "Cayman Islands", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["32.26930618", "34.62501907", "34.0881958", "35.19940186"],
+      "geometry": { "coordinates": [33.003037, 34.926722], "type": "Point" },
+      "properties": { "country": "Cyprus", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["12.09076023", "48.54084015", "18.85925293", "51.05569076"],
+      "geometry": { "coordinates": [15.330266, 49.740588], "type": "Point" },
+      "properties": { "country": "Czechia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["5.866250516", "47.27012253", "15.0418148", "55.05652618"],
+      "geometry": { "coordinates": [10.394249, 51.10975], "type": "Point" },
+      "properties": { "country": "Germany", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["41.76045227", "10.9524107", "43.41764069", "12.70677757"],
+      "geometry": { "coordinates": [42.571562, 11.741842], "type": "Point" },
+      "properties": { "country": "Djibouti", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-61.48014069", "15.20625114", "-61.24013901", "15.64013863"],
+      "geometry": { "coordinates": [-61.349988, 15.434551], "type": "Point" },
+      "properties": { "country": "Dominica", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["8.076389313", "54.55902862", "15.19305611", "57.75152588"],
+      "geometry": { "coordinates": [10.055913, 55.957768], "type": "Point" },
+      "properties": { "country": "Denmark", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-72.00388336", "17.47013855", "-68.32263946", "19.9323616"],
+      "geometry": { "coordinates": [-70.492884, 18.895716], "type": "Point" },
+      "properties": { "country": "Dominican Republic", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-8.673868179", "18.96003151", "11.98891068", "37.09513855"],
+      "geometry": { "coordinates": [2.677146, 28.158374], "type": "Point" },
+      "properties": { "country": "Algeria", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-92.00854492", "-5.015803337", "-75.18714905", "1.681834578"],
+      "geometry": { "coordinates": [-78.775104, -1.428014], "type": "Point" },
+      "properties": { "country": "Ecuador", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["24.69809914", "21.72538948", "36.24874878", "31.66791725"],
+      "geometry": { "coordinates": [29.783659, 26.569799], "type": "Point" },
+      "properties": { "country": "Egypt", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["36.43876648", "12.35698223", "43.13763809", "18.00671387"],
+      "geometry": { "coordinates": [38.857271, 15.381915], "type": "Point" },
+      "properties": { "country": "Eritrea", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-17.10541534", "20.76958275", "-8.670013427", "27.68309784"],
+      "geometry": { "coordinates": [-13.134732, 24.679022], "type": "Point" },
+      "properties": { "country": "Western Sahara", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-18.16152763", "27.63736153", "4.328195096", "43.79152679"],
+      "geometry": { "coordinates": [-3.647067, 40.226896], "type": "Point" },
+      "properties": { "country": "Spain", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["21.76431274", "57.51394653", "28.20903778", "59.82201767"],
+      "geometry": { "coordinates": [25.549703, 58.670634], "type": "Point" },
+      "properties": { "country": "Estonia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["33.00153732", "3.398823023", "47.95822907", "14.8454771"],
+      "geometry": { "coordinates": [39.626195, 8.629764], "type": "Point" },
+      "properties": { "country": "Ethiopia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["20.55120659", "59.72097015", "31.58279991", "70.09145355"],
+      "geometry": { "coordinates": [26.246203, 64.485745], "type": "Point" },
+      "properties": { "country": "Finland", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-180", "-21.04249954", "180", "-12.46172428"],
+      "geometry": { "coordinates": [161.800369, -17.445626], "type": "Point" },
+      "properties": { "country": "Fiji", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-7.683333397", "61.39374924", "-6.245833397", "62.39166641"],
+      "geometry": { "coordinates": [-59.39527, -51.741233], "type": "Point" },
+      "properties": { "country": "Falkland Islands (Malvinas)", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-5.143751144", "41.33375168", "9.560416222", "51.08939743"],
+      "geometry": { "coordinates": [2.553553, 46.558916], "type": "Point" },
+      "properties": { "country": "France", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-7.683333397", "61.39374924", "-6.245833397", "62.39166641"],
+      "geometry": { "coordinates": [-6.890424, 62.069196], "type": "Point" },
+      "properties": { "country": "Faroe Islands", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["137.4252777", "1.025277018", "163.035553", "10.09062386"],
+      "geometry": { "coordinates": [154.649175, 7.081244], "type": "Point" },
+      "properties": { "country": "Federated States of Micronesia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["8.699028015", "-3.990695", "14.50234604", "2.315644502"],
+      "geometry": { "coordinates": [11.784989, -0.623357], "type": "Point" },
+      "properties": { "country": "Gabon", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-13.69139004", "49.86541748", "1.764168024", "61.52708435"],
+      "geometry": { "coordinates": [-2.895751, 54.164734], "type": "Point" },
+      "properties": { "country": "United Kingdom", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["40.0111084", "41.03851318", "46.72135925", "43.58454132"],
+      "geometry": { "coordinates": [43.519272, 42.176976], "type": "Point" },
+      "properties": { "country": "Georgia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-2.678194046", "49.39958191", "-2.155694961", "49.73597336"],
+      "geometry": { "coordinates": [-2.514771, 49.485933], "type": "Point" },
+      "properties": { "country": "Guernsey", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-3.255419016", "4.738750934", "1.191769958", "11.17329979"],
+      "geometry": { "coordinates": [-1.210711, 7.966777], "type": "Point" },
+      "properties": { "country": "Ghana", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-5.367640018", "36.10847092", "-5.338471889", "36.15715408"],
+      "geometry": { "coordinates": [-5.349238, 36.136503], "type": "Point" },
+      "properties": { "country": "Gibraltar", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-15.07625008", "7.193552971", "-7.641070843", "12.69151688"],
+      "geometry": { "coordinates": [-10.93696, 10.436254], "type": "Point" },
+      "properties": { "country": "Guinea", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-61.8101387", "15.83152676", "-61.00013733", "16.51486206"],
+      "geometry": { "coordinates": [-61.539305, 16.197679], "type": "Point" },
+      "properties": { "country": "Guadeloupe", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-16.81736183", "13.0646553", "-13.79092789", "13.82688999"],
+      "geometry": { "coordinates": [-15.37291, 13.451482], "type": "Point" },
+      "properties": { "country": "Gambia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-16.71489143", "10.86430645", "-13.63652039", "12.68544006"],
+      "geometry": { "coordinates": [-14.982346, 12.014624], "type": "Point" },
+      "properties": { "country": "Guinea-Bissau", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["5.61644125", "-1.46763897", "11.33743668", "3.788749933"],
+      "geometry": { "coordinates": [10.332331, 1.701663], "type": "Point" },
+      "properties": { "country": "Equatorial Guinea", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["19.37235832", "34.8006897", "29.64569664", "41.74800873"],
+      "geometry": { "coordinates": [22.986062, 39.041555], "type": "Point" },
+      "properties": { "country": "Greece", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-61.80208206", "11.98430538", "-61.3781929", "12.54013824"],
+      "geometry": { "coordinates": [-61.658645, 12.153364], "type": "Point" },
+      "properties": { "country": "Grenada", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-101.882019", "54.76960373", "-0.013020861", "83.65833282"],
+      "geometry": { "coordinates": [-41.485587, 74.677238], "type": "Point" },
+      "properties": { "country": "Greenland", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-92.2223587", "13.7382822", "-88.22566986", "17.81871414"],
+      "geometry": { "coordinates": [-90.354657, 15.697564], "type": "Point" },
+      "properties": { "country": "Guatemala", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-54.54182434", "2.128722906", "-51.60593033", "5.751805782"],
+      "geometry": { "coordinates": [-53.230951, 3.930452], "type": "Point" },
+      "properties": { "country": "French Guiana", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["144.6179199", "13.23426056", "144.9569397", "13.65432358"],
+      "geometry": { "coordinates": [144.776951, 13.443393], "type": "Point" },
+      "properties": { "country": "Guam", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-61.38691711", "1.176766991", "-56.48025131", "8.530921936"],
+      "geometry": { "coordinates": [-58.979673, 4.793327], "type": "Point" },
+      "properties": { "country": "Guyana", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["113.8345871", "22.15319443", "114.4409714", "22.56209373"],
+      "geometry": { "coordinates": [114.134965, 22.381121], "type": "Point" },
+      "properties": { "country": "Hong Kong", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["72.58264923", "-53.19499969", "73.87325287", "-52.90214539"],
+      "geometry": { "coordinates": [73.510618, -53.092606], "type": "Point" },
+      "properties": { "country": "Heard Island and McDonald Islands", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-89.35079193", "12.98453999", "-82.40569305", "17.41847229"],
+      "geometry": { "coordinates": [-86.6162, 14.818248], "type": "Point" },
+      "properties": { "country": "Honduras", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["13.48958206", "42.38542557", "19.43517685", "46.55051804"],
+      "geometry": { "coordinates": [16.390621, 45.026917], "type": "Point" },
+      "properties": { "country": "Croatia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-74.48124695", "18.02180481", "-71.6181488", "20.09041595"],
+      "geometry": { "coordinates": [-72.683939, 18.937387], "type": "Point" },
+      "properties": { "country": "Haiti", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["16.11104965", "45.74782944", "22.90558434", "48.58637619"],
+      "geometry": { "coordinates": [19.414044, 47.167323], "type": "Point" },
+      "properties": { "country": "Hungary", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["95.00970459", "-11.00761509", "141.0193939", "6.076940536"],
+      "geometry": { "coordinates": [117.302928, -2.236612], "type": "Point" },
+      "properties": { "country": "Indonesia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-4.841186524", "54.03649902", "-4.306387901", "54.41819382"],
+      "geometry": { "coordinates": [-4.539159, 54.22758], "type": "Point" },
+      "properties": { "country": "Isle of Man", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["68.18624878", "6.754255771", "97.41516113", "35.50133133"],
+      "geometry": { "coordinates": [79.622525, 22.882846], "type": "Point" },
+      "properties": { "country": "India", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["71.23735809", "-7.444582939", "72.49569702", "-5.235972881"],
+      "geometry": { "coordinates": [72.1207, -6.682924], "type": "Point" },
+      "properties": { "country": "British Indian Ocean Territory", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-10.66305447", "51.41958237", "-5.993610859", "55.45041656"],
+      "geometry": { "coordinates": [-8.153349, 53.180266], "type": "Point" },
+      "properties": { "country": "Ireland", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["44.0472641", "25.05874824", "63.31745911", "39.77722168"],
+      "geometry": { "coordinates": [54.304033, 32.557248], "type": "Point" },
+      "properties": { "country": "Islamic Republic of Iran", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["38.79683685", "28.98695183", "48.56855774", "37.37804031"],
+      "geometry": { "coordinates": [43.754807, 32.999867], "type": "Point" },
+      "properties": { "country": "Iraq", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-27.98073006", "60.00208282", "-12.0505209", "66.70207977"],
+      "geometry": { "coordinates": [-18.581348, 64.983169], "type": "Point" },
+      "properties": { "country": "Iceland", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["34.26800919", "29.49708366", "35.90093613", "33.36403275"],
+      "geometry": { "coordinates": [35.013169, 31.455682], "type": "Point" },
+      "properties": { "country": "Israel", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["6.630878925", "35.49291611", "18.52069473", "47.09096146"],
+      "geometry": { "coordinates": [12.0782, 42.789728], "type": "Point" },
+      "properties": { "country": "Italy", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-78.36902618", "17.02041435", "-75.96986389", "18.52514076"],
+      "geometry": { "coordinates": [-77.310312, 18.156889], "type": "Point" },
+      "properties": { "country": "Jamaica", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-2.25513792", "49.14708328", "-1.924584031", "49.29291534"],
+      "geometry": { "coordinates": [-2.132467, 49.213823], "type": "Point" },
+      "properties": { "country": "Jersey", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["34.95763779", "29.18587875", "39.30208588", "33.36817169"],
+      "geometry": { "coordinates": [36.788884, 31.249261], "type": "Point" },
+      "properties": { "country": "Jordan", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["122.933197", "24.04541588", "153.9869385", "45.52278519"],
+      "geometry": { "coordinates": [137.949437, 37.531196], "type": "Point" },
+      "properties": { "country": "Japan", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["46.49185562", "40.55167389", "87.31266022", "55.43181229"],
+      "geometry": { "coordinates": [67.255166, 48.157379], "type": "Point" },
+      "properties": { "country": "Kazakhstan", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["33.90958786", "-4.720417023", "41.92621613", "5.06116581"],
+      "geometry": { "coordinates": [37.845668, 0.552741], "type": "Point" },
+      "properties": { "country": "Kenya", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["69.27973938", "39.17284393", "80.28318024", "43.23823547"],
+      "geometry": { "coordinates": [74.560389, 41.465047], "type": "Point" },
+      "properties": { "country": "Kyrgyzstan", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["102.3355026", "9.913610458", "107.6302643", "14.68817139"],
+      "geometry": { "coordinates": [104.916872, 12.708955], "type": "Point" },
+      "properties": { "country": "Cambodia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-174.543396", "-17.85211372", "176.8486938", "4.699491978"],
+      "geometry": { "coordinates": [-39.197255, 0.564677], "type": "Point" },
+      "properties": { "country": "Kiribati", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-62.8643074", "17.09347153", "-62.53930664", "17.41819382"],
+      "geometry": { "coordinates": [-62.701341, 17.271858], "type": "Point" },
+      "properties": { "country": "Saint Kitts and Nevis", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["125.0818024", "33.11208343", "130.9404144", "38.6121521"],
+      "geometry": { "coordinates": [127.795212, 36.355169], "type": "Point" },
+      "properties": { "country": "Korea, Republic of", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["46.55061722", "28.52461433", "48.65402603", "30.08443832"],
+      "geometry": { "coordinates": [47.612991, 29.354042], "type": "Point" },
+      "properties": { "country": "Kuwait", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["100.0867691", "13.9076004", "107.6349792", "22.50040054"],
+      "geometry": { "coordinates": [103.768157, 18.495175], "type": "Point" },
+      "properties": { "country": "Lao People's Democratic Republic", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["35.1026268", "33.0550003", "36.6218338", "34.69140625"],
+      "geometry": { "coordinates": [35.891702, 33.919566], "type": "Point" },
+      "properties": { "country": "Lebanon", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-11.48569488", "4.352915763", "-7.365112781", "8.551790237"],
+      "geometry": { "coordinates": [-9.307269, 6.445288], "type": "Point" },
+      "properties": { "country": "Liberia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["9.391736984", "19.50817299", "25.14847183", "33.16541672"],
+      "geometry": { "coordinates": [18.031171, 27.040323], "type": "Point" },
+      "properties": { "country": "Libya", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-61.08013916", "13.70708275", "-60.8698616", "14.11041737"],
+      "geometry": { "coordinates": [-60.966758, 13.898366], "type": "Point" },
+      "properties": { "country": "Saint Lucia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["9.472480774", "47.04738235", "9.637494088", "47.27172852"],
+      "geometry": { "coordinates": [9.553805, 47.142463], "type": "Point" },
+      "properties": { "country": "Liechtenstein", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["79.52180481", "5.918471813", "81.87875366", "9.835970878"],
+      "geometry": { "coordinates": [80.697868, 7.621672], "type": "Point" },
+      "properties": { "country": "Sri Lanka", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["27.01123047", "-30.67557526", "29.45570946", "-28.57080078"],
+      "geometry": { "coordinates": [28.246684, -29.582962], "type": "Point" },
+      "properties": { "country": "Lesotho", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["20.95059586", "53.8901062", "26.84722137", "56.44702911"],
+      "geometry": { "coordinates": [23.904837, 55.334788], "type": "Point" },
+      "properties": { "country": "Lithuania", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["5.744140148", "49.44780731", "6.530774593", "50.18162155"],
+      "geometry": { "coordinates": [6.094189, 49.776499], "type": "Point" },
+      "properties": { "country": "Luxembourg", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["20.97138977", "55.66371918", "28.24051094", "58.08557129"],
+      "geometry": { "coordinates": [24.931585, 56.853301], "type": "Point" },
+      "properties": { "country": "Latvia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["113.5287552", "22.10902977", "113.5987473", "22.2173214"],
+      "geometry": { "coordinates": [113.561331, 22.162351], "type": "Point" },
+      "properties": { "country": "Macao", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-63.15375137", "18.04535294", "-62.9695816", "18.12597275"],
+      "geometry": { "coordinates": [-63.060262, 18.079513], "type": "Point" },
+      "properties": { "country": "Saint Martin", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-13.16791534", "27.67007446", "-0.997406005", "35.92263794"],
+      "geometry": { "coordinates": [-6.276139, 31.846559], "type": "Point" },
+      "properties": { "country": "Morocco", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["7.409527301", "43.72263718", "7.440137863", "43.75088882"],
+      "geometry": { "coordinates": [7.423269, 43.735679], "type": "Point" },
+      "properties": { "country": "Monaco", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["26.62131119", "45.46675873", "30.16374016", "48.49016952"],
+      "geometry": { "coordinates": [28.468526, 47.204112], "type": "Point" },
+      "properties": { "country": "Moldova, Republic of", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["43.18819427", "-25.60625076", "50.48652649", "-11.94874954"],
+      "geometry": { "coordinates": [46.698618, -19.375648], "type": "Point" },
+      "properties": { "country": "Madagascar", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["72.63819122", "-0.703194023", "73.76041412", "7.106529236"],
+      "geometry": { "coordinates": [73.22536, 3.718029], "type": "Point" },
+      "properties": { "country": "Maldives", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-118.3688889", "14.53291702", "-86.71013641", "32.71804047"],
+      "geometry": { "coordinates": [-102.547072, 23.950534], "type": "Point" },
+      "properties": { "country": "Mexico", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["160.7952728", "4.572501182", "172.1726074", "14.7231884"],
+      "geometry": { "coordinates": [168.995487, 8.660982], "type": "Point" },
+      "properties": { "country": "Marshall Islands", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-12.23891163", "10.15951061", "4.244967938", "25"],
+      "geometry": { "coordinates": [-3.522152, 17.356241], "type": "Point" },
+      "properties": { "country": "Mali", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["14.18359757", "35.78597259", "14.57652664", "36.08235931"],
+      "geometry": { "coordinates": [14.399767, 35.92293], "type": "Point" },
+      "properties": { "country": "Malta", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["92.17250061", "8.824444771", "101.1767807", "28.54326057"],
+      "geometry": { "coordinates": [96.510201, 21.117143], "type": "Point" },
+      "properties": { "country": "Myanmar", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["18.45892334", "41.84791565", "20.31764793", "43.56264114"],
+      "geometry": { "coordinates": [19.237101, 42.777376], "type": "Point" },
+      "properties": { "country": "Montenegro", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["87.74965668", "41.56768799", "119.9243011", "52.15429687"],
+      "geometry": { "coordinates": [103.067029, 46.836391], "type": "Point" },
+      "properties": { "country": "Mongolia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["144.8849945", "14.10999966", "146.06604", "20.5549984"],
+      "geometry": { "coordinates": [145.600406, 16.012382], "type": "Point" },
+      "properties": { "country": "Northern Mariana Islands", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["30.21741486", "-26.86869431", "40.83930588", "-10.47124958"],
+      "geometry": { "coordinates": [35.551437, -17.259581], "type": "Point" },
+      "properties": { "country": "Mozambique", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-17.06652069", "14.71555138", "-4.827673912", "27.29807091"],
+      "geometry": { "coordinates": [-10.337093, 20.265149], "type": "Point" },
+      "properties": { "country": "Mauritania", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-62.24180603", "16.67486191", "-62.14458466", "16.82430649"],
+      "geometry": { "coordinates": [-62.189685, 16.739452], "type": "Point" },
+      "properties": { "country": "Montserrat", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-61.22902679", "14.38819408", "-60.80875015", "14.87902832"],
+      "geometry": { "coordinates": [-61.017755, 14.652637], "type": "Point" },
+      "properties": { "country": "Martinique", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["56.58569336", "-20.52569389", "63.50347138", "-10.33708191"],
+      "geometry": { "coordinates": [57.895824, -20.119774], "type": "Point" },
+      "properties": { "country": "Mauritius", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["32.67152405", "-17.12721062", "35.91504669", "-9.363796234"],
+      "geometry": { "coordinates": [34.300482, -13.215077], "type": "Point" },
+      "properties": { "country": "Malawi", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["99.64071655", "0.85371995", "119.269722", "7.380556107"],
+      "geometry": { "coordinates": [109.706646, 3.793688], "type": "Point" },
+      "properties": { "country": "Malaysia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["45.01791763", "-13.00625134", "45.30014038", "-12.63569546"],
+      "geometry": { "coordinates": [45.148404, -12.82122], "type": "Point" },
+      "properties": { "country": "Mayotte", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["11.73486233", "-28.96945", "25.25670052", "-16.95989037"],
+      "geometry": { "coordinates": [17.220511, -22.139576], "type": "Point" },
+      "properties": { "country": "Namibia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["155.8688965", "-22.84805679", "172.0900879", "-17.39916611"],
+      "geometry": { "coordinates": [165.699848, -21.306403], "type": "Point" },
+      "properties": { "country": "New Caledonia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["0.166250005", "11.69696999", "15.99564171", "23.52503014"],
+      "geometry": { "coordinates": [9.401244, 17.42437], "type": "Point" },
+      "properties": { "country": "Niger", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["167.9138947", "-29.13305473", "167.9980621", "-28.99388886"],
+      "geometry": { "coordinates": [167.952332, -29.038244], "type": "Point" },
+      "properties": { "country": "Norfolk Island", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["2.668431044", "4.270418167", "14.67641544", "13.89200974"],
+      "geometry": { "coordinates": [8.097575, 9.592268], "type": "Point" },
+      "properties": { "country": "Nigeria", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-87.69097137", "10.70754242", "-81.99986267", "15.02591038"],
+      "geometry": { "coordinates": [-85.03839, 12.843909], "type": "Point" },
+      "properties": { "country": "Nicaragua", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-169.9508362", "-19.15615654", "-169.7736053", "-18.95222282"],
+      "geometry": { "coordinates": [-169.858549, -19.052414], "type": "Point" },
+      "properties": { "country": "Niue", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["3.360781909", "50.72349167", "7.227095127", "53.5545845"],
+      "geometry": { "coordinates": [5.574516, 52.263182], "type": "Point" },
+      "properties": { "country": "Netherlands", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["3.904687644", "57.95902634", "31.16197968", "71.18125153"],
+      "geometry": { "coordinates": [14.069659, 64.458381], "type": "Point" },
+      "properties": { "country": "Norway", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["80.06014252", "26.34751511", "88.20401001", "30.44702148"],
+      "geometry": { "coordinates": [83.946082, 28.259041], "type": "Point" },
+      "properties": { "country": "Nepal", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["166.9095306", "-0.554311991", "166.9593353", "-0.502065003"],
+      "geometry": { "coordinates": [166.934484, -0.52847], "type": "Point" },
+      "properties": { "country": "Nauru", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-178.8269501", "-52.62083435", "179.0658264", "-29.23166275"],
+      "geometry": { "coordinates": [171.470881, -41.82592], "type": "Point" },
+      "properties": { "country": "New Zealand", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["52", "16.64236259", "59.83930588", "26.50680542"],
+      "geometry": { "coordinates": [56.095588, 20.588542], "type": "Point" },
+      "properties": { "country": "Oman", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["60.89943695", "23.70291519", "77.84307861", "37.09701157"],
+      "geometry": { "coordinates": [69.398315, 29.963713], "type": "Point" },
+      "properties": { "country": "Pakistan", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-83.05017853", "7.2023592", "-77.17324066", "9.647360802"],
+      "geometry": { "coordinates": [-80.109022, 8.5131], "type": "Point" },
+      "properties": { "country": "Panama", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-130.7562256", "-25.07988548", "-124.7719421", "-23.90772629"],
+      "geometry": { "coordinates": [-74.356842, -9.172336], "type": "Point" },
+      "properties": { "country": "Pitcairn", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-81.33069611", "-18.35180473", "-68.65310669", "-0.037470002"],
+      "geometry": { "coordinates": [-74.356842, -9.172336], "type": "Point" },
+      "properties": { "country": "Peru", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["116.9283371", "4.586939811", "126.6053467", "21.07014084"],
+      "geometry": { "coordinates": [122.865757, 11.735988], "type": "Point" },
+      "properties": { "country": "Philippines", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["131.1198578", "2.971383094", "134.7213898", "8.094166755"],
+      "geometry": { "coordinates": [134.494532, 7.402705], "type": "Point" },
+      "properties": { "country": "Palau", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["140.8404999", "-11.65538025", "157.0377808", "-0.75583303"],
+      "geometry": { "coordinates": [145.254007, -6.476837], "type": "Point" },
+      "properties": { "country": "Papua New Guinea", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["14.12288475", "49.00204468", "24.14578247", "54.83641815"],
+      "geometry": { "coordinates": [19.393496, 52.12953], "type": "Point" },
+      "properties": { "country": "Poland", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-67.95180511", "17.88264084", "-64.99986267", "18.51597214"],
+      "geometry": { "coordinates": [-66.468148, 18.22201], "type": "Point" },
+      "properties": { "country": "Puerto Rico", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["124.1823578", "37.60291672", "130.6743927", "43.00605011"],
+      "geometry": { "coordinates": [127.162779, 40.134346], "type": "Point" },
+      "properties": { "country": "Korea, Democratic People's Republic of", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-31.26818657", "30.03017616", "-6.189142227", "42.15431595"],
+      "geometry": { "coordinates": [-8.514976, 39.596548], "type": "Point" },
+      "properties": { "country": "Portugal", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-62.64651871", "-27.60586166", "-54.25863266", "-19.29137039"],
+      "geometry": { "coordinates": [-58.392788, -23.242973], "type": "Point" },
+      "properties": { "country": "Paraguay", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["34.22902679", "31.22360611", "35.57545471", "32.55156708"],
+      "geometry": { "coordinates": [35.209176, 31.916065], "type": "Point" },
+      "properties": { "country": "Palestine, State of", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-154.7272949", "-27.90062714", "-134.4511108", "-7.894928933"],
+      "geometry": { "coordinates": [-145.320314, -15.721273], "type": "Point" },
+      "properties": { "country": "French Polynesia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["50.73652649", "24.46788216", "51.64736176", "26.18402862"],
+      "geometry": { "coordinates": [51.190344, 25.282225], "type": "Point" },
+      "properties": { "country": "Qatar", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["55.21625137", "-21.38986015", "55.83736038", "-20.87180519"],
+      "geometry": { "coordinates": [55.532685, -21.133348], "type": "Point" },
+      "properties": { "country": "R\u00e9union", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["20.26353836", "43.61933136", "29.71986198", "48.2655983"],
+      "geometry": { "coordinates": [24.985588, 45.83971], "type": "Point" },
+      "properties": { "country": "Romania", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-180", "41.18886566", "180", "81.85624695"],
+      "geometry": { "coordinates": [96.723288, 61.98073], "type": "Point" },
+      "properties": { "country": "Russian Federation", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["28.86170769", "-2.839972735", "30.89907265", "-1.047450185"],
+      "geometry": { "coordinates": [29.926434, -2.000476], "type": "Point" },
+      "properties": { "country": "Rwanda", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["34.49430466", "16.09430504", "55.66658783", "32.27078247"],
+      "geometry": { "coordinates": [44.555974, 24.090774], "type": "Point" },
+      "properties": { "country": "Saudi Arabia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["21.8389492", "8.67911911", "38.8493042", "23.14514732"],
+      "geometry": { "coordinates": [30.005646, 16.049386], "type": "Point" },
+      "properties": { "country": "Sudan", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-17.54318619", "12.30785942", "-11.34247017", "16.69207191"],
+      "geometry": { "coordinates": [-14.470363, 14.359109], "type": "Point" },
+      "properties": { "country": "Senegal", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["103.6090546", "1.166389942", "104.0858002", "1.471387983"],
+      "geometry": { "coordinates": [103.815059, 1.353458], "type": "Point" },
+      "properties": { "country": "Singapore", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-41.81561661", "-59.48427963", "-26.2293148", "-53.6468811"],
+      "geometry": { "coordinates": [-35.91019, -54.677494], "type": "Point" },
+      "properties": { "country": "South Georgia and the South Sandwich Islands", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-14.42111206", "-40.37138748", "-5.631452083", "-7.889167786"],
+      "geometry": { "coordinates": [-10.486828, -25.73934], "type": "Point" },
+      "properties": { "country": "Saint Helena, Ascension and Tristan da Cunha", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-9.076562881", "70.82499695", "36.80781555", "82.53749847"],
+      "geometry": { "coordinates": [18.468176, 78.856205], "type": "Point" },
+      "properties": { "country": "Svalbard and Jan Mayen", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["155.3925018", "-12.30833435", "170.1925049", "-4.445219994"],
+      "geometry": { "coordinates": [159.571259, -8.88806], "type": "Point" },
+      "properties": { "country": "Solomon Islands", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-13.3035059", "6.91761589", "-10.26575279", "10.00043106"],
+      "geometry": { "coordinates": [-11.790251, 8.556476], "type": "Point" },
+      "properties": { "country": "Sierra Leone", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-90.12486267", "13.15264034", "-87.68374634", "14.45055103"],
+      "geometry": { "coordinates": [-88.867124, 13.73022], "type": "Point" },
+      "properties": { "country": "El Salvador", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["12.40066433", "43.89465332", "12.51412296", "43.99569321"],
+      "geometry": { "coordinates": [12.460999, 43.939052], "type": "Point" },
+      "properties": { "country": "San Marino", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["40.97850037", "-1.647081972", "51.41569519", "11.98930645"],
+      "geometry": { "coordinates": [45.86917, 6.068279], "type": "Point" },
+      "properties": { "country": "Somalia", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-56.40611267", "46.74888992", "-56.12643814", "47.14500046"],
+      "geometry": { "coordinates": [-56.305845, 46.929849], "type": "Point" },
+      "properties": { "country": "Saint Pierre and Miquelon", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["18.80852127", "42.22761536", "22.97898293", "46.18939972"],
+      "geometry": { "coordinates": [20.782009, 44.226095], "type": "Point" },
+      "properties": { "country": "Serbia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["24.15192986", "3.480998993", "35.86994934", "12.21899986"],
+      "geometry": { "coordinates": [30.321407, 7.287292], "type": "Point" },
+      "properties": { "country": "South Sudan", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["6.459862232", "-0.014027001", "7.462637902", "1.701529026"],
+      "geometry": { "coordinates": [6.716494, 0.436447], "type": "Point" },
+      "properties": { "country": "Sao Tome and Principe", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-58.08656311", "1.831146002", "-53.97749329", "6.015139103"],
+      "geometry": { "coordinates": [-55.915962, 4.136237], "type": "Point" },
+      "properties": { "country": "Suriname", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["16.83417511", "47.73274612", "22.56791306", "49.61380005"],
+      "geometry": { "coordinates": [19.483437, 48.709536], "type": "Point" },
+      "properties": { "country": "Slovakia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["13.38211918", "45.42828369", "16.58431244", "46.8782196"],
+      "geometry": { "coordinates": [14.818101, 46.124459], "type": "Point" },
+      "properties": { "country": "Slovenia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["10.96138859", "55.3362503", "24.17239571", "69.05903625"],
+      "geometry": { "coordinates": [16.758187, 62.771389], "type": "Point" },
+      "properties": { "country": "Sweden", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["30.7908001", "-27.31752014", "32.13669968", "-25.71875954"],
+      "geometry": { "coordinates": [31.4982, -26.565445], "type": "Point" },
+      "properties": { "country": "Eswatini", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-63.139431", "17.99986076", "-62.99986267", "18.06354904"],
+      "geometry": { "coordinates": [-63.062326, 18.038231], "type": "Point" },
+      "properties": { "country": "Sint Maarten", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["46.20367813", "-10.22735977", "56.29568481", "-3.712637902"],
+      "geometry": { "coordinates": [51.755682, -6.76939], "type": "Point" },
+      "properties": { "country": "Seychelles", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["35.71625137", "32.31068039", "42.38504028", "37.3191452"],
+      "geometry": { "coordinates": [38.526773, 35.024602], "type": "Point" },
+      "properties": { "country": "Syrian Arab Republic", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-72.48319244", "21.17708588", "-71.08208466", "21.96263885"],
+      "geometry": { "coordinates": [-71.824282, 21.758022], "type": "Point" },
+      "properties": { "country": "Turks and Caicos Islands", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["13.47347546", "7.441069126", "24.00268555", "23.45037079"],
+      "geometry": { "coordinates": [18.666657, 15.364775], "type": "Point" },
+      "properties": { "country": "Chad", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-0.147322998", "6.109581947", "1.806692005", "11.13898087"],
+      "geometry": { "coordinates": [0.976875, 8.530167], "type": "Point" },
+      "properties": { "country": "Togo", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["97.34519196", "5.616042137", "105.6391296", "20.46321106"],
+      "geometry": { "coordinates": [101.014802, 15.110375], "type": "Point" },
+      "properties": { "country": "Thailand", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["67.38713074", "36.67196655", "75.13722229", "41.04224396"],
+      "geometry": { "coordinates": [71.03753, 38.528939], "type": "Point" },
+      "properties": { "country": "Tajikistan", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-172.5208282", "-9.44399643", "-171.1813965", "-8.531943321"],
+      "geometry": { "coordinates": [-171.782468, -9.068801], "type": "Point" },
+      "properties": { "country": "Tokelau", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["52.44143295", "35.12981415", "66.68430328", "42.7955513"],
+      "geometry": { "coordinates": [59.179016, 39.192618], "type": "Point" },
+      "properties": { "country": "Turkmenistan", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["124.0446548", "-9.504652977", "127.3424988", "-8.126944542"],
+      "geometry": { "coordinates": [125.851979, -8.820334], "type": "Point" },
+      "properties": { "country": "Timor-Leste", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-176.2138367", "-22.34972382", "-173.7350006", "-15.5657959"],
+      "geometry": { "coordinates": [-174.821605, -19.856709], "type": "Point" },
+      "properties": { "country": "Tonga", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-61.93013763", "10.04291725", "-60.4920845", "11.35958481"],
+      "geometry": { "coordinates": [-61.25929, 10.473979], "type": "Point" },
+      "properties": { "country": "Trinidad and Tobago", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["7.530076028", "30.23681068", "11.59825897", "37.55986023"],
+      "geometry": { "coordinates": [9.578887, 34.11107], "type": "Point" },
+      "properties": { "country": "Tunisia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["25.66513634", "35.81542587", "44.83498764", "42.10665512"],
+      "geometry": { "coordinates": [35.176305, 39.059953], "type": "Point" },
+      "properties": { "country": "Turkey", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["176.0587463", "-10.79187012", "179.8713531", "-5.642499924"],
+      "geometry": { "coordinates": [178.093952, -7.58203], "type": "Point" },
+      "properties": { "country": "Tuvalu", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["116.7099991", "20.69750023", "122.1084747", "26.38541985"],
+      "geometry": { "coordinates": [120.956586, 23.752633], "type": "Point" },
+      "properties": { "country": "Taiwan", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["29.32716751", "-11.74569511", "40.44513702", "-0.985787511"],
+      "geometry": { "coordinates": [34.825685, -6.26622], "type": "Point" },
+      "properties": { "country": "United Republic of Tanzania", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["29.57149887", "-1.482139826", "35.00027466", "4.234466076"],
+      "geometry": { "coordinates": [32.391932, 1.280968], "type": "Point" },
+      "properties": { "country": "Uganda", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["22.14044762", "44.38597107", "40.21807098", "52.37503433"],
+      "geometry": { "coordinates": [31.405509, 49.008921], "type": "Point" },
+      "properties": { "country": "Ukraine", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-178.3036041", "-0.389005989", "166.6575012", "28.40167046"],
+      "geometry": { "coordinates": [-98.429876, 15.923139], "type": "Point" },
+      "properties": { "country": "United States Minor Outlying Islands", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-58.44272232", "-34.97402954", "-53.09424591", "-30.07968903"],
+      "geometry": { "coordinates": [-56.017792, -32.793226], "type": "Point" },
+      "properties": { "country": "Uruguay", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-179.1505585", "18.9098587", "179.773407", "72.6875"],
+      "geometry": { "coordinates": [-112.470837, 45.676259], "type": "Point" },
+      "properties": { "country": "United States", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["55.99777603", "37.17716599", "73.13459778", "45.57110596"],
+      "geometry": { "coordinates": [63.171383, 41.750637], "type": "Point" },
+      "properties": { "country": "Uzbekistan", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["12.44560814", "41.90011215", "12.45845127", "41.90755081"],
+      "geometry": { "coordinates": [12.452861, 41.90354], "type": "Point" },
+      "properties": { "country": "Holy See (Vatican City State)", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-61.46097183", "12.5787487", "-61.11402893", "13.3834734"],
+      "geometry": { "coordinates": [-61.200688, 13.200474], "type": "Point" },
+      "properties": { "country": "Saint Vincent and the Grenadines", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-69.63902283", "-22.89612961", "-57.45384979", "-9.669329644"],
+      "geometry": { "coordinates": [-66.145936, 7.132691], "type": "Point" },
+      "properties": { "country": "Bolivarian Republic of Venezuela", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-64.8501358", "18.30597305", "-64.27041626", "18.7495842"],
+      "geometry": { "coordinates": [-64.518447, 18.502845], "type": "Point" },
+      "properties": { "country": "British Virgin Islands", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-65.08652496", "17.67291641", "-64.56485748", "18.41569519"],
+      "geometry": { "coordinates": [-64.802773, 17.971699], "type": "Point" },
+      "properties": { "country": "US Virgin Islands", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["102.1445847", "8.381355285", "109.4691696", "23.39269257"],
+      "geometry": { "coordinates": [106.308066, 16.645486], "type": "Point" },
+      "properties": { "country": "Viet Nam", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["166.5413971", "-20.25324059", "170.2402802", "-13.07247639"],
+      "geometry": { "coordinates": [167.721196, -16.211282], "type": "Point" },
+      "properties": { "country": "Vanuatu", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-178.1824951", "-14.36907196", "-176.1241608", "-13.18283176"],
+      "geometry": { "coordinates": [-177.105479, -13.76671], "type": "Point" },
+      "properties": { "country": "Wallis and Futuna", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["-172.8041229", "-14.07722092", "-171.3977051", "-13.43980885"],
+      "geometry": { "coordinates": [-172.172027, -13.744717], "type": "Point" },
+      "properties": { "country": "Samoa", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["41.81458282", "12.10819435", "54.53541565", "18.99999809"],
+      "geometry": { "coordinates": [47.582759, 15.904837], "type": "Point" },
+      "properties": { "country": "Yemen", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["16.45189095", "-34.83514023", "32.89125061", "-22.12503052"],
+      "geometry": { "coordinates": [25.086904, -28.996293], "type": "Point" },
+      "properties": { "country": "South Africa", "mangroves": "1" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["21.99937058", "-18.0794735", "33.70570374", "-8.270876885"],
+      "geometry": { "coordinates": [27.792636, -13.462276], "type": "Point" },
+      "properties": { "country": "Zambia", "mangroves": "0" },
+      "type": "Feature"
+    },
+    {
+      "bbox": ["25.23702812", "-22.42027664", "33.05630112", "-15.60883522"],
+      "geometry": { "coordinates": [29.868838, -19.000563], "type": "Point" },
+      "properties": { "country": "Zimbabwe", "mangroves": "0" },
+      "type": "Feature"
+    }
+  ],
+  "type": "FeatureCollection"
+}

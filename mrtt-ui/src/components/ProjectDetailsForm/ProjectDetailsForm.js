@@ -1,10 +1,12 @@
+import { useState } from 'react'
 import styles from './style.module.scss'
 import { useForm, Controller } from 'react-hook-form'
+import styled from 'styled-components/macro'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-import countries from '../../data/countries.json'
 import {
   Button,
+  ButtonGroup,
   Checkbox,
   FormLabel,
   FormControlLabel,
@@ -18,8 +20,21 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import Autocomplete from '@mui/material/Autocomplete'
+import ProjectAreaMap from '../../components/ProjectAreaMap/ProjectAreaMap'
+import MangroveCountries from '../../data/mangrove_countries.json'
+
+const DownloadButtonGroup = styled(ButtonGroup)`
+  justify-content: center;
+  margin-bottom: 1.5em;
+`
+
+const countriesGeojson = MangroveCountries.features.filter(
+  (feature) => feature.properties.mangroves > 0
+)
 
 function ProjectDetailsForm() {
+  const [mapExtent, setMapExtent] = useState(undefined)
+
   // form validation rules
   const validationSchema = Yup.object().shape({
     projectTitle: Yup.string().required('Project title is required'),
@@ -47,12 +62,20 @@ function ProjectDetailsForm() {
   const { errors } = formState
   const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
 
+  const onCountriesChange = (field, values) => {
+    field.onChange(values)
+    if (values.length > 0) {
+      setMapExtent(values[0].bbox)
+    } else {
+      setMapExtent(undefined)
+    }
+  }
+
   const onSubmit = (data) => {
     // set up data structure for api
     // POST to api route
     console.log('data: ', data)
   }
-
   const options = ['Restoration/Rehabilitation', 'Afforestation', 'Protection', 'Other']
 
   return (
@@ -179,17 +202,28 @@ function ProjectDetailsForm() {
                 {...field}
                 disablePortal
                 multiple
-                options={countries}
-                getOptionLabel={(option) => (option ? option.name : '')}
+                options={countriesGeojson}
+                getOptionLabel={(feature) => (feature ? feature.properties.country : '')}
                 renderInput={(params) => <TextField {...params} label="Country" />}
                 onChange={(e, values) => {
-                  field.onChange(values)
+                  onCountriesChange(field, values)
                 }}
               />
             )}
           />
           <div className={styles.invalid}>{errors.countries?.message}</div>
         </div>
+        <div className={styles.formGroup}>
+          <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
+            1.? What is the overall site area?
+          </FormLabel>
+          <DownloadButtonGroup variant="outlined" aria-label="outlined primary button group">
+            <Button>Draw Polygon</Button>
+            <Button>Upload Polygon</Button>
+          </DownloadButtonGroup>
+          <ProjectAreaMap extent={mapExtent}></ProjectAreaMap>
+        </div>
+
         <Button sx={{ marginTop: '1em' }} variant="contained" type="submit">
           Submit
         </Button>
