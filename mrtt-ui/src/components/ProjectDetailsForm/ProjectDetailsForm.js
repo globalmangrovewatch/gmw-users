@@ -1,14 +1,12 @@
-import styles from './style.module.scss'
+import { useState } from 'react'
+import axios from 'axios'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-import countries from '../../data/countries.json'
 import {
   Button,
-  Checkbox,
-  FormLabel,
   FormControlLabel,
-  InputLabel,
+  FormLabel,
   Radio,
   RadioGroup,
   Stack,
@@ -19,11 +17,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import Autocomplete from '@mui/material/Autocomplete'
 
-function ProjectDetailsForm() {
+import styles from './style.module.scss'
+import countries from '../../data/countries.json'
+import { questionMapping } from '../../data/questionMapping'
+
+const ProjectDetailsForm = () => {
   // form validation rules
   const validationSchema = Yup.object().shape({
-    projectTitle: Yup.string().required('Project title is required'),
-    projectAims: Yup.array().of(Yup.string()).typeError('Select at least one item'),
     hasProjectEndDate: Yup.boolean(),
     projectStartDate: Yup.string().required('Select a start date'),
     projectEndDate: Yup.string().when('hasProjectEndDate', {
@@ -38,96 +38,81 @@ function ProjectDetailsForm() {
         })
       )
       .min(1)
-      .typeError('Select at least one item')
+      .typeError('Select at least one country')
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() hook
-  const { register, control, handleSubmit, formState, watch } = useForm(formOptions)
+  const { control, handleSubmit, formState, watch } = useForm(formOptions)
   const { errors } = formState
   const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
+  const [isSubmitting, setisSubmitting] = useState(false)
+  const [isError, setIsError] = useState(false)
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    setisSubmitting(true)
+    setIsError(false)
+    const preppedData = []
+    const url = `${process.env.REACT_APP_API_URL}sites/1/registration_answers`
+
+    if (!data) return
+
     // set up data structure for api
-    // POST to api route
-    console.log('data: ', data)
-  }
+    for (const [key, value] of Object.entries(data)) {
+      // map question ids with keys
+      if (Object.prototype.hasOwnProperty.call(questionMapping.projectDetails, key)) {
+        preppedData.push({ question_id: questionMapping.projectDetails[key], answer_value: value })
+      }
+    }
 
-  const options = ['Restoration/Rehabilitation', 'Afforestation', 'Protection', 'Other']
+    // make axios PUT request
+    axios
+      .put(url, preppedData)
+      .then((res) => {
+        setisSubmitting(false)
+        console.log(res)
+      })
+      .catch((error) => {
+        setIsError(true)
+        console.log(error)
+      })
+  }
 
   return (
     <div className={styles.projectDetailsForm}>
       <h1>Project Details Form</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Project Title */}
-        <div className={styles.formGroup}>
-          <InputLabel sx={{ color: 'black' }}>1.1 Project title</InputLabel>
-          <Controller
-            name="projectTitle"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField
-                required
-                id="outlined-required"
-                label="Required"
-                variant="outlined"
-                {...field}
-              />
-            )}
-          />
-          <div className={styles.invalid}>{errors.projectTitle?.message}</div>
-        </div>
-        {/* Project Aims */}
-        <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black' }}>
-            1.2 What is the overall aim for the project area?
-          </FormLabel>
-          {options.map((value) => (
-            <FormLabel key={value}>
-              <Checkbox
-                key={value}
-                type="checkbox"
-                value={value}
-                {...register('projectAims', { required: true })}
-              />
-              {value}
-            </FormLabel>
-          ))}
-          <div className={styles.invalid}>{errors.projectAims?.message}</div>
-        </div>
-        {/* Project Duration */}
         {/* Has project end date radio group */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black' }}>1.2a Does the project have an end date?</FormLabel>
+          <FormLabel sx={{ color: 'black' }}>1.1a Does the project have an end date?</FormLabel>
           <Controller
-            name="hasProjectEndDate"
+            name='hasProjectEndDate'
             control={control}
             defaultValue={false}
             render={({ field }) => (
               <RadioGroup
                 {...field}
-                aria-labelledby="demo-radio-buttons-group-label"
-                name="radio-buttons-group">
-                <FormControlLabel value={true} control={<Radio />} label="Yes" />
-                <FormControlLabel value={false} control={<Radio />} label="No" />
+                aria-labelledby='demo-radio-buttons-group-label'
+                name='radio-buttons-group'>
+                <FormControlLabel value={true} control={<Radio />} label='Yes' />
+                <FormControlLabel value={false} control={<Radio />} label='No' />
               </RadioGroup>
             )}
           />
         </div>
         {/* Start Date */}
         <div className={styles.formGroup}>
-          <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>Project Duration</FormLabel>
-          <FormLabel sx={{ color: 'black' }}>1.2b</FormLabel>
+          <FormLabel sx={{ color: 'black', marginBottom: '0.5em' }}>Project Duration</FormLabel>
+          <FormLabel sx={{ color: 'black' }}>1.1b</FormLabel>
           <Controller
-            name="projectStartDate"
+            name='projectStartDate'
             control={control}
             defaultValue={new Date()}
             render={({ field }) => (
               <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                 <Stack spacing={3}>
                   <MobileDatePicker
-                    label="1.2b Project start date"
+                    label='Project start date'
                     value={field.value}
                     onChange={(newValue) => {
                       field.onChange(newValue)
@@ -143,15 +128,15 @@ function ProjectDetailsForm() {
         {/* End Date */}
         {watchHasProjectEndDate === 'true' && (
           <div className={styles.formGroup}>
-            <FormLabel sx={{ color: 'black' }}>1.2c</FormLabel>
+            <FormLabel sx={{ color: 'black' }}>1.1c</FormLabel>
             <Controller
-              name="projectEndDate"
+              name='projectEndDate'
               control={control}
               render={({ field }) => (
                 <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                   <Stack spacing={3}>
                     <MobileDatePicker
-                      label="Project end date"
+                      label='Project end date'
                       value={field.value}
                       onChange={(newValue) => {
                         field.onChange(newValue)
@@ -168,10 +153,10 @@ function ProjectDetailsForm() {
         {/* Countries selector */}
         <div className={styles.formGroup}>
           <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
-            1.3 What country/countries is the site located in?
+            1.2 What country/countries is the site located in?
           </FormLabel>
           <Controller
-            name="countries"
+            name='countries'
             control={control}
             defaultValue={[]}
             render={({ field }) => (
@@ -181,7 +166,7 @@ function ProjectDetailsForm() {
                 multiple
                 options={countries}
                 getOptionLabel={(option) => (option ? option.name : '')}
-                renderInput={(params) => <TextField {...params} label="Country" />}
+                renderInput={(params) => <TextField {...params} label='Country' />}
                 onChange={(e, values) => {
                   field.onChange(values)
                 }}
@@ -190,8 +175,15 @@ function ProjectDetailsForm() {
           />
           <div className={styles.invalid}>{errors.countries?.message}</div>
         </div>
-        <Button sx={{ marginTop: '1em' }} variant="contained" type="submit">
-          Submit
+        {/* Draw Pologon - TO BE INSERTED */}
+        <div className={styles.formGroup}>
+          <FormLabel sx={{ color: 'black', marginBottom: '1.5em' }}>
+            1.3 What is the overall site area?
+          </FormLabel>
+        </div>
+        {isError && <div className={styles.invalid}>Submit failed, please try again.</div>}
+        <Button sx={{ marginTop: '1em' }} variant='contained' type='submit' disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Submit'}
         </Button>
       </form>
     </div>
