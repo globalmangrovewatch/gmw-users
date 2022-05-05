@@ -9,13 +9,13 @@ function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <Router>
-        <div className="app">
+        <div className='app'>
           <Routes>
             <Route
-              path="/"
+              path='/'
               element={[
-                <Home key="1"></Home>,
-                <ProjectDetailsForm key="2"></ProjectDetailsForm>
+                <Home key='1'></Home>,
+                <ProjectDetailsForm key='2'></ProjectDetailsForm>
               ]}></Route>
           </Routes>
         </div>
