@@ -78,6 +78,8 @@ jobs:
           fetch-depth: 0
       - name: Delete all review app
         run: |
+
+          # get the created review apps from the list of comments in the PR
           curl -Ss $COMMENTS_URL \
               -H "Content-Type: application/json" \
               -H "Authorization: token $GITHUB_TOKEN" \
