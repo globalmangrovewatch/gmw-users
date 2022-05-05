@@ -28,7 +28,7 @@ const ProjectAreaMap = ({ height, extent }) => {
       ref={mapRef}
       mapboxAccessToken={MAPBOX_TOKEN}
       style={{ width: '100%', height: height || '400px' }}
-      mapStyle="mapbox://styles/mapbox/streets-v9"
+      mapStyle='mapbox://styles/mapbox/streets-v9'
     />
   )
 }
@@ -39,7 +39,7 @@ ProjectAreaMap.defaultProps = {
 }
 
 ProjectAreaMap.propTypes = {
-  extent: PropTypes.arrayOf(PropTypes.number),
+  extent: PropTypes.arrayOf(PropTypes.string),
   height: PropTypes.string
 }
 
