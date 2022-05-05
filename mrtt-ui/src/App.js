@@ -2,12 +2,12 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './views/Home'
 import ProjectDetailsForm from './components/ProjectDetailsForm/ProjectDetailsForm'
-import { MuiThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider } from '@mui/material/styles'
 import theme from './styles/theme'
 
 function App() {
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <Router>
         <div className='app'>
           <Routes>
@@ -20,7 +20,7 @@ function App() {
           </Routes>
         </div>
       </Router>
-    </MuiThemeProvider>
+    </ThemeProvider>
   )
 }
 
