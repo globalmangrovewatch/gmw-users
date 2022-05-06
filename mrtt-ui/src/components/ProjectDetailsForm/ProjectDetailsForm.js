@@ -27,10 +27,15 @@ const DownloadButtonGroup = styled(ButtonGroup)`
   justify-content: center;
   margin-bottom: 1.5em;
 `
+const sortCountries = (a, b) => {
+  const textA = a.properties.country.toUpperCase()
+  const textB = b.properties.country.toUpperCase()
 
-const countriesGeojson = MangroveCountries.features.filter(
-  (feature) => feature.properties.mangroves > 0
-)
+  return textA < textB ? -1 : textA > textB ? 1 : 0
+}
+const countriesGeojson = MangroveCountries.features
+  .filter((feature) => feature.properties.mangroves > 0)
+  .sort(sortCountries)
 
 function ProjectDetailsForm() {
   const [mapExtent, setMapExtent] = useState(undefined)
