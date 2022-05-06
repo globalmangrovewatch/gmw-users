@@ -19,6 +19,9 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import Autocomplete from '@mui/material/Autocomplete'
+import turfConvex from '@turf/convex'
+import turfBbox from '@turf/bbox'
+import turfBboxPolygon from '@turf/bbox-polygon'
 
 import ProjectAreaMap from './ProjectAreaMap'
 import MangroveCountries from '../data/mangrove_countries.json'
@@ -68,10 +71,15 @@ function ProjectDetailsForm() {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  const onCountriesChange = (field, values) => {
-    field.onChange(values)
-    if (values.length > 0) {
-      setMapExtent(values[0].bbox)
+  const onCountriesChange = (field, features) => {
+    field.onChange(features)
+    if (features.length > 0) {
+      const bboxFeatureCollection = {
+        features: features.map((feature) => turfBboxPolygon(feature.bbox)),
+        type: 'FeatureCollection'
+      }
+      const totalBbox = turfBbox(turfConvex(bboxFeatureCollection))
+      setMapExtent(totalBbox)
     } else {
       setMapExtent(undefined)
     }

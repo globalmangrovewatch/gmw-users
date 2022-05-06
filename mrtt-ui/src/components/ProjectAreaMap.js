@@ -39,7 +39,7 @@ ProjectAreaMap.defaultProps = {
 }
 
 ProjectAreaMap.propTypes = {
-  extent: PropTypes.arrayOf(PropTypes.string),
+  extent: PropTypes.arrayOf(PropTypes.number),
   height: PropTypes.string
 }
 
