@@ -10,14 +10,15 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  TextField
+  TextField,
+  Typography
 } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import Autocomplete from '@mui/material/Autocomplete'
 
-import styles from './style.module.scss'
+import { styled } from '@mui/material/styles'
 import countries from '../../data/countries.json'
 import { questionMapping } from '../../data/questionMapping'
 
@@ -64,7 +65,6 @@ const ProjectDetailsForm = () => {
         preppedData.push({ question_id: questionMapping.projectDetails[key], answer_value: value })
       }
     }
-
     // make axios PUT request
     axios
       .put(url, preppedData)
@@ -79,11 +79,13 @@ const ProjectDetailsForm = () => {
   }
 
   return (
-    <div className={styles.projectDetailsForm}>
-      <h1>Project Details Form</h1>
+    <ProjectDetailsFormDiv>
+      <Typography variant='h4' sx={{ marginBottom: '0.5em' }}>
+        Project Details Form
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Has project end date radio group */}
-        <div className={styles.formGroup}>
+        <FormGroupDiv>
           <FormLabel>1.1a Does the project have an end date?</FormLabel>
           <Controller
             name='hasProjectEndDate'
@@ -99,9 +101,9 @@ const ProjectDetailsForm = () => {
               </RadioGroup>
             )}
           />
-        </div>
+        </FormGroupDiv>
         {/* Start Date */}
-        <div className={styles.formGroup}>
+        <FormGroupDiv>
           <FormLabel>Project Duration</FormLabel>
           <FormLabel>1.1b</FormLabel>
           <Controller
@@ -123,11 +125,13 @@ const ProjectDetailsForm = () => {
               </LocalizationProvider>
             )}
           />
-          <div className={styles.invalid}>{errors.projectStartDate?.message}</div>
-        </div>
+          <Typography variant='subtitle' sx={{ color: 'red' }}>
+            {errors.projectStartDate?.message}
+          </Typography>
+        </FormGroupDiv>
         {/* End Date */}
         {watchHasProjectEndDate === 'true' && (
-          <div className={styles.formGroup}>
+          <FormGroupDiv>
             <FormLabel>1.1c</FormLabel>
             <Controller
               name='projectEndDate'
@@ -147,11 +151,13 @@ const ProjectDetailsForm = () => {
                 </LocalizationProvider>
               )}
             />
-            <div className={styles.invalid}>{errors.projectEndDate?.message}</div>
-          </div>
+            <Typography variant='subtitle' sx={{ color: 'red' }}>
+              {errors.projectEndDate?.message}
+            </Typography>
+          </FormGroupDiv>
         )}
         {/* Countries selector */}
-        <div className={styles.formGroup}>
+        <FormGroupDiv>
           <FormLabel>1.2 What country/countries is the site located in?</FormLabel>
           <Controller
             name='countries'
@@ -171,19 +177,42 @@ const ProjectDetailsForm = () => {
               />
             )}
           />
-          <div className={styles.invalid}>{errors.countries?.message}</div>
-        </div>
+          <Typography variant='subtitle' sx={{ color: 'red' }}>
+            {errors.countries?.message}
+          </Typography>
+        </FormGroupDiv>
         {/* Draw Pologon - TO BE INSERTED */}
-        <div className={styles.formGroup}>
+        <FormGroupDiv>
           <FormLabel>1.3 What is the overall site area?</FormLabel>
-        </div>
-        {isError && <div className={styles.invalid}>Submit failed, please try again.</div>}
+        </FormGroupDiv>
+        {isError && (
+          <Typography variant='subtitle' sx={{ color: 'red' }}>
+            Submit failed, please try again
+          </Typography>
+        )}
         <Button sx={{ marginTop: '1em' }} variant='contained' type='submit' disabled={isSubmitting}>
           {isSubmitting ? 'Submitting...' : 'Submit'}
         </Button>
       </form>
-    </div>
+    </ProjectDetailsFormDiv>
   )
 }
+
+// Styles
+
+const ProjectDetailsFormDiv = styled('div')(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  margin: '1.5em'
+}))
+
+const FormGroupDiv = styled('div')(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  marginBottom: '1em',
+  marginTop: '2em'
+}))
 
 export default ProjectDetailsForm

@@ -1,5 +1,4 @@
 import { createTheme } from '@material-ui/core/styles'
-// import { black } from '@mui/material/colors'
 
 const theme = createTheme({
   palette: {
@@ -14,7 +13,8 @@ const theme = createTheme({
     MuiFormLabel: {
       styleOverrides: {
         root: {
-          color: '#000'
+          color: '#000',
+          marginBottom: '0.5em'
         }
       }
     },
