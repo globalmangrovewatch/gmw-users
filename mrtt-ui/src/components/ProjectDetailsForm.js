@@ -19,8 +19,8 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import Autocomplete from '@mui/material/Autocomplete'
 
 import { styled } from '@mui/material/styles'
-import countries from '../../data/countries.json'
-import { questionMapping } from '../../data/questionMapping'
+import countries from '../data/countries.json'
+import { questionMapping } from '../data/questionMapping'
 
 const ProjectDetailsForm = () => {
   // form validation rules
