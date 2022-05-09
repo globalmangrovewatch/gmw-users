@@ -28,8 +28,6 @@ jobs:
       - name: Create review app
         run: |
 
-          echo "Should be working on branch ${{github.event.pull_request.head.ref}}..."
-
           SOURCE_BRANCH_REF=$(git rev-parse --short HEAD)
           REVIEW_APP_NAME=$APP_NAME-$SOURCE_BRANCH_REF
 
