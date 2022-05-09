@@ -18,7 +18,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import Autocomplete from '@mui/material/Autocomplete'
 
-import { styled } from '@mui/material/styles'
+import { ProjectDetailsFormDiv, FormGroupDiv } from '../styles/forms'
 import countries from '../data/countries.json'
 import { questionMapping } from '../data/questionMapping'
 
@@ -197,22 +197,5 @@ const ProjectDetailsForm = () => {
     </ProjectDetailsFormDiv>
   )
 }
-
-// Styles
-
-const ProjectDetailsFormDiv = styled('div')(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  margin: '1.5em'
-}))
-
-const FormGroupDiv = styled('div')(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  marginBottom: '1em',
-  marginTop: '2em'
-}))
 
 export default ProjectDetailsForm
