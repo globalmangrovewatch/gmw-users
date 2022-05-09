@@ -53,11 +53,11 @@ jobs:
               -H "Accept: application/vnd.heroku+json; version=3" \
               -H "Authorization: Bearer $HEROKU_API_KEY" \
               -H "Content-Type: application/json" \
-              -d "{" \
-                \"REACT_APP_API_URL\":\"$REACT_APP_API_URL\", \
-                \"REACT_APP_MAPBOX_ACCESS_TOKEN\":\"$REACT_APP_MAPBOX_ACCESS_TOKEN\", \
-                \"REACT_APP_MAPBOX_ACCOUNT\":\"$REACT_APP_MAPBOX_ACCOUNT\" \
-              "}"
+              -d '{
+                  "REACT_APP_API_URL": "$REACT_APP_API_URL",
+                  "REACT_APP_MAPBOX_ACCESS_TOKEN": "$REACT_APP_MAPBOX_ACCESS_TOKEN",
+                  "REACT_APP_MAPBOX_ACCOUNT": "$REACT_APP_MAPBOX_ACCOUNT"
+              }'
 
           # git push the subdirectory mrtt-ui
           git subtree push --prefix mrtt-ui \
