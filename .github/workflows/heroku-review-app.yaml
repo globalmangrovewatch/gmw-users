@@ -15,27 +15,6 @@ jobs:
       )
     runs-on: ubuntu-latest
     steps:
-      - name: Delete previous review app
-        run: |
-          curl -Ss $COMMENTS_URL \
-              -H "Content-Type: application/json" \
-              -H "Authorization: token $GITHUB_TOKEN" \
-              | jq -r 'last(.[]|select(.body | startswith("A review app was created for this PR"))).body' | \
-          while read i; do
-              HASH=`echo $i |  sed -e 's/.*'"$APP_NAME"'-\(.*\).herokuapp.com.*/\1/'`
-              OLD_REVIEW_APP_NAME=$APP_NAME-$HASH
-              echo "Deleting previous review app $OLD_REVIEW_APP_NAME"
-
-              curl -X DELETE https://api.heroku.com/apps/$OLD_REVIEW_APP_NAME \
-                  -H "Content-Type: application/json" \
-                  -H "Accept: application/vnd.heroku+json; version=3" \
-                  -H "Authorization: Bearer $HEROKU_API_KEY"
-          done
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          COMMENTS_URL: ${{ github.event.pull_request.comments_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          APP_NAME: gmw-users-staging
       - name: Check out repository code
         uses: actions/checkout@v3
         with:
@@ -48,8 +27,6 @@ jobs:
           npm test -- --watchAll=false
       - name: Create review app
         run: |
-
-          echo "Should be working on branch ${{github.event.pull_request.head.ref}}..."
 
           SOURCE_BRANCH_REF=$(git rev-parse --short HEAD)
           REVIEW_APP_NAME=$APP_NAME-$SOURCE_BRANCH_REF
