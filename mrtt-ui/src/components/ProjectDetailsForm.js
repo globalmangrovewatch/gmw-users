@@ -18,7 +18,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import Autocomplete from '@mui/material/Autocomplete'
 
-import { styled } from '@mui/material/styles'
+import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
 import countries from '../data/countries.json'
 import { questionMapping } from '../data/questionMapping'
 
@@ -79,13 +79,13 @@ const ProjectDetailsForm = () => {
   }
 
   return (
-    <ProjectDetailsFormDiv>
+    <MainFormDiv>
       <Typography variant='h4' sx={{ marginBottom: '0.5em' }}>
         Project Details Form
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Has project end date radio group */}
-        <FormGroupDiv>
+        <FormQuestionDiv>
           <FormLabel>1.1a Does the project have an end date?</FormLabel>
           <Controller
             name='hasProjectEndDate'
@@ -101,9 +101,9 @@ const ProjectDetailsForm = () => {
               </RadioGroup>
             )}
           />
-        </FormGroupDiv>
+        </FormQuestionDiv>
         {/* Start Date */}
-        <FormGroupDiv>
+        <FormQuestionDiv>
           <FormLabel>Project Duration</FormLabel>
           <FormLabel>1.1b</FormLabel>
           <Controller
@@ -128,10 +128,10 @@ const ProjectDetailsForm = () => {
           <Typography variant='subtitle' sx={{ color: 'red' }}>
             {errors.projectStartDate?.message}
           </Typography>
-        </FormGroupDiv>
+        </FormQuestionDiv>
         {/* End Date */}
         {watchHasProjectEndDate === 'true' && (
-          <FormGroupDiv>
+          <FormQuestionDiv>
             <FormLabel>1.1c</FormLabel>
             <Controller
               name='projectEndDate'
@@ -154,10 +154,10 @@ const ProjectDetailsForm = () => {
             <Typography variant='subtitle' sx={{ color: 'red' }}>
               {errors.projectEndDate?.message}
             </Typography>
-          </FormGroupDiv>
+          </FormQuestionDiv>
         )}
         {/* Countries selector */}
-        <FormGroupDiv>
+        <FormQuestionDiv>
           <FormLabel>1.2 What country/countries is the site located in?</FormLabel>
           <Controller
             name='countries'
@@ -180,11 +180,11 @@ const ProjectDetailsForm = () => {
           <Typography variant='subtitle' sx={{ color: 'red' }}>
             {errors.countries?.message}
           </Typography>
-        </FormGroupDiv>
+        </FormQuestionDiv>
         {/* Draw Pologon - TO BE INSERTED */}
-        <FormGroupDiv>
+        <FormQuestionDiv>
           <FormLabel>1.3 What is the overall site area?</FormLabel>
-        </FormGroupDiv>
+        </FormQuestionDiv>
         {isError && (
           <Typography variant='subtitle' sx={{ color: 'red' }}>
             Submit failed, please try again
@@ -194,25 +194,8 @@ const ProjectDetailsForm = () => {
           {isSubmitting ? 'Submitting...' : 'Submit'}
         </Button>
       </form>
-    </ProjectDetailsFormDiv>
+    </MainFormDiv>
   )
 }
-
-// Styles
-
-const ProjectDetailsFormDiv = styled('div')(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  margin: '1.5em'
-}))
-
-const FormGroupDiv = styled('div')(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  marginBottom: '1em',
-  marginTop: '2em'
-}))
 
 export default ProjectDetailsForm
