@@ -4,7 +4,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import {
-  Button,
   FormControlLabel,
   FormLabel,
   Radio,
@@ -18,9 +17,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import Autocomplete from '@mui/material/Autocomplete'
 
-import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
+import { MainFormDiv, FormQuestionDiv, SectionFormTitle } from '../styles/forms'
 import countries from '../data/countries.json'
 import { mapDataForApi } from '../library/mapDataForApi'
+import ButtonSubmit from './ButtonSubmit'
 
 const ProjectDetailsForm = () => {
   // form validation rules
@@ -47,11 +47,11 @@ const ProjectDetailsForm = () => {
   const { control, handleSubmit, formState, watch } = useForm(formOptions)
   const { errors } = formState
   const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
-  const [isSubmitting, setisSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
 
   const onSubmit = async (data) => {
-    setisSubmitting(true)
+    setIsSubmitting(true)
     setIsError(false)
     const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
 
@@ -63,7 +63,7 @@ const ProjectDetailsForm = () => {
     axios
       .put(url, preppedData)
       .then((res) => {
-        setisSubmitting(false)
+        setIsSubmitting(false)
         console.log(res)
       })
       .catch((error) => {
@@ -74,9 +74,7 @@ const ProjectDetailsForm = () => {
 
   return (
     <MainFormDiv>
-      <Typography variant='h4' sx={{ marginBottom: '0.5em' }}>
-        Project Details Form
-      </Typography>
+      <SectionFormTitle>Project Details Form</SectionFormTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
@@ -184,9 +182,7 @@ const ProjectDetailsForm = () => {
             Submit failed, please try again
           </Typography>
         )}
-        <Button sx={{ marginTop: '1em' }} variant='contained' type='submit' disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Submit'}
-        </Button>
+        <ButtonSubmit isSubmitting={isSubmitting} />
       </form>
     </MainFormDiv>
   )
