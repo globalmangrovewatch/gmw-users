@@ -4,7 +4,6 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import { Button, Checkbox, FormLabel, List, ListItem, Typography } from '@mui/material'
-// import Autocomplete from '@mui/material/Autocomplete'
 
 import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
 import { stakeholderOptions } from '../data/stakeholders'
@@ -32,15 +31,20 @@ const ProjectDetailsForm = () => {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
 
+  // add stakeholder list to fields array on mount
   useEffect(() => {
     fields.length = stakeholderOptions.length
     stakeholderOptions.forEach((stakeholder) =>
       append({ stakeholderType: stakeholder, stakeholderName: '' })
     )
-
-    console.log('stakes', stakeholderOptions.length)
+    // these console logs appear twice on initial load
+    // keys are duplicated (38 items appear instead of 19)
+    // every time I save a new change, another set of duplicates gets added
+    // it looks like useEffect is called twice for some reason on initial load
+    // intentially left empty dependency array so useeffect is only called once on mount
+    console.log('fields length: ', fields.length)
     console.log('fields', fields)
-  }, [stakeholderOptions])
+  }, [])
 
   const onSubmit = async (data) => {
     setisSubmitting(true)
