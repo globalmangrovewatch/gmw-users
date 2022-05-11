@@ -34,8 +34,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test  --passWithNoTests",
     "eject": "react-scripts eject",
-    "lint": "eslint ./src/**/*.{js,jsx,tsx,ts}",
-    "lint:fix": "eslint './src/**/*.{js,jsx,tsx,ts}' --fix",
+    "lint": "eslint ./src/**/*.{js,jsx,tsx,ts} --no-error-on-unmatched-pattern",
+    "lint:fix": "eslint './src/**/*.{js,jsx,tsx,ts}' --fix --no-error-on-unmatched-pattern",
     "prettier": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "eslintConfig": {
