@@ -1,9 +1,10 @@
-import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from './views/Home'
-import ProjectDetailsForm from './components/ProjectDetailsForm'
 import { ThemeProvider } from '@mui/material/styles'
+import Home from './views/Home'
+import React from 'react'
 import theme from './styles/theme'
+import ProjectDetailsForm from './components/ProjectDetailsForm'
+import RestorationAimsForm from './components/RestorationAimsForm/RestorationAimsForm'
 
 function App() {
   return (
@@ -11,12 +12,9 @@ function App() {
       <Router>
         <div className='app'>
           <Routes>
-            <Route
-              path='/'
-              element={[
-                <Home key='1'></Home>,
-                <ProjectDetailsForm key='2'></ProjectDetailsForm>
-              ]}></Route>
+            <Route path='/' element={<Home />} />
+            <Route path='/:siteId/form/project-details' element={<ProjectDetailsForm />} />
+            <Route path='/:siteId/form/restoration-aims' element={<RestorationAimsForm />} />
           </Routes>
         </div>
       </Router>
