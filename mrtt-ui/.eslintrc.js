@@ -16,6 +16,14 @@ module.exports = {
   plugins: ['react', 'react-hooks'],
   rules: {
     'react/react-in-jsx-scope': 'off',
-    'prettier/prettier': ['error', { jsxSingleQuote: true }]
-  }
+    'prettier/prettier': ['error', { jsxSingleQuote: true }],
+    'no-unused-vars': [
+      'error',
+      {
+        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_' // ignore unused vars and args that start with _. These vars are unsued, but named for readability/maintainability of code.
+      }
+    ]
+  },
+  settings: { react: { version: 'detect' } }
 }
