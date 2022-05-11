@@ -185,14 +185,16 @@ const ProjectDetailsForm = () => {
         <FormQuestionDiv>
           <FormLabel>1.3 What is the overall site area?</FormLabel>
         </FormQuestionDiv>
-        {isError && (
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            Submit failed, please try again
-          </Typography>
-        )}
-        <Button sx={{ marginTop: '1em' }} variant='contained' type='submit' disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Submit'}
-        </Button>
+        <FormQuestionDiv>
+          {isError && (
+            <Typography variant='subtitle' sx={{ color: 'red' }}>
+              Submit failed, please try again
+            </Typography>
+          )}
+          <Button variant='contained' type='submit' disabled={isSubmitting}>
+            {isSubmitting ? 'Submitting...' : 'Submit'}
+          </Button>
+        </FormQuestionDiv>
       </form>
     </MainFormDiv>
   )

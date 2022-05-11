@@ -1,0 +1,21 @@
+export const stakeholderOptions = [
+  'Local community representatives',
+  'Local leaders',
+  'Indigenous peoples',
+  'Traditionally marginalised or underrepresented groups',
+  'Landowners/customary area owners',
+  'National, central or federal government',
+  'Sub-national, regional or state government',
+  'Local or municipal government',
+  'Overseas government agencies ',
+  'Intergovernmental agencies',
+  'Managed area manager/personnel',
+  'International or national NGO',
+  'Small-scale local NGO',
+  'Community based organisations, associations or cooperatives',
+  'Industry/Private sector',
+  'Academic institute or research facility',
+  'Ecotourists',
+  'Unknown',
+  'Other'
+]
