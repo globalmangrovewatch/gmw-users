@@ -1,8 +1,3 @@
-import { useState } from 'react'
-import axios from 'axios'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as Yup from 'yup'
 import {
   FormControlLabel,
   FormLabel,
@@ -15,12 +10,19 @@ import {
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
+import { useForm, Controller } from 'react-hook-form'
+import { useState } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as Yup from 'yup'
 import Autocomplete from '@mui/material/Autocomplete'
+import axios from 'axios'
 
-import { MainFormDiv, FormQuestionDiv, SectionFormTitle } from '../styles/forms'
 import countries from '../data/countries.json'
 import { mapDataForApi } from '../library/mapDataForApi'
+import { ErrorText } from '../styles/typography'
+import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/forms'
 import ButtonSubmit from './ButtonSubmit'
+import language from '../language'
 
 const ProjectDetailsForm = () => {
   // form validation rules
@@ -61,13 +63,14 @@ const ProjectDetailsForm = () => {
 
     // make axios PUT request
     axios
-      .put(url, preppedData)
+      .patch(url, preppedData)
       .then((res) => {
         setIsSubmitting(false)
         console.log(res)
       })
       .catch((error) => {
         setIsError(true)
+        setIsSubmitting(false)
         console.log(error)
       })
   }
@@ -75,7 +78,7 @@ const ProjectDetailsForm = () => {
   return (
     <MainFormDiv>
       <SectionFormTitle>Project Details Form</SectionFormTitle>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
           <FormLabel>1.1a Does the project have an end date?</FormLabel>
@@ -177,13 +180,9 @@ const ProjectDetailsForm = () => {
         <FormQuestionDiv>
           <FormLabel>1.3 What is the overall site area?</FormLabel>
         </FormQuestionDiv>
-        {isError && (
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            Submit failed, please try again
-          </Typography>
-        )}
+        {isError && <ErrorText>{language.error.submit}</ErrorText>}
         <ButtonSubmit isSubmitting={isSubmitting} />
-      </form>
+      </Form>
     </MainFormDiv>
   )
 }
