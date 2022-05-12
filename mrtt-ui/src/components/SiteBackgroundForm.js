@@ -10,12 +10,14 @@ import {
   FormLabel,
   List,
   ListItem,
+  MenuItem,
+  Select,
   TextField,
   Typography
 } from '@mui/material'
 
 import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
-import { stakeholderOptions } from '../data/stakeholders'
+import { stakeholderOptions, managementStatusOptions } from '../data/projectDetailsOptions'
 // TODO: update question mapping to include 2.0 questions
 import { questionMapping } from '../data/questionMapping'
 
@@ -27,7 +29,8 @@ const ProjectDetailsForm = () => {
         stakeholderType: Yup.string(),
         stackholderName: Yup.string()
       })
-    )
+    ),
+    managementStatus: Yup.string()
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -122,6 +125,25 @@ const ProjectDetailsForm = () => {
           <Typography variant='subtitle' sx={{ color: 'red' }}>
             {errors.stakeholders?.message}
           </Typography>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <FormLabel>
+            2.2 What was the management status of the site immediately before the project started?
+          </FormLabel>
+          <Controller
+            name='managementStatus'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <Select {...field} value={field.value}>
+                {managementStatusOptions.map((status, index) => (
+                  <MenuItem key={index} value={status}>
+                    {status}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
         </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && (

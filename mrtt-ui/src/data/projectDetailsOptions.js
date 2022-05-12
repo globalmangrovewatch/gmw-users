@@ -19,3 +19,12 @@ export const stakeholderOptions = [
   'Unknown',
   'Other'
 ]
+
+export const managementStatusOptions = [
+  'Protected informally at a local level',
+  'Protection is formally recognized at the state/province/regional level',
+  'Protection is formally recognized at a national level',
+  'Protection is formally recognized at an international level',
+  'None',
+  'Unknown'
+]
