@@ -1,9 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import axios from 'axios'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-import { Button, Checkbox, FormLabel, List, ListItem, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormLabel,
+  List,
+  ListItem,
+  TextField,
+  Typography
+} from '@mui/material'
 
 import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
 import { stakeholderOptions } from '../data/stakeholders'
@@ -23,28 +32,13 @@ const ProjectDetailsForm = () => {
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() and useFieldArray() hooks
-  const { control, handleSubmit, formState } = useForm(formOptions)
+  const { handleSubmit, formState, control } = useForm(formOptions)
   const { errors } = formState
-  const { fields, append } = useFieldArray({ name: 'stakeholders', control })
+  const { fields, append, remove } = useFieldArray({ name: 'stakeholders', control })
 
   // state variables
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
-
-  // add stakeholder list to fields array on mount
-  useEffect(() => {
-    fields.length = stakeholderOptions.length
-    stakeholderOptions.forEach((stakeholder) =>
-      append({ stakeholderType: stakeholder, stakeholderName: '' })
-    )
-    // these console logs appear twice on initial load
-    // keys are duplicated (38 items appear instead of 19)
-    // every time I save a new change, another set of duplicates gets added
-    // it looks like useEffect is called twice for some reason on initial load
-    // intentially left empty dependency array so useeffect is only called once on mount
-    console.log('fields length: ', fields.length)
-    console.log('fields', fields)
-  }, [])
 
   const onSubmit = async (data) => {
     setisSubmitting(true)
@@ -74,9 +68,20 @@ const ProjectDetailsForm = () => {
       })
       .catch((error) => {
         setIsError(true)
+        setisSubmitting(false)
         console.log(error)
       })
   }
+
+  const handleStakeholdersOnChange = (e, stakeholder) => {
+    if (e.target.checked) {
+      append({ stakeholderType: stakeholder })
+    } else {
+      const index = fields.findIndex((field) => field.stakeholderType === stakeholder)
+      remove(index)
+    }
+  }
+
   return (
     <MainFormDiv>
       {/* Select Stakeholders */}
@@ -85,18 +90,32 @@ const ProjectDetailsForm = () => {
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormQuestionDiv>
-          <FormLabel>2.1 What stakeholders are involved in the project activities?</FormLabel>
+          <FormLabel>2.1 Which stakeholders are involved in the project activities?</FormLabel>
           <List>
-            {fields.map((item, index) => (
-              <ListItem key={item.id}>
-                <div>{item.stakeholderType}</div>
-                <Controller
-                  name={`stakeholders[${index}]stakeholderType`}
-                  control={control}
-                  mode='onBlur'
-                  // defaultValue={item.stakeholderType}
-                  render={({ field }) => <Checkbox {...field}>{item.stakeholderType}</Checkbox>}
-                />
+            {stakeholderOptions.map((stakeholder, index) => (
+              <ListItem key={index}>
+                <Box>
+                  <Box>
+                    <Checkbox
+                      value={stakeholder}
+                      onChange={(e) => handleStakeholdersOnChange(e, stakeholder)}></Checkbox>
+                    <Typography variant='subtitle'>{stakeholder}</Typography>
+                  </Box>
+                  <Box>
+                    {fields.find((field) => field.stakeholderType === stakeholder) && (
+                      <Controller
+                        name={`stakeholders.${fields.findIndex(
+                          (field) => field.stakeholderType === stakeholder
+                        )}.stakeholderName`}
+                        control={control}
+                        defaultValue=''
+                        render={({ field }) => (
+                          <TextField label='Name' variant='outlined' {...field} />
+                        )}
+                      />
+                    )}
+                  </Box>
+                </Box>
               </ListItem>
             ))}
           </List>

@@ -74,6 +74,7 @@ const ProjectDetailsForm = () => {
       })
       .catch((error) => {
         setIsError(true)
+        setisSubmitting(false)
         console.log(error)
       })
   }
