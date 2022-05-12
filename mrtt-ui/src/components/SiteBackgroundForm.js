@@ -11,13 +11,16 @@ import {
   List,
   ListItem,
   MenuItem,
-  Select,
   TextField,
   Typography
 } from '@mui/material'
 
 import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
-import { stakeholderOptions, managementStatusOptions } from '../data/projectDetailsOptions'
+import {
+  lawOptions,
+  managementStatusOptions,
+  stakeholderOptions
+} from '../data/projectDetailsOptions'
 // TODO: update question mapping to include 2.0 questions
 import { questionMapping } from '../data/questionMapping'
 
@@ -30,7 +33,8 @@ const ProjectDetailsForm = () => {
         stackholderName: Yup.string()
       })
     ),
-    managementStatus: Yup.string()
+    managementStatus: Yup.string(),
+    lawStatus: Yup.string()
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -126,6 +130,7 @@ const ProjectDetailsForm = () => {
             {errors.stakeholders?.message}
           </Typography>
         </FormQuestionDiv>
+        {/* Select Management Status*/}
         <FormQuestionDiv>
           <FormLabel>
             2.2 What was the management status of the site immediately before the project started?
@@ -135,15 +140,41 @@ const ProjectDetailsForm = () => {
             control={control}
             defaultValue=''
             render={({ field }) => (
-              <Select {...field} value={field.value}>
-                {managementStatusOptions.map((status, index) => (
-                  <MenuItem key={index} value={status}>
-                    {status}
+              <TextField {...field} select value={field.value} label='select a management status'>
+                {managementStatusOptions.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
                   </MenuItem>
                 ))}
-              </Select>
+              </TextField>
             )}
           />
+          <Typography variant='subtitle' sx={{ color: 'red' }}>
+            {errors.managementStatus?.message}
+          </Typography>
+        </FormQuestionDiv>
+        {/* Law recognition */}
+        <FormQuestionDiv>
+          <FormLabel>
+            2.3 Are management activities at the site recognized in statutory or customary laws?
+          </FormLabel>
+          <Controller
+            name='lawStatus'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select a law status'>
+                {lawOptions.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <Typography variant='subtitle' sx={{ color: 'red' }}>
+            {errors.managementStatus?.message}
+          </Typography>
         </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && (

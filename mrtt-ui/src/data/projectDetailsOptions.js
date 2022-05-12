@@ -28,3 +28,11 @@ export const managementStatusOptions = [
   'None',
   'Unknown'
 ]
+
+export const lawOptions = [
+  'Yes - statutory',
+  'Yes - customary',
+  'No',
+  'Partially - statutory',
+  'Partially - customary'
+]
