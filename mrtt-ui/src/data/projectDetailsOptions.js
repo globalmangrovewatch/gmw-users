@@ -36,3 +36,11 @@ export const lawOptions = [
   'Partially - statutory',
   'Partially - customary'
 ]
+
+export const protectionStatusOptions = [
+  'Full protection',
+  'Partial protection',
+  'Sustainable use',
+  'No management',
+  'Other'
+]

@@ -19,6 +19,7 @@ import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
 import {
   lawOptions,
   managementStatusOptions,
+  protectionStatusOptions,
   stakeholderOptions
 } from '../data/projectDetailsOptions'
 // TODO: update question mapping to include 2.0 questions
@@ -34,7 +35,8 @@ const ProjectDetailsForm = () => {
       })
     ),
     managementStatus: Yup.string(),
-    lawStatus: Yup.string()
+    lawStatus: Yup.string(),
+    managementArea: Yup.string()
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -175,6 +177,37 @@ const ProjectDetailsForm = () => {
           <Typography variant='subtitle' sx={{ color: 'red' }}>
             {errors.managementStatus?.message}
           </Typography>
+        </FormQuestionDiv>
+        {/* Management Area*/}
+        <FormQuestionDiv>
+          <FormLabel>
+            2.4 Name of the formal management area the site is contained within (if relevant)?
+          </FormLabel>
+          <Controller
+            name='managementArea'
+            control={control}
+            defaultValue=''
+            render={({ field }) => <TextField {...field} value={field.value}></TextField>}
+          />
+        </FormQuestionDiv>
+        {/* Protection Status*/}
+        <FormQuestionDiv>
+          <FormLabel>
+            2.5 How would you describe the protection status of the site immediately before the
+            project started?
+          </FormLabel>
+          <List>
+            {protectionStatusOptions.map((option, index) => (
+              <ListItem key={index}>
+                <Box>
+                  <Box>
+                    <Checkbox value={option}></Checkbox>
+                    <Typography variant='subtitle'>{option}</Typography>
+                  </Box>
+                </Box>
+              </ListItem>
+            ))}
+          </List>
         </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && (
