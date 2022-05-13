@@ -56,3 +56,16 @@ export const governmentArrangementOptions = [
   'None',
   'Unknown'
 ]
+
+export const landTenureOptions = [
+  'Private - individual',
+  'Private - business',
+  'Customary',
+  'Communal',
+  'Sub-national or local government',
+  'National government',
+  'Unknown',
+  'Other'
+]
+
+export const customaryRightsOptions = ['Yes', 'No', 'Partially']

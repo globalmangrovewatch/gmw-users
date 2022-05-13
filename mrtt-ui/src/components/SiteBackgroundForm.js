@@ -21,7 +21,9 @@ import {
 import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
 import {
   areStakeholdersInvolvedOptions,
+  customaryRightsOptions,
   governmentArrangementOptions,
+  landTenureOptions,
   lawOptions,
   managementStatusOptions,
   protectionStatusOptions,
@@ -44,7 +46,9 @@ const ProjectDetailsForm = () => {
     managementArea: Yup.string(),
     protectionStatus: Yup.array().of(Yup.string()),
     areStakeholdersInvolved: Yup.string(),
-    govermentArrangement: Yup.array().of(Yup.string())
+    govermentArrangement: Yup.array().of(Yup.string()),
+    landTenure: Yup.array().of(Yup.string()),
+    customaryRights: Yup.string()
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -103,7 +107,7 @@ const ProjectDetailsForm = () => {
     }
   }
 
-  // TODO: handle '2.5 other protection status textfield add in'
+  // TODO: handle '2.5 & 2.8 other option textfield add in'
 
   return (
     <MainFormDiv>
@@ -301,6 +305,64 @@ const ProjectDetailsForm = () => {
           />
           <Typography variant='subtitle' sx={{ color: 'red' }}>
             {errors.govermentArrangement?.message}
+          </Typography>
+        </FormQuestionDiv>
+        {/* Land Tenure */}
+        <FormQuestionDiv>
+          <FormLabel>
+            2.8 What was the land tenure of the site immediately before the project started?
+          </FormLabel>
+          <Controller
+            name='landTenure'
+            control={control}
+            defaultValue={[]}
+            render={({ field }) => (
+              <Select
+                {...field}
+                multiple
+                value={field.value}
+                label='select'
+                input={<OutlinedInput id='select-multiple-chip' label='Chip' />}
+                renderValue={(selected) => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </Box>
+                )}>
+                {landTenureOptions.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          <Typography variant='subtitle' sx={{ color: 'red' }}>
+            {errors.landTenure?.message}
+          </Typography>
+        </FormQuestionDiv>
+        {/* customaryRights */}
+        <FormQuestionDiv>
+          <FormLabel>
+            2.9 Are customary rights to land within the site recognised in national law?
+          </FormLabel>
+          <Controller
+            name='customaryRights'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {customaryRightsOptions.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <Typography variant='subtitle' sx={{ color: 'red' }}>
+            {errors.customaryRights?.message}
           </Typography>
         </FormQuestionDiv>
         <FormQuestionDiv>
