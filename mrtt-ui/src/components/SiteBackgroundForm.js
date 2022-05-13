@@ -36,14 +36,29 @@ const ProjectDetailsForm = () => {
     ),
     managementStatus: Yup.string(),
     lawStatus: Yup.string(),
-    managementArea: Yup.string()
+    managementArea: Yup.string(),
+    protectionStatus: Yup.array().of(
+      Yup.object().shape({
+        protectionStatusType: Yup.string(),
+        other: Yup.string()
+      })
+    )
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() and useFieldArray() hooks
   const { handleSubmit, formState, control } = useForm(formOptions)
   const { errors } = formState
-  const { fields, append, remove } = useFieldArray({ name: 'stakeholders', control })
+  const {
+    fields: stakeholdersFields,
+    append: stakeholdersAppend,
+    remove: stakeholdersRemove
+  } = useFieldArray({ name: 'stakeholders', control })
+  const {
+    fields: protectionStatusFields,
+    append: protectionStatusAppend,
+    remove: protectionStatusRemove
+  } = useFieldArray({ name: 'protectionStatus', control })
 
   // state variables
   const [isSubmitting, setisSubmitting] = useState(false)
@@ -84,10 +99,23 @@ const ProjectDetailsForm = () => {
 
   const handleStakeholdersOnChange = (e, stakeholder) => {
     if (e.target.checked) {
-      append({ stakeholderType: stakeholder })
+      stakeholdersAppend({ stakeholderType: stakeholder })
     } else {
-      const index = fields.findIndex((field) => field.stakeholderType === stakeholder)
-      remove(index)
+      const index = stakeholdersFields.findIndex((field) => field.stakeholderType === stakeholder)
+      stakeholdersRemove(index)
+    }
+  }
+
+  const handleProtectionStatusOnChange = (e, option) => {
+    if (e.target.checked && option !== 'other') {
+      protectionStatusAppend({ protectionStatusType: option })
+    } else if (e.target.checked && option === 'other') {
+      protectionStatusAppend({ other: option })
+    } else {
+      const index = protectionStatusFields.findIndex(
+        (field) => field.protectionStatusType === option || field.other === option
+      )
+      protectionStatusRemove(index)
     }
   }
 
@@ -111,9 +139,9 @@ const ProjectDetailsForm = () => {
                     <Typography variant='subtitle'>{stakeholder}</Typography>
                   </Box>
                   <Box>
-                    {fields.find((field) => field.stakeholderType === stakeholder) && (
+                    {stakeholdersFields.find((field) => field.stakeholderType === stakeholder) && (
                       <Controller
-                        name={`stakeholders.${fields.findIndex(
+                        name={`stakeholders.${stakeholdersFields.findIndex(
                           (field) => field.stakeholderType === stakeholder
                         )}.stakeholderName`}
                         control={control}
@@ -201,7 +229,9 @@ const ProjectDetailsForm = () => {
               <ListItem key={index}>
                 <Box>
                   <Box>
-                    <Checkbox value={option}></Checkbox>
+                    <Checkbox
+                      value={option}
+                      onChange={(e) => handleProtectionStatusOnChange(e, option)}></Checkbox>
                     <Typography variant='subtitle'>{option}</Typography>
                   </Box>
                 </Box>
