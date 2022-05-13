@@ -37,11 +37,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test  --passWithNoTests",
     "eject": "react-scripts eject",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
+    "lint": "eslint ./src/**/*.{js,jsx,tsx,ts}",
+    "lint:fix": "eslint './src/**/*.{js,jsx,tsx,ts}' --fix",
+    "prettier": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "eslintConfig": {
     "extends": [
@@ -71,24 +71,11 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
-    "husky": "^4.3.8",
     "jest": "^27.5.1",
-    "lint-staged": "^12.4.0",
+    "plop": "^3.1.0",
     "prettier": "^2.6.2"
   },
-  "lint-staged": {
-    "src/**/*.{json,md}": [
-      "prettier --write"
-    ],
-    "src/**/*.{js,jsx,tsx,ts}": [
-      "prettier --write",
-      "eslint --fix"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm run lint && npm run test -- --watchAll=false"
-    }
+  "engines": {
+    "node": ">=16.15.0"
   }
 }
