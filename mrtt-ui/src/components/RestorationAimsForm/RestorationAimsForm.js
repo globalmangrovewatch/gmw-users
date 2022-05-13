@@ -1,39 +1,71 @@
-import { FormLabel } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 import axios from 'axios'
 
 import { ErrorText } from '../../styles/typography'
-import { Form, FormQuestionDiv, MainFormDiv, SectionFormTitle } from '../../styles/forms'
+import { Form, MainFormDiv, SectionFormTitle } from '../../styles/forms'
+import { mapDataForApi } from '../../library/mapDataForApi'
+import { restorationAims as questions } from '../../data/questions'
 import ButtonSubmit from '../ButtonSubmit'
-import CheckboxGroupMangroveWithLabel from '../CheckboxGroupMangroveWithLabel'
+import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import language from '../../language'
-import restorationAimsQuestionsAndAnswers from './restorationAimsQuestionsAndAnswers'
-
-const formatFormDataForApi = (formData) =>
-  Object.entries(formData).map((formField) => {
-    const formAnswers = formField[1].map((formAnswer) => ({ choice: formAnswer }))
-
-    return {
-      question_id: `Q3.${formField[0]}`,
-      answer_value: formAnswers
-    }
-  })
 
 const submitUrl = `${process.env.REACT_APP_API_URL}sites/1/registration_answers`
+
+const aimsValidation = yup.object({
+  selectedValues: yup
+    .array()
+    .of(yup.string())
+    .when('isOtherChecked', {
+      is: (isOtherChecked) => {
+        return !isOtherChecked
+      },
+      then: (schema) => schema.min(1, language.restorationAimsForm.validation.selectAtleastOneAim),
+      otherwise: (schema) =>
+        schema.test(
+          'isCheckedAndEmpty',
+          language.restorationAimsForm.validation.clairfyOther,
+          (value, context) => {
+            const {
+              parent: { otherValue }
+            } = context
+            return otherValue !== undefined && otherValue !== ''
+          }
+        )
+    }),
+  otherValue: yup.string(),
+  isOtherChecked: yup.bool()
+})
 
 const RestorationAimsForm = () => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const validationSchema = yup.object({
+    ecologicalAims: aimsValidation,
+    socioEconomicAims: aimsValidation,
+    otherAims: aimsValidation
+  })
 
-  const reactHookFormInstance = useForm()
-  const { handleSubmit: validateInputs } = reactHookFormInstance
+  const reactHookFormInstance = useForm({
+    defaultValues: {
+      ecologicalAims: { selectedValues: [], otherValue: undefined },
+      socioEconomicAims: { selectedValues: [], otherValue: undefined },
+      otherAims: { selectedValues: [], otherValue: undefined }
+    },
+    resolver: yupResolver(validationSchema)
+  })
+  const {
+    handleSubmit: validateInputs,
+    formState: { errors }
+  } = reactHookFormInstance
 
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
     axios
-      .patch(submitUrl, formatFormDataForApi(formData))
+      .patch(submitUrl, mapDataForApi('restorationAims', formData))
       .then(() => {
         setIsSubmitting(false)
       })
@@ -42,46 +74,36 @@ const RestorationAimsForm = () => {
         setIsSubmitError(true)
       })
   }
-  const generateOptionsObjectFromAnswers = (answers) =>
-    answers.map((answer) => ({
-      label: answer,
-      value: answer
-    }))
-  const ecologicalAimsOptions = generateOptionsObjectFromAnswers(
-    restorationAimsQuestionsAndAnswers[1].answers
-  )
-  const socioEconomicAimsOptions = generateOptionsObjectFromAnswers(
-    restorationAimsQuestionsAndAnswers[2].answers
-  )
-  const otherAimsOptions = generateOptionsObjectFromAnswers(
-    restorationAimsQuestionsAndAnswers[3].answers
-  )
+
   return (
     <MainFormDiv>
       <SectionFormTitle>Restoration Aims</SectionFormTitle>
       <Form onSubmit={validateInputs(handleSubmit)}>
-        <CheckboxGroupMangroveWithLabel
-          fieldName='1'
+        <CheckboxGroupWithLabelAndController
+          fieldName='ecologicalAims'
           reactHookFormInstance={reactHookFormInstance}
-          options={ecologicalAimsOptions}
-          question={restorationAimsQuestionsAndAnswers[1].question}
+          options={questions.ecologicalAims.options}
+          question={questions.ecologicalAims.question}
+          shouldAddOtherOptionWithClarification={true}
         />
-        <CheckboxGroupMangroveWithLabel
-          fieldName='2'
+        <ErrorText>{errors.ecologicalAims?.selectedValues?.message}</ErrorText>
+        <CheckboxGroupWithLabelAndController
+          fieldName='socioEconomicAims'
           reactHookFormInstance={reactHookFormInstance}
-          options={socioEconomicAimsOptions}
-          question={restorationAimsQuestionsAndAnswers[2].question}
+          options={questions.socioEconomicAims.options}
+          question={questions.socioEconomicAims.question}
+          shouldAddOtherOptionWithClarification={true}
         />
-        <CheckboxGroupMangroveWithLabel
-          fieldName='3'
+        <ErrorText>{errors.socioEconomicAims?.selectedValues?.message}</ErrorText>
+        <CheckboxGroupWithLabelAndController
+          fieldName='otherAims'
           reactHookFormInstance={reactHookFormInstance}
-          options={otherAimsOptions}
-          question={restorationAimsQuestionsAndAnswers[3].question}
+          options={questions.otherAims.options}
+          question={questions.otherAims.question}
+          shouldAddOtherOptionWithClarification={true}
         />
-        <FormQuestionDiv>
-          <FormLabel>{restorationAimsQuestionsAndAnswers[4].question}</FormLabel>
-        </FormQuestionDiv>
-        <div>Question 3.4 is complicated and will be built in a later ticket (#41)</div>
+        <ErrorText>{errors.otherAims?.selectedValues?.message}</ErrorText>
+
         {isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}
         <ButtonSubmit isSubmitting={isSubmitting} />
       </Form>
