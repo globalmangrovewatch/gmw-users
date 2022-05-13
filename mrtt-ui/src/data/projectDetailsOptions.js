@@ -44,3 +44,5 @@ export const protectionStatusOptions = [
   'No management',
   'Other'
 ]
+
+export const areStakeholdersInvolved = ['Yes', 'No', 'Partially']

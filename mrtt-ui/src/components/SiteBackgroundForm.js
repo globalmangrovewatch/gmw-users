@@ -20,6 +20,7 @@ import {
 
 import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
 import {
+  areStakeholdersInvolved,
   lawOptions,
   managementStatusOptions,
   protectionStatusOptions,
@@ -40,7 +41,8 @@ const ProjectDetailsForm = () => {
     managementStatus: Yup.string(),
     lawStatus: Yup.string(),
     managementArea: Yup.string(),
-    protectionStatus: Yup.array().of(Yup.string())
+    protectionStatus: Yup.array().of(Yup.string()),
+    areStakeholdersInvolved: Yup.string()
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -152,7 +154,7 @@ const ProjectDetailsForm = () => {
             control={control}
             defaultValue=''
             render={({ field }) => (
-              <TextField {...field} select value={field.value} label='select a management status'>
+              <TextField {...field} select value={field.value} label='select'>
                 {managementStatusOptions.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
@@ -175,7 +177,7 @@ const ProjectDetailsForm = () => {
             control={control}
             defaultValue=''
             render={({ field }) => (
-              <TextField {...field} select value={field.value} label='select a law status'>
+              <TextField {...field} select value={field.value} label='select'>
                 {lawOptions.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
@@ -199,6 +201,9 @@ const ProjectDetailsForm = () => {
             defaultValue=''
             render={({ field }) => <TextField {...field} value={field.value}></TextField>}
           />
+          <Typography variant='subtitle' sx={{ color: 'red' }}>
+            {errors.managementArea?.message}
+          </Typography>
         </FormQuestionDiv>
         {/* Protection Status*/}
         <FormQuestionDiv>
@@ -215,7 +220,7 @@ const ProjectDetailsForm = () => {
                 {...field}
                 multiple
                 value={field.value}
-                label='select a protection status'
+                label='select'
                 input={<OutlinedInput id='select-multiple-chip' label='Chip' />}
                 renderValue={(selected) => (
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -232,6 +237,33 @@ const ProjectDetailsForm = () => {
               </Select>
             )}
           />
+          <Typography variant='subtitle' sx={{ color: 'red' }}>
+            {errors.protectionStatus?.message}
+          </Typography>
+        </FormQuestionDiv>
+        {/* areStakeholdersInvolved */}
+        <FormQuestionDiv>
+          <FormLabel>
+            2.6 Are the stakeholders involved in project activities able to influence site
+            management rules?
+          </FormLabel>
+          <Controller
+            name='areStakeholdersInvolved '
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {areStakeholdersInvolved.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <Typography variant='subtitle' sx={{ color: 'red' }}>
+            {errors.managementStatus?.message}
+          </Typography>
         </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && (
