@@ -10,7 +10,9 @@ import {
   FormLabel,
   List,
   ListItem,
+  ListItemText,
   MenuItem,
+  Select,
   TextField,
   Typography
 } from '@mui/material'
@@ -37,28 +39,19 @@ const ProjectDetailsForm = () => {
     managementStatus: Yup.string(),
     lawStatus: Yup.string(),
     managementArea: Yup.string(),
-    protectionStatus: Yup.array().of(
-      Yup.object().shape({
-        protectionStatusType: Yup.string(),
-        other: Yup.string()
-      })
-    )
+    protectionStatus: Yup.array().of(Yup.string())
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() and useFieldArray() hooks
   const { handleSubmit, formState, control } = useForm(formOptions)
   const { errors } = formState
+
   const {
     fields: stakeholdersFields,
     append: stakeholdersAppend,
     remove: stakeholdersRemove
   } = useFieldArray({ name: 'stakeholders', control })
-  const {
-    fields: protectionStatusFields,
-    append: protectionStatusAppend,
-    remove: protectionStatusRemove
-  } = useFieldArray({ name: 'protectionStatus', control })
 
   // state variables
   const [isSubmitting, setisSubmitting] = useState(false)
@@ -106,18 +99,7 @@ const ProjectDetailsForm = () => {
     }
   }
 
-  const handleProtectionStatusOnChange = (e, option) => {
-    if (e.target.checked && option !== 'other') {
-      protectionStatusAppend({ protectionStatusType: option })
-    } else if (e.target.checked && option === 'other') {
-      protectionStatusAppend({ other: option })
-    } else {
-      const index = protectionStatusFields.findIndex(
-        (field) => field.protectionStatusType === option || field.other === option
-      )
-      protectionStatusRemove(index)
-    }
-  }
+  // TODO: handle '2.5 other protection status textfield add in'
 
   return (
     <MainFormDiv>
@@ -224,20 +206,26 @@ const ProjectDetailsForm = () => {
             2.5 How would you describe the protection status of the site immediately before the
             project started?
           </FormLabel>
-          <List>
-            {protectionStatusOptions.map((option, index) => (
-              <ListItem key={index}>
-                <Box>
-                  <Box>
-                    <Checkbox
-                      value={option}
-                      onChange={(e) => handleProtectionStatusOnChange(e, option)}></Checkbox>
-                    <Typography variant='subtitle'>{option}</Typography>
-                  </Box>
-                </Box>
-              </ListItem>
-            ))}
-          </List>
+          <Controller
+            name='protectionStatus'
+            control={control}
+            defaultValue={[]}
+            render={({ field }) => (
+              <Select
+                {...field}
+                multiple
+                value={field.value}
+                label='select a protection status'
+                renderValue={(selected) => selected.join(', ')}>
+                {protectionStatusOptions.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    <Checkbox />
+                    <ListItemText primary={item} />
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
         </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && (
