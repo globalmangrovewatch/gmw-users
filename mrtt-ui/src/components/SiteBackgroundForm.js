@@ -7,11 +7,12 @@ import {
   Box,
   Button,
   Checkbox,
+  Chip,
   FormLabel,
   List,
   ListItem,
-  ListItemText,
   MenuItem,
+  OutlinedInput,
   Select,
   TextField,
   Typography
@@ -46,7 +47,6 @@ const ProjectDetailsForm = () => {
   // get functions to build form with useForm() and useFieldArray() hooks
   const { handleSubmit, formState, control } = useForm(formOptions)
   const { errors } = formState
-
   const {
     fields: stakeholdersFields,
     append: stakeholdersAppend,
@@ -216,11 +216,17 @@ const ProjectDetailsForm = () => {
                 multiple
                 value={field.value}
                 label='select a protection status'
-                renderValue={(selected) => selected.join(', ')}>
+                input={<OutlinedInput id='select-multiple-chip' label='Chip' />}
+                renderValue={(selected) => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </Box>
+                )}>
                 {protectionStatusOptions.map((item, index) => (
                   <MenuItem key={index} value={item}>
-                    <Checkbox />
-                    <ListItemText primary={item} />
+                    {item}
                   </MenuItem>
                 ))}
               </Select>
