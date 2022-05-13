@@ -20,7 +20,8 @@ import {
 
 import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
 import {
-  areStakeholdersInvolved,
+  areStakeholdersInvolvedOptions,
+  governmentArrangementOptions,
   lawOptions,
   managementStatusOptions,
   protectionStatusOptions,
@@ -42,7 +43,8 @@ const ProjectDetailsForm = () => {
     lawStatus: Yup.string(),
     managementArea: Yup.string(),
     protectionStatus: Yup.array().of(Yup.string()),
-    areStakeholdersInvolved: Yup.string()
+    areStakeholdersInvolved: Yup.string(),
+    govermentArrangement: Yup.array().of(Yup.string())
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -187,7 +189,7 @@ const ProjectDetailsForm = () => {
             )}
           />
           <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.managementStatus?.message}
+            {errors.lawStatus?.message}
           </Typography>
         </FormQuestionDiv>
         {/* Management Area*/}
@@ -253,7 +255,7 @@ const ProjectDetailsForm = () => {
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label='select'>
-                {areStakeholdersInvolved.map((item, index) => (
+                {areStakeholdersInvolvedOptions.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -262,7 +264,43 @@ const ProjectDetailsForm = () => {
             )}
           />
           <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.managementStatus?.message}
+            {errors.areStakeholdersInvolved?.message}
+          </Typography>
+        </FormQuestionDiv>
+        {/* Government Arrangement */}
+        <FormQuestionDiv>
+          <FormLabel>
+            2.7 What best describes the governance arrangement of the site immediately before the
+            project started?
+          </FormLabel>
+          <Controller
+            name='governmentArrangement'
+            control={control}
+            defaultValue={[]}
+            render={({ field }) => (
+              <Select
+                {...field}
+                multiple
+                value={field.value}
+                label='select'
+                input={<OutlinedInput id='select-multiple-chip' label='Chip' />}
+                renderValue={(selected) => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </Box>
+                )}>
+                {governmentArrangementOptions.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          <Typography variant='subtitle' sx={{ color: 'red' }}>
+            {errors.govermentArrangement?.message}
           </Typography>
         </FormQuestionDiv>
         <FormQuestionDiv>

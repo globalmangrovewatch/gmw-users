@@ -45,4 +45,14 @@ export const protectionStatusOptions = [
   'Other'
 ]
 
-export const areStakeholdersInvolved = ['Yes', 'No', 'Partially']
+export const areStakeholdersInvolvedOptions = ['Yes', 'No', 'Partially']
+
+export const governmentArrangementOptions = [
+  'Governance by government',
+  'Shared governance',
+  'Private governance',
+  'Governance by indigenous peoples and local communities',
+  'Mixed governance',
+  'None',
+  'Unknown'
+]
