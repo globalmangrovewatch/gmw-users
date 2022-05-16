@@ -20,7 +20,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 
 import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
 import countries from '../data/countries.json'
-import { questionMapping } from '../data/questionMapping'
+import { mapDataForApi } from '../library/mapDataForApi'
 
 const ProjectDetailsForm = () => {
   // form validation rules
@@ -53,18 +53,12 @@ const ProjectDetailsForm = () => {
   const onSubmit = async (data) => {
     setisSubmitting(true)
     setIsError(false)
-    const preppedData = []
     const url = `${process.env.REACT_APP_API_URL}sites/1/registration_answers`
 
     if (!data) return
 
-    // set up data structure for api
-    for (const [key, value] of Object.entries(data)) {
-      // map question ids with keys
-      if (Object.prototype.hasOwnProperty.call(questionMapping.projectDetails, key)) {
-        preppedData.push({ question_id: questionMapping.projectDetails[key], answer_value: value })
-      }
-    }
+    const preppedData = mapDataForApi('projectDetails', data)
+
     // make axios PUT request
     axios
       .put(url, preppedData)
