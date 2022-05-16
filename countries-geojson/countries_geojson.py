@@ -6,17 +6,19 @@ jsonFilePath = "/Users/cpapalaz/Desktop/Mangrove_Countries.json"
 
 #read csv file and add to data
 features = []
-with open(csvFilePath, newline='') as csvfile:
-    reader = csv.reader(csvfile, delimiter=',')
-    for country, mangroves, latitude, longitude, minpt_x, maxpt_x, minpt_y, maxpt_y in reader:
-        latitude, longitude, minpt_x, maxpt_x, minpt_y, maxpt_y = map(float, (latitude, longitude, minpt_x, maxpt_x, minpt_y, maxpt_y))
+with open(csvFilePath, newline='', encoding='latin1') as csvfile:
+    print(csvfile)
+    reader = csv.reader(csvfile, dialect=csv.excel, delimiter=',')
+    next(reader, None)  # skip the headers
+    for Country,Mangroves,Latitude,Longitude,MIN_POINT_X,MAX_POINT_X,MIN_POINT_Y,MAX_POINT_Y in reader:
+        Latitude, Longitude = map(float, (Latitude, Longitude))
         features.append(
             Feature(
-                bbox = [minpt_x, maxpt_x, minpt_y, maxpt_y],
-                geometry = Point((longitude, latitude)),
+                bbox= [MIN_POINT_X, MIN_POINT_Y, MAX_POINT_X, MAX_POINT_Y],
+                geometry = Point((Longitude, Latitude)),
                 properties = {
-                    "country": country,
-                    "mangroves": mangroves
+                    'country': Country,
+                    'mangroves': Mangroves
                 }
             )
         )
