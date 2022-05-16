@@ -53,7 +53,7 @@ const ProjectDetailsForm = () => {
   const onSubmit = async (data) => {
     setisSubmitting(true)
     setIsError(false)
-    const url = `${process.env.REACT_APP_API_URL}sites/1/registration_answers`
+    const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
 
     if (!data) return
 
