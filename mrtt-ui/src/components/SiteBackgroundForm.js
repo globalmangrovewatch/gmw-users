@@ -5,7 +5,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import {
   Box,
-  Button,
   Checkbox,
   Chip,
   FormLabel,
@@ -18,7 +17,9 @@ import {
   Typography
 } from '@mui/material'
 
-import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
+import { FormQuestionDiv, MainFormDiv, SectionFormTitle } from '../styles/forms'
+import { ErrorText } from '../styles/typography'
+import ButtonSubmit from './ButtonSubmit'
 import {
   areStakeholdersInvolvedOptions,
   customaryRightsOptions,
@@ -35,21 +36,21 @@ const ProjectDetailsForm = () => {
   let watchProtectionStatus
   // form validation rules
   const validationSchema = Yup.object().shape({
-    stakeholders: Yup.array().of(
-      Yup.object().shape({
-        stakeholderType: Yup.string(),
-        stackholderName: Yup.string()
-      })
-    ),
+    stakeholders: Yup.array()
+      .of(
+        Yup.object().shape({
+          stakeholderType: Yup.string(),
+          stackholderName: Yup.string()
+        })
+      )
+      .min(1)
+      .required('Select at least one stakeholder'),
     managementStatus: Yup.string(),
     lawStatus: Yup.string(),
     managementArea: Yup.string(),
     protectionStatus: Yup.object().shape({
       protectionTypes: Yup.array().of(Yup.string()),
-      other: Yup.string().when('protectionStatus.protectionTypes', {
-        is: watchProtectionStatus?.protectionTypes?.includes('Other'),
-        then: Yup.string().required('Add an other type')
-      })
+      other: Yup.string()
     }),
     areStakeholdersInvolved: Yup.string(),
     govermentArrangement: Yup.array().of(Yup.string()),
@@ -73,7 +74,7 @@ const ProjectDetailsForm = () => {
   const onSubmit = async (data) => {
     setisSubmitting(true)
     setIsError(false)
-    const preppedData = []
+    let preppedData = []
     // TODO: update url to match form section
     const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
 
@@ -81,7 +82,7 @@ const ProjectDetailsForm = () => {
 
     console.log('data:', data)
 
-    mapDataForApi('siteBackground', data)
+    preppedData = mapDataForApi('siteBackground', data)
 
     // make axios PUT request
     axios
@@ -111,9 +112,7 @@ const ProjectDetailsForm = () => {
   return (
     <MainFormDiv>
       {/* Select Stakeholders */}
-      <Typography variant='h4' sx={{ marginBottom: '0.5em' }}>
-        Site Background Form
-      </Typography>
+      <SectionFormTitle>Site Background Form</SectionFormTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormQuestionDiv>
           <FormLabel>2.1 Which stakeholders are involved in the project activities?</FormLabel>
@@ -145,9 +144,7 @@ const ProjectDetailsForm = () => {
               </ListItem>
             ))}
           </List>
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.stakeholders?.message}
-          </Typography>
+          <ErrorText>{errors.stakeholders?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Select Management Status*/}
         <FormQuestionDiv>
@@ -168,9 +165,7 @@ const ProjectDetailsForm = () => {
               </TextField>
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.managementStatus?.message}
-          </Typography>
+          <ErrorText>{errors.managementStatus?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Law recognition */}
         <FormQuestionDiv>
@@ -191,9 +186,7 @@ const ProjectDetailsForm = () => {
               </TextField>
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.lawStatus?.message}
-          </Typography>
+          <ErrorText>{errors.lawStatus?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Management Area*/}
         <FormQuestionDiv>
@@ -206,9 +199,7 @@ const ProjectDetailsForm = () => {
             defaultValue=''
             render={({ field }) => <TextField {...field} value={field.value}></TextField>}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.managementArea?.message}
-          </Typography>
+          <ErrorText>{errors.managementArea?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Protection Status*/}
         <FormQuestionDiv>
@@ -243,9 +234,7 @@ const ProjectDetailsForm = () => {
               </Select>
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.protectionStatus?.protectionTypes?.message}
-          </Typography>
+          <ErrorText>{errors.protectionStatus?.protectionTypes?.message}</ErrorText>
           {/* Protection Status - Other */}
           {watchProtectionStatus && watchProtectionStatus.protectionTypes.includes('Other') && (
             <Controller
@@ -261,9 +250,9 @@ const ProjectDetailsForm = () => {
                     required
                     id='outlined-required'
                     label='Required'></TextField>
-                  <Typography variant='subtitle' sx={{ color: 'red' }}>
+                  <ErrorText variant='subtitle' sx={{ color: 'red' }}>
                     {errors.protectionStatus?.other?.message}
-                  </Typography>
+                  </ErrorText>
                 </FormQuestionDiv>
               )}
             />
@@ -289,9 +278,9 @@ const ProjectDetailsForm = () => {
               </TextField>
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
+          <ErrorText variant='subtitle' sx={{ color: 'red' }}>
             {errors.areStakeholdersInvolved?.message}
-          </Typography>
+          </ErrorText>
         </FormQuestionDiv>
         {/* Government Arrangement */}
         <FormQuestionDiv>
@@ -325,9 +314,7 @@ const ProjectDetailsForm = () => {
               </Select>
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.govermentArrangement?.message}
-          </Typography>
+          <ErrorText>{errors.govermentArrangement?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Land Tenure */}
         <FormQuestionDiv>
@@ -360,9 +347,7 @@ const ProjectDetailsForm = () => {
               </Select>
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.landTenure?.message}
-          </Typography>
+          <ErrorText>{errors.landTenure?.message}</ErrorText>
         </FormQuestionDiv>
         {/* customaryRights */}
         <FormQuestionDiv>
@@ -383,19 +368,11 @@ const ProjectDetailsForm = () => {
               </TextField>
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.customaryRights?.message}
-          </Typography>
+          <ErrorText>{errors.customaryRights?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          {isError && (
-            <Typography variant='subtitle' sx={{ color: 'red' }}>
-              Submit failed, please try again
-            </Typography>
-          )}
-          <Button variant='contained' type='submit' disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : 'Submit'}
-          </Button>
+          {isError && <ErrorText>Submit failed, please try again</ErrorText>}
+          <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
         </FormQuestionDiv>
       </form>
     </MainFormDiv>
