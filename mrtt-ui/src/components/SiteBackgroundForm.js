@@ -29,7 +29,7 @@ import {
   protectionStatusOptions,
   stakeholderOptions
 } from '../data/projectDetailsOptions'
-import { questionMapping } from '../data/questionMapping'
+import { mapDataForApi } from '../library/mapDataForApi'
 
 const ProjectDetailsForm = () => {
   let watchProtectionStatus
@@ -81,14 +81,8 @@ const ProjectDetailsForm = () => {
 
     console.log('data:', data)
 
-    // TODO: make more general & reusable function
-    // set up data structure for api
-    for (const [key, value] of Object.entries(data)) {
-      // map question ids with keys
-      if (Object.prototype.hasOwnProperty.call(questionMapping.projectDetails, key)) {
-        preppedData.push({ question_id: questionMapping.projectDetails[key], answer_value: value })
-      }
-    }
+    mapDataForApi('siteBackground', data)
+
     // make axios PUT request
     axios
       .put(url, preppedData)
