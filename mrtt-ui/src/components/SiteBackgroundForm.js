@@ -29,7 +29,6 @@ import {
   protectionStatusOptions,
   stakeholderOptions
 } from '../data/projectDetailsOptions'
-// TODO: update question mapping to include 2.0 questions
 import { questionMapping } from '../data/questionMapping'
 
 const ProjectDetailsForm = () => {
