@@ -44,7 +44,10 @@ const ProjectDetailsForm = () => {
     managementStatus: Yup.string(),
     lawStatus: Yup.string(),
     managementArea: Yup.string(),
-    protectionStatus: Yup.array().of(Yup.string()),
+    protectionStatus: Yup.object().shape({
+      protectionTypes: Yup.array().of(Yup.string()),
+      other: Yup.string()
+    }),
     areStakeholdersInvolved: Yup.string(),
     govermentArrangement: Yup.array().of(Yup.string()),
     landTenure: Yup.array().of(Yup.string()),
@@ -53,13 +56,16 @@ const ProjectDetailsForm = () => {
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() and useFieldArray() hooks
-  const { handleSubmit, formState, control } = useForm(formOptions)
+  const { handleSubmit, formState, control, watch } = useForm(formOptions)
   const { errors } = formState
   const {
     fields: stakeholdersFields,
     append: stakeholdersAppend,
     remove: stakeholdersRemove
   } = useFieldArray({ name: 'stakeholders', control })
+  const watchProtectionStatus = watch('protectionStatus')
+
+  console.log('status', watchProtectionStatus)
 
   // state variables
   const [isSubmitting, setisSubmitting] = useState(false)
@@ -70,7 +76,7 @@ const ProjectDetailsForm = () => {
     setIsError(false)
     const preppedData = []
     // TODO: update url to match form section
-    const url = `${process.env.REACT_APP_API_URL}sites/1/registration_answers`
+    const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
 
     if (!data) return
 
@@ -218,7 +224,7 @@ const ProjectDetailsForm = () => {
             project started?
           </FormLabel>
           <Controller
-            name='protectionStatus'
+            name='protectionStatus.protectionTypes'
             control={control}
             defaultValue={[]}
             render={({ field }) => (
@@ -237,6 +243,7 @@ const ProjectDetailsForm = () => {
                 )}>
                 {protectionStatusOptions.map((item, index) => (
                   <MenuItem key={index} value={item}>
+                    <Checkbox checked={field.value.indexOf(item) > -1} />
                     {item}
                   </MenuItem>
                 ))}
