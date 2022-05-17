@@ -33,6 +33,7 @@ import {
 import { questionMapping } from '../data/questionMapping'
 
 const ProjectDetailsForm = () => {
+  let watchProtectionStatus
   // form validation rules
   const validationSchema = Yup.object().shape({
     stakeholders: Yup.array().of(
@@ -46,16 +47,17 @@ const ProjectDetailsForm = () => {
     managementArea: Yup.string(),
     protectionStatus: Yup.object().shape({
       protectionTypes: Yup.array().of(Yup.string()),
-      other: Yup.string()
+      other: Yup.string().when('protectionStatus.protectionTypes', {
+        is: watchProtectionStatus?.protectionTypes?.includes('Other'),
+        then: Yup.string().required('Add an other type')
+      })
     }),
     areStakeholdersInvolved: Yup.string(),
     govermentArrangement: Yup.array().of(Yup.string()),
     landTenure: Yup.array().of(Yup.string()),
     customaryRights: Yup.string()
   })
-  const formOptions = { resolver: yupResolver(validationSchema) }
-
-  // get functions to build form with useForm() and useFieldArray() hooks
+  const formOptions = { resolver: yupResolver(validationSchema) } // get functions to build form with useForm() and useFieldArray() hooks
   const { handleSubmit, formState, control, watch } = useForm(formOptions)
   const { errors } = formState
   const {
@@ -63,9 +65,7 @@ const ProjectDetailsForm = () => {
     append: stakeholdersAppend,
     remove: stakeholdersRemove
   } = useFieldArray({ name: 'stakeholders', control })
-  const watchProtectionStatus = watch('protectionStatus')
-
-  console.log('status', watchProtectionStatus)
+  watchProtectionStatus = watch('protectionStatus')
 
   // state variables
   const [isSubmitting, setisSubmitting] = useState(false)
@@ -251,8 +251,30 @@ const ProjectDetailsForm = () => {
             )}
           />
           <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.protectionStatus?.message}
+            {errors.protectionStatus?.protectionTypes?.message}
           </Typography>
+          {/* Protection Status - Other */}
+          {watchProtectionStatus && watchProtectionStatus.protectionTypes.includes('Other') && (
+            <Controller
+              name='protectionStatus.other'
+              control={control}
+              defaultValue=''
+              render={({ field }) => (
+                <FormQuestionDiv>
+                  <FormLabel>Please state other protection status:</FormLabel>
+                  <TextField
+                    {...field}
+                    value={field.value}
+                    required
+                    id='outlined-required'
+                    label='Required'></TextField>
+                  <Typography variant='subtitle' sx={{ color: 'red' }}>
+                    {errors.protectionStatus?.other?.message}
+                  </Typography>
+                </FormQuestionDiv>
+              )}
+            />
+          )}
         </FormQuestionDiv>
         {/* areStakeholdersInvolved */}
         <FormQuestionDiv>
