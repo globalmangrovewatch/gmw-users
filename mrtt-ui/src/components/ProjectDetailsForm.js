@@ -3,24 +3,17 @@ import axios from 'axios'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-import {
-  Button,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  Stack,
-  TextField,
-  Typography
-} from '@mui/material'
+import { FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import Autocomplete from '@mui/material/Autocomplete'
 
-import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
+import { MainFormDiv, FormQuestionDiv, SectionFormTitle } from '../styles/forms'
+import { ErrorText } from '../styles/typography'
 import countries from '../data/countries.json'
 import { mapDataForApi } from '../library/mapDataForApi'
+import ButtonSubmit from './ButtonSubmit'
 
 const ProjectDetailsForm = () => {
   // form validation rules
@@ -75,9 +68,7 @@ const ProjectDetailsForm = () => {
 
   return (
     <MainFormDiv>
-      <Typography variant='h4' sx={{ marginBottom: '0.5em' }}>
-        Project Details Form
-      </Typography>
+      <SectionFormTitle>Project Details Form</SectionFormTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
@@ -120,9 +111,7 @@ const ProjectDetailsForm = () => {
               </LocalizationProvider>
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.projectStartDate?.message}
-          </Typography>
+          <ErrorText>{errors.projectStartDate?.message}</ErrorText>
         </FormQuestionDiv>
         {/* End Date */}
         {watchHasProjectEndDate === 'true' && (
@@ -146,9 +135,7 @@ const ProjectDetailsForm = () => {
                 </LocalizationProvider>
               )}
             />
-            <Typography variant='subtitle' sx={{ color: 'red' }}>
-              {errors.projectEndDate?.message}
-            </Typography>
+            <ErrorText>{errors.projectEndDate?.message}</ErrorText>
           </FormQuestionDiv>
         )}
         {/* Countries selector */}
@@ -172,23 +159,15 @@ const ProjectDetailsForm = () => {
               />
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.countries?.message}
-          </Typography>
+          <ErrorText>{errors.countries?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Draw Pologon - TO BE INSERTED */}
         <FormQuestionDiv>
           <FormLabel>1.3 What is the overall site area?</FormLabel>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          {isError && (
-            <Typography variant='subtitle' sx={{ color: 'red' }}>
-              Submit failed, please try again
-            </Typography>
-          )}
-          <Button variant='contained' type='submit' disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : 'Submit'}
-          </Button>
+          {isError && <ErrorText>Submit failed, please try again</ErrorText>}
+          <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
         </FormQuestionDiv>
       </form>
     </MainFormDiv>
