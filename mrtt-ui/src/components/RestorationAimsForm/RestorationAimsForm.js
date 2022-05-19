@@ -1,5 +1,7 @@
+import { toast } from 'react-toastify'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
@@ -11,8 +13,9 @@ import { restorationAims as questions } from '../../data/questions'
 import ButtonSubmit from '../ButtonSubmit'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import language from '../../language'
-
-const submitUrl = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
+import formatApiAnswersForForm from '../../library/formatApiAnswersForForm'
+import { questionMapping } from '../../data/questionMapping'
+import LoadingIndicator from '../LoadingIndicator'
 
 const otherIsCheckedButInputIsEmptyValidation = (schema) =>
   schema.test({
@@ -40,6 +43,9 @@ const aimsValidation = yup.object({
 })
 
 const RestorationAimsForm = () => {
+  const { siteId } = useParams()
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+  const [isLoading, setIsLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const validationSchema = yup.object({
@@ -47,7 +53,6 @@ const RestorationAimsForm = () => {
     socioEconomicAims: aimsValidation,
     otherAims: aimsValidation
   })
-
   const reactHookFormInstance = useForm({
     defaultValues: {
       ecologicalAims: { selectedValues: [], otherValue: undefined },
@@ -58,14 +63,34 @@ const RestorationAimsForm = () => {
   })
   const {
     handleSubmit: validateInputs,
-    formState: { errors }
+    formState: { errors },
+    reset: resetForm
   } = reactHookFormInstance
+
+  const _loadSiteData = useEffect(() => {
+    if (apiAnswersUrl && resetForm) {
+      setIsLoading(true)
+      axios
+        .get(apiAnswersUrl)
+        .then(({ data }) => {
+          setIsLoading(false)
+          const initialValuesForForm = formatApiAnswersForForm({
+            apiAnswers: data,
+            questionMapping: questionMapping.restorationAims
+          })
+          resetForm(initialValuesForForm)
+        })
+        .catch(() => {
+          toast.error(language.error.apiLoad)
+        })
+    }
+  }, [apiAnswersUrl, resetForm])
 
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
     axios
-      .patch(submitUrl, mapDataForApi('restorationAims', formData))
+      .patch(apiAnswersUrl, mapDataForApi('restorationAims', formData))
       .then(() => {
         setIsSubmitting(false)
       })
@@ -75,7 +100,9 @@ const RestorationAimsForm = () => {
       })
   }
 
-  return (
+  return isLoading ? (
+    <LoadingIndicator />
+  ) : (
     <MainFormDiv>
       <SectionFormTitle>Restoration Aims</SectionFormTitle>
       <Form onSubmit={validateInputs(handleSubmit)}>

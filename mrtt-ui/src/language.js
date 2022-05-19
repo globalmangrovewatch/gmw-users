@@ -1,4 +1,7 @@
-const error = { submit: 'Submit failed, please try again.' }
+const error = {
+  submit: 'Submit failed. please try again.',
+  apiLoad: 'Loading data from the api failed. Please try again.'
+}
 const form = {
   checkboxGroupOtherLabel: 'Other',
   checkboxGroupOtherInputPlaceholder: 'If other, please state.'
