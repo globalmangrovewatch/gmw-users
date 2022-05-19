@@ -12,28 +12,28 @@ import ButtonSubmit from '../ButtonSubmit'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import language from '../../language'
 
-const submitUrl = `${process.env.REACT_APP_API_URL}sites/1/registration_answers`
+const submitUrl = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
+
+const otherIsCheckedButInputIsEmptyValidation = (schema) =>
+  schema.test({
+    name: 'isOtherCheckedAndEmpty',
+    message: language.restorationAimsForm.validation.clairfyOther,
+    test: (value, context) => {
+      const {
+        parent: { otherValue }
+      } = context
+      return otherValue !== undefined && otherValue !== ''
+    }
+  })
 
 const aimsValidation = yup.object({
   selectedValues: yup
     .array()
     .of(yup.string())
     .when('isOtherChecked', {
-      is: (isOtherChecked) => {
-        return !isOtherChecked
-      },
+      is: false || undefined,
       then: (schema) => schema.min(1, language.restorationAimsForm.validation.selectAtleastOneAim),
-      otherwise: (schema) =>
-        schema.test(
-          'isCheckedAndEmpty',
-          language.restorationAimsForm.validation.clairfyOther,
-          (value, context) => {
-            const {
-              parent: { otherValue }
-            } = context
-            return otherValue !== undefined && otherValue !== ''
-          }
-        )
+      otherwise: otherIsCheckedButInputIsEmptyValidation
     }),
   otherValue: yup.string(),
   isOtherChecked: yup.bool()
