@@ -20,17 +20,8 @@ import {
 import { FormQuestionDiv, MainFormDiv, SectionFormTitle } from '../styles/forms'
 import { ErrorText } from '../styles/typography'
 import ButtonSubmit from './ButtonSubmit'
-import {
-  areStakeholdersInvolvedOptions,
-  customaryRightsOptions,
-  governmentArrangementOptions,
-  landTenureOptions,
-  lawOptions,
-  managementStatusOptions,
-  protectionStatusOptions,
-  stakeholderOptions
-} from '../data/projectDetailsOptions'
 import { mapDataForApi } from '../library/mapDataForApi'
+import { siteBackground } from '../data/questions'
 
 const ProjectDetailsForm = () => {
   let watchProtectionStatus
@@ -115,9 +106,9 @@ const ProjectDetailsForm = () => {
       <SectionFormTitle>Site Background Form</SectionFormTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormQuestionDiv>
-          <FormLabel>2.1 Which stakeholders are involved in the project activities?</FormLabel>
+          <FormLabel>{siteBackground.stakeholders.question}</FormLabel>
           <List>
-            {stakeholderOptions.map((stakeholder, index) => (
+            {siteBackground.stakeholders.options.map((stakeholder, index) => (
               <ListItem key={index}>
                 <Box>
                   <Box>
@@ -148,16 +139,14 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Select Management Status*/}
         <FormQuestionDiv>
-          <FormLabel>
-            2.2 What was the management status of the site immediately before the project started?
-          </FormLabel>
+          <FormLabel>{siteBackground.managementStatus.question}</FormLabel>
           <Controller
             name='managementStatus'
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label='select'>
-                {managementStatusOptions.map((item, index) => (
+                {siteBackground.managementStatus.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -169,16 +158,14 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Law recognition */}
         <FormQuestionDiv>
-          <FormLabel>
-            2.3 Are management activities at the site recognized in statutory or customary laws?
-          </FormLabel>
+          <FormLabel>{siteBackground.lawStatus.question}</FormLabel>
           <Controller
             name='lawStatus'
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label='select'>
-                {lawOptions.map((item, index) => (
+                {siteBackground.lawStatus.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -190,9 +177,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Management Area*/}
         <FormQuestionDiv>
-          <FormLabel>
-            2.4 Name of the formal management area the site is contained within (if relevant)?
-          </FormLabel>
+          <FormLabel>{siteBackground.managementArea.question}</FormLabel>
           <Controller
             name='managementArea'
             control={control}
@@ -203,10 +188,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Protection Status*/}
         <FormQuestionDiv>
-          <FormLabel>
-            2.5 How would you describe the protection status of the site immediately before the
-            project started?
-          </FormLabel>
+          <FormLabel>{siteBackground.protectionStatus.question}</FormLabel>
           <Controller
             name='protectionStatus.protectionTypes'
             control={control}
@@ -225,7 +207,7 @@ const ProjectDetailsForm = () => {
                     ))}
                   </Box>
                 )}>
-                {protectionStatusOptions.map((item, index) => (
+                {siteBackground.protectionStatus.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     <Checkbox checked={field.value.indexOf(item) > -1} />
                     {item}
@@ -260,17 +242,14 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* areStakeholdersInvolved */}
         <FormQuestionDiv>
-          <FormLabel>
-            2.6 Are the stakeholders involved in project activities able to influence site
-            management rules?
-          </FormLabel>
+          <FormLabel>{siteBackground.areStakeholdersInvolved.question}</FormLabel>
           <Controller
             name='areStakeholdersInvolved '
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label='select'>
-                {areStakeholdersInvolvedOptions.map((item, index) => (
+                {siteBackground.areStakeholdersInvolved.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -284,10 +263,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Government Arrangement */}
         <FormQuestionDiv>
-          <FormLabel>
-            2.7 What best describes the governance arrangement of the site immediately before the
-            project started?
-          </FormLabel>
+          <FormLabel>{siteBackground.govermentArrangement.question}</FormLabel>
           <Controller
             name='governmentArrangement'
             control={control}
@@ -306,7 +282,7 @@ const ProjectDetailsForm = () => {
                     ))}
                   </Box>
                 )}>
-                {governmentArrangementOptions.map((item, index) => (
+                {siteBackground.govermentArrangement.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -318,9 +294,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Land Tenure */}
         <FormQuestionDiv>
-          <FormLabel>
-            2.8 What was the land tenure of the site immediately before the project started?
-          </FormLabel>
+          <FormLabel>{siteBackground.landTenure.question}</FormLabel>
           <Controller
             name='landTenure'
             control={control}
@@ -339,7 +313,7 @@ const ProjectDetailsForm = () => {
                     ))}
                   </Box>
                 )}>
-                {landTenureOptions.map((item, index) => (
+                {siteBackground.landTenure.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -351,16 +325,14 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* customaryRights */}
         <FormQuestionDiv>
-          <FormLabel>
-            2.9 Are customary rights to land within the site recognised in national law?
-          </FormLabel>
+          <FormLabel>{siteBackground.customaryRights.question}</FormLabel>
           <Controller
             name='customaryRights'
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label='select'>
-                {customaryRightsOptions.map((item, index) => (
+                {siteBackground.customaryRights.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>

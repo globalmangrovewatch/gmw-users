@@ -12,6 +12,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 import { MainFormDiv, FormQuestionDiv, SectionFormTitle } from '../styles/forms'
 import { ErrorText } from '../styles/typography'
 import countries from '../data/countries.json'
+import { projectDetails } from '../data/questions'
 import { mapDataForApi } from '../library/mapDataForApi'
 import ButtonSubmit from './ButtonSubmit'
 
@@ -72,7 +73,7 @@ const ProjectDetailsForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
-          <FormLabel>1.1a Does the project have an end date?</FormLabel>
+          <FormLabel>{projectDetails.hasProjectEndDate.question}</FormLabel>
           <Controller
             name='hasProjectEndDate'
             control={control}
@@ -91,7 +92,7 @@ const ProjectDetailsForm = () => {
         {/* Start Date */}
         <FormQuestionDiv>
           <FormLabel>Project Duration</FormLabel>
-          <FormLabel>1.1b</FormLabel>
+          <FormLabel>{projectDetails.projectStartDate.question}</FormLabel>
           <Controller
             name='projectStartDate'
             control={control}
@@ -116,7 +117,7 @@ const ProjectDetailsForm = () => {
         {/* End Date */}
         {watchHasProjectEndDate === 'true' && (
           <FormQuestionDiv>
-            <FormLabel>1.1c</FormLabel>
+            <FormLabel>{projectDetails.projectEndDate.question}</FormLabel>
             <Controller
               name='projectEndDate'
               control={control}
@@ -140,7 +141,7 @@ const ProjectDetailsForm = () => {
         )}
         {/* Countries selector */}
         <FormQuestionDiv>
-          <FormLabel>1.2 What country/countries is the site located in?</FormLabel>
+          <FormLabel>{projectDetails.countries.question}</FormLabel>
           <Controller
             name='countries'
             control={control}
