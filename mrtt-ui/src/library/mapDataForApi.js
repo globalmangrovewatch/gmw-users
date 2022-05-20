@@ -5,11 +5,13 @@ import { questionMapping } from '../data/questionMapping'
 export const mapDataForApi = (formTitle, data) => {
   const preppedData = []
 
-  for (const [key, value] of Object.entries(data)) {
-    // longer version of Object.hasOwnProperty
-    if (Object.prototype.hasOwnProperty.call(questionMapping[formTitle], key)) {
-      // map question ids with descriptive question keys
-      preppedData.push({ question_id: questionMapping[formTitle][key], answer_value: value })
+  for (const [fieldName, uiAnswer] of Object.entries(data)) {
+    const apiQuestionId = questionMapping[formTitle]?.[fieldName]
+    if (apiQuestionId) {
+      preppedData.push({
+        question_id: apiQuestionId,
+        answer_value: uiAnswer
+      })
     }
   }
   return preppedData

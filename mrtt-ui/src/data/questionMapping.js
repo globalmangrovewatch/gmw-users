@@ -16,5 +16,10 @@ export const questionMapping = {
     governmentArrangement: '2.7',
     landTenture: '2.8',
     customaryRights: '2.9'
+  },
+  restorationAims: {
+    ecologicalAims: '3.1',
+    socioEconomicAims: '3.2',
+    otherAims: '3.3'
   }
 }

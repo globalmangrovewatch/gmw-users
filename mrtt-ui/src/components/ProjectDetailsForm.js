@@ -1,20 +1,21 @@
-import { useState } from 'react'
-import axios from 'axios'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as Yup from 'yup'
 import { FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
+import { useForm, Controller } from 'react-hook-form'
+import { useState } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as Yup from 'yup'
 import Autocomplete from '@mui/material/Autocomplete'
+import axios from 'axios'
 
-import { MainFormDiv, FormQuestionDiv, SectionFormTitle } from '../styles/forms'
-import { ErrorText } from '../styles/typography'
 import countries from '../data/countries.json'
 import { projectDetails } from '../data/questions'
 import { mapDataForApi } from '../library/mapDataForApi'
+import { ErrorText } from '../styles/typography'
+import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/forms'
 import ButtonSubmit from './ButtonSubmit'
+import language from '../language'
 
 const ProjectDetailsForm = () => {
   // form validation rules
@@ -41,11 +42,11 @@ const ProjectDetailsForm = () => {
   const { control, handleSubmit, formState, watch } = useForm(formOptions)
   const { errors } = formState
   const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
-  const [isSubmitting, setisSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
 
   const onSubmit = async (data) => {
-    setisSubmitting(true)
+    setIsSubmitting(true)
     setIsError(false)
     const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
 
@@ -55,14 +56,14 @@ const ProjectDetailsForm = () => {
 
     // make axios PUT request
     axios
-      .put(url, preppedData)
+      .patch(url, preppedData)
       .then((res) => {
-        setisSubmitting(false)
+        setIsSubmitting(false)
         console.log(res)
       })
       .catch((error) => {
         setIsError(true)
-        setisSubmitting(false)
+        setIsSubmitting(false)
         console.log(error)
       })
   }
@@ -70,7 +71,7 @@ const ProjectDetailsForm = () => {
   return (
     <MainFormDiv>
       <SectionFormTitle>Project Details Form</SectionFormTitle>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
           <FormLabel>{projectDetails.hasProjectEndDate.question}</FormLabel>
@@ -164,13 +165,13 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Draw Pologon - TO BE INSERTED */}
         <FormQuestionDiv>
-          <FormLabel>1.3 What is the overall site area?</FormLabel>
+          <FormLabel>{projectDetails.siteArea.question}</FormLabel>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          {isError && <ErrorText>Submit failed, please try again</ErrorText>}
-          <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
+          {isError && <ErrorText>{language.error.submit}</ErrorText>}
+          <ButtonSubmit isSubmitting={isSubmitting} />
         </FormQuestionDiv>
-      </form>
+      </Form>
     </MainFormDiv>
   )
 }

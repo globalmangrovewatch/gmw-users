@@ -10,6 +10,9 @@ export const projectDetails = {
   },
   countries: {
     question: '1.2 What country/countries is the site located in?'
+  },
+  siteArea: {
+    question: '1.3 What is the overall site area?'
   }
 }
 
