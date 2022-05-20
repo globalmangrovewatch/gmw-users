@@ -22,10 +22,10 @@ import { ErrorText } from '../styles/typography'
 import ButtonSubmit from './ButtonSubmit'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { siteBackground as questions } from '../data/questions'
+import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
+import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
 
 const ProjectDetailsForm = () => {
-  let watchProtectionStatus
-  // form validation rules
   const validationSchema = yup.object().shape({
     stakeholders: yup
       .array()
@@ -40,30 +40,37 @@ const ProjectDetailsForm = () => {
     managementStatus: yup.string(),
     lawStatus: yup.string(),
     managementArea: yup.string(),
-    protectionStatus: yup.object().shape({
-      protectionTypes: yup.array().of(yup.string()),
-      other: yup.string()
-    }),
+    protectionStatus: multiselectWithOtherValidation,
     areStakeholdersInvolved: yup.string(),
     govermentArrangement: yup.array().of(yup.string()),
-    landTenure: yup.array().of(yup.string()),
+    landTenure: multiselectWithOtherValidation,
     customaryRights: yup.string()
   })
-  const formOptions = { resolver: yupResolver(validationSchema) } // get functions to build form with useForm() and useFieldArray() hooks
-  const { handleSubmit, formState, control, watch } = useForm(formOptions)
-  const { errors } = formState
+
+  const reactHookFormInstance = useForm({
+    defaultValues: {
+      protectionStatus: { selectedValues: [], otherValue: undefined },
+      landTenure: { selectedValues: [], otherValue: undefined }
+    },
+    resolver: yupResolver(validationSchema)
+  })
+
+  const {
+    handleSubmit: validateInputs,
+    formState: { errors },
+    control
+  } = reactHookFormInstance
+
   const {
     fields: stakeholdersFields,
     append: stakeholdersAppend,
     remove: stakeholdersRemove
   } = useFieldArray({ name: 'stakeholders', control })
-  watchProtectionStatus = watch('protectionStatus')
 
-  // state variables
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  const onSubmit = async (data) => {
+  const handleSubmit = async (data) => {
     setisSubmitting(true)
     setIsError(false)
 
@@ -91,13 +98,11 @@ const ProjectDetailsForm = () => {
     }
   }
 
-  // TODO: handle '2.5 & 2.8 other option textfield add in'
-
   return (
     <MainFormDiv>
       {/* Select Stakeholders */}
       <SectionFormTitle>Site Background Form</SectionFormTitle>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={validateInputs(handleSubmit)}>
         <FormQuestionDiv>
           <FormLabel>{questions.stakeholders.question}</FormLabel>
           <List>
@@ -180,59 +185,14 @@ const ProjectDetailsForm = () => {
           <ErrorText>{errors.managementArea?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Protection Status*/}
-        <FormQuestionDiv>
-          <FormLabel>{questions.protectionStatus.question}</FormLabel>
-          <Controller
-            name='protectionStatus.protectionTypes'
-            control={control}
-            defaultValue={[]}
-            render={({ field }) => (
-              <Select
-                {...field}
-                multiple
-                value={field.value}
-                label='select'
-                input={<OutlinedInput id='select-multiple-chip' label='Chip' />}
-                renderValue={(selected) => (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
-                  </Box>
-                )}>
-                {questions.protectionStatus.options.map((item, index) => (
-                  <MenuItem key={index} value={item}>
-                    <Checkbox checked={field.value.indexOf(item) > -1} />
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
-          />
-          <ErrorText>{errors.protectionStatus?.protectionTypes?.message}</ErrorText>
-          {/* Protection Status - Other */}
-          {watchProtectionStatus && watchProtectionStatus.protectionTypes.includes('Other') && (
-            <Controller
-              name='protectionStatus.other'
-              control={control}
-              defaultValue=''
-              render={({ field }) => (
-                <FormQuestionDiv>
-                  <FormLabel>Please state other protection status:</FormLabel>
-                  <TextField
-                    {...field}
-                    value={field.value}
-                    required
-                    id='outlined-required'
-                    label='Required'></TextField>
-                  <ErrorText variant='subtitle' sx={{ color: 'red' }}>
-                    {errors.protectionStatus?.other?.message}
-                  </ErrorText>
-                </FormQuestionDiv>
-              )}
-            />
-          )}
-        </FormQuestionDiv>
+        <CheckboxGroupWithLabelAndController
+          fieldName='protectionStatus'
+          reactHookFormInstance={reactHookFormInstance}
+          options={questions.protectionStatus.options}
+          question={questions.protectionStatus.question}
+          shouldAddOtherOptionWithClarification={true}
+        />
+        <ErrorText>{errors.protectionStatus?.selectedValues?.message}</ErrorText>
         {/* areStakeholdersInvolved */}
         <FormQuestionDiv>
           <FormLabel>{questions.areStakeholdersInvolved.question}</FormLabel>
@@ -286,36 +246,14 @@ const ProjectDetailsForm = () => {
           <ErrorText>{errors.govermentArrangement?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Land Tenure */}
-        <FormQuestionDiv>
-          <FormLabel>{questions.landTenure.question}</FormLabel>
-          <Controller
-            name='landTenure'
-            control={control}
-            defaultValue={[]}
-            render={({ field }) => (
-              <Select
-                {...field}
-                multiple
-                value={field.value}
-                label='select'
-                input={<OutlinedInput id='select-multiple-chip' label='Chip' />}
-                renderValue={(selected) => (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
-                  </Box>
-                )}>
-                {questions.landTenure.options.map((item, index) => (
-                  <MenuItem key={index} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
-          />
-          <ErrorText>{errors.landTenure?.message}</ErrorText>
-        </FormQuestionDiv>
+        <CheckboxGroupWithLabelAndController
+          fieldName='landTenureStatus'
+          reactHookFormInstance={reactHookFormInstance}
+          options={questions.landTenure.options}
+          question={questions.landTenure.question}
+          shouldAddOtherOptionWithClarification={true}
+        />
+        <ErrorText>{errors.protectionStatus?.selectedValues?.message}</ErrorText>
         {/* customaryRights */}
         <FormQuestionDiv>
           <FormLabel>{questions.customaryRights.question}</FormLabel>

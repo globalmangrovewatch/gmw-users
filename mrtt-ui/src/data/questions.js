@@ -70,7 +70,7 @@ export const siteBackground = {
   protectionStatus: {
     question:
       '2.5 How would you describe the protection status of the site immediately before the project started?',
-    options: ['Full protection', 'Partial protection', 'Sustainable use', 'No management', 'Other']
+    options: ['Full protection', 'Partial protection', 'Sustainable use', 'No management']
   },
   areStakeholdersInvolved: {
     question:
@@ -99,8 +99,7 @@ export const siteBackground = {
       'Communal',
       'Sub-national or local government',
       'National government',
-      'Unknown',
-      'Other'
+      'Unknown'
     ]
   },
   customaryRights: {
