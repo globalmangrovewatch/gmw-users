@@ -5,8 +5,8 @@ const form = {
 }
 const multiselectWithOtherFormQuestion = {
   validation: {
-    selectAtleastOneAim: 'Please select at least one aim.',
-    clairfyOther: 'Please clarify other aim.'
+    selectAtleastOneItem: 'Please select at least one item.',
+    clairfyOther: 'Please clarify other item.'
   }
 }
 
