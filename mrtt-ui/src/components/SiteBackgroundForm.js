@@ -124,7 +124,12 @@ const ProjectDetailsForm = () => {
                         control={control}
                         defaultValue=''
                         render={({ field }) => (
-                          <TextField label='Name' variant='outlined' {...field} />
+                          <TextField
+                            sx={{ marginTop: '1em' }}
+                            label='Name'
+                            variant='outlined'
+                            {...field}
+                          />
                         )}
                       />
                     )}
