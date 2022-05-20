@@ -11,41 +11,17 @@ import { restorationAims as questions } from '../../data/questions'
 import ButtonSubmit from '../ButtonSubmit'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import language from '../../language'
+import { multiselectWithOtherValidation } from '../../validation/multiSelectWithOther'
 
 const submitUrl = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
-
-const otherIsCheckedButInputIsEmptyValidation = (schema) =>
-  schema.test({
-    name: 'isOtherCheckedAndEmpty',
-    message: language.restorationAimsForm.validation.clairfyOther,
-    test: (value, context) => {
-      const {
-        parent: { otherValue }
-      } = context
-      return otherValue !== undefined && otherValue !== ''
-    }
-  })
-
-const aimsValidation = yup.object({
-  selectedValues: yup
-    .array()
-    .of(yup.string())
-    .when('isOtherChecked', {
-      is: false || undefined,
-      then: (schema) => schema.min(1, language.restorationAimsForm.validation.selectAtleastOneAim),
-      otherwise: otherIsCheckedButInputIsEmptyValidation
-    }),
-  otherValue: yup.string(),
-  isOtherChecked: yup.bool()
-})
 
 const RestorationAimsForm = () => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const validationSchema = yup.object({
-    ecologicalAims: aimsValidation,
-    socioEconomicAims: aimsValidation,
-    otherAims: aimsValidation
+    ecologicalAims: multiselectWithOtherValidation,
+    socioEconomicAims: multiselectWithOtherValidation,
+    otherAims: multiselectWithOtherValidation
   })
 
   const reactHookFormInstance = useForm({
