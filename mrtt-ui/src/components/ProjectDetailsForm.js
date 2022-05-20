@@ -5,7 +5,7 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { useForm, Controller } from 'react-hook-form'
 import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as Yup from 'yup'
+import * as yup from 'yup'
 import Autocomplete from '@mui/material/Autocomplete'
 import axios from 'axios'
 
@@ -19,18 +19,19 @@ import language from '../language'
 
 const ProjectDetailsForm = () => {
   // form validation rules
-  const validationSchema = Yup.object().shape({
-    hasProjectEndDate: Yup.boolean(),
-    projectStartDate: Yup.string().required('Select a start date'),
-    projectEndDate: Yup.string().when('hasProjectEndDate', {
+  const validationSchema = yup.object().shape({
+    hasProjectEndDate: yup.boolean(),
+    projectStartDate: yup.string().required('Select a start date'),
+    projectEndDate: yup.string().when('hasProjectEndDate', {
       is: true,
-      then: Yup.string().required('Please select an end date')
+      then: yup.string().required('Please select an end date')
     }),
-    countries: Yup.array()
+    countries: yup
+      .array()
       .of(
-        Yup.object().shape({
-          name: Yup.string(),
-          code: Yup.string()
+        yup.object().shape({
+          name: yup.string(),
+          code: yup.string()
         })
       )
       .min(1)
@@ -52,19 +53,14 @@ const ProjectDetailsForm = () => {
 
     if (!data) return
 
-    const preppedData = mapDataForApi('projectDetails', data)
-
-    // make axios PUT request
     axios
-      .patch(url, preppedData)
-      .then((res) => {
+      .patch(url, mapDataForApi('projectDetails', data))
+      .then(() => {
         setIsSubmitting(false)
-        console.log(res)
       })
-      .catch((error) => {
+      .catch(() => {
         setIsError(true)
         setIsSubmitting(false)
-        console.log(error)
       })
   }
 

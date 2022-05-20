@@ -2,7 +2,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as Yup from 'yup'
+import * as yup from 'yup'
 import {
   Box,
   Checkbox,
@@ -26,27 +26,28 @@ import { siteBackground } from '../data/questions'
 const ProjectDetailsForm = () => {
   let watchProtectionStatus
   // form validation rules
-  const validationSchema = Yup.object().shape({
-    stakeholders: Yup.array()
+  const validationSchema = yup.object().shape({
+    stakeholders: yup
+      .array()
       .of(
-        Yup.object().shape({
-          stakeholderType: Yup.string(),
-          stackholderName: Yup.string()
+        yup.object().shape({
+          stakeholderType: yup.string(),
+          stackholderName: yup.string()
         })
       )
       .min(1)
       .required('Select at least one stakeholder'),
-    managementStatus: Yup.string(),
-    lawStatus: Yup.string(),
-    managementArea: Yup.string(),
-    protectionStatus: Yup.object().shape({
-      protectionTypes: Yup.array().of(Yup.string()),
-      other: Yup.string()
+    managementStatus: yup.string(),
+    lawStatus: yup.string(),
+    managementArea: yup.string(),
+    protectionStatus: yup.object().shape({
+      protectionTypes: yup.array().of(yup.string()),
+      other: yup.string()
     }),
-    areStakeholdersInvolved: Yup.string(),
-    govermentArrangement: Yup.array().of(Yup.string()),
-    landTenure: Yup.array().of(Yup.string()),
-    customaryRights: Yup.string()
+    areStakeholdersInvolved: yup.string(),
+    govermentArrangement: yup.array().of(yup.string()),
+    landTenure: yup.array().of(yup.string()),
+    customaryRights: yup.string()
   })
   const formOptions = { resolver: yupResolver(validationSchema) } // get functions to build form with useForm() and useFieldArray() hooks
   const { handleSubmit, formState, control, watch } = useForm(formOptions)
@@ -65,27 +66,19 @@ const ProjectDetailsForm = () => {
   const onSubmit = async (data) => {
     setisSubmitting(true)
     setIsError(false)
-    let preppedData = []
-    // TODO: update url to match form section
+
     const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
 
     if (!data) return
 
-    console.log('data:', data)
-
-    preppedData = mapDataForApi('siteBackground', data)
-
-    // make axios PUT request
     axios
-      .put(url, preppedData)
-      .then((res) => {
+      .put(url, mapDataForApi('siteBackground', data))
+      .then(() => {
         setisSubmitting(false)
-        console.log(res)
       })
-      .catch((error) => {
+      .catch(() => {
         setIsError(true)
         setisSubmitting(false)
-        console.log(error)
       })
   }
 
