@@ -21,7 +21,7 @@ import { FormQuestionDiv, MainFormDiv, SectionFormTitle } from '../styles/forms'
 import { ErrorText } from '../styles/typography'
 import ButtonSubmit from './ButtonSubmit'
 import { mapDataForApi } from '../library/mapDataForApi'
-import { siteBackground } from '../data/questions'
+import { siteBackground as questions } from '../data/questions'
 
 const ProjectDetailsForm = () => {
   let watchProtectionStatus
@@ -99,9 +99,9 @@ const ProjectDetailsForm = () => {
       <SectionFormTitle>Site Background Form</SectionFormTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.stakeholders.question}</FormLabel>
+          <FormLabel>{questions.stakeholders.question}</FormLabel>
           <List>
-            {siteBackground.stakeholders.options.map((stakeholder, index) => (
+            {questions.stakeholders.options.map((stakeholder, index) => (
               <ListItem key={index}>
                 <Box>
                   <Box>
@@ -132,14 +132,14 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Select Management Status*/}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.managementStatus.question}</FormLabel>
+          <FormLabel>{questions.managementStatus.question}</FormLabel>
           <Controller
             name='managementStatus'
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label='select'>
-                {siteBackground.managementStatus.options.map((item, index) => (
+                {questions.managementStatus.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -151,14 +151,14 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Law recognition */}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.lawStatus.question}</FormLabel>
+          <FormLabel>{questions.lawStatus.question}</FormLabel>
           <Controller
             name='lawStatus'
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label='select'>
-                {siteBackground.lawStatus.options.map((item, index) => (
+                {questions.lawStatus.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -170,7 +170,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Management Area*/}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.managementArea.question}</FormLabel>
+          <FormLabel>{questions.managementArea.question}</FormLabel>
           <Controller
             name='managementArea'
             control={control}
@@ -181,7 +181,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Protection Status*/}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.protectionStatus.question}</FormLabel>
+          <FormLabel>{questions.protectionStatus.question}</FormLabel>
           <Controller
             name='protectionStatus.protectionTypes'
             control={control}
@@ -200,7 +200,7 @@ const ProjectDetailsForm = () => {
                     ))}
                   </Box>
                 )}>
-                {siteBackground.protectionStatus.options.map((item, index) => (
+                {questions.protectionStatus.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     <Checkbox checked={field.value.indexOf(item) > -1} />
                     {item}
@@ -235,14 +235,14 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* areStakeholdersInvolved */}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.areStakeholdersInvolved.question}</FormLabel>
+          <FormLabel>{questions.areStakeholdersInvolved.question}</FormLabel>
           <Controller
             name='areStakeholdersInvolved '
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label='select'>
-                {siteBackground.areStakeholdersInvolved.options.map((item, index) => (
+                {questions.areStakeholdersInvolved.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -256,7 +256,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Government Arrangement */}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.govermentArrangement.question}</FormLabel>
+          <FormLabel>{questions.govermentArrangement.question}</FormLabel>
           <Controller
             name='governmentArrangement'
             control={control}
@@ -275,7 +275,7 @@ const ProjectDetailsForm = () => {
                     ))}
                   </Box>
                 )}>
-                {siteBackground.govermentArrangement.options.map((item, index) => (
+                {questions.govermentArrangement.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -287,7 +287,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Land Tenure */}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.landTenure.question}</FormLabel>
+          <FormLabel>{questions.landTenure.question}</FormLabel>
           <Controller
             name='landTenure'
             control={control}
@@ -306,7 +306,7 @@ const ProjectDetailsForm = () => {
                     ))}
                   </Box>
                 )}>
-                {siteBackground.landTenure.options.map((item, index) => (
+                {questions.landTenure.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -318,14 +318,14 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* customaryRights */}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.customaryRights.question}</FormLabel>
+          <FormLabel>{questions.customaryRights.question}</FormLabel>
           <Controller
             name='customaryRights'
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label='select'>
-                {siteBackground.customaryRights.options.map((item, index) => (
+                {questions.customaryRights.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>

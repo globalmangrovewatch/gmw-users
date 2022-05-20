@@ -10,7 +10,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 import axios from 'axios'
 
 import countries from '../data/countries.json'
-import { projectDetails } from '../data/questions'
+import { projectDetails as questions } from '../data/questions'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { ErrorText } from '../styles/typography'
 import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/forms'
@@ -70,7 +70,7 @@ const ProjectDetailsForm = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
-          <FormLabel>{projectDetails.hasProjectEndDate.question}</FormLabel>
+          <FormLabel>{questions.hasProjectEndDate.question}</FormLabel>
           <Controller
             name='hasProjectEndDate'
             control={control}
@@ -89,7 +89,7 @@ const ProjectDetailsForm = () => {
         {/* Start Date */}
         <FormQuestionDiv>
           <FormLabel>Project Duration</FormLabel>
-          <FormLabel>{projectDetails.projectStartDate.question}</FormLabel>
+          <FormLabel>{questions.projectStartDate.question}</FormLabel>
           <Controller
             name='projectStartDate'
             control={control}
@@ -114,7 +114,7 @@ const ProjectDetailsForm = () => {
         {/* End Date */}
         {watchHasProjectEndDate === 'true' && (
           <FormQuestionDiv>
-            <FormLabel>{projectDetails.projectEndDate.question}</FormLabel>
+            <FormLabel>{questions.projectEndDate.question}</FormLabel>
             <Controller
               name='projectEndDate'
               control={control}
@@ -138,7 +138,7 @@ const ProjectDetailsForm = () => {
         )}
         {/* Countries selector */}
         <FormQuestionDiv>
-          <FormLabel>{projectDetails.countries.question}</FormLabel>
+          <FormLabel>{questions.countries.question}</FormLabel>
           <Controller
             name='countries'
             control={control}
@@ -161,7 +161,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Draw Pologon - TO BE INSERTED */}
         <FormQuestionDiv>
-          <FormLabel>{projectDetails.siteArea.question}</FormLabel>
+          <FormLabel>{questions.siteArea.question}</FormLabel>
         </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && <ErrorText>{language.error.submit}</ErrorText>}
