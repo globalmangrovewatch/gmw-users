@@ -48,3 +48,5 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ## Misc notes for later refinement
 
 - Plop is configured for easy component scaffolding. To use it, run `plop componentName` and you will find a new component folder and files in `./src/components`
+
+# 
