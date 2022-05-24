@@ -89,14 +89,17 @@ const ProjectDetailsForm = () => {
       })
   }
 
-  const handleStakeholdersOnChange = (e, stakeholder) => {
-    if (e.target.checked) {
+  const handleStakeholdersOnChange = (event, stakeholder) => {
+    if (event.target.checked) {
       stakeholdersAppend({ stakeholderType: stakeholder })
     } else {
       const index = stakeholdersFields.findIndex((field) => field.stakeholderType === stakeholder)
       stakeholdersRemove(index)
     }
   }
+
+  const getStakeholder = (stakeholder) =>
+    stakeholdersFields.find((field) => field.stakeholderType === stakeholder)
 
   return (
     <MainFormDiv>
@@ -112,11 +115,13 @@ const ProjectDetailsForm = () => {
                   <Box>
                     <Checkbox
                       value={stakeholder}
-                      onChange={(e) => handleStakeholdersOnChange(e, stakeholder)}></Checkbox>
+                      onChange={(event) =>
+                        handleStakeholdersOnChange(event, stakeholder)
+                      }></Checkbox>
                     <Typography variant='subtitle'>{stakeholder}</Typography>
                   </Box>
                   <Box>
-                    {stakeholdersFields.find((field) => field.stakeholderType === stakeholder) && (
+                    {getStakeholder(stakeholder) && (
                       <Controller
                         name={`stakeholders.${stakeholdersFields.findIndex(
                           (field) => field.stakeholderType === stakeholder
@@ -252,7 +257,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Land Tenure */}
         <CheckboxGroupWithLabelAndController
-          fieldName='landTenureStatus'
+          fieldName='landTenure'
           reactHookFormInstance={reactHookFormInstance}
           options={questions.landTenure.options}
           question={questions.landTenure.question}
