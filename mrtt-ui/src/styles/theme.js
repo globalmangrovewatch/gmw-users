@@ -24,6 +24,13 @@ const theme = createTheme({
           color: '#000'
         }
       }
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          marginTop: '1em'
+        }
+      }
     }
   }
 })

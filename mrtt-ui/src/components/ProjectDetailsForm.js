@@ -1,23 +1,16 @@
-import {
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  Stack,
-  TextField,
-  Typography
-} from '@mui/material'
+import { FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { useForm, Controller } from 'react-hook-form'
 import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as Yup from 'yup'
+import * as yup from 'yup'
 import Autocomplete from '@mui/material/Autocomplete'
 import axios from 'axios'
 
 import countries from '../data/countries.json'
+import { projectDetails as questions } from '../data/questions'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { ErrorText } from '../styles/typography'
 import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/forms'
@@ -26,18 +19,19 @@ import language from '../language'
 
 const ProjectDetailsForm = () => {
   // form validation rules
-  const validationSchema = Yup.object().shape({
-    hasProjectEndDate: Yup.boolean(),
-    projectStartDate: Yup.string().required('Select a start date'),
-    projectEndDate: Yup.string().when('hasProjectEndDate', {
+  const validationSchema = yup.object().shape({
+    hasProjectEndDate: yup.boolean(),
+    projectStartDate: yup.string().required('Select a start date'),
+    projectEndDate: yup.string().when('hasProjectEndDate', {
       is: true,
-      then: Yup.string().required('Please select an end date')
+      then: yup.string().required('Please select an end date')
     }),
-    countries: Yup.array()
+    countries: yup
+      .array()
       .of(
-        Yup.object().shape({
-          name: Yup.string(),
-          code: Yup.string()
+        yup.object().shape({
+          name: yup.string(),
+          code: yup.string()
         })
       )
       .min(1)
@@ -59,19 +53,14 @@ const ProjectDetailsForm = () => {
 
     if (!data) return
 
-    const preppedData = mapDataForApi('projectDetails', data)
-
-    // make axios PUT request
     axios
-      .patch(url, preppedData)
-      .then((res) => {
+      .patch(url, mapDataForApi('projectDetails', data))
+      .then(() => {
         setIsSubmitting(false)
-        console.log(res)
       })
-      .catch((error) => {
+      .catch(() => {
         setIsError(true)
         setIsSubmitting(false)
-        console.log(error)
       })
   }
 
@@ -81,7 +70,7 @@ const ProjectDetailsForm = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
-          <FormLabel>1.1a Does the project have an end date?</FormLabel>
+          <FormLabel>{questions.hasProjectEndDate.question}</FormLabel>
           <Controller
             name='hasProjectEndDate'
             control={control}
@@ -100,7 +89,7 @@ const ProjectDetailsForm = () => {
         {/* Start Date */}
         <FormQuestionDiv>
           <FormLabel>Project Duration</FormLabel>
-          <FormLabel>1.1b</FormLabel>
+          <FormLabel>{questions.projectStartDate.question}</FormLabel>
           <Controller
             name='projectStartDate'
             control={control}
@@ -120,14 +109,12 @@ const ProjectDetailsForm = () => {
               </LocalizationProvider>
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.projectStartDate?.message}
-          </Typography>
+          <ErrorText>{errors.projectStartDate?.message}</ErrorText>
         </FormQuestionDiv>
         {/* End Date */}
         {watchHasProjectEndDate === 'true' && (
           <FormQuestionDiv>
-            <FormLabel>1.1c</FormLabel>
+            <FormLabel>{questions.projectEndDate.question}</FormLabel>
             <Controller
               name='projectEndDate'
               control={control}
@@ -146,14 +133,12 @@ const ProjectDetailsForm = () => {
                 </LocalizationProvider>
               )}
             />
-            <Typography variant='subtitle' sx={{ color: 'red' }}>
-              {errors.projectEndDate?.message}
-            </Typography>
+            <ErrorText>{errors.projectEndDate?.message}</ErrorText>
           </FormQuestionDiv>
         )}
         {/* Countries selector */}
         <FormQuestionDiv>
-          <FormLabel>1.2 What country/countries is the site located in?</FormLabel>
+          <FormLabel>{questions.countries.question}</FormLabel>
           <Controller
             name='countries'
             control={control}
@@ -172,16 +157,16 @@ const ProjectDetailsForm = () => {
               />
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.countries?.message}
-          </Typography>
+          <ErrorText>{errors.countries?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Draw Pologon - TO BE INSERTED */}
         <FormQuestionDiv>
-          <FormLabel>1.3 What is the overall site area?</FormLabel>
+          <FormLabel>{questions.siteArea.question}</FormLabel>
         </FormQuestionDiv>
-        {isError && <ErrorText>{language.error.submit}</ErrorText>}
-        <ButtonSubmit isSubmitting={isSubmitting} />
+        <FormQuestionDiv>
+          {isError && <ErrorText>{language.error.submit}</ErrorText>}
+          <ButtonSubmit isSubmitting={isSubmitting} />
+        </FormQuestionDiv>
       </Form>
     </MainFormDiv>
   )

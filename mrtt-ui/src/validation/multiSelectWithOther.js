@@ -19,7 +19,8 @@ export const multiselectWithOtherValidation = yup.object({
     .of(yup.string())
     .when('isOtherChecked', {
       is: false || undefined,
-      then: (schema) => schema.min(1, language.multiselectWithOtherFormQuestion.validation.item),
+      then: (schema) =>
+        schema.min(1, language.multiselectWithOtherFormQuestion.validation.selectAtleastOneItem),
       otherwise: otherIsCheckedButInputIsEmptyValidation
     }),
   otherValue: yup.string(),
