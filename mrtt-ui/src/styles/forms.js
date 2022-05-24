@@ -19,7 +19,7 @@ export const FormQuestionDiv = styled('div')(() => ({
 }))
 
 export const SectionFormTitle = styled(Typography)`
-  marginbottom: '0.5em';
+  margin-bottom: '0.5em';
 `
 SectionFormTitle.defaultProps = { variant: 'h4' }
 
@@ -32,4 +32,12 @@ export const NestedFormSectionDiv = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: center;
+`
+
+export const SubTitle = styled(Typography)`
+  font-weight: bold;
+`
+export const SubTitle2 = styled(Typography)`
+  font-weight: bold;
+  margin-top: '0.75em';
 `

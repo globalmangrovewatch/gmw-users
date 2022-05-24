@@ -11,32 +11,50 @@ import {
 } from '@mui/material'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as Yup from 'yup'
+import * as yup from 'yup'
 
 import {
   FormQuestionDiv,
   MainFormDiv,
   NestedFormSectionDiv,
-  SectionFormTitle
+  SectionFormTitle,
+  SubTitle,
+  SubTitle2
 } from '../styles/forms'
 import { causesOfDecline } from '../data/questions'
 import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
 
 function CausesOfDeclineForm() {
   // form validation rules
-  const validationSchema = Yup.object().shape({
-    lossKnown: Yup.boolean()
+  const validationSchema = yup.object().shape({
+    lossKnown: yup.boolean(),
+    causesOfDecline: yup
+      .array()
+      .of(
+        yup.object().shape({
+          mainCause: yup.string(),
+          mainCauseAnswers: yup.array().of(yup.string()),
+          subCauses: yup.array().of(
+            yup.object().shape({
+              subCause: yup.string(),
+              subCauseAnswers: yup.array().of(yup.string())
+            })
+          )
+        })
+      )
+      .min(1)
+      .required('Select at least one cause of decline')
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() hook
   const { control } = useForm(formOptions)
   // const { errors } = formState
-  // const {
-  //   fields: causesOfDeclineFields,
-  //   append: causesOfDeclineAppend,
-  //   remove: causesOfDeclineRemove
-  // } = useFieldArray({ name: 'causesOfDecline', control })
+  const {
+    fields: causesOfDeclineFields,
+    append: causesOfDeclineAppend,
+    remove: causesOfDeclineRemove
+  } = useFieldArray({ name: 'causesOfDecline', control })
 
   const handleCausesOfDeclineOnChange = ({
     event,
@@ -72,10 +90,8 @@ function CausesOfDeclineForm() {
         <FormLabel>{causesOfDecline.causesOfDecline.question}</FormLabel>
         {causesOfDeclineOptions.map((mainCause, mainCauseIndex) => {
           return (
-            <Box key={mainCauseIndex} sx={{ marginTop: '0.75em' }}>
-              <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>
-                {mainCause.label}
-              </Typography>
+            <Box key={mainCauseIndex} sx={{ marginTop: '0.75em', marginBottom: '1.5em' }}>
+              <SubTitle variant='subtitle1'>{mainCause.label}</SubTitle>
               {typeof mainCause.children[0] === 'string'
                 ? mainCause.children.map((childOption, childIndex) => (
                     <ListItem key={childIndex}>
@@ -94,12 +110,11 @@ function CausesOfDeclineForm() {
                     </ListItem>
                   ))
                 : mainCause.children.map((subCause, subCauseIndex) => (
-                    <Box key={subCauseIndex} variant='subtitle2' sx={{ marginLeft: '0.75em' }}>
-                      <Typography
-                        sx={{ marginTop: '0.75em', fontWeight: 'bold' }}
-                        variant='subtitle2'>
-                        {subCause.secondaryLabel}
-                      </Typography>
+                    <Box
+                      key={subCauseIndex}
+                      variant='subtitle2'
+                      sx={{ marginLeft: '0.75em', marginTop: '0.75em' }}>
+                      <SubTitle2 variant='subtitle2'>{subCause.secondaryLabel}</SubTitle2>
                       {subCause.secondaryChildren.map(
                         (secondaryChildOption, secondaryChildIndex) => {
                           return (
