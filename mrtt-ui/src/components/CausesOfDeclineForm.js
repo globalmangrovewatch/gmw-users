@@ -45,7 +45,7 @@ function CausesOfDeclineForm() {
     childOption,
     secondaryChildOption
   }) => {
-    return event, mainCause, subCause, childOption, secondaryChildOption
+    return console.log({ event, mainCause, subCause, childOption, secondaryChildOption })
   }
 
   return (
@@ -85,7 +85,7 @@ function CausesOfDeclineForm() {
                           onChange={(event) =>
                             handleCausesOfDeclineOnChange({
                               event,
-                              mainCause,
+                              mainCause: mainCause.label,
                               childOption
                             })
                           }></Checkbox>
@@ -110,8 +110,8 @@ function CausesOfDeclineForm() {
                                   onChange={(event) =>
                                     handleCausesOfDeclineOnChange({
                                       event,
-                                      mainCause,
-                                      subCause,
+                                      mainCause: mainCause.label,
+                                      subCause: subCause.secondaryLabel,
                                       secondaryChildOption
                                     })
                                   }></Checkbox>
