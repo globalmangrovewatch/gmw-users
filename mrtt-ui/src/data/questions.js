@@ -1,4 +1,4 @@
-export const projectDetails = {
+const projectDetails = {
   hasProjectEndDate: {
     question: '1.1a Does the project have an end date?'
   },
@@ -16,7 +16,7 @@ export const projectDetails = {
   }
 }
 
-export const siteBackground = {
+const siteBackground = {
   stakeholders: {
     question: '2.1 Which stakeholders are involved in the project activities?',
     options: [
@@ -172,4 +172,18 @@ const restorationAims = {
   }
 }
 
-export { restorationAims }
+const preRestorationAssessment = {
+  mangrovesPreviouslyOccured: {
+    question: '5.1 Have mangroves naturally occurred at the site previously?',
+    options: ['Yes', 'No', 'Unknown']
+  },
+  mangroveRestorationAttempted: {
+    question: '5.2 Has mangrove restoration/rehabilitation been attempted at the site previously?',
+    options: ['Yes', 'No', 'Unknown']
+  },
+  lastRestorationAttemptYear: {
+    question: '5.2a What year was restoration/rehabilitation last attempted at the site?'
+  }
+}
+
+export { restorationAims, projectDetails, siteBackground, preRestorationAssessment }
