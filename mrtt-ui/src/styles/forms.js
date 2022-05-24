@@ -27,3 +27,9 @@ export const Form = styled('form')`
   display: flex;
   flex-direction: column;
 `
+
+export const NestedFormSectionDiv = styled('div')`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
