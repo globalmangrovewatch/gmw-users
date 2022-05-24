@@ -9,38 +9,14 @@ import axios from 'axios'
 import { ErrorText } from '../../styles/typography'
 import { Form, MainFormDiv, SectionFormTitle } from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
+import { multiselectWithOtherValidation } from '../../validation/multiSelectWithOther'
+import { questionMapping } from '../../data/questionMapping'
 import { restorationAims as questions } from '../../data/questions'
 import ButtonSubmit from '../ButtonSubmit'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import language from '../../language'
 import formatApiAnswersForForm from '../../library/formatApiAnswersForForm'
-import { questionMapping } from '../../data/questionMapping'
+import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
-
-const otherIsCheckedButInputIsEmptyValidation = (schema) =>
-  schema.test({
-    name: 'isOtherCheckedAndEmpty',
-    message: language.restorationAimsForm.validation.clairfyOther,
-    test: (value, context) => {
-      const {
-        parent: { otherValue }
-      } = context
-      return otherValue !== undefined && otherValue !== ''
-    }
-  })
-
-const aimsValidation = yup.object({
-  selectedValues: yup
-    .array()
-    .of(yup.string())
-    .when('isOtherChecked', {
-      is: false || undefined,
-      then: (schema) => schema.min(1, language.restorationAimsForm.validation.selectAtleastOneAim),
-      otherwise: otherIsCheckedButInputIsEmptyValidation
-    }),
-  otherValue: yup.string(),
-  isOtherChecked: yup.bool()
-})
 
 const RestorationAimsForm = () => {
   const { siteId } = useParams()
@@ -49,9 +25,9 @@ const RestorationAimsForm = () => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const validationSchema = yup.object({
-    ecologicalAims: aimsValidation,
-    socioEconomicAims: aimsValidation,
-    otherAims: aimsValidation
+    ecologicalAims: multiselectWithOtherValidation,
+    socioEconomicAims: multiselectWithOtherValidation,
+    otherAims: multiselectWithOtherValidation
   })
   const reactHookFormInstance = useForm({
     defaultValues: {

@@ -9,6 +9,9 @@ const FakeSite = () => {
       <Link component={LinkReactRouter} to='/1/form/project-details'>
         Project Details
       </Link>
+      <Link component={LinkReactRouter} to='/1/form/site-background'>
+        Site Background
+      </Link>
       <Link component={LinkReactRouter} to='/1/form/restoration-aims'>
         Restoration Aims
       </Link>

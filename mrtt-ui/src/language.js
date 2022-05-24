@@ -6,11 +6,11 @@ const form = {
   checkboxGroupOtherLabel: 'Other',
   checkboxGroupOtherInputPlaceholder: 'If other, please state.'
 }
-const restorationAimsForm = {
+const multiselectWithOtherFormQuestion = {
   validation: {
-    selectAtleastOneAim: 'Please select at least one aim.',
-    clairfyOther: 'Please clarify other aim.'
+    selectAtleastOneItem: 'Please select at least one item.',
+    clairfyOther: 'Please clarify other item.'
   }
 }
 
-export default { error, form, restorationAimsForm }
+export default { error, form, multiselectWithOtherFormQuestion }
