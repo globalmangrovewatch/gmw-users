@@ -21,5 +21,9 @@ export const questionMapping = {
     ecologicalAims: '3.1',
     socioEconomicAims: '3.2',
     otherAims: '3.3'
+  },
+  causesOfDecline: {
+    lossKnown: '4.1',
+    causesOfDecline: '4.2'
   }
 }
