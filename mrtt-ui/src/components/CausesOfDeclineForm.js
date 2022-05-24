@@ -31,9 +31,21 @@ function CausesOfDeclineForm() {
 
   // get functions to build form with useForm() hook
   const { control } = useForm(formOptions)
+  // const { errors } = formState
+  // const {
+  //   fields: causesOfDeclineFields,
+  //   append: causesOfDeclineAppend,
+  //   remove: causesOfDeclineRemove
+  // } = useFieldArray({ name: 'causesOfDecline', control })
 
-  const handleCausesOfDeclineOnChange = ({ event, secondaryChild, nesting }) => {
-    return event, secondaryChild, nesting
+  const handleCausesOfDeclineOnChange = ({
+    event,
+    mainCause,
+    subCause,
+    childOption,
+    secondaryChildOption
+  }) => {
+    return event, mainCause, subCause, childOption, secondaryChildOption
   }
 
   return (
@@ -58,50 +70,57 @@ function CausesOfDeclineForm() {
       </FormQuestionDiv>
       <FormQuestionDiv>
         <FormLabel>{causesOfDecline.causesOfDecline.question}</FormLabel>
-        {causesOfDeclineOptions.map((option, index) => {
+        {causesOfDeclineOptions.map((mainCause, mainCauseIndex) => {
           return (
-            <Box key={index} sx={{ marginTop: '0.75em' }}>
+            <Box key={mainCauseIndex} sx={{ marginTop: '0.75em' }}>
               <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>
-                {option.label}
+                {mainCause.label}
               </Typography>
-              {typeof option.children[0] === 'string'
-                ? option.children.map((optionChild, indexChild) => (
-                    <ListItem key={indexChild}>
+              {typeof mainCause.children[0] === 'string'
+                ? mainCause.children.map((childOption, childIndex) => (
+                    <ListItem key={childIndex}>
                       <NestedFormSectionDiv>
                         <Checkbox
-                          value={optionChild}
+                          value={childOption}
                           onChange={(event) =>
-                            handleCausesOfDeclineOnChange({ event, optionChild, nesting: false })
+                            handleCausesOfDeclineOnChange({
+                              event,
+                              mainCause,
+                              childOption
+                            })
                           }></Checkbox>
-                        <Typography variant='subtitle2'>{optionChild}</Typography>
+                        <Typography variant='subtitle2'>{childOption}</Typography>
                       </NestedFormSectionDiv>
                     </ListItem>
                   ))
-                : option.children.map((optionChild, indexChild) => (
-                    <Box key={indexChild} variant='subtitle2' sx={{ marginLeft: '0.75em' }}>
+                : mainCause.children.map((subCause, subCauseIndex) => (
+                    <Box key={subCauseIndex} variant='subtitle2' sx={{ marginLeft: '0.75em' }}>
                       <Typography
                         sx={{ marginTop: '0.75em', fontWeight: 'bold' }}
                         variant='subtitle2'>
-                        {optionChild.secondaryLabel}
+                        {subCause.secondaryLabel}
                       </Typography>
-                      {optionChild.secondaryChildren.map((secondaryChild, secondaryChildIndex) => {
-                        return (
-                          <ListItem key={secondaryChildIndex}>
-                            <NestedFormSectionDiv>
-                              <Checkbox
-                                value={secondaryChild}
-                                onChange={(event) =>
-                                  handleCausesOfDeclineOnChange({
-                                    event,
-                                    secondaryChild,
-                                    nesting: true
-                                  })
-                                }></Checkbox>
-                              <Typography variant='subtitle2'>{secondaryChild} </Typography>
-                            </NestedFormSectionDiv>
-                          </ListItem>
-                        )
-                      })}
+                      {subCause.secondaryChildren.map(
+                        (secondaryChildOption, secondaryChildIndex) => {
+                          return (
+                            <ListItem key={secondaryChildIndex}>
+                              <NestedFormSectionDiv>
+                                <Checkbox
+                                  value={secondaryChildOption}
+                                  onChange={(event) =>
+                                    handleCausesOfDeclineOnChange({
+                                      event,
+                                      mainCause,
+                                      subCause,
+                                      secondaryChildOption
+                                    })
+                                  }></Checkbox>
+                                <Typography variant='subtitle2'>{secondaryChildOption} </Typography>
+                              </NestedFormSectionDiv>
+                            </ListItem>
+                          )
+                        }
+                      )}
                     </Box>
                   ))}
             </Box>
