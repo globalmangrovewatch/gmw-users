@@ -10,6 +10,20 @@ const theme = createTheme({
     }
   },
   components: {
+    MuiDropzoneArea: {
+      styleOverrides: {
+        root: {
+          marginBottom: '1em',
+          marginTop: '1em',
+          minHeight: '2em'
+        },
+        text: {
+          '&.MuiTypography-h5': {
+            fontSize: '0.8rem'
+          }
+        }
+      }
+    },
     MuiFormLabel: {
       styleOverrides: {
         root: {

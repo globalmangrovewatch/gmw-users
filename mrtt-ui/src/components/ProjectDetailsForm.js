@@ -33,6 +33,7 @@ const countriesGeojson = MangroveCountries.features
 
 function ProjectDetailsForm() {
   const [mapExtent, setMapExtent] = useState(undefined)
+  const [siteAreaPolygon, setSiteAreaPolygon] = useState(undefined)
 
   // form validation rules
   const validationSchema = yup.object().shape({
@@ -192,7 +193,10 @@ function ProjectDetailsForm() {
         {/* Draw or upload site area */}
         <FormQuestionDiv>
           <FormLabel>{questions.siteArea.question}</FormLabel>
-          <ProjectAreaMap extent={mapExtent}></ProjectAreaMap>
+          <ProjectAreaMap
+            extent={mapExtent}
+            polygon={siteAreaPolygon}
+            setPolygon={setSiteAreaPolygon}></ProjectAreaMap>
         </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && <ErrorText>{language.error.submit}</ErrorText>}
