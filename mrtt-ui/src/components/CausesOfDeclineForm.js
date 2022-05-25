@@ -32,11 +32,21 @@ function CausesOfDeclineForm() {
       .of(
         yup.object().shape({
           mainCauseLabel: yup.string(),
-          mainCauseAnswers: yup.array().of(yup.string()),
+          mainCauseAnswers: yup.array().of(
+            yup.object().shape({
+              mainCauseAnswer: yup.string(),
+              levelOfDegredation: yup.string().required()
+            })
+          ),
           subCauses: yup.array().of(
             yup.object().shape({
               subCauseLabel: yup.string(),
-              subCauseAnswers: yup.array().of(yup.string())
+              subCauseAnswers: yup.array().of(
+                yup.object().shape({
+                  subCauseAnswer: yup.string(),
+                  levelOfDegredation: yup.string().required()
+                })
+              )
             })
           )
         })
@@ -56,6 +66,7 @@ function CausesOfDeclineForm() {
     remove: causesOfDeclineRemove
   } = useFieldArray({ name: 'causesOfDecline', control })
 
+  // big function with many different cases for Q4.2 due to the nesting involved in this question type
   const handleCausesOfDeclineOnChange = ({
     event,
     mainCauseLabel,
@@ -74,17 +85,28 @@ function CausesOfDeclineForm() {
 
     //  case: checked, no subCause, and mainCause does not exist
     if (event.target.checked && !subCauseLabel && mainCauseIndex === -1) {
-      causesOfDeclineAppend({ mainCauseLabel, mainCauseAnswers: [childOption] })
+      causesOfDeclineAppend({
+        mainCauseLabel,
+        mainCauseAnswers: [{ mainCauseAnswer: childOption, levelOfDegredation: '' }]
+      })
     }
     // case: checked, no subCause, mainCause exists
     else if (event.target.checked && !subCauseLabel && mainCauseIndex > -1) {
-      currentMainCause.mainCauseAnswers.push(childOption)
+      currentMainCause.mainCauseAnswers.push({
+        mainCauseAnswer: childOption,
+        levelOfDegredation: ''
+      })
     }
     // case: checked, subCause, mainCause does not exist
     else if (event.target.checked && subCauseLabel && mainCauseIndex === -1) {
       causesOfDeclineAppend({
         mainCauseLabel,
-        subCauses: [{ subCauseLabel, subCauseAnswers: [secondaryChildOption] }]
+        subCauses: [
+          {
+            subCauseLabel,
+            subCauseAnswers: [{ subCauseAnswer: secondaryChildOption, levelOfDegredation: '' }]
+          }
+        ]
       })
     }
     // case: checked, subCause, mainCause does exist
@@ -93,12 +115,15 @@ function CausesOfDeclineForm() {
       if (subCauseIndex === -1) {
         currentMainCause.subCauses.push({
           subCauseLabel,
-          subCauseAnswers: [secondaryChildOption]
+          subCauseAnswers: [{ subCauseAnswer: secondaryChildOption, levelOfDegredation: '' }]
         })
       }
       // if subCause does exist within main cause
       else {
-        currentSubCause.subCauseAnswers.push(secondaryChildOption)
+        currentSubCause.subCauseAnswers.push({
+          subCauseAnswer: secondaryChildOption,
+          levelOfDegredation: ''
+        })
       }
     }
     // case: unchecked, no subCause
@@ -110,7 +135,7 @@ function CausesOfDeclineForm() {
       // if more than one answer exists within mainCauseAnwers
       else {
         const childOptionIndex = currentMainCause.mainCauseAnswers.findIndex(
-          (answer) => answer === childOption
+          (option) => option.mainCauseAnswer === childOption
         )
         currentMainCause.mainCauseAnswers.splice(childOptionIndex, 1)
       }
@@ -124,7 +149,7 @@ function CausesOfDeclineForm() {
       // if more than one answer exists with subCauseAnswers
       else {
         const secondaryChildOptionIndex = currentSubCause.subCauseAnswers.findIndex(
-          (answer) => answer === secondaryChildOption
+          (option) => option.subCauseAnswer === secondaryChildOption
         )
         currentSubCause.subCauseAnswers.splice(secondaryChildOptionIndex, 1)
       }
@@ -133,6 +158,7 @@ function CausesOfDeclineForm() {
         causesOfDeclineRemove(mainCauseIndex)
       }
     }
+    console.log('fields>>>>', causesOfDeclineFields)
   }
 
   return (
