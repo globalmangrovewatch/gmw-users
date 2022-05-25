@@ -1,37 +1,26 @@
-import { useState } from 'react'
-import axios from 'axios'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as Yup from 'yup'
-import {
-  Button,
-  ButtonGroup,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  Stack,
-  TextField,
-  Typography
-} from '@mui/material'
-import { styled } from '@mui/material/styles'
+import { FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
+import { useForm, Controller } from 'react-hook-form'
+import { useState } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 import Autocomplete from '@mui/material/Autocomplete'
+import axios from 'axios'
 import turfConvex from '@turf/convex'
 import turfBbox from '@turf/bbox'
 import turfBboxPolygon from '@turf/bbox-polygon'
 
-import ProjectAreaMap from './ProjectAreaMap'
+import { projectDetails as questions } from '../data/questions'
+import { mapDataForApi } from '../library/mapDataForApi'
+import { ErrorText } from '../styles/typography'
+import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/forms'
+import ButtonSubmit from './ButtonSubmit'
+import language from '../language'
 import MangroveCountries from '../data/mangrove_countries.json'
-import { MainFormDiv, FormQuestionDiv } from '../styles/forms'
-import { questionMapping } from '../data/questionMapping'
+import ProjectAreaMap from './ProjectAreaMap'
 
-const DownloadButtonGroup = styled(ButtonGroup)`
-  justify-content: center;
-  margin-bottom: 1.5em;
-`
 const sortCountries = (a, b) => {
   const textA = a.properties.country.toUpperCase()
   const textB = b.properties.country.toUpperCase()
@@ -46,18 +35,19 @@ function ProjectDetailsForm() {
   const [mapExtent, setMapExtent] = useState(undefined)
 
   // form validation rules
-  const validationSchema = Yup.object().shape({
-    hasProjectEndDate: Yup.boolean(),
-    projectStartDate: Yup.string().required('Select a start date'),
-    projectEndDate: Yup.string().when('hasProjectEndDate', {
+  const validationSchema = yup.object().shape({
+    hasProjectEndDate: yup.boolean(),
+    projectStartDate: yup.string().required('Select a start date'),
+    projectEndDate: yup.string().when('hasProjectEndDate', {
       is: true,
-      then: Yup.string().required('Please select an end date')
+      then: yup.string().required('Please select an end date')
     }),
-    countries: Yup.array()
+    countries: yup
+      .array()
       .of(
-        Yup.object().shape({
-          name: Yup.string(),
-          code: Yup.string()
+        yup.object().shape({
+          name: yup.string(),
+          code: yup.string()
         })
       )
       .min(1)
@@ -69,7 +59,7 @@ function ProjectDetailsForm() {
   const { control, handleSubmit, formState, watch } = useForm(formOptions)
   const { errors } = formState
   const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
-  const [isSubmitting, setisSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
 
   const onCountriesChange = (field, features) => {
@@ -87,42 +77,30 @@ function ProjectDetailsForm() {
   }
 
   const onSubmit = async (data) => {
-    setisSubmitting(true)
+    setIsSubmitting(true)
     setIsError(false)
-    const preppedData = []
-    const url = `${process.env.REACT_APP_API_URL}sites/1/registration_answers`
+    const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
 
     if (!data) return
 
-    // set up data structure for api
-    for (const [key, value] of Object.entries(data)) {
-      // map question ids with keys
-      if (Object.prototype.hasOwnProperty.call(questionMapping.projectDetails, key)) {
-        preppedData.push({ question_id: questionMapping.projectDetails[key], answer_value: value })
-      }
-    }
-    // make axios PUT request
     axios
-      .put(url, preppedData)
-      .then((res) => {
-        setisSubmitting(false)
-        console.log(res)
+      .patch(url, mapDataForApi('projectDetails', data))
+      .then(() => {
+        setIsSubmitting(false)
       })
-      .catch((error) => {
+      .catch(() => {
         setIsError(true)
-        console.log(error)
+        setIsSubmitting(false)
       })
   }
 
   return (
     <MainFormDiv>
-      <Typography variant='h4' sx={{ marginBottom: '0.5em' }}>
-        Project Details Form
-      </Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <SectionFormTitle>Project Details Form</SectionFormTitle>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
-          <FormLabel>1.1a Does the project have an end date?</FormLabel>
+          <FormLabel>{questions.hasProjectEndDate.question}</FormLabel>
           <Controller
             name='hasProjectEndDate'
             control={control}
@@ -141,7 +119,7 @@ function ProjectDetailsForm() {
         {/* Start Date */}
         <FormQuestionDiv>
           <FormLabel>Project Duration</FormLabel>
-          <FormLabel>1.1b</FormLabel>
+          <FormLabel>{questions.projectStartDate.question}</FormLabel>
           <Controller
             name='projectStartDate'
             control={control}
@@ -161,14 +139,12 @@ function ProjectDetailsForm() {
               </LocalizationProvider>
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.projectStartDate?.message}
-          </Typography>
+          <ErrorText>{errors.projectStartDate?.message}</ErrorText>
         </FormQuestionDiv>
         {/* End Date */}
         {watchHasProjectEndDate === 'true' && (
           <FormQuestionDiv>
-            <FormLabel>1.1c</FormLabel>
+            <FormLabel>{questions.projectEndDate.question}</FormLabel>
             <Controller
               name='projectEndDate'
               control={control}
@@ -187,14 +163,12 @@ function ProjectDetailsForm() {
                 </LocalizationProvider>
               )}
             />
-            <Typography variant='subtitle' sx={{ color: 'red' }}>
-              {errors.projectEndDate?.message}
-            </Typography>
+            <ErrorText>{errors.projectEndDate?.message}</ErrorText>
           </FormQuestionDiv>
         )}
         {/* Countries selector */}
         <FormQuestionDiv>
-          <FormLabel>1.2 What country/countries is the site located in?</FormLabel>
+          <FormLabel>{questions.countries.question}</FormLabel>
           <Controller
             name='countries'
             control={control}
@@ -213,28 +187,18 @@ function ProjectDetailsForm() {
               />
             )}
           />
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            {errors.countries?.message}
-          </Typography>
+          <ErrorText>{errors.countries?.message}</ErrorText>
         </FormQuestionDiv>
-        {/* Draw Pologon - TO BE INSERTED */}
+        {/* Draw or upload site area */}
         <FormQuestionDiv>
-          <FormLabel>1.3 What is the overall site area?</FormLabel>
-          <DownloadButtonGroup variant='outlined' aria-label='outlined primary button group'>
-            <Button>Draw Polygon</Button>
-            <Button>Upload Polygon</Button>
-          </DownloadButtonGroup>
+          <FormLabel>{questions.siteArea.question}</FormLabel>
           <ProjectAreaMap extent={mapExtent}></ProjectAreaMap>
         </FormQuestionDiv>
-        {isError && (
-          <Typography variant='subtitle' sx={{ color: 'red' }}>
-            Submit failed, please try again
-          </Typography>
-        )}
-        <Button sx={{ marginTop: '1em' }} variant='contained' type='submit' disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Submit'}
-        </Button>
-      </form>
+        <FormQuestionDiv>
+          {isError && <ErrorText>{language.error.submit}</ErrorText>}
+          <ButtonSubmit isSubmitting={isSubmitting} />
+        </FormQuestionDiv>
+      </Form>
     </MainFormDiv>
   )
 }
