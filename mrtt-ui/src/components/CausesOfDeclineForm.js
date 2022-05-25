@@ -25,7 +25,6 @@ import { causesOfDecline } from '../data/questions'
 import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
 
 function CausesOfDeclineForm() {
-  // form validation rules
   const validationSchema = yup.object().shape({
     lossKnown: yup.boolean(),
     causesOfDecline: yup
@@ -68,10 +67,10 @@ function CausesOfDeclineForm() {
       (cause) => cause.mainCauseLabel === mainCauseLabel
     )
     const currentMainCause = causesOfDeclineFields[mainCauseIndex]
-
     const subCauseIndex = currentMainCause?.subCauses?.findIndex(
       (subCause) => subCause.subCauseLabel === subCauseLabel
     )
+    const currentSubCause = currentMainCause?.subCauses?.[subCauseIndex]
 
     //  case: checked, no subCause, and mainCause does not exist
     if (event.target.checked && !subCauseLabel && mainCauseIndex === -1) {
@@ -99,7 +98,7 @@ function CausesOfDeclineForm() {
       }
       // if subCause does exist within main cause
       else {
-        currentMainCause.subCauses[subCauseIndex].subCauseAnswers.push(secondaryChildOption)
+        currentSubCause.subCauseAnswers.push(secondaryChildOption)
       }
     }
     // case: unchecked, no subCause
@@ -116,7 +115,24 @@ function CausesOfDeclineForm() {
         currentMainCause.mainCauseAnswers.splice(childOptionIndex, 1)
       }
     }
-    return console.log('FIELDS>>>', causesOfDeclineFields)
+    // case: unchecked, subCause exists
+    else if (!event.target.checked && subCauseLabel) {
+      // if only one answer exists within subCauseAnswers
+      if (currentSubCause.subCauseAnswers.length === 1) {
+        currentMainCause.subCauses.splice(subCauseIndex, 1)
+      }
+      // if more than one answer exists with subCauseAnswers
+      else {
+        const secondaryChildOptionIndex = currentSubCause.subCauseAnswers.findIndex(
+          (answer) => answer === secondaryChildOption
+        )
+        currentSubCause.subCauseAnswers.splice(secondaryChildOptionIndex, 1)
+      }
+      // remove main cause if subcauses array is empty
+      if (currentMainCause.subCauses.length === 0) {
+        causesOfDeclineRemove(mainCauseIndex)
+      }
+    }
   }
 
   return (
