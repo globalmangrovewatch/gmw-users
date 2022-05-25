@@ -5,8 +5,10 @@ import {
   FormControlLabel,
   FormLabel,
   ListItem,
+  MenuItem,
   Radio,
   RadioGroup,
+  TextField,
   Typography
 } from '@mui/material'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
@@ -239,6 +241,39 @@ function CausesOfDeclineForm() {
       </FormQuestionDiv>
       <FormQuestionDiv>
         <FormLabel>{causesOfDecline.levelsOfDegredation.question}</FormLabel>
+        <Controller
+          name='managementStatus'
+          control={control}
+          defaultValue=''
+          render={({ field }) => (
+            <TextField {...field} select value={field.value} label='select'>
+              {causesOfDecline.levelsOfDegredation.options.map((item, index) => (
+                <MenuItem key={index} value={item}>
+                  {item}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+        />
+        {causesOfDeclineFields.map((mainCause, index) => (
+          <Box key={index}>
+            <SubTitle>{mainCause.mainCauseLabel}</SubTitle>
+            {mainCause.mainCauseAnswers?.map((answer, index) => {
+              return (
+                <Typography key={index} sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
+                  {answer.mainCauseAnswer}
+                </Typography>
+              )
+            })}
+            {mainCause.subCauses?.map((subCause, index) => {
+              return (
+                <SubTitle2 key={index} sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
+                  {subCause.subCauseLabel}
+                </SubTitle2>
+              )
+            })}
+          </Box>
+        ))}
       </FormQuestionDiv>
       {/* <FormQuestionDiv>
         {isError && (
