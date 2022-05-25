@@ -9,7 +9,7 @@ import {
   RadioGroup,
   Typography
 } from '@mui/material'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
@@ -32,11 +32,11 @@ function CausesOfDeclineForm() {
       .array()
       .of(
         yup.object().shape({
-          mainCause: yup.string(),
+          mainCauseLabel: yup.string(),
           mainCauseAnswers: yup.array().of(yup.string()),
           subCauses: yup.array().of(
             yup.object().shape({
-              subCause: yup.string(),
+              subCauseLabel: yup.string(),
               subCauseAnswers: yup.array().of(yup.string())
             })
           )
@@ -44,6 +44,7 @@ function CausesOfDeclineForm() {
       )
       .min(1)
       .required('Select at least one cause of decline')
+      .default([])
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
 
@@ -52,18 +53,59 @@ function CausesOfDeclineForm() {
   // const { errors } = formState
   const {
     fields: causesOfDeclineFields,
-    append: causesOfDeclineAppend,
-    remove: causesOfDeclineRemove
+    append: causesOfDeclineAppend
+    // remove: causesOfDeclineRemove
   } = useFieldArray({ name: 'causesOfDecline', control })
 
   const handleCausesOfDeclineOnChange = ({
     event,
-    mainCause,
-    subCause,
+    mainCauseLabel,
+    subCauseLabel,
     childOption,
     secondaryChildOption
   }) => {
-    return console.log({ event, mainCause, subCause, childOption, secondaryChildOption })
+    const mainCauseIndex = causesOfDeclineFields.findIndex(
+      (cause) => cause.mainCauseLabel === mainCauseLabel
+    )
+
+    const subCauseIndex = causesOfDeclineFields[mainCauseIndex]?.subCauses?.findIndex(
+      (subCause) => subCause.subCauseLabel === subCauseLabel
+    )
+    console.log('subindex', subCauseIndex)
+
+    //  case: checked, no subcause, and mainCause does not exist
+    if (event.target.checked && !subCauseLabel && mainCauseIndex === -1) {
+      causesOfDeclineAppend({ mainCauseLabel, mainCauseAnswers: [childOption] })
+    }
+    // case: checked, no subcase, mainCause exists
+    else if (event.target.checked && !subCauseLabel && mainCauseIndex > -1) {
+      // if subcause also exists
+      causesOfDeclineFields[mainCauseIndex].mainCauseAnswers.push(childOption)
+    }
+    // case: checked, subCause, mainCause does not exist
+    else if (event.target.checked && subCauseLabel && mainCauseIndex === -1) {
+      causesOfDeclineAppend({
+        mainCauseLabel,
+        subCauses: [{ subCauseLabel, subCauseAnswers: [secondaryChildOption] }]
+      })
+    }
+    // case: checked, subCause, mainCause does exist
+    else if (event.target.checked && subCauseLabel && mainCauseIndex > -1) {
+      // if subCause does not exist within main cause
+      if (subCauseIndex === -1) {
+        causesOfDeclineFields[mainCauseIndex].subCauses.push({
+          subCauseLabel,
+          subCauseAnswers: [secondaryChildOption]
+        })
+      }
+      // if subCause does exist within main cause
+      else {
+        causesOfDeclineFields[mainCauseIndex].subCauses[subCauseIndex].subCauseAnswers.push(
+          secondaryChildOption
+        )
+      }
+    }
+    return console.log('FIELDS>>>', causesOfDeclineFields)
   }
 
   return (
@@ -101,7 +143,7 @@ function CausesOfDeclineForm() {
                           onChange={(event) =>
                             handleCausesOfDeclineOnChange({
                               event,
-                              mainCause: mainCause.label,
+                              mainCauseLabel: mainCause.label,
                               childOption
                             })
                           }></Checkbox>
@@ -113,7 +155,7 @@ function CausesOfDeclineForm() {
                     <Box
                       key={subCauseIndex}
                       variant='subtitle2'
-                      sx={{ marginLeft: '0.75em', marginTop: '0.75em' }}>
+                      sx={{ marginLeft: '1em', marginTop: '0.75em' }}>
                       <SubTitle2 variant='subtitle2'>{subCause.secondaryLabel}</SubTitle2>
                       {subCause.secondaryChildren.map(
                         (secondaryChildOption, secondaryChildIndex) => {
@@ -125,8 +167,8 @@ function CausesOfDeclineForm() {
                                   onChange={(event) =>
                                     handleCausesOfDeclineOnChange({
                                       event,
-                                      mainCause: mainCause.label,
-                                      subCause: subCause.secondaryLabel,
+                                      mainCauseLabel: mainCause.label,
+                                      subCauseLabel: subCause.secondaryLabel,
                                       secondaryChildOption
                                     })
                                   }></Checkbox>
