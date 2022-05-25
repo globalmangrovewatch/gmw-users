@@ -53,8 +53,8 @@ function CausesOfDeclineForm() {
   // const { errors } = formState
   const {
     fields: causesOfDeclineFields,
-    append: causesOfDeclineAppend
-    // remove: causesOfDeclineRemove
+    append: causesOfDeclineAppend,
+    remove: causesOfDeclineRemove
   } = useFieldArray({ name: 'causesOfDecline', control })
 
   const handleCausesOfDeclineOnChange = ({
@@ -67,20 +67,19 @@ function CausesOfDeclineForm() {
     const mainCauseIndex = causesOfDeclineFields.findIndex(
       (cause) => cause.mainCauseLabel === mainCauseLabel
     )
+    const currentMainCause = causesOfDeclineFields[mainCauseIndex]
 
-    const subCauseIndex = causesOfDeclineFields[mainCauseIndex]?.subCauses?.findIndex(
+    const subCauseIndex = currentMainCause?.subCauses?.findIndex(
       (subCause) => subCause.subCauseLabel === subCauseLabel
     )
-    console.log('subindex', subCauseIndex)
 
-    //  case: checked, no subcause, and mainCause does not exist
+    //  case: checked, no subCause, and mainCause does not exist
     if (event.target.checked && !subCauseLabel && mainCauseIndex === -1) {
       causesOfDeclineAppend({ mainCauseLabel, mainCauseAnswers: [childOption] })
     }
-    // case: checked, no subcase, mainCause exists
+    // case: checked, no subCause, mainCause exists
     else if (event.target.checked && !subCauseLabel && mainCauseIndex > -1) {
-      // if subcause also exists
-      causesOfDeclineFields[mainCauseIndex].mainCauseAnswers.push(childOption)
+      currentMainCause.mainCauseAnswers.push(childOption)
     }
     // case: checked, subCause, mainCause does not exist
     else if (event.target.checked && subCauseLabel && mainCauseIndex === -1) {
@@ -93,16 +92,28 @@ function CausesOfDeclineForm() {
     else if (event.target.checked && subCauseLabel && mainCauseIndex > -1) {
       // if subCause does not exist within main cause
       if (subCauseIndex === -1) {
-        causesOfDeclineFields[mainCauseIndex].subCauses.push({
+        currentMainCause.subCauses.push({
           subCauseLabel,
           subCauseAnswers: [secondaryChildOption]
         })
       }
       // if subCause does exist within main cause
       else {
-        causesOfDeclineFields[mainCauseIndex].subCauses[subCauseIndex].subCauseAnswers.push(
-          secondaryChildOption
+        currentMainCause.subCauses[subCauseIndex].subCauseAnswers.push(secondaryChildOption)
+      }
+    }
+    // case: unchecked, no subCause
+    else if (!event.target.checked && !subCauseLabel) {
+      // if only one answer exists within mainCauseAnswers
+      if (currentMainCause.mainCauseAnswers.length === 1) {
+        causesOfDeclineRemove(mainCauseIndex)
+      }
+      // if more than one answer exists within mainCauseAnwers
+      else {
+        const childOptionIndex = currentMainCause.mainCauseAnswers.findIndex(
+          (answer) => answer === childOption
         )
+        currentMainCause.mainCauseAnswers.splice(childOptionIndex, 1)
       }
     }
     return console.log('FIELDS>>>', causesOfDeclineFields)
