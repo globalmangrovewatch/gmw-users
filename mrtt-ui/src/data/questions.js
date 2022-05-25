@@ -178,6 +178,11 @@ const causesOfDecline = {
   },
   causesOfDecline: {
     question: '4.2 What were the major cause(s) of mangrove loss or degradation at the site?'
+  },
+  levelsOfDegredation: {
+    question:
+      '4.3 Rate the magnitude of impact of the cause(s) of decline selected in the previous question, on mangrove loss and degradation - High, Moderate, Low',
+    options: ['High', 'Moderate', 'Low']
   }
 }
 

@@ -237,6 +237,9 @@ function CausesOfDeclineForm() {
           )
         })}
       </FormQuestionDiv>
+      <FormQuestionDiv>
+        <FormLabel>{causesOfDecline.levelsOfDegredation.question}</FormLabel>
+      </FormQuestionDiv>
       {/* <FormQuestionDiv>
         {isError && (
           <Typography variant='subtitle' sx={{ color: 'red' }}>
