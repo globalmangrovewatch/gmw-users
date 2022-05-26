@@ -163,6 +163,16 @@ function CausesOfDeclineForm() {
     console.log('fields>>>>', causesOfDeclineFields)
   }
 
+  const getMainCauseOption = (mainCauseIndex, childOption) => {
+    const index = causesOfDeclineFields[mainCauseIndex]?.mainCauseAnswers?.findIndex((answer) => {
+      console.log('answer: ', answer)
+      console.log('childOption: ', childOption)
+      return answer.mainCauseAnswer === childOption
+    })
+    console.log('index', index)
+    return index > -1 ? true : false
+  }
+
   return (
     <MainFormDiv>
       <SectionFormTitle>Causes of Decline</SectionFormTitle>
@@ -191,20 +201,46 @@ function CausesOfDeclineForm() {
               <SubTitle variant='subtitle1'>{mainCause.label}</SubTitle>
               {typeof mainCause.children[0] === 'string'
                 ? mainCause.children.map((childOption, childIndex) => (
-                    <ListItem key={childIndex}>
-                      <NestedFormSectionDiv>
-                        <Checkbox
-                          value={childOption}
-                          onChange={(event) =>
-                            handleCausesOfDeclineOnChange({
-                              event,
-                              mainCauseLabel: mainCause.label,
-                              childOption
-                            })
-                          }></Checkbox>
-                        <Typography variant='subtitle2'>{childOption}</Typography>
-                      </NestedFormSectionDiv>
-                    </ListItem>
+                    <Box key={childIndex}>
+                      <Box>
+                        <ListItem>
+                          <Checkbox
+                            value={childOption}
+                            onChange={(event) =>
+                              handleCausesOfDeclineOnChange({
+                                event,
+                                mainCauseLabel: mainCause.label,
+                                childOption
+                              })
+                            }></Checkbox>
+                          <Typography variant='subtitle2'>{childOption}</Typography>
+                        </ListItem>
+                      </Box>
+
+                      {getMainCauseOption(mainCauseIndex, childOption) && (
+                        <Box>
+                          <Controller
+                            name='managementStatus'
+                            control={control}
+                            defaultValue=''
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                select
+                                value={field.value}
+                                label='Magnitude of impact *'
+                                sx={{ width: '13em', marginLeft: '1.7em' }}>
+                                {causesOfDecline.levelsOfDegredation.options.map((item, index) => (
+                                  <MenuItem key={index} value={item}>
+                                    {item}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
+                            )}
+                          />
+                        </Box>
+                      )}
+                    </Box>
                   ))
                 : mainCause.children.map((subCause, subCauseIndex) => (
                     <Box
@@ -241,21 +277,8 @@ function CausesOfDeclineForm() {
       </FormQuestionDiv>
       <FormQuestionDiv>
         <FormLabel>{causesOfDecline.levelsOfDegredation.question}</FormLabel>
-        <Controller
-          name='managementStatus'
-          control={control}
-          defaultValue=''
-          render={({ field }) => (
-            <TextField {...field} select value={field.value} label='select'>
-              {causesOfDecline.levelsOfDegredation.options.map((item, index) => (
-                <MenuItem key={index} value={item}>
-                  {item}
-                </MenuItem>
-              ))}
-            </TextField>
-          )}
-        />
-        {causesOfDeclineFields.map((mainCause, index) => (
+
+        {/* {causesOfDeclineFields.map((mainCause, index) => (
           <Box key={index}>
             <SubTitle>{mainCause.mainCauseLabel}</SubTitle>
             {mainCause.mainCauseAnswers?.map((answer, index) => {
@@ -272,8 +295,8 @@ function CausesOfDeclineForm() {
                 </SubTitle2>
               )
             })}
-          </Box>
-        ))}
+          </Box> */}
+        {/* ))} */}
       </FormQuestionDiv>
       {/* <FormQuestionDiv>
         {isError && (
