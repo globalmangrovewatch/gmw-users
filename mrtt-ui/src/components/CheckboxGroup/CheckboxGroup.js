@@ -1,7 +1,8 @@
-import { Checkbox, FormControlLabel, FormGroup, TextField } from '@mui/material'
+import { Checkbox, FormControlLabel, FormGroup, Stack, TextField } from '@mui/material'
 import PropTypes from 'prop-types'
 import { forwardRef, useEffect, useState } from 'react'
 import language from '../../language'
+import { makeValidClassName } from '../../library/strings/makeValidClassName'
 
 const getValueToReturn = ({ nonOtherSelectedValues, otherInputValue, isOtherChecked }) => {
   const valueToReturn = { selectedValues: nonOtherSelectedValues ?? [] }
@@ -14,7 +15,10 @@ const getValueToReturn = ({ nonOtherSelectedValues, otherInputValue, isOtherChec
 }
 
 const CheckboxGroup = forwardRef(
-  ({ id, onBlur, onChange, options, shouldAddOtherOptionWithClarification, value }, ref) => {
+  (
+    { id, onBlur, onChange, options, shouldAddOtherOptionWithClarification, value, SelectedMarkup },
+    ref
+  ) => {
     const [nonOtherSelectedValues, setNonOtherSelectedValues] = useState([])
     const [otherInputValue, setOtherInputValue] = useState(value?.otherValue ?? '')
     const [isOtherChecked, setIsOtherChecked] = useState(!!value?.otherValue)
@@ -67,49 +71,58 @@ const CheckboxGroup = forwardRef(
       )
     }
 
-    const nonOtherCheckboxInputs = options.map((item) => (
-      <div key={item.value}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              id={`${id}-${item.value}`}
-              value={item.value}
-              checked={nonOtherSelectedValues.includes(item.value)}
-              onChange={() => {
-                handleNonOtherCheckboxChange(item.value)
-              }}
-              onBlur={onBlur}
-            />
-          }
-          label={item.label}
-        />
-      </div>
-    ))
+    const nonOtherCheckboxInputs = options.map((item) => {
+      const isChecked = nonOtherSelectedValues.includes(item.value)
+      const optionId = makeValidClassName(`${id}-${item.value}`)
+
+      return (
+        <Stack key={item.value}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                id={optionId}
+                value={item.value}
+                checked={isChecked}
+                onChange={() => {
+                  handleNonOtherCheckboxChange(item.value)
+                }}
+                onBlur={onBlur}
+              />
+            }
+            label={item.label}
+          />
+          {isChecked && SelectedMarkup ? <SelectedMarkup optionId={optionId} /> : null}
+        </Stack>
+      )
+    })
 
     return (
       <FormGroup ref={ref}>
         {nonOtherCheckboxInputs}
         {shouldAddOtherOptionWithClarification ? (
-          <div>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={isOtherChecked}
-                  onChange={handleOtherCheckboxChange}
-                  onBlur={onBlur}
-                />
-              }
-              label={language.form.checkboxGroupOtherLabel}
-            />
-            {isOtherChecked ? (
-              <TextField
-                label={language.form.checkboxGroupOtherInputPlaceholder}
-                variant='outlined'
-                onChange={handleOtherTextInputChange}
-                value={otherInputValue}
+          <Stack>
+            <div>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isOtherChecked}
+                    onChange={handleOtherCheckboxChange}
+                    onBlur={onBlur}
+                  />
+                }
+                label={language.form.checkboxGroupOtherLabel}
               />
-            ) : null}
-          </div>
+              {isOtherChecked ? (
+                <TextField
+                  label={language.form.checkboxGroupOtherInputPlaceholder}
+                  variant='outlined'
+                  onChange={handleOtherTextInputChange}
+                  value={otherInputValue}
+                />
+              ) : null}
+            </div>
+            {isOtherChecked && SelectedMarkup ? <SelectedMarkup optionId={`${id}-other`} /> : null}
+          </Stack>
         ) : null}
       </FormGroup>
     )
@@ -127,6 +140,7 @@ CheckboxGroup.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   ).isRequired,
+  SelectedMarkup: PropTypes.oneOfType([PropTypes.node, PropTypes.any]), // we're doing partial application so this component can supply the selectedMarkup the optionId. Proptype complains about it being a function.
   shouldAddOtherOptionWithClarification: PropTypes.bool,
   value: PropTypes.shape({
     selectedValues: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
@@ -136,6 +150,7 @@ CheckboxGroup.propTypes = {
 
 CheckboxGroup.defaultProps = {
   onBlur: () => {},
+  SelectedMarkup: undefined,
   shouldAddOtherOptionWithClarification: false
 }
 

@@ -39,3 +39,14 @@ export const OtherOptionPrePopulated = () => (
     shouldAddOtherOptionWithClarification={true}
   />
 )
+
+export const WithNestedMarkupForSelected = () => (
+  <CheckboxGroup
+    options={options}
+    value={{ selectedValues: ['Option 1', 'Option 2'], otherValue: 'Some other value' }}
+    onChange={action('onChange')}
+    id='cuddlyKittens'
+    shouldAddOtherOptionWithClarification={true}
+    selectedMarkup={<>Youve selected ME</>}
+  />
+)
