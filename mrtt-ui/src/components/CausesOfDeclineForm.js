@@ -1,4 +1,4 @@
-import React from 'react'
+// import { useState } from 'react'
 import {
   Box,
   Checkbox,
@@ -57,6 +57,8 @@ function CausesOfDeclineForm() {
       .required('Select at least one cause of decline')
       .default([])
   })
+
+  // const [causesOfDeclineSelects, setCausesOfDeclineSelects] = useState([])
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() hook
@@ -65,7 +67,8 @@ function CausesOfDeclineForm() {
   const {
     fields: causesOfDeclineFields,
     append: causesOfDeclineAppend,
-    remove: causesOfDeclineRemove
+    remove: causesOfDeclineRemove,
+    update: causesOfDeclineUpdate
   } = useFieldArray({ name: 'causesOfDecline', control })
 
   // big function with many different cases for Q4.2 due to the nesting involved in this question type
@@ -94,10 +97,14 @@ function CausesOfDeclineForm() {
     }
     // case: checked, no subCause, mainCause exists
     else if (event.target.checked && !subCauseLabel && mainCauseIndex > -1) {
-      currentMainCause.mainCauseAnswers.push({
+      const currentMainCauseCopy = currentMainCause
+
+      currentMainCauseCopy.mainCauseAnswers.push({
         mainCauseAnswer: childOption,
         levelOfDegredation: ''
       })
+
+      causesOfDeclineUpdate(currentMainCauseCopy)
     }
     // case: checked, subCause, mainCause does not exist
     else if (event.target.checked && subCauseLabel && mainCauseIndex === -1) {
@@ -163,15 +170,17 @@ function CausesOfDeclineForm() {
     console.log('fields>>>>', causesOfDeclineFields)
   }
 
-  const getMainCauseOption = (mainCauseIndex, childOption) => {
-    const index = causesOfDeclineFields[mainCauseIndex]?.mainCauseAnswers?.findIndex((answer) => {
-      console.log('answer: ', answer)
-      console.log('childOption: ', childOption)
-      return answer.mainCauseAnswer === childOption
-    })
-    console.log('index', index)
-    return index > -1 ? true : false
-  }
+  // const showRateImpactSelect = (mainCauseIndex, childOption, mainCause) => {
+  //   const index = causesOfDeclineFields[mainCauseIndex]?.mainCauseAnswers?.findIndex((answer) => {
+  //     console.log('mainCauseIndex', mainCauseIndex)
+  //     console.log('main cause: ', mainCause)
+  //     console.log('child option: ', childOption)
+  //     console.log('answer.mainCauseAnswer: ', answer.mainCauseAnswer)
+  //     return answer.mainCauseAnswer === childOption
+  //   })
+  //   console.log('index', index)
+  //   return index > -1 ? true : false
+  // }
 
   return (
     <MainFormDiv>
@@ -216,30 +225,6 @@ function CausesOfDeclineForm() {
                           <Typography variant='subtitle2'>{childOption}</Typography>
                         </ListItem>
                       </Box>
-
-                      {getMainCauseOption(mainCauseIndex, childOption) && (
-                        <Box>
-                          <Controller
-                            name='managementStatus'
-                            control={control}
-                            defaultValue=''
-                            render={({ field }) => (
-                              <TextField
-                                {...field}
-                                select
-                                value={field.value}
-                                label='Magnitude of impact *'
-                                sx={{ width: '13em', marginLeft: '1.7em' }}>
-                                {causesOfDecline.levelsOfDegredation.options.map((item, index) => (
-                                  <MenuItem key={index} value={item}>
-                                    {item}
-                                  </MenuItem>
-                                ))}
-                              </TextField>
-                            )}
-                          />
-                        </Box>
-                      )}
                     </Box>
                   ))
                 : mainCause.children.map((subCause, subCauseIndex) => (
@@ -278,14 +263,36 @@ function CausesOfDeclineForm() {
       <FormQuestionDiv>
         <FormLabel>{causesOfDecline.levelsOfDegredation.question}</FormLabel>
 
-        {/* {causesOfDeclineFields.map((mainCause, index) => (
-          <Box key={index}>
+        {causesOfDeclineFields.map((mainCause, mainCauseIndex) => (
+          <Box key={mainCauseIndex}>
             <SubTitle>{mainCause.mainCauseLabel}</SubTitle>
-            {mainCause.mainCauseAnswers?.map((answer, index) => {
+            {mainCause.mainCauseAnswers?.map((answer, answerIndex) => {
               return (
-                <Typography key={index} sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
-                  {answer.mainCauseAnswer}
-                </Typography>
+                <Box key={answerIndex}>
+                  <Typography sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
+                    {answer.mainCauseAnswer}
+                  </Typography>
+
+                  <Controller
+                    name={`causesOfDecline.${mainCauseIndex}.mainCauseAnswers.${answerIndex}.levelOfDegredation`}
+                    control={control}
+                    defaultValue=''
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        select
+                        value={field.value}
+                        label='Magnitude of impact *'
+                        sx={{ width: '13em', marginLeft: '0.5em' }}>
+                        {causesOfDecline.levelsOfDegredation.options.map((item, index) => (
+                          <MenuItem key={index} value={item}>
+                            {item}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    )}
+                  />
+                </Box>
               )
             })}
             {mainCause.subCauses?.map((subCause, index) => {
@@ -295,8 +302,8 @@ function CausesOfDeclineForm() {
                 </SubTitle2>
               )
             })}
-          </Box> */}
-        {/* ))} */}
+          </Box>
+        ))}
       </FormQuestionDiv>
       {/* <FormQuestionDiv>
         {isError && (
