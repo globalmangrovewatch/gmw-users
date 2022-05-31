@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { useParams } from 'react-router-dom'
 import {
   Box,
   Checkbox,
@@ -66,17 +67,20 @@ function CausesOfDeclineForm() {
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() hook
-  const { control } = useForm(formOptions)
-  // const { errors } = formState
+  const { control, formState, watch } = useForm(formOptions)
+  const { errors } = formState
   const {
     fields: causesOfDeclineFields,
     append: causesOfDeclineAppend,
     remove: causesOfDeclineRemove,
     update: causesOfDeclineUpdate
   } = useFieldArray({ name: 'causesOfDecline', control })
+  const lossKnownWatcher = watch('lossKnown')
 
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
+  const { siteId } = useParams()
+  const url = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
 
   // big function with many different cases for Q4.2 due to the nesting involved in this question type
   const handleCausesOfDeclineOnChange = ({
@@ -177,19 +181,16 @@ function CausesOfDeclineForm() {
         causesOfDeclineRemove(mainCauseIndex)
       }
     }
-    console.log('fields>>>>', causesOfDeclineFields)
   }
 
   const handleSubmit = async (data) => {
     setisSubmitting(true)
     setIsError(false)
 
-    const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
-
     if (!data) return
 
     axios
-      .put(url, mapDataForApi('siteBackground', data))
+      .put(url, mapDataForApi('causesOfDecline', data))
       .then(() => {
         setisSubmitting(false)
       })
@@ -220,117 +221,161 @@ function CausesOfDeclineForm() {
             )}
           />
         </FormQuestionDiv>
-        <FormQuestionDiv>
-          <FormLabel>{causesOfDecline.causesOfDecline.question}</FormLabel>
-          {causesOfDeclineOptions.map((mainCause, mainCauseIndex) => {
-            return (
-              <Box key={mainCauseIndex} sx={{ marginTop: '0.75em', marginBottom: '1.5em' }}>
-                <SubTitle variant='subtitle1'>{mainCause.label}</SubTitle>
-                {typeof mainCause.children[0] === 'string'
-                  ? mainCause.children.map((childOption, childIndex) => (
-                      <Box key={childIndex}>
-                        <Box>
-                          <ListItem>
-                            <Checkbox
-                              value={childOption}
-                              onChange={(event) =>
-                                handleCausesOfDeclineOnChange({
-                                  event,
-                                  mainCauseLabel: mainCause.label,
-                                  childOption
-                                })
-                              }></Checkbox>
-                            <Typography variant='subtitle2'>{childOption}</Typography>
-                          </ListItem>
+        {lossKnownWatcher === 'true' ? (
+          <FormQuestionDiv>
+            <FormLabel>{causesOfDecline.causesOfDecline.question}</FormLabel>
+            {causesOfDeclineOptions.map((mainCause, mainCauseIndex) => {
+              return (
+                <Box key={mainCauseIndex} sx={{ marginTop: '0.75em', marginBottom: '1.5em' }}>
+                  <SubTitle variant='subtitle1'>{mainCause.label}</SubTitle>
+                  {typeof mainCause.children[0] === 'string'
+                    ? mainCause.children.map((childOption, childIndex) => (
+                        <Box key={childIndex}>
+                          <Box>
+                            <ListItem>
+                              <Checkbox
+                                value={childOption}
+                                onChange={(event) =>
+                                  handleCausesOfDeclineOnChange({
+                                    event,
+                                    mainCauseLabel: mainCause.label,
+                                    childOption
+                                  })
+                                }></Checkbox>
+                              <Typography variant='subtitle2'>{childOption}</Typography>
+                            </ListItem>
+                          </Box>
                         </Box>
-                      </Box>
-                    ))
-                  : mainCause.children.map((subCause, subCauseIndex) => (
-                      <Box
-                        key={subCauseIndex}
-                        variant='subtitle2'
-                        sx={{ marginLeft: '1em', marginTop: '0.75em' }}>
-                        <SubTitle2 variant='subtitle2'>{subCause.secondaryLabel}</SubTitle2>
-                        {subCause.secondaryChildren.map(
-                          (secondaryChildOption, secondaryChildIndex) => {
-                            return (
-                              <ListItem key={secondaryChildIndex}>
-                                <NestedFormSectionDiv>
-                                  <Checkbox
-                                    value={secondaryChildOption}
-                                    onChange={(event) =>
-                                      handleCausesOfDeclineOnChange({
-                                        event,
-                                        mainCauseLabel: mainCause.label,
-                                        subCauseLabel: subCause.secondaryLabel,
-                                        secondaryChildOption
-                                      })
-                                    }></Checkbox>
-                                  <Typography variant='subtitle2'>
-                                    {secondaryChildOption}{' '}
-                                  </Typography>
-                                </NestedFormSectionDiv>
-                              </ListItem>
-                            )
-                          }
+                      ))
+                    : mainCause.children.map((subCause, subCauseIndex) => (
+                        <Box
+                          key={subCauseIndex}
+                          variant='subtitle2'
+                          sx={{ marginLeft: '1em', marginTop: '0.75em' }}>
+                          <SubTitle2 variant='subtitle2'>{subCause.secondaryLabel}</SubTitle2>
+                          {subCause.secondaryChildren.map(
+                            (secondaryChildOption, secondaryChildIndex) => {
+                              return (
+                                <ListItem key={secondaryChildIndex}>
+                                  <NestedFormSectionDiv>
+                                    <Checkbox
+                                      value={secondaryChildOption}
+                                      onChange={(event) =>
+                                        handleCausesOfDeclineOnChange({
+                                          event,
+                                          mainCauseLabel: mainCause.label,
+                                          subCauseLabel: subCause.secondaryLabel,
+                                          secondaryChildOption
+                                        })
+                                      }></Checkbox>
+                                    <Typography variant='subtitle2'>
+                                      {secondaryChildOption}{' '}
+                                    </Typography>
+                                  </NestedFormSectionDiv>
+                                </ListItem>
+                              )
+                            }
+                          )}
+                        </Box>
+                      ))}
+                </Box>
+              )
+            })}
+            <ErrorText>{errors.causesOfDecline?.message}</ErrorText>
+          </FormQuestionDiv>
+        ) : null}
+        {causesOfDeclineFields.length ? (
+          <FormQuestionDiv>
+            <FormLabel>{causesOfDecline.levelsOfDegredation.question}</FormLabel>
+            {causesOfDeclineFields.map((mainCause, mainCauseIndex) => (
+              <Box key={mainCauseIndex}>
+                <SubTitle sx={{ marginBottom: '0.5em', marginTop: '1em' }}>
+                  {mainCause.mainCauseLabel}
+                </SubTitle>
+                {mainCause.mainCauseAnswers?.map((answer, answerIndex) => {
+                  return (
+                    <Box key={answerIndex}>
+                      <Typography sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
+                        {answer.mainCauseAnswer}
+                      </Typography>
+                      <Controller
+                        name={`causesOfDecline.${mainCauseIndex}.mainCauseAnswers.${answerIndex}.levelOfDegredation`}
+                        control={control}
+                        defaultValue=''
+                        required
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            select
+                            required
+                            value={field.value}
+                            label='Magnitude of impact *'
+                            sx={{
+                              width: '13em',
+                              marginLeft: '0.5em',
+                              marginTop: '0.5em',
+                              marginBottom: '1.5em'
+                            }}>
+                            {causesOfDecline.levelsOfDegredation.options.map((item, index) => (
+                              <MenuItem key={index} value={item}>
+                                {item}
+                              </MenuItem>
+                            ))}
+                          </TextField>
                         )}
-                      </Box>
-                    ))}
+                      />
+                    </Box>
+                  )
+                })}
+                {mainCause.subCauses?.map((subCause, subCauseIndex) => {
+                  return (
+                    <Box key={subCauseIndex}>
+                      <SubTitle2 sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
+                        {subCause.subCauseLabel}
+                      </SubTitle2>
+                      {subCause.subCauseAnswers?.map((subCauseAnswer, subCauseAnswerIndex) => {
+                        return (
+                          <Box key={subCauseAnswerIndex}>
+                            <Typography sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
+                              {subCauseAnswer.subCauseAnswer}
+                            </Typography>
+                            <Controller
+                              name={`causesOfDecline.${mainCauseIndex}.subCauses.${subCauseIndex}.subCauseAnswers.${subCauseAnswerIndex}.levelOfDegredation`}
+                              control={control}
+                              defaultValue=''
+                              required
+                              render={({ field }) => (
+                                <TextField
+                                  {...field}
+                                  select
+                                  value={field.value}
+                                  label='Magnitude of impact *'
+                                  sx={{
+                                    width: '13em',
+                                    marginLeft: '0.5em',
+                                    marginTop: '0.5em',
+                                    marginBottom: '1em'
+                                  }}>
+                                  {causesOfDecline.levelsOfDegredation.options.map(
+                                    (item, index) => (
+                                      <MenuItem key={index} value={item}>
+                                        {item}
+                                      </MenuItem>
+                                    )
+                                  )}
+                                </TextField>
+                              )}
+                            />
+                          </Box>
+                        )
+                      })}
+                    </Box>
+                  )
+                })}
               </Box>
-            )
-          })}
-        </FormQuestionDiv>
-        <FormQuestionDiv>
-          <FormLabel>{causesOfDecline.levelsOfDegredation.question}</FormLabel>
-
-          {causesOfDeclineFields.map((mainCause, mainCauseIndex) => (
-            <Box key={mainCauseIndex}>
-              <SubTitle>{mainCause.mainCauseLabel}</SubTitle>
-              {mainCause.mainCauseAnswers?.map((answer, answerIndex) => {
-                return (
-                  <Box key={answerIndex}>
-                    <Typography sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
-                      {answer.mainCauseAnswer}
-                    </Typography>
-
-                    <Controller
-                      name={`causesOfDecline.${mainCauseIndex}.mainCauseAnswers.${answerIndex}.levelOfDegredation`}
-                      control={control}
-                      defaultValue=''
-                      required
-                      render={({ field }) => (
-                        <TextField
-                          {...field}
-                          select
-                          value={field.value}
-                          label='Magnitude of impact *'
-                          sx={{
-                            width: '13em',
-                            marginLeft: '0.5em',
-                            marginTop: '1em',
-                            marginBottom: '1em'
-                          }}>
-                          {causesOfDecline.levelsOfDegredation.options.map((item, index) => (
-                            <MenuItem key={index} value={item}>
-                              {item}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      )}
-                    />
-                  </Box>
-                )
-              })}
-              {mainCause.subCauses?.map((subCause, index) => {
-                return (
-                  <SubTitle2 key={index} sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
-                    {subCause.subCauseLabel}
-                  </SubTitle2>
-                )
-              })}
-            </Box>
-          ))}
-        </FormQuestionDiv>
+            ))}
+          </FormQuestionDiv>
+        ) : null}
         <FormQuestionDiv>
           {isError && <ErrorText>Submit failed, please try again</ErrorText>}
           <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
