@@ -14,17 +14,17 @@ import theme from './styles/theme'
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <GlobalLayout>
-        <CustomToastContainer />
-        <Router>
+      <Router>
+        <GlobalLayout>
+          <CustomToastContainer />
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/:siteId/form/project-details' element={<ProjectDetailsForm />} />
             <Route path='/:siteId/form/site-background' element={<SiteBackgroundForm />} />
             <Route path='/:siteId/form/restoration-aims' element={<RestorationAimsForm />} />
           </Routes>
-        </Router>
-      </GlobalLayout>
+        </GlobalLayout>
+      </Router>
     </ThemeProvider>
   )
 }
