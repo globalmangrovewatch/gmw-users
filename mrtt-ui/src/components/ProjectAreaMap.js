@@ -32,7 +32,6 @@ const acceptedFileMimeTypes = [
   'application/x-zip-compressed',
   'multipart/x-zip'
 ]
-
 const lineTypes = ['Line', 'MultiLine', 'LineString']
 const pointTypes = ['Point', 'MultiPoint']
 const polygonTypes = ['Polygon', 'MultiPolygon']
@@ -54,10 +53,7 @@ const ProjectAreaMap = ({
 }) => {
   const [uploadLineCount, setUploadLineCount] = useState(0)
   const [uploadPointCount, setUploadPointCount] = useState(0)
-
-  const featureCollectionHasPolygons = siteAreaFeatureCollection.features.some((f) =>
-    polygonTypes.includes(f.geometry.type)
-  )
+  const [error, setError] = useState()
 
   // When extent changes
   useEffect(() => {
@@ -76,25 +72,27 @@ const ProjectAreaMap = ({
     }
   }, [extent])
 
-  useEffect(() => {
-    console.log('useeffect', siteAreaFeatureCollection)
-  }, [siteAreaFeatureCollection])
-
   const onAddGeomFile = async (files) => {
     if (drawControlRef) {
       if (files.length) {
-        const fileJson = await handleFileLoadEvent(files)
-        const polygonOnlyFeatureClass = getPolygonOnlyFeatureCollection(fileJson)
+        try {
+          const fileJson = await handleFileLoadEvent(files)
 
-        setUploadLineCount(
-          fileJson.features.filter((f) => lineTypes.includes(f.geometry.type)).length
-        )
-        setUploadPointCount(
-          fileJson.features.filter((f) => pointTypes.includes(f.geometry.type)).length
-        )
+          const polygonOnlyFeatureClass = getPolygonOnlyFeatureCollection(fileJson)
 
-        drawControlRef.deleteAll()
-        drawControlRef.add(polygonOnlyFeatureClass)
+          setUploadLineCount(
+            fileJson.features.filter((f) => lineTypes.includes(f.geometry.type)).length
+          )
+          setUploadPointCount(
+            fileJson.features.filter((f) => pointTypes.includes(f.geometry.type)).length
+          )
+
+          drawControlRef.deleteAll()
+          drawControlRef.add(polygonOnlyFeatureClass)
+          setError()
+        } catch (e) {
+          setError(`${language.projectAreaMap.uploadErrorPrefix}: ${e}`)
+        }
       }
 
       setSiteAreaFeatureCollection(drawControlRef.getAll())
@@ -125,8 +123,7 @@ const ProjectAreaMap = ({
         filesLimit={1}
         acceptedFiles={acceptedFileMimeTypes}
         showPreviews={false}
-        showPreviewsInDropzone={true}
-        showFileNames={true}
+        showPreviewsInDropzone={false}
         dropzoneText={language.projectAreaMap.dropzoneText}
         onDelete={onDropzoneDelete}
       />
@@ -157,15 +154,14 @@ const ProjectAreaMap = ({
         <NavigationControl position='top-right' />
         <ScaleControl />
       </Map>
-      {featureCollectionHasPolygons && (
-        <MapDrawInfo
-          polygons={siteAreaFeatureCollection.features.filter((f) =>
-            polygonTypes.includes(f.geometry.type)
-          )}
-          lineCount={uploadLineCount}
-          pointCount={uploadPointCount}
-        />
-      )}
+      <MapDrawInfo
+        polygons={siteAreaFeatureCollection.features.filter((f) =>
+          polygonTypes.includes(f.geometry.type)
+        )}
+        lineCount={uploadLineCount}
+        pointCount={uploadPointCount}
+        error={error}
+      />
     </>
   )
 }

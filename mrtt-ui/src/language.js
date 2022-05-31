@@ -21,6 +21,8 @@ const projectAreaMap = {
   siteArea: 'Site Area',
   siteAreaInstructions:
     'Draw the site area on the map or upload from file. Uploaded geometry can be edited. Only polygon geometry from uploaded files will be included. Lines and points will be ignored. ',
+  uploadErrorPrefix:
+    'Please check that your uploaded file contains valid geometry. An error occured uploading site area',
   getLineAndPointCounts: (lineCount, pointCount) => {
     const fileContains = 'Uploaded file contains'
     const notIncluded = 'which will not be included in the site area'
