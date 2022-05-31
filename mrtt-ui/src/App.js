@@ -1,8 +1,12 @@
 import 'react-toastify/dist/ReactToastify.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
-import Home from './views/Home'
 import React from 'react'
+
+import Home from './views/Home'
+import Landscapes from './views/Landscapes'
+import Sites from './views/Sites'
+import Organizations from './views/Organizations'
 
 import { CustomToastContainer } from './components/CustomToastContainer'
 import GlobalLayout from './components/GlobalLayout'
@@ -22,6 +26,9 @@ function App() {
             <Route path='/:siteId/form/project-details' element={<ProjectDetailsForm />} />
             <Route path='/:siteId/form/site-background' element={<SiteBackgroundForm />} />
             <Route path='/:siteId/form/restoration-aims' element={<RestorationAimsForm />} />
+            <Route path='/sites' element={<Sites />} />
+            <Route path='/organizations' element={<Organizations />} />
+            <Route path='/landscapes' element={<Landscapes />} />
           </Routes>
         </GlobalLayout>
       </Router>
