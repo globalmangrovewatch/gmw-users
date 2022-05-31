@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useState, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Typography } from '@mui/material'
 import Map from 'react-map-gl'
 import { DropzoneArea } from 'react-mui-dropzone'
 import GeoPropTypes from 'geojson-prop-types'
 
-import MapDrawControl from './MapDrawControl'
-// import MapDrawControlPanel from './MapDrawControlPanel'
+import MapDrawControl, { drawControlRef } from './MapDrawControl'
+import MapDrawControlPanel from './MapDrawControlPanel'
+import handleFileLoadEvent from '../library/handleFileLoadEvent'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
@@ -16,31 +17,41 @@ const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
 const acceptedFileMimeTypes = [
   'application/json',
   'application/geo+json',
+  'application/vnd.geo+json',
+  '.geojson',
   'application/vnd.google-earth.kml+xml', // .kml
-  'application/vnd.google-earth.kmz', // .kmz
-  'application/geopackage+vnd.sqlite3', // geopackage
-  // Shapefile
-  'application/octet-stream', // .shp
-  'application/x-dbf', // .dbf
-  'application/octet-stream' // .shx
+  // Shapefile (zip)
+  'application/zip',
+  'application/octet-stream',
+  'application/x-zip-compressed',
+  'multipart/x-zip'
 ]
 
-// function getStringFromFile(file) {
-//   return new Promise((resolve, reject) => {
-//     const fr = new FileReader()
-//     fr.onerror = reject
-//     fr.onload = function (e) {
-//       resolve(e.target.result)
-//     }
-//     fr.readAsText(file)
-//   })
-// }
+const lineTypes = ['Line', 'MultiLine', 'LineString']
+const pointTypes = ['Point', 'MultiPoint']
+const polygonTypes = ['Polygon', 'MultiPolygon']
 
-const ProjectAreaMap = ({ height, extent /*drawMode*/ }) => {
-  const [features, setFeatures] = useState({})
-  const [geometryFile, setGeometryFile] = useState(false) // eslint-disable-line
+const getPolygonOnlyFeatureCollection = (geojsonFeatureCollection) => {
+  return {
+    ...geojsonFeatureCollection,
+    features: geojsonFeatureCollection.features.filter((feature) =>
+      polygonTypes.includes(feature.geometry.type)
+    )
+  }
+}
 
-  console.log('features', features)
+const ProjectAreaMap = ({
+  height,
+  extent,
+  siteAreaFeatureCollection,
+  setSiteAreaFeatureCollection /*drawMode*/
+}) => {
+  const [uploadLineCount, setUploadLineCount] = useState(0)
+  const [uploadPointCount, setUploadPointCount] = useState(0)
+
+  const featureCollectionHasPolygons = siteAreaFeatureCollection.features.some((f) =>
+    polygonTypes.includes(f.geometry.type)
+  )
 
   // When extent changes
   useEffect(() => {
@@ -59,72 +70,61 @@ const ProjectAreaMap = ({ height, extent /*drawMode*/ }) => {
     }
   }, [extent])
 
-  // // When draw mode changes
-  // useEffect(() => {
-  //   if (!drawControlRef) return
+  useEffect(() => {
+    console.log('useeffect', siteAreaFeatureCollection)
+  }, [siteAreaFeatureCollection])
 
-  //   drawControlRef.changeMode(drawMode)
-  // }, [drawMode])
+  const onAddGeomFile = async (files) => {
+    if (drawControlRef) {
+      if (files.length) {
+        const fileJson = await handleFileLoadEvent(files)
+        const polygonOnlyFeatureClass = getPolygonOnlyFeatureCollection(fileJson)
 
-  const onAddGeomFile = (files) => {
-    const reader = new FileReader()
-    files.forEach((file) => {
-      reader.onabort = () => console.log('file reading was aborted')
-      reader.onerror = () => console.log('file reading has failed')
-      reader.onload = () => {
-        // Do whatever you want with the file contents
-        const binaryStr = reader.result
-        // var uint8array = new TextEncoder('utf-8').encode(binaryStr)
-        // var string = new TextDecoder().decode(uint8array)
-        // const test = JSON.stringify(
-        //   Array.from(new Uint8Array(JSON.stringify(Array.from(new Uint8Array(binaryStr)))))
-        // )
+        setUploadLineCount(
+          fileJson.features.filter((f) => lineTypes.includes(f.geometry.type)).length
+        )
+        setUploadPointCount(
+          fileJson.features.filter((f) => pointTypes.includes(f.geometry.type)).length
+        )
 
-        // console.log('parsed', JSON.parse(binaryStr))
-        console.log('bin str', binaryStr)
+        drawControlRef.deleteAll()
+        drawControlRef.add(polygonOnlyFeatureClass)
       }
-      // reader.readAsArrayBuffer(file)
-      reader.readAsText(file)
-    })
 
-    console.log(files)
-    setGeometryFile(files)
+      setSiteAreaFeatureCollection(drawControlRef.getAll())
+    }
   }
 
-  const onUpdate = useCallback((e) => {
-    setFeatures((currFeatures) => {
-      const newFeatures = { ...currFeatures }
-      for (const f of e.features) {
-        newFeatures[f.id] = f
-      }
+  const onDropzoneDelete = () => {
+    drawControlRef.deleteAll()
+    setSiteAreaFeatureCollection(ProjectAreaMap.defaultProps.siteAreaFeatureCollection)
+  }
 
-      return newFeatures
-    })
-  }, [])
+  const onUpdate = useCallback(() => {
+    setSiteAreaFeatureCollection(drawControlRef.getAll())
+  }, [setSiteAreaFeatureCollection])
 
-  const onDelete = useCallback((e) => {
-    setFeatures((currFeatures) => {
-      const newFeatures = { ...currFeatures }
-      for (const f of e.features) {
-        delete newFeatures[f.id]
-      }
-      return newFeatures
-    })
-  }, [])
+  const onDelete = useCallback(() => {
+    setSiteAreaFeatureCollection(drawControlRef.getAll())
+  }, [setSiteAreaFeatureCollection])
 
   const mapRef = useRef()
 
   return (
     <>
-      <Typography variant='body2'>Draw a polygon or the map or upload from .shp or .kml</Typography>
-      {/* <DownloadButtonGroup variant='outlined' aria-label='outlined primary button group'> */}
-      {/* <Button onClick={() => setSiteAreaDrawMode('draw_polygon')}>Draw Polygon</Button> */}
-      {/* <Button>Upload Polygon</Button> */}
+      <Typography variant='body2'>Draw a polygon or the map or upload from file</Typography>
       <DropzoneArea
         sx={'margin-top: 20px'}
         onChange={onAddGeomFile}
         filesLimit={1}
         acceptedFiles={acceptedFileMimeTypes}
+        showPreviews={false}
+        showPreviewsInDropzone={true}
+        showFileNames={true}
+        dropzoneText={
+          'Click or drag and drop a file here. Accepted formats are geojson, KML and shapefile (zipped as a .zip file).'
+        }
+        onDelete={onDropzoneDelete}
       />
       <Map
         ref={mapRef}
@@ -138,13 +138,21 @@ const ProjectAreaMap = ({ height, extent /*drawMode*/ }) => {
             polygon: true,
             trash: true
           }}
-          // defaultMode={'static'}
-          defaultMode={'draw_polygon'}
+          defaultMode={'static'}
           onCreate={onUpdate}
           onUpdate={onUpdate}
           onDelete={onDelete}
         />
       </Map>
+      {featureCollectionHasPolygons && (
+        <MapDrawControlPanel
+          polygons={siteAreaFeatureCollection.features.filter((f) =>
+            polygonTypes.includes(f.geometry.type)
+          )}
+          lineCount={uploadLineCount}
+          pointCount={uploadPointCount}
+        />
+      )}
     </>
   )
 }
@@ -152,17 +160,17 @@ const ProjectAreaMap = ({ height, extent /*drawMode*/ }) => {
 ProjectAreaMap.defaultProps = {
   extent: undefined,
   height: undefined,
-  // drawMode: 'static',
-  polygon: undefined
+  siteAreaFeatureCollection: {
+    type: 'FeatureCollection',
+    features: []
+  }
 }
 
 ProjectAreaMap.propTypes = {
   extent: PropTypes.arrayOf(PropTypes.number),
   height: PropTypes.string,
-  // drawMode: PropTypes.string,
-  // setDrawMode: PropTypes.func.isRequired,
-  polygon: GeoPropTypes.Polygon,
-  setPolygon: PropTypes.func.isRequired
+  siteAreaFeatureCollection: GeoPropTypes.FeatureCollection,
+  setSiteAreaFeatureCollection: PropTypes.func.isRequired
 }
 
 export default ProjectAreaMap
