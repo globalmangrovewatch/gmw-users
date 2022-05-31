@@ -4,7 +4,7 @@ import area from '@turf/area'
 import { Typography } from '@mui/material'
 import language from '../language'
 
-const MapDrawControlPanel = ({ polygons, lineCount, pointCount }) => {
+const MapDrawInfo = ({ polygons, lineCount, pointCount }) => {
   let polygonAreaSqKm = 0
   for (const polygon of polygons) {
     polygonAreaSqKm += area(polygon) / 1000000
@@ -26,10 +26,10 @@ const MapDrawControlPanel = ({ polygons, lineCount, pointCount }) => {
   )
 }
 
-MapDrawControlPanel.propTypes = {
+MapDrawInfo.propTypes = {
   polygons: PropTypes.array.isRequired,
   lineCount: PropTypes.number.isRequired,
   pointCount: PropTypes.number.isRequired
 }
 
-export default React.memo(MapDrawControlPanel)
+export default React.memo(MapDrawInfo)

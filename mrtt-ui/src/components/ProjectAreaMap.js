@@ -10,8 +10,9 @@ import Map, {
 import { DropzoneArea } from 'react-mui-dropzone'
 import GeoPropTypes from 'geojson-prop-types'
 
+import language from '../language'
 import MapDrawControl, { drawControlRef } from './MapDrawControl'
-import MapDrawControlPanel from './MapDrawControlPanel'
+import MapDrawInfo from './MapDrawInfo'
 import handleFileLoadEvent from '../library/handleFileLoadEvent'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -117,7 +118,7 @@ const ProjectAreaMap = ({
 
   return (
     <>
-      <Typography variant='body2'>Draw a polygon or the map or upload from file</Typography>
+      <Typography variant='body2'>{language.projectAreaMap.siteAreaInstructions}</Typography>
       <DropzoneArea
         sx={'margin-top: 20px'}
         onChange={onAddGeomFile}
@@ -126,9 +127,7 @@ const ProjectAreaMap = ({
         showPreviews={false}
         showPreviewsInDropzone={true}
         showFileNames={true}
-        dropzoneText={
-          'Click or drag and drop a file here. Accepted formats are geojson, KML and shapefile (zipped as a .zip file).'
-        }
+        dropzoneText={language.projectAreaMap.dropzoneText}
         onDelete={onDropzoneDelete}
       />
       <Map
@@ -159,7 +158,7 @@ const ProjectAreaMap = ({
         <ScaleControl />
       </Map>
       {featureCollectionHasPolygons && (
-        <MapDrawControlPanel
+        <MapDrawInfo
           polygons={siteAreaFeatureCollection.features.filter((f) =>
             polygonTypes.includes(f.geometry.type)
           )}
