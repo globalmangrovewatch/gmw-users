@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Typography } from '@mui/material'
-import Map from 'react-map-gl'
+import Map, {
+  NavigationControl,
+  FullscreenControl,
+  ScaleControl,
+  GeolocateControl
+} from 'react-map-gl'
 import { DropzoneArea } from 'react-mui-dropzone'
 import GeoPropTypes from 'geojson-prop-types'
 
@@ -130,7 +135,12 @@ const ProjectAreaMap = ({
         ref={mapRef}
         mapboxAccessToken={MAPBOX_TOKEN}
         style={{ width: '100%', height: height || '400px' }}
-        mapStyle='mapbox://styles/mapbox/streets-v9'>
+        initialViewState={{
+          longitude: 0,
+          latitude: 0,
+          zoom: 0.5
+        }}
+        mapStyle='mapbox://styles/mapbox/satellite-streets-v11'>
         <MapDrawControl
           position='top-left'
           displayControlsDefault={false}
@@ -143,6 +153,10 @@ const ProjectAreaMap = ({
           onUpdate={onUpdate}
           onDelete={onDelete}
         />
+        <GeolocateControl position='top-right' />
+        <FullscreenControl position='top-right' />
+        <NavigationControl position='top-right' />
+        <ScaleControl />
       </Map>
       {featureCollectionHasPolygons && (
         <MapDrawControlPanel
