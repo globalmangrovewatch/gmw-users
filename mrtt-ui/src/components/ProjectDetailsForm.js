@@ -27,13 +27,11 @@ const sortCountries = (a, b) => {
 
   return textA < textB ? -1 : textA > textB ? 1 : 0
 }
-const countriesGeojson = MangroveCountries.features
-  .filter((feature) => feature.properties.mangroves > 0)
-  .sort(sortCountries)
+const countriesGeojson = MangroveCountries.features.sort(sortCountries)
 
 function ProjectDetailsForm() {
-  const [mapExtent, setMapExtent] = useState(undefined)
-  const [siteAreaPolygon, setSiteAreaPolygon] = useState(undefined)
+  const [mapExtent, setMapExtent] = useState()
+  const [siteAreaFeatureCollection, setsiteAreaFeatureCollection] = useState()
 
   // form validation rules
   const validationSchema = yup.object().shape({
@@ -74,6 +72,14 @@ function ProjectDetailsForm() {
       setMapExtent(totalBbox)
     } else {
       setMapExtent(undefined)
+    }
+  }
+
+  const onsiteAreaFeatureCollectionChange = (polygon) => {
+    setsiteAreaFeatureCollection(polygon)
+
+    if (polygon.features && polygon.features.length) {
+      setMapExtent(turfBbox(turfConvex(polygon)))
     }
   }
 
@@ -195,8 +201,8 @@ function ProjectDetailsForm() {
           <FormLabel>{questions.siteArea.question}</FormLabel>
           <ProjectAreaMap
             extent={mapExtent}
-            polygon={siteAreaPolygon}
-            setPolygon={setSiteAreaPolygon}></ProjectAreaMap>
+            siteAreaFeatureCollection={siteAreaFeatureCollection}
+            setSiteAreaFeatureCollection={onsiteAreaFeatureCollectionChange}></ProjectAreaMap>
         </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && <ErrorText>{language.error.submit}</ErrorText>}

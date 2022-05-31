@@ -7,12 +7,11 @@ const modes = MapboxDraw.modes
 modes.static = StaticMode
 
 // Allows access to draw control elsewhere as described here: https://stackoverflow.com/a/72023298
-// export let drawControlRef = null
+export let drawControlRef = null
 
 const MapDrawControl = (props) => {
   const { onCreate, onUpdate, onDelete, position } = props
-  // drawControlRef = useControl(
-  useControl(
+  drawControlRef = useControl(
     ({ map }) => {
       map.on('draw.create', (features) => onCreate(features))
       map.on('draw.update', (features) => onUpdate(features))

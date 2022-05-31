@@ -13,4 +13,29 @@ const multiselectWithOtherFormQuestion = {
   }
 }
 
-export default { error, form, multiselectWithOtherFormQuestion }
+const maybePluralize = (count, noun, suffix = 's') => `${count} ${noun}${count !== 1 ? suffix : ''}`
+
+const projectAreaMap = {
+  siteArea: 'Site Area',
+  getLineAndPointCounts: (lineCount, pointCount) => {
+    const fileContains = 'Uploaded file contains'
+    const notIncluded = 'which will not be included in the site area'
+
+    if (lineCount && pointCount) {
+      return `${fileContains} ${maybePluralize(lineCount, 'line')} and ${maybePluralize(
+        pointCount,
+        'point'
+      )} ${notIncluded}.`
+    }
+
+    if (lineCount) {
+      return `${fileContains} ${maybePluralize(lineCount, 'line')} ${notIncluded}.`
+    }
+
+    if (pointCount) {
+      return `${fileContains} ${maybePluralize(pointCount, 'point')} ${notIncluded}.`
+    }
+  }
+}
+
+export default { error, form, multiselectWithOtherFormQuestion, projectAreaMap }

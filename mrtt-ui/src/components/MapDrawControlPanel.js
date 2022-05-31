@@ -1,37 +1,35 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 import area from '@turf/area'
+import { Typography } from '@mui/material'
+import language from '../language'
 
-const MapDrawControlPanel = ({ polygons }) => {
-  let polygonArea = 0
+const MapDrawControlPanel = ({ polygons, lineCount, pointCount }) => {
+  let polygonAreaSqKm = 0
   for (const polygon of polygons) {
-    polygonArea += area(polygon)
+    polygonAreaSqKm += area(polygon) / 1000000
   }
-
-  console.log(polygons)
-
   return (
-    <div className='control-panel'>
-      <h3>Draw Polygon</h3>
-      {polygonArea > 0 && (
-        <p>
-          {Math.round(polygonArea * 100) / 100} <br />
-          square meters
-        </p>
+    <>
+      {polygonAreaSqKm > 0 && (
+        <Typography variant='body2'>
+          {language.projectAreaMap.siteArea}: {(Math.round(polygonAreaSqKm) * 100) / 100} km
+          {'\u00b2'}
+        </Typography>
       )}
-      <div className='source-link'>
-        <a
-          href='https://github.com/visgl/react-map-gl/tree/7.0-release/examples/draw-polygon'
-          target='_new'>
-          View Code ↗
-        </a>
-      </div>
-    </div>
+      {!!(lineCount || pointCount) && (
+        <Typography variant='body2'>
+          {language.projectAreaMap.getLineAndPointCounts(lineCount, pointCount)}
+        </Typography>
+      )}
+    </>
   )
 }
 
 MapDrawControlPanel.propTypes = {
-  polygons: PropTypes.array.isRequired
+  polygons: PropTypes.array.isRequired,
+  lineCount: PropTypes.number.isRequired,
+  pointCount: PropTypes.number.isRequired
 }
 
 export default React.memo(MapDrawControlPanel)
