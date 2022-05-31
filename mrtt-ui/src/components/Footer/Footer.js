@@ -1,6 +1,6 @@
 import React from 'react'
 import { styled } from '@mui/system'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import {
   Map as SitesIcon,
   Language as LandscapesIcon,
@@ -27,6 +27,7 @@ const LinkContainer = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-width: 80px;
 
   color: ${(props) => (props.active ? '#00c6bd' : '#121212')};
   div {
@@ -40,17 +41,19 @@ const LinkContainer = styled(Link)`
 `
 
 function Footer() {
+  const { pathname } = useLocation()
+
   return (
     <StyledFooter>
-      <LinkContainer to='/sites' active={true}>
+      <LinkContainer to='/sites' active={/^\/sites/.test(pathname)}>
         <SitesIcon />
         <div>Sites</div>
       </LinkContainer>
-      <LinkContainer to='/landscapes'>
+      <LinkContainer to='/landscapes' active={/^\/landscapes/.test(pathname)}>
         <LandscapesIcon />
         <div>landscapes</div>
       </LinkContainer>
-      <LinkContainer to='/organizations'>
+      <LinkContainer to='/organizations' active={/^\/organizations/.test(pathname)}>
         <OrganizationsIcon />
         <div>organizations</div>
       </LinkContainer>
