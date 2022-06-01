@@ -49,7 +49,7 @@ const ProjectAreaMap = ({
   height,
   extent,
   siteAreaFeatureCollection,
-  setSiteAreaFeatureCollection /*drawMode*/
+  setSiteAreaFeatureCollection
 }) => {
   const [uploadLineCount, setUploadLineCount] = useState(0)
   const [uploadPointCount, setUploadPointCount] = useState(0)

@@ -31,8 +31,8 @@ const countriesGeojson = MangroveCountries.features.sort(sortCountries)
 
 function ProjectDetailsForm() {
   const [mapExtent, setMapExtent] = useState()
-  const [siteAreaFeatureCollection, setsiteAreaFeatureCollection] = useState()
 
+  const siteAreaError = 'Please provide a site area'
   // form validation rules
   const validationSchema = yup.object().shape({
     hasProjectEndDate: yup.boolean(),
@@ -49,11 +49,16 @@ function ProjectDetailsForm() {
           code: yup.string()
         })
       )
-      .min(1)
-      .typeError('Select at least one country')
+      .min(1, 'Select at least ${min} country')
+      .typeError('Select at least 1 country'),
+    siteArea: yup
+      .object()
+      .shape({
+        features: yup.array().min(1, siteAreaError).required(siteAreaError)
+      })
+      .required(siteAreaError)
   })
   const formOptions = { resolver: yupResolver(validationSchema) }
-
   // get functions to build form with useForm() hook
   const { control, handleSubmit, formState, watch } = useForm(formOptions)
   const { errors } = formState
@@ -75,15 +80,16 @@ function ProjectDetailsForm() {
     }
   }
 
-  const onsiteAreaFeatureCollectionChange = (polygon) => {
-    setsiteAreaFeatureCollection(polygon)
+  const onSiteAreaFeatureCollectionChange = (field, featureCollection) => {
+    field.onChange(featureCollection)
 
-    if (polygon.features && polygon.features.length) {
-      setMapExtent(turfBbox(turfConvex(polygon)))
+    if (featureCollection.features && featureCollection.features.length) {
+      setMapExtent(turfBbox(turfConvex(featureCollection)))
     }
   }
 
   const onSubmit = async (data) => {
+    debugger // eslint-disable-line
     setIsSubmitting(true)
     setIsError(false)
     const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
@@ -199,10 +205,20 @@ function ProjectDetailsForm() {
         {/* Draw or upload site area */}
         <FormQuestionDiv>
           <FormLabel>{questions.siteArea.question}</FormLabel>
-          <ProjectAreaMap
-            extent={mapExtent}
-            siteAreaFeatureCollection={siteAreaFeatureCollection}
-            setSiteAreaFeatureCollection={onsiteAreaFeatureCollectionChange}></ProjectAreaMap>
+          <Controller
+            name='siteArea'
+            control={control}
+            defaultValue={undefined}
+            render={({ field }) => (
+              <ProjectAreaMap
+                extent={mapExtent}
+                siteAreaFeatureCollection={field.value}
+                setSiteAreaFeatureCollection={(value) => {
+                  onSiteAreaFeatureCollectionChange(field, value)
+                }}></ProjectAreaMap>
+            )}
+          />
+          <ErrorText>{errors.siteArea?.features?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && <ErrorText>{language.error.submit}</ErrorText>}
