@@ -144,7 +144,7 @@ const ProjectAreaMap = ({
             polygon: true,
             trash: true
           }}
-          defaultMode={'static'}
+          defaultMode={'draw_polygon'}
           onCreate={onUpdate}
           onUpdate={onUpdate}
           onDelete={onDelete}

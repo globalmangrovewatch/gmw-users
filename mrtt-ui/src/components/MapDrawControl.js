@@ -1,10 +1,6 @@
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
-import StaticMode from '@mapbox/mapbox-gl-draw-static-mode'
 import PropTypes from 'prop-types'
 import { useControl } from 'react-map-gl'
-
-const modes = MapboxDraw.modes
-modes.static = StaticMode
 
 // Allows access to draw control elsewhere as described here: https://stackoverflow.com/a/72023298
 export let drawControlRef = null
@@ -16,7 +12,7 @@ const MapDrawControl = (props) => {
       map.on('draw.create', (features) => onCreate(features))
       map.on('draw.update', (features) => onUpdate(features))
       map.on('draw.delete', (features) => onDelete(features))
-      return new MapboxDraw({ modes, ...props })
+      return new MapboxDraw({ ...props })
     },
     ({ map }) => {
       map.off('draw.create', (features) => onCreate(features))
