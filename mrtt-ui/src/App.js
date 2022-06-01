@@ -9,6 +9,7 @@ import GlobalLayout from './components/GlobalLayout'
 import ProjectDetailsForm from './components/ProjectDetailsForm'
 import SiteBackgroundForm from './components/SiteBackgroundForm'
 import RestorationAimsForm from './components/RestorationAimsForm/RestorationAimsForm'
+import CausesOfDeclineForm from './components/CausesOfDeclineForm'
 import theme from './styles/theme'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path='/:siteId/form/project-details' element={<ProjectDetailsForm />} />
             <Route path='/:siteId/form/site-background' element={<SiteBackgroundForm />} />
             <Route path='/:siteId/form/restoration-aims' element={<RestorationAimsForm />} />
+            <Route path='/:siteId/form/causes-of-decline' element={<CausesOfDeclineForm />} />
           </Routes>
         </Router>
       </GlobalLayout>
