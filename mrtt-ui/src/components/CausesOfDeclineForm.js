@@ -67,7 +67,7 @@ function CausesOfDeclineForm() {
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() hook
-  const { control, formState, watch } = useForm(formOptions)
+  const { control, formState, watch, handleSubmit } = useForm(formOptions)
   const { errors } = formState
   const {
     fields: causesOfDeclineFields,
@@ -183,11 +183,12 @@ function CausesOfDeclineForm() {
     }
   }
 
-  const handleSubmit = async (data) => {
+  const onSubmit = async (data) => {
     setisSubmitting(true)
     setIsError(false)
 
     if (!data) return
+    'data', data
 
     axios
       .put(url, mapDataForApi('causesOfDecline', data))
@@ -203,7 +204,7 @@ function CausesOfDeclineForm() {
   return (
     <MainFormDiv>
       <SectionFormTitle>Causes of Decline</SectionFormTitle>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <FormQuestionDiv>
           <FormLabel>{causesOfDecline.lossKnown.question}</FormLabel>
           <Controller
