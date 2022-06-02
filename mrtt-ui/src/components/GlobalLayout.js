@@ -2,7 +2,7 @@ import { styled } from '@mui/system'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import Footer from './Footer'
+import Footer from './MobileFooter'
 
 const LayoutWrapper = styled('div')`
   display: flex;

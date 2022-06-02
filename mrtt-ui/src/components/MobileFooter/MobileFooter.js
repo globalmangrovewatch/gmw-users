@@ -47,7 +47,7 @@ const LinkContainer = styled(Link)`
   border-bottom-color: ${(props) => (props.active === 'true' ? '#00c6bd' : 'transparent')};
 `
 
-function Footer() {
+function MobileFooter() {
   const { pathname } = useLocation()
 
   return (
@@ -68,4 +68,4 @@ function Footer() {
   )
 }
 
-export default Footer
+export default MobileFooter
