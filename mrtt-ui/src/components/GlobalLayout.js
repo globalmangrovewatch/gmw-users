@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 import Footer from './Footer'
-import Header from './Header'
 
 const LayoutWrapper = styled('div')`
   display: flex;
@@ -14,10 +13,12 @@ const LayoutWrapper = styled('div')`
   }
 `
 
+const Header = styled('header')``
+
 const GlobalLayout = ({ children }) => {
   return (
     <LayoutWrapper>
-      <Header />
+      <Header>Header placeholder</Header>
       <main>{children}</main>
       <Footer />
     </LayoutWrapper>
