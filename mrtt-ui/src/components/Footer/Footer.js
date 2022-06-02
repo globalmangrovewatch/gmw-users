@@ -8,7 +8,14 @@ import {
 } from '@mui/icons-material'
 
 const StyledFooter = styled('footer')`
-  display: flex;
+  /* Hide display in mobile mode in favour of a sidebar */
+  @media (max-width: 767px) {
+    visibility: visible;
+    display: flex;
+  }
+
+  visibility: hidden;
+  display: none;
   justify-content: space-around;
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
