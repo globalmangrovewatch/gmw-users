@@ -36,7 +36,7 @@ const LinkContainer = styled(Link)`
   align-items: center;
   min-width: 80px;
 
-  color: ${(props) => (props.active ? '#00c6bd' : '#121212')};
+  color: ${(props) => (props.active === 'true' ? '#00c6bd' : '#121212')};
   div {
     color: #121212;
   }
@@ -44,7 +44,7 @@ const LinkContainer = styled(Link)`
   border-bottom-width: 2px;
   border-bottom-style: solid;
 
-  border-bottom-color: ${(props) => (props.active ? '#00c6bd' : 'transparent')};
+  border-bottom-color: ${(props) => (props.active === 'true' ? '#00c6bd' : 'transparent')};
 `
 
 function Footer() {
@@ -52,15 +52,15 @@ function Footer() {
 
   return (
     <StyledFooter>
-      <LinkContainer to='/sites' active={/^\/sites/.test(pathname)}>
+      <LinkContainer to='/sites' active={String(/^\/sites/.test(pathname))}>
         <SitesIcon />
         <div>Sites</div>
       </LinkContainer>
-      <LinkContainer to='/landscapes' active={/^\/landscapes/.test(pathname)}>
+      <LinkContainer to='/landscapes' active={String(/^\/landscapes/.test(pathname))}>
         <LandscapesIcon />
         <div>landscapes</div>
       </LinkContainer>
-      <LinkContainer to='/organizations' active={/^\/organizations/.test(pathname)}>
+      <LinkContainer to='/organizations' active={String(/^\/organizations/.test(pathname))}>
         <OrganizationsIcon />
         <div>organizations</div>
       </LinkContainer>
