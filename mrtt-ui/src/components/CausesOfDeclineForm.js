@@ -99,7 +99,7 @@ function CausesOfDeclineForm() {
             apiAnswers: data,
             questionMapping: questionMapping.causesOfDecline
           })
-          console.log('initial: ', typeof initialValuesForForm.lossKnown)
+
           resetForm(initialValuesForForm)
         })
         .catch(() => {
