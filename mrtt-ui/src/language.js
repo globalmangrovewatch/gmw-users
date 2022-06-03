@@ -5,7 +5,8 @@ const error = {
 }
 const form = {
   checkboxGroupOtherLabel: 'Other',
-  checkboxGroupOtherInputPlaceholder: 'If other, please state.'
+  checkboxGroupOtherInputPlaceholder: 'If other, please state.',
+  selectLabel: 'Select'
 }
 const multiselectWithOtherFormQuestion = {
   validation: {

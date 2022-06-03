@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
@@ -12,17 +12,21 @@ import { mapDataForApi } from '../../library/mapDataForApi'
 import { multiselectWithOtherValidation } from '../../validation/multiSelectWithOther'
 import { questionMapping } from '../../data/questionMapping'
 import { restorationAims as questions } from '../../data/questions'
-import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
+import RestorationAimsCheckboxGroupWithLabel from './RestorationAimsCheckboxGroupWithLabel'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 
+const getStakeholders = (registrationAnswersFromServer) =>
+  registrationAnswersFromServer?.data.find((dataItem) => dataItem.question_id === '2.1')
+    ?.answer_value ?? []
 const RestorationAimsForm = () => {
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [stakeholders, setStakeholders] = useState([])
   const validationSchema = yup.object({
     ecologicalAims: multiselectWithOtherValidation,
     socioEconomicAims: multiselectWithOtherValidation,
@@ -42,11 +46,16 @@ const RestorationAimsForm = () => {
     reset: resetForm
   } = reactHookFormInstance
 
+  const loadStakeholdersFromServerData = useCallback((serverResponse) => {
+    setStakeholders(getStakeholders(serverResponse))
+  }, [])
+
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
-    resetForm,
     questionMapping: questionMapping.restorationAims,
-    setIsLoading
+    resetForm,
+    setIsLoading,
+    successCallback: loadStakeholdersFromServerData
   })
 
   const handleSubmit = (formData) => {
@@ -69,28 +78,28 @@ const RestorationAimsForm = () => {
     <MainFormDiv>
       <SectionFormTitle>Restoration Aims</SectionFormTitle>
       <Form onSubmit={validateInputs(handleSubmit)}>
-        <CheckboxGroupWithLabelAndController
+        <RestorationAimsCheckboxGroupWithLabel
+          stakeholders={stakeholders}
           fieldName='ecologicalAims'
           reactHookFormInstance={reactHookFormInstance}
           options={questions.ecologicalAims.options}
           question={questions.ecologicalAims.question}
-          shouldAddOtherOptionWithClarification={true}
         />
         <ErrorText>{errors.ecologicalAims?.selectedValues?.message}</ErrorText>
-        <CheckboxGroupWithLabelAndController
+        <RestorationAimsCheckboxGroupWithLabel
+          stakeholders={stakeholders}
           fieldName='socioEconomicAims'
           reactHookFormInstance={reactHookFormInstance}
           options={questions.socioEconomicAims.options}
           question={questions.socioEconomicAims.question}
-          shouldAddOtherOptionWithClarification={true}
         />
         <ErrorText>{errors.socioEconomicAims?.selectedValues?.message}</ErrorText>
-        <CheckboxGroupWithLabelAndController
+        <RestorationAimsCheckboxGroupWithLabel
+          stakeholders={stakeholders}
           fieldName='otherAims'
           reactHookFormInstance={reactHookFormInstance}
           options={questions.otherAims.options}
           question={questions.otherAims.question}
-          shouldAddOtherOptionWithClarification={true}
         />
         <ErrorText>{errors.otherAims?.selectedValues?.message}</ErrorText>
 

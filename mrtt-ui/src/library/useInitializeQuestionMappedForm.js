@@ -5,26 +5,36 @@ import { useEffect } from 'react'
 import formatApiAnswersForForm from './formatApiAnswersForForm'
 import language from '../language'
 
-const useInitializeQuestionMappedForm = ({ apiUrl, resetForm, setIsLoading, questionMapping }) => {
+const useInitializeQuestionMappedForm = ({
+  apiUrl,
+  resetForm,
+  setIsLoading,
+  questionMapping,
+  successCallback
+}) => {
   useEffect(
     function initializeFormWithApiData() {
       if (resetForm && apiUrl) {
+        setIsLoading(true)
         axios
           .get(apiUrl)
-          .then(({ data }) => {
+          .then((response) => {
             setIsLoading(false)
             const initialValuesForForm = formatApiAnswersForForm({
-              apiAnswers: data,
+              apiAnswers: response.data,
               questionMapping
             })
             resetForm(initialValuesForForm)
+            if (successCallback) {
+              successCallback(response)
+            }
           })
           .catch(() => {
             toast.error(language.error.apiLoad)
           })
       }
     },
-    [apiUrl, resetForm, setIsLoading, questionMapping]
+    [apiUrl, resetForm, setIsLoading, questionMapping, successCallback]
   )
 }
 
