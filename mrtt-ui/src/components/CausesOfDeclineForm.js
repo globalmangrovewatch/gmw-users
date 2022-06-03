@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import {
@@ -29,12 +30,16 @@ import {
 import { ErrorText } from '../styles/typography'
 import ButtonSubmit from './ButtonSubmit'
 import { causesOfDecline } from '../data/questions'
+import { questionMapping } from '../data/questionMapping'
 import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
 import { mapDataForApi } from '../library/mapDataForApi'
+import formatApiAnswersForForm from '../library/formatApiAnswersForForm'
+import language from '../language'
+import LoadingIndicator from './LoadingIndicator'
 
 function CausesOfDeclineForm() {
   const validationSchema = yup.object().shape({
-    lossKnown: yup.boolean(),
+    lossKnown: yup.string(),
     causesOfDecline: yup
       .array()
       .of(
@@ -67,7 +72,7 @@ function CausesOfDeclineForm() {
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() hook
-  const { control, formState, watch, handleSubmit } = useForm(formOptions)
+  const { control, formState, watch, handleSubmit, reset: resetForm } = useForm(formOptions)
   const { errors } = formState
   const {
     fields: causesOfDeclineFields,
@@ -79,8 +84,29 @@ function CausesOfDeclineForm() {
 
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { siteId } = useParams()
-  const url = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+
+  const _loadSiteData = useEffect(() => {
+    if (apiAnswersUrl && resetForm) {
+      setIsLoading(true)
+      axios
+        .get(apiAnswersUrl)
+        .then(({ data }) => {
+          setIsLoading(false)
+          const initialValuesForForm = formatApiAnswersForForm({
+            apiAnswers: data,
+            questionMapping: questionMapping.causesOfDecline
+          })
+
+          resetForm(initialValuesForForm)
+        })
+        .catch(() => {
+          toast.error(language.error.apiLoad)
+        })
+    }
+  }, [apiAnswersUrl, resetForm])
 
   // big function with many different cases for Q4.2 due to the nesting involved in this question type
   const handleCausesOfDeclineOnChange = ({
@@ -191,17 +217,20 @@ function CausesOfDeclineForm() {
     'data', data
 
     axios
-      .put(url, mapDataForApi('causesOfDecline', data))
+      .put(apiAnswersUrl, mapDataForApi('causesOfDecline', data))
       .then(() => {
         setisSubmitting(false)
       })
       .catch(() => {
         setIsError(true)
         setisSubmitting(false)
+        toast.error(language.error.apiLoad)
       })
   }
 
-  return (
+  return isLoading ? (
+    <LoadingIndicator />
+  ) : (
     <MainFormDiv>
       <SectionFormTitle>Causes of Decline</SectionFormTitle>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -216,8 +245,9 @@ function CausesOfDeclineForm() {
                 {...field}
                 aria-labelledby='demo-radio-buttons-group-label'
                 name='radio-buttons-group'>
-                <FormControlLabel value={true} control={<Radio />} label='Yes' />
-                <FormControlLabel value={false} control={<Radio />} label='No' />
+                {/* Mui converts values to strings, even for booleans */}
+                <FormControlLabel value={'true'} control={<Radio />} label='Yes' />
+                <FormControlLabel value={'false'} control={<Radio />} label='No' />
               </RadioGroup>
             )}
           />
