@@ -39,7 +39,7 @@ import LoadingIndicator from './LoadingIndicator'
 
 function CausesOfDeclineForm() {
   const validationSchema = yup.object().shape({
-    lossKnown: yup.boolean(),
+    lossKnown: yup.string(),
     causesOfDecline: yup
       .array()
       .of(
@@ -72,7 +72,7 @@ function CausesOfDeclineForm() {
   const formOptions = { resolver: yupResolver(validationSchema) }
 
   // get functions to build form with useForm() hook
-  const { control, formState, watch, handleSubmit, reset } = useForm(formOptions)
+  const { control, formState, watch, handleSubmit, reset: resetForm } = useForm(formOptions)
   const { errors } = formState
   const {
     fields: causesOfDeclineFields,
@@ -89,7 +89,7 @@ function CausesOfDeclineForm() {
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
 
   const _loadSiteData = useEffect(() => {
-    if (apiAnswersUrl && reset) {
+    if (apiAnswersUrl && resetForm) {
       setIsLoading(true)
       axios
         .get(apiAnswersUrl)
@@ -97,15 +97,16 @@ function CausesOfDeclineForm() {
           setIsLoading(false)
           const initialValuesForForm = formatApiAnswersForForm({
             apiAnswers: data,
-            questionMapping: questionMapping.restorationAims
+            questionMapping: questionMapping.causesOfDecline
           })
-          reset(initialValuesForForm)
+          console.log('initial: ', typeof initialValuesForForm.lossKnown)
+          resetForm(initialValuesForForm)
         })
         .catch(() => {
           toast.error(language.error.apiLoad)
         })
     }
-  }, [apiAnswersUrl, reset])
+  }, [apiAnswersUrl, resetForm])
 
   // big function with many different cases for Q4.2 due to the nesting involved in this question type
   const handleCausesOfDeclineOnChange = ({
@@ -244,8 +245,9 @@ function CausesOfDeclineForm() {
                 {...field}
                 aria-labelledby='demo-radio-buttons-group-label'
                 name='radio-buttons-group'>
-                <FormControlLabel value={true} control={<Radio />} label='Yes' />
-                <FormControlLabel value={false} control={<Radio />} label='No' />
+                {/* Mui converts values to strings, even for booleans */}
+                <FormControlLabel value={'true'} control={<Radio />} label='Yes' />
+                <FormControlLabel value={'false'} control={<Radio />} label='No' />
               </RadioGroup>
             )}
           />
