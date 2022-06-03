@@ -1,14 +1,24 @@
 import { Checkbox, FormControlLabel, FormGroup, Stack, TextField } from '@mui/material'
 import PropTypes from 'prop-types'
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef, useState } from 'react'
 import language from '../../language'
 import { makeValidClassName } from '../../library/strings/makeValidClassName'
 
-const getValueToReturn = ({ nonOtherSelectedValues, otherInputValue, isOtherChecked }) => {
+const getValueToReturn = ({
+  nonOtherSelectedValues,
+  otherInputValue,
+  isOtherChecked,
+  event,
+  shouldReturnEvent
+}) => {
   const valueToReturn = { selectedValues: nonOtherSelectedValues ?? [] }
+  valueToReturn.isOtherChecked = !!isOtherChecked //we're being explicit here for the sake of composing code not having to use empty strings vs undefined to differentiate between checked and unchecked for validation for example.
   if (isOtherChecked) {
     valueToReturn.otherValue = otherInputValue
-    valueToReturn.isOtherChecked = true //we're being explicit here for the sake of composing code not having to use empty strings vs undefined to differentiate between checked and unchecked for validation for example.
+  }
+  if (shouldReturnEvent) {
+    // react hook form doesnt like the event being attached to the value object if it handles onchange, so made a flag for when we are handling onchange manually and want to use the event
+    valueToReturn.event = event
   }
 
   return valueToReturn
@@ -16,25 +26,34 @@ const getValueToReturn = ({ nonOtherSelectedValues, otherInputValue, isOtherChec
 
 const CheckboxGroup = forwardRef(
   (
-    { id, onBlur, onChange, options, shouldAddOtherOptionWithClarification, value, SelectedMarkup },
+    {
+      id,
+      onBlur,
+      onChange,
+      options,
+      shouldAddOtherOptionWithClarification,
+      value,
+      SelectedMarkup,
+      shouldReturnEvent
+    },
     ref
   ) => {
-    const [nonOtherSelectedValues, setNonOtherSelectedValues] = useState([])
+    const [isOtherChecked, setIsOtherChecked] = useState(!!value?.isOtherChecked)
+    const [nonOtherSelectedValues, setNonOtherSelectedValues] = useState(
+      value?.selectedValues ?? []
+    )
     const [otherInputValue, setOtherInputValue] = useState(value?.otherValue ?? '')
-    const [isOtherChecked, setIsOtherChecked] = useState(!!value?.otherValue)
 
-    const _loadNonOtherSelectedValues = useEffect(() => {
-      setNonOtherSelectedValues(value?.selectedValues ?? [])
-    }, [value?.selectedValues])
-
-    const handleOtherCheckboxChange = () => {
+    const handleOtherCheckboxChange = (event) => {
       const isOtherCheckedNewState = !isOtherChecked
       setIsOtherChecked(isOtherCheckedNewState)
       onChange(
         getValueToReturn({
           nonOtherSelectedValues,
           otherInputValue,
-          isOtherChecked: isOtherCheckedNewState
+          isOtherChecked: isOtherCheckedNewState,
+          shouldReturnEvent,
+          event
         })
       )
     }
@@ -47,11 +66,13 @@ const CheckboxGroup = forwardRef(
         getValueToReturn({
           nonOtherSelectedValues,
           otherInputValue: value,
-          isOtherChecked
+          isOtherChecked,
+          shouldReturnEvent,
+          event
         })
       )
     }
-    const handleNonOtherCheckboxChange = (itemValue) => {
+    const handleNonOtherCheckboxChange = ({ itemValue, event }) => {
       const updateNonOtherSelectedValues = [...nonOtherSelectedValues]
       const foundItemIndex = updateNonOtherSelectedValues.indexOf(itemValue)
 
@@ -66,32 +87,36 @@ const CheckboxGroup = forwardRef(
         getValueToReturn({
           nonOtherSelectedValues: updateNonOtherSelectedValues,
           otherInputValue,
-          isOtherChecked
+          isOtherChecked,
+          shouldReturnEvent,
+          event
         })
       )
     }
 
-    const nonOtherCheckboxInputs = options.map((item) => {
-      const isChecked = nonOtherSelectedValues.includes(item.value)
-      const optionId = makeValidClassName(`${id}-${item.value}`)
+    const nonOtherCheckboxInputs = options.map((option) => {
+      const isChecked = nonOtherSelectedValues.includes(option.value)
+      const optionId = makeValidClassName(`${id}-${option.value}`)
 
       return (
-        <Stack key={item.value}>
+        <Stack key={option.value}>
           <FormControlLabel
             control={
               <Checkbox
                 id={optionId}
-                value={item.value}
+                value={option.value}
                 checked={isChecked}
-                onChange={() => {
-                  handleNonOtherCheckboxChange(item.value)
+                onChange={(event) => {
+                  handleNonOtherCheckboxChange({ itemValue: option.value, event })
                 }}
                 onBlur={onBlur}
               />
             }
-            label={item.label}
+            label={option.label}
           />
-          {isChecked && SelectedMarkup ? <SelectedMarkup optionId={optionId} /> : null}
+          {isChecked && SelectedMarkup ? (
+            <SelectedMarkup optionId={optionId} optionValue={option.value} />
+          ) : null}
         </Stack>
       )
     })
@@ -108,6 +133,7 @@ const CheckboxGroup = forwardRef(
                     checked={isOtherChecked}
                     onChange={handleOtherCheckboxChange}
                     onBlur={onBlur}
+                    value='other'
                   />
                 }
                 label={language.form.checkboxGroupOtherLabel}
@@ -121,7 +147,9 @@ const CheckboxGroup = forwardRef(
                 />
               ) : null}
             </div>
-            {isOtherChecked && SelectedMarkup ? <SelectedMarkup optionId={`${id}-other`} /> : null}
+            {isOtherChecked && SelectedMarkup ? (
+              <SelectedMarkup optionId={`${id}-other`} optionValue='other' />
+            ) : null}
           </Stack>
         ) : null}
       </FormGroup>
@@ -142,16 +170,20 @@ CheckboxGroup.propTypes = {
   ).isRequired,
   SelectedMarkup: PropTypes.oneOfType([PropTypes.node, PropTypes.any]), // we're doing partial application so this component can supply the selectedMarkup the optionId. Proptype complains about it being a function.
   shouldAddOtherOptionWithClarification: PropTypes.bool,
+  shouldReturnEvent: PropTypes.bool,
   value: PropTypes.shape({
     selectedValues: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
-    otherValue: PropTypes.string
+    otherValue: PropTypes.string,
+    isOtherChecked: PropTypes.bool
   })
 }
 
 CheckboxGroup.defaultProps = {
   onBlur: () => {},
+  value: [],
   SelectedMarkup: undefined,
-  shouldAddOtherOptionWithClarification: false
+  shouldAddOtherOptionWithClarification: false,
+  shouldReturnEvent: false
 }
 
 export default CheckboxGroup

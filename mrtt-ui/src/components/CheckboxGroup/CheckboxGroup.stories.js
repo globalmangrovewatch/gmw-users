@@ -47,6 +47,6 @@ export const WithNestedMarkupForSelected = () => (
     onChange={action('onChange')}
     id='cuddlyKittens'
     shouldAddOtherOptionWithClarification={true}
-    selectedMarkup={<>Youve selected ME</>}
+    SelectedMarkup={() => <>Youve selected ME</>}
   />
 )
