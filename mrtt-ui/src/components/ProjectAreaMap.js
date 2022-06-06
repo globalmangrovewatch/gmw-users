@@ -73,28 +73,25 @@ const ProjectAreaMap = ({
   }, [extent])
 
   const onAddGeomFile = async (files) => {
-    if (drawControlRef) {
-      if (files.length) {
-        try {
-          const fileJson = await handleFileLoadEvent(files)
+    if (drawControlRef && files.length) {
+      try {
+        const fileJson = await handleFileLoadEvent(files)
 
-          const polygonOnlyFeatureClass = getPolygonOnlyFeatureCollection(fileJson)
+        const polygonOnlyFeatureClass = getPolygonOnlyFeatureCollection(fileJson)
 
-          setUploadLineCount(
-            fileJson.features.filter((f) => lineTypes.includes(f.geometry.type)).length
-          )
-          setUploadPointCount(
-            fileJson.features.filter((f) => pointTypes.includes(f.geometry.type)).length
-          )
+        setUploadLineCount(
+          fileJson.features.filter((f) => lineTypes.includes(f.geometry.type)).length
+        )
+        setUploadPointCount(
+          fileJson.features.filter((f) => pointTypes.includes(f.geometry.type)).length
+        )
 
-          drawControlRef.deleteAll()
-          drawControlRef.add(polygonOnlyFeatureClass)
-          setError()
-        } catch (e) {
-          setError(`${language.projectAreaMap.uploadErrorPrefix}: ${e}`)
-        }
+        drawControlRef.deleteAll()
+        drawControlRef.add(polygonOnlyFeatureClass)
+        setError()
+      } catch (e) {
+        setError(`${language.projectAreaMap.uploadErrorPrefix}: ${e}`)
       }
-
       setSiteAreaFeatureCollection(drawControlRef.getAll())
     }
   }
