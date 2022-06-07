@@ -1,38 +1,11 @@
-import { createTheme } from '@mui/material/styles'
+const color = {
+  primary: '#009b93',
+  primaryHover: '#00c6bd',
+  secondary: '#02b1a8',
+  secondaryHover: '#02b1a8',
+  text: '#000000D9',
+  slub: '#333333D9',
+  bodyBackground: '#fafafa'
+}
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#009B93'
-    },
-    secondary: {
-      main: '#02B1A8'
-    }
-  },
-  components: {
-    MuiFormLabel: {
-      styleOverrides: {
-        root: {
-          color: '#000',
-          marginBottom: '0.5em'
-        }
-      }
-    },
-    MuiInputLabel: {
-      styleOverrides: {
-        root: {
-          color: '#000'
-        }
-      }
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          marginTop: '1em'
-        }
-      }
-    }
-  }
-})
-
-export default theme
+export default { color }

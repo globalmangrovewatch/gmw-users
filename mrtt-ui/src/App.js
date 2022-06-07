@@ -14,11 +14,11 @@ import ProjectDetailsForm from './components/ProjectDetailsForm'
 import SiteBackgroundForm from './components/SiteBackgroundForm'
 import RestorationAimsForm from './components/RestorationAimsForm/RestorationAimsForm'
 import CausesOfDeclineForm from './components/CausesOfDeclineForm'
-import theme from './styles/theme'
+import themeMui from './styles/themeMui'
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={themeMui}>
       <Router>
         <GlobalLayout>
           <CustomToastContainer />
