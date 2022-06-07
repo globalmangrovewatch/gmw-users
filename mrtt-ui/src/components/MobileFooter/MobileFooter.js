@@ -13,7 +13,7 @@ const StyledFooter = styled('footer')`
   justify-content: space-around;
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
-  border-top: 1px solid ${theme.color.primary};
+  border-top: ${theme.border.primary};
   font-family: 'Open Sans', sans-serif;
   text-transform: uppercase;
   font-weight: 300;
@@ -35,8 +35,8 @@ const LinkContainer = styled(Link)`
     color: theme.color.slub;
   }
 
-  border-bottom-width: 2px;
-  border-bottom-style: solid;
+  border-bottom-width: ${theme.border.primaryWidth};
+  border-bottom-style: ${theme.border.primaryStyle};
 
   border-bottom-color: ${(props) =>
     props.active === 'true' ? theme.color.primaryHover : 'transparent'};

@@ -9,12 +9,12 @@ import * as yup from 'yup'
 import Autocomplete from '@mui/material/Autocomplete'
 import axios from 'axios'
 
-import countries from '../data/countries.json'
-import { projectDetails as questions } from '../data/questions'
-import { mapDataForApi } from '../library/mapDataForApi'
+import { ButtonSubmit } from './buttons'
 import { ErrorText } from '../styles/typography'
 import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/forms'
-import ButtonSubmit from './ButtonSubmit'
+import { mapDataForApi } from '../library/mapDataForApi'
+import { projectDetails as questions } from '../data/questions'
+import countries from '../data/countries.json'
 import language from '../language'
 
 const ProjectDetailsForm = () => {

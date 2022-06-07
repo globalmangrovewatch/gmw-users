@@ -13,4 +13,12 @@ const multiselectWithOtherFormQuestion = {
   }
 }
 
-export default { error, form, multiselectWithOtherFormQuestion }
+const pages = {
+  organizations: {
+    title: 'Organizations',
+    titleOtherOrganizations: 'Other Organizations',
+    titleYourOrganizations: 'Your Organizations'
+  }
+}
+
+export default { error, form, multiselectWithOtherFormQuestion, pages }
