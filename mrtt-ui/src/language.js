@@ -18,7 +18,8 @@ const pages = {
     title: 'Organizations',
     titleOtherOrganizations: 'Other Organizations',
     titleYourOrganizations: 'Your Organizations'
-  }
+  },
+  sites: { title: 'Sites', newSiteButton: 'New Site' }
 }
 
 export default { error, form, multiselectWithOtherFormQuestion, pages }

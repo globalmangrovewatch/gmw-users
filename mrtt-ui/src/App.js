@@ -15,6 +15,7 @@ import SiteBackgroundForm from './components/SiteBackgroundForm'
 import RestorationAimsForm from './components/RestorationAimsForm/RestorationAimsForm'
 import CausesOfDeclineForm from './components/CausesOfDeclineForm'
 import themeMui from './styles/themeMui'
+import Site from './views/Site'
 
 function App() {
   return (
@@ -24,13 +25,14 @@ function App() {
           <CustomToastContainer />
           <Routes>
             <Route path='/' element={<Home />} />
-            <Route path='/:siteId/form/project-details' element={<ProjectDetailsForm />} />
-            <Route path='/:siteId/form/site-background' element={<SiteBackgroundForm />} />
-            <Route path='/:siteId/form/restoration-aims' element={<RestorationAimsForm />} />
-            <Route path='/sites' element={<Sites />} />
-            <Route path='/organizations' element={<Organizations />} />
             <Route path='/landscapes' element={<Landscapes />} />
-            <Route path='/:siteId/form/causes-of-decline' element={<CausesOfDeclineForm />} />
+            <Route path='/organizations' element={<Organizations />} />
+            <Route path='/site/:siteId' element={<Site />} />
+            <Route path='/site/:siteId/form/causes-of-decline' element={<CausesOfDeclineForm />} />
+            <Route path='/site/:siteId/form/project-details' element={<ProjectDetailsForm />} />
+            <Route path='/site/:siteId/form/restoration-aims' element={<RestorationAimsForm />} />
+            <Route path='/site/:siteId/form/site-background' element={<SiteBackgroundForm />} />
+            <Route path='/sites' element={<Sites />} />
           </Routes>
         </GlobalLayout>
       </Router>

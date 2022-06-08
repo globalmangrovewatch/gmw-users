@@ -9,7 +9,7 @@ import * as yup from 'yup'
 import Autocomplete from '@mui/material/Autocomplete'
 import axios from 'axios'
 
-import { ButtonSubmit } from './buttons'
+import { ButtonSubmit } from '../styles/buttons'
 import { ErrorText } from '../styles/typography'
 import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
