@@ -1,9 +1,9 @@
-import { FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
+import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -14,37 +14,73 @@ import { ErrorText } from '../styles/typography'
 import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { projectDetails as questions } from '../data/questions'
+import { questionMapping } from '../data/questionMapping'
+import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
 import countries from '../data/countries.json'
+import formatApiAnswersForForm from '../library/formatApiAnswersForForm'
 import language from '../language'
 
-const ProjectDetailsForm = () => {
-  // form validation rules
-  const validationSchema = yup.object().shape({
-    hasProjectEndDate: yup.boolean(),
-    projectStartDate: yup.string().required('Select a start date'),
-    projectEndDate: yup.string().when('hasProjectEndDate', {
-      is: true,
-      then: yup.string().required('Please select an end date')
-    }),
-    countries: yup
-      .array()
-      .of(
-        yup.object().shape({
-          name: yup.string(),
-          code: yup.string()
-        })
-      )
-      .min(1)
-      .typeError('Select at least one country')
-  })
-  const formOptions = { resolver: yupResolver(validationSchema) }
+const validationSchema = yup.object().shape({
+  hasProjectEndDate: yup.boolean(),
+  projectStartDate: yup.string().required('Select a start date'),
+  projectEndDate: yup.string().when('hasProjectEndDate', {
+    is: true,
+    then: yup.string().required('Please select an end date')
+  }),
+  countries: yup
+    .array()
+    .of(
+      yup.object().shape({
+        name: yup.string(),
+        code: yup.string()
+      })
+    )
+    .min(1)
+    .typeError('Select at least one country')
+})
 
-  // get functions to build form with useForm() hook
-  const { control, handleSubmit, formState, watch } = useForm(formOptions)
-  const { errors } = formState
-  const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
-  const [isSubmitting, setIsSubmitting] = useState(false)
+const ProjectDetailsForm = () => {
   const [isError, setIsError] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const formOptions = {
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      hasProjectEndDate: false,
+      projectStartDate: undefined,
+      projectEndDate: undefined,
+      countries: undefined
+    }
+  }
+  const { control, handleSubmit, formState, watch, reset: resetForm } = useForm(formOptions)
+  const { errors } = formState
+  const { siteId } = useParams()
+  const registrationAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+  let watchHasProjectEndDate = watch('hasProjectEndDate', false)
+  /* showEndDateInput is a hack because MUI follows native html and casts values to strings.
+   The api casts them to boolean so we support both */
+  const showEndDateInput = watchHasProjectEndDate === 'true' || watchHasProjectEndDate === true
+
+  useEffect(
+    function initializeFormWithApiData() {
+      if (resetForm && registrationAnswersUrl) {
+        axios
+          .get(registrationAnswersUrl)
+          .then(({ data }) => {
+            const initialValuesForForm = formatApiAnswersForForm({
+              apiAnswers: data,
+              questionMapping: questionMapping.projectDetails
+            })
+
+            resetForm(initialValuesForForm)
+          })
+          .catch(() => {
+            toast.error(language.error.apiLoad)
+          })
+      }
+    },
+    [registrationAnswersUrl, resetForm]
+  )
 
   const onSubmit = async (data) => {
     setIsSubmitting(true)
@@ -112,7 +148,7 @@ const ProjectDetailsForm = () => {
           <ErrorText>{errors.projectStartDate?.message}</ErrorText>
         </FormQuestionDiv>
         {/* End Date */}
-        {watchHasProjectEndDate === 'true' && (
+        {showEndDateInput && (
           <FormQuestionDiv>
             <FormLabel>{questions.projectEndDate.question}</FormLabel>
             <Controller
