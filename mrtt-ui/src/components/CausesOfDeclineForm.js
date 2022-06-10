@@ -27,7 +27,7 @@ import {
   SubTitle,
   SubTitle2
 } from '../styles/forms'
-import { ButtonSubmit } from './buttons'
+import { ButtonSubmit } from '../styles/buttons'
 import { causesOfDecline } from '../data/questions'
 import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
 import { ErrorText } from '../styles/typography'

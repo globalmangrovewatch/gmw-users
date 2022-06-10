@@ -17,7 +17,7 @@ import {
   Typography
 } from '@mui/material'
 
-import { ButtonSubmit } from './buttons'
+import { ButtonSubmit } from '../styles/buttons'
 import { ErrorText } from '../styles/typography'
 import { FormQuestionDiv, MainFormDiv, SectionFormTitle } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'

@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 
-import { ButtonSubmit } from '../buttons'
+import { ButtonSubmit } from '../../styles/buttons'
 import { ErrorText } from '../../styles/typography'
 import { Form, MainFormDiv, SectionFormTitle } from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
