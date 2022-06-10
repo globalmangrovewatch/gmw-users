@@ -14,9 +14,9 @@ import { multiselectWithOtherValidation } from '../../validation/multiSelectWith
 import { questionMapping } from '../../data/questionMapping'
 import { restorationAims as questions } from '../../data/questions'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import formatApiAnswersForForm from '../../library/formatApiAnswersForForm'
 import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
+import usePopulateQuestionFormWithInitialValues from '../../library/usePopulateQuestionFormWithInitialValues'
 
 const RestorationAimsForm = () => {
   const { siteId } = useParams()
@@ -43,24 +43,12 @@ const RestorationAimsForm = () => {
     reset: resetForm
   } = reactHookFormInstance
 
-  const _loadSiteData = useEffect(() => {
-    if (apiAnswersUrl && resetForm) {
-      setIsLoading(true)
-      axios
-        .get(apiAnswersUrl)
-        .then(({ data }) => {
-          setIsLoading(false)
-          const initialValuesForForm = formatApiAnswersForForm({
-            apiAnswers: data,
-            questionMapping: questionMapping.restorationAims
-          })
-          resetForm(initialValuesForForm)
-        })
-        .catch(() => {
-          toast.error(language.error.apiLoad)
-        })
-    }
-  }, [apiAnswersUrl, resetForm])
+  usePopulateQuestionFormWithInitialValues({
+    apiUrl: apiAnswersUrl,
+    resetForm,
+    questionMapping: questionMapping.restorationAims,
+    setIsLoading
+  })
 
   const handleSubmit = (formData) => {
     setIsSubmitting(true)

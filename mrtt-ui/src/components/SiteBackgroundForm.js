@@ -79,7 +79,7 @@ const ProjectDetailsForm = () => {
     if (!data) return
 
     axios
-      .put(url, mapDataForApi('siteBackground', data))
+      .patch(url, mapDataForApi('siteBackground', data))
       .then(() => {
         setisSubmitting(false)
       })
