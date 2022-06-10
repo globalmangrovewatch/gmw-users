@@ -24,11 +24,24 @@ function Sites() {
       .catch(() => toast.error(language.error.apiLoad))
   }, [])
 
-  const sitesList = sites.map(({ site_name, id }) => (
-    <LinkCard key={id} to={`/site/${id}`}>
-      {site_name}
-    </LinkCard>
-  ))
+  const sitesList = sites
+    .sort((siteA, siteB) => {
+      const siteAName = siteA.site_name?.toLowerCase()
+      const siteBName = siteB.site_name?.toLowerCase()
+
+      if (siteAName < siteBName) {
+        return -1
+      }
+      if (siteAName < siteBName) {
+        return 1
+      }
+      return 0
+    })
+    .map(({ site_name, id }) => (
+      <LinkCard key={id} to={`/site/${id}/overview`}>
+        {site_name}
+      </LinkCard>
+    ))
 
   return isLoading ? (
     <LoadingIndicator />
@@ -36,7 +49,7 @@ function Sites() {
     <PagePadding>
       <RowSpaceBetween>
         <H4>{language.pages.sites.title}</H4>
-        <ButtonPrimary component={Link} to='#'>
+        <ButtonPrimary component={Link} to='/site/new'>
           {language.pages.sites.newSiteButton}
         </ButtonPrimary>
       </RowSpaceBetween>

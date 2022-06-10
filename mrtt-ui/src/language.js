@@ -1,6 +1,7 @@
 const error = {
   submit: 'Submit failed. please try again.',
-  apiLoad: 'Loading data from the api failed. Please try again.'
+  apiLoad: 'Loading data from the api failed. Please try again.',
+  getItemDoesntExistMessage: (item) => `That ${item} doesnt exits.`
 }
 const form = {
   checkboxGroupOtherLabel: 'Other',
@@ -19,7 +20,23 @@ const pages = {
     titleOtherOrganizations: 'Other Organizations',
     titleYourOrganizations: 'Your Organizations'
   },
-  sites: { title: 'Sites', newSiteButton: 'New Site' }
+  sites: { title: 'Sites', newSiteButton: 'New Site' },
+  siteform: {
+    getEditSiteSuccessMessage: (siteName) => `The site had been renamed to ${siteName}`,
+    getNewSiteSuccessMessage: (siteName) => `The site, ${siteName}, has been created`,
+    titleNewSite: 'Create a site',
+    labelName: 'Name',
+    labelLandscape: 'Landscape',
+    validation: {
+      nameRequired: 'Please enter a name'
+    }
+  }
+}
+
+const buttons = {
+  cancel: 'Cancel',
+  submit: 'Submit',
+  submitting: 'Submitting...'
 }
 
 const maybePluralize = (count, noun, suffix = 's') => `${count} ${noun}${count !== 1 ? suffix : ''}`
@@ -53,4 +70,4 @@ const projectAreaMap = {
   }
 }
 
-export default { error, form, multiselectWithOtherFormQuestion, pages, projectAreaMap }
+export default { error, form, multiselectWithOtherFormQuestion, pages, buttons, projectAreaMap }
