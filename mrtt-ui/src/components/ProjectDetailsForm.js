@@ -23,6 +23,7 @@ import { useParams } from 'react-router-dom'
 import formatApiAnswersForForm from '../library/formatApiAnswersForForm'
 import language from '../language'
 import mangroveCountries from '../data/mangrove_countries.json'
+import emptyFeatureCollection from '../data/emptyFeatureCollection'
 import ProjectAreaMap from './ProjectAreaMap'
 
 const sortCountries = (a, b) => {
@@ -49,8 +50,15 @@ function ProjectDetailsForm() {
       .array()
       .of(
         yup.object().shape({
-          name: yup.string(),
-          code: yup.string()
+          bbox: yup.array().of(yup.number()),
+          geometry: yup.object().shape({
+            coordinates: yup.array().of(yup.number()),
+            type: yup.string()
+          }),
+          properties: yup.object().shape({
+            country: yup.string(),
+            mangroves: yup.string()
+          })
         })
       )
       .min(1)
@@ -69,10 +77,7 @@ function ProjectDetailsForm() {
       projectStartDate: undefined,
       projectEndDate: undefined,
       countries: undefined,
-      siteArea: {
-        type: 'FeatureCollection',
-        features: []
-      }
+      siteArea: emptyFeatureCollection
     }
   }
 
@@ -128,12 +133,11 @@ function ProjectDetailsForm() {
     field.onChange(featureCollection)
 
     if (featureCollection.features && featureCollection.features.length) {
-      setMapExtent(turfBbox(turfConvex(featureCollection)))
+      setMapExtent(turfBbox(featureCollection))
     }
   }
 
   const onSubmit = async (data) => {
-    debugger // eslint-disable-line
     setIsSubmitting(true)
     setIsError(false)
     const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
@@ -236,15 +240,14 @@ function ProjectDetailsForm() {
                 disablePortal
                 multiple
                 options={countriesGeojson}
-                getOptionLabel={(feature) => {
-                  console.log(feature)
-                  console.log(countriesGeojson)
-                  return feature ? feature.properties.country : ''
-                }}
+                getOptionLabel={(feature) => (feature ? feature.properties.country : '')}
                 renderInput={(params) => <TextField {...params} label='Country' />}
                 onChange={(e, values) => {
                   onCountriesChange(field, values)
                 }}
+                isOptionEqualToValue={(option, value) =>
+                  option.properties.country === value.properties.country
+                }
               />
             )}
           />
@@ -260,6 +263,8 @@ function ProjectDetailsForm() {
             render={({ field }) => (
               <ProjectAreaMap
                 extent={mapExtent}
+                setExtent={setMapExtent}
+                height='400px'
                 siteAreaFeatureCollection={field.value}
                 setSiteAreaFeatureCollection={(value) => {
                   onSiteAreaFeatureCollectionChange(field, value)

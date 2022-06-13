@@ -9,10 +9,12 @@ import Map, {
 } from 'react-map-gl'
 import { DropzoneArea } from 'react-mui-dropzone'
 import GeoPropTypes from 'geojson-prop-types'
+import turfBbox from '@turf/bbox'
 
 import language from '../language'
 import MapDrawControl, { drawControlRef } from './MapDrawControl'
 import MapDrawInfo from './MapDrawInfo'
+import emptyFeatureCollection from '../data/emptyFeatureCollection'
 import handleFileLoadEvent from '../library/handleFileLoadEvent'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -46,8 +48,9 @@ const getPolygonOnlyFeatureCollection = (geojsonFeatureCollection) => {
 }
 
 const ProjectAreaMap = ({
-  height,
   extent,
+  setExtent,
+  height,
   siteAreaFeatureCollection,
   setSiteAreaFeatureCollection
 }) => {
@@ -77,6 +80,13 @@ const ProjectAreaMap = ({
       setError(e.message)
     }
   }, [extent])
+
+  const onMapLoad = () => {
+    if (siteAreaFeatureCollection.features.length) {
+      drawControlRef.add(siteAreaFeatureCollection)
+      setExtent(turfBbox(siteAreaFeatureCollection))
+    }
+  }
 
   const onAddGeomFile = async (files) => {
     if (drawControlRef && files.length) {
@@ -139,7 +149,8 @@ const ProjectAreaMap = ({
           latitude: 0,
           zoom: 0.5
         }}
-        mapStyle='mapbox://styles/mapbox/satellite-streets-v11'>
+        mapStyle='mapbox://styles/mapbox/satellite-streets-v11'
+        onLoad={onMapLoad}>
         <MapDrawControl
           position='top-left'
           displayControlsDefault={false}
@@ -172,14 +183,12 @@ const ProjectAreaMap = ({
 ProjectAreaMap.defaultProps = {
   extent: undefined,
   height: undefined,
-  siteAreaFeatureCollection: {
-    type: 'FeatureCollection',
-    features: []
-  }
+  siteAreaFeatureCollection: emptyFeatureCollection
 }
 
 ProjectAreaMap.propTypes = {
   extent: PropTypes.arrayOf(PropTypes.number),
+  setExtent: PropTypes.func.isRequired,
   height: PropTypes.string,
   siteAreaFeatureCollection: GeoPropTypes.FeatureCollection,
   setSiteAreaFeatureCollection: PropTypes.func.isRequired
