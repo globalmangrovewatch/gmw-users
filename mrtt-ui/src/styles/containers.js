@@ -16,14 +16,9 @@ const RowFlexEnd = styled('div')`
   justify-content: flex-end;
 `
 
-const ButtonContainer = styled(RowFlexEnd)(
-  ({ theme: themeMui }) => `
-  & > * {
-    margin-left: ${themeMui.spacing(2)};
-
-  }
-  `
-)
+const ButtonContainer = styled(RowFlexEnd)(({ theme: themeMui }) => ({
+  '&& > *': { marginLeft: themeMui.spacing(2) }
+}))
 
 const RowCenterCenter = styled('div')`
   display: flex;

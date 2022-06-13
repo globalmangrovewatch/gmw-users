@@ -29,7 +29,7 @@ const SiteForm = ({ isNewSite }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [doesItemNotExist, setDoesItemNotExist] = useState(false)
+  const [doesItemExist, setDoesItemExist] = useState(true)
   const sitesUrl = `${process.env.REACT_APP_API_URL}/sites/`
   const navigate = useNavigate()
 
@@ -53,7 +53,7 @@ const SiteForm = ({ isNewSite }) => {
           .catch((err) => {
             setIsLoading(false)
             if (err?.response?.status === 404) {
-              setDoesItemNotExist(true)
+              setDoesItemExist(false)
             } else {
               toast.error(language.error.apiLoad)
             }
@@ -80,7 +80,7 @@ const SiteForm = ({ isNewSite }) => {
 
   const editSite = (formData) => {
     axios
-      .put(`${sitesUrl}${siteId}`, formData)
+      .patch(`${sitesUrl}${siteId}`, formData)
       .then(({ data: { site_name } }) => {
         setIsSubmitting(false)
         toast.success(language.pages.siteform.getEditSiteSuccessMessage(site_name))
@@ -108,7 +108,7 @@ const SiteForm = ({ isNewSite }) => {
     navigate(-1)
   }
 
-  const form = doesItemNotExist ? (
+  const form = !doesItemExist ? (
     <ItemDoesntExist item='site' />
   ) : (
     <MainFormDiv>

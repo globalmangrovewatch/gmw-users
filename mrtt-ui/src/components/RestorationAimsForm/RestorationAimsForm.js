@@ -15,7 +15,7 @@ import { restorationAims as questions } from '../../data/questions'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
-import usePopulateQuestionFormWithInitialValues from '../../library/usePopulateQuestionFormWithInitialValues'
+import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 
 const RestorationAimsForm = () => {
   const { siteId } = useParams()
@@ -42,7 +42,7 @@ const RestorationAimsForm = () => {
     reset: resetForm
   } = reactHookFormInstance
 
-  usePopulateQuestionFormWithInitialValues({
+  useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     resetForm,
     questionMapping: questionMapping.restorationAims,

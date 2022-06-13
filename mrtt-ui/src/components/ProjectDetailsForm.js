@@ -19,14 +19,12 @@ import { mapDataForApi } from '../library/mapDataForApi'
 import { projectDetails as questions } from '../data/questions'
 import { questionMapping } from '../data/questionMapping'
 import { useParams } from 'react-router-dom'
-import countries from '../data/countries.json'
 import emptyFeatureCollection from '../data/emptyFeatureCollection'
-import formatApiAnswersForForm from '../library/formatApiAnswersForForm'
 import language from '../language'
 import LoadingIndicator from './LoadingIndicator'
 import mangroveCountries from '../data/mangrove_countries.json'
 import ProjectAreaMap from './ProjectAreaMap'
-import usePopulateQuestionFormWithInitialValues from '../library/usePopulateQuestionFormWithInitialValues'
+import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 
 const sortCountries = (a, b) => {
   const textA = a.properties.country.toUpperCase()
@@ -93,7 +91,7 @@ function ProjectDetailsForm() {
    The api casts them to boolean so we support both */
   const showEndDateInput = watchHasProjectEndDate === 'true' || watchHasProjectEndDate === true
 
-  usePopulateQuestionFormWithInitialValues({
+  useInitializeQuestionMappedForm({
     apiUrl: registrationAnswersUrl,
     resetForm,
     questionMapping: questionMapping.projectDetails,

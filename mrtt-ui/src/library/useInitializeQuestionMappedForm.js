@@ -5,12 +5,7 @@ import { useEffect } from 'react'
 import formatApiAnswersForForm from './formatApiAnswersForForm'
 import language from '../language'
 
-const usePopulateQuestionFormWithInitialValues = ({
-  apiUrl,
-  resetForm,
-  setIsLoading,
-  questionMapping
-}) => {
+const useInitializeQuestionMappedForm = ({ apiUrl, resetForm, setIsLoading, questionMapping }) => {
   useEffect(
     function initializeFormWithApiData() {
       if (resetForm && apiUrl) {
@@ -33,4 +28,4 @@ const usePopulateQuestionFormWithInitialValues = ({
   )
 }
 
-export default usePopulateQuestionFormWithInitialValues
+export default useInitializeQuestionMappedForm
