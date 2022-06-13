@@ -23,7 +23,7 @@ jobs:
       - name: Run Tests
         run: |
           cd mrtt-ui/
-          npm install 
+          npm install --legacy-peer-deps
           npm test -- --watchAll=false
       - name: Create review app
         run: |
