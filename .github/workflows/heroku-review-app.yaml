@@ -20,10 +20,11 @@ jobs:
         with:
           ref: ${{github.event.pull_request.head.ref}}
           fetch-depth: 0
-      - name: Run Tests
+      - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: 16.15.0
+      - name: Run Tests
         run: |
           cd mrtt-ui/
           npm install --legacy-peer-deps
