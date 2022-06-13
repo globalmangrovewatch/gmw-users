@@ -67,16 +67,20 @@ function ProjectDetailsForm() {
   const [isError, setIsError] = useState(false)
 
   const onCountriesChange = (field, features) => {
-    field.onChange(features)
-    if (features.length > 0) {
-      const bboxFeatureCollection = {
-        features: features.map((feature) => turfBboxPolygon(feature.bbox)),
-        type: 'FeatureCollection'
+    try {
+      field.onChange(features)
+      if (features.length > 0) {
+        const bboxFeatureCollection = {
+          features: features.map((feature) => turfBboxPolygon(feature.bbox)),
+          type: 'FeatureCollection'
+        }
+        const totalBbox = turfBbox(turfConvex(bboxFeatureCollection))
+        setMapExtent(totalBbox)
+      } else {
+        setMapExtent(undefined)
       }
-      const totalBbox = turfBbox(turfConvex(bboxFeatureCollection))
-      setMapExtent(totalBbox)
-    } else {
-      setMapExtent(undefined)
+    } catch (e) {
+      console.error(e)
     }
   }
 

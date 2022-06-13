@@ -59,16 +59,22 @@ const ProjectAreaMap = ({
   useEffect(() => {
     if (!mapRef.current) return
     const animationProps = { padding: 40, duration: 1000 }
-    if (extent) {
-      mapRef.current.fitBounds(
-        [
-          [extent[0], extent[1]],
-          [extent[2], extent[3]]
-        ],
-        animationProps
-      )
-    } else {
-      mapRef.current.zoomTo(0, animationProps)
+
+    try {
+      if (extent) {
+        mapRef.current.fitBounds(
+          [
+            [extent[0], extent[1]],
+            [extent[2], extent[3]]
+          ],
+          animationProps
+        )
+      } else {
+        mapRef.current.zoomTo(0, animationProps)
+      }
+    } catch (e) {
+      console.error(e)
+      setError(e.message)
     }
   }, [extent])
 
