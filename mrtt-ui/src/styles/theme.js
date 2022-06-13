@@ -1,52 +1,19 @@
-import { createTheme } from '@mui/material/styles'
+const color = {
+  bodyBackground: '#fafafa',
+  primary: '#009b93',
+  primaryHover: '#00c6bd',
+  rowEven: '#e6e6e6',
+  rowOdd: '#f2f2f2',
+  secondary: '#02b1a8',
+  secondaryHover: '#02b1a8',
+  slub: '#333333D9',
+  text: '#000000D9'
+}
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#009B93'
-    },
-    secondary: {
-      main: '#02B1A8'
-    }
-  },
-  components: {
-    MuiDropzoneArea: {
-      styleOverrides: {
-        root: {
-          marginBottom: '1em',
-          marginTop: '1em',
-          minHeight: '2em'
-        },
-        text: {
-          '&.MuiTypography-h5': {
-            fontSize: '0.8rem'
-          }
-        }
-      }
-    },
-    MuiFormLabel: {
-      styleOverrides: {
-        root: {
-          color: '#000',
-          marginBottom: '0.5em'
-        }
-      }
-    },
-    MuiInputLabel: {
-      styleOverrides: {
-        root: {
-          color: '#000'
-        }
-      }
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          marginTop: '1em'
-        }
-      }
-    }
-  }
-})
+const border = {
+  primary: `solid thin ${color.primary}`,
+  primaryStyle: 'solid',
+  primaryWidth: 'thin'
+}
 
-export default theme
+export default { color, border }

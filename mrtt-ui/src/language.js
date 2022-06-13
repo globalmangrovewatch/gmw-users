@@ -13,6 +13,15 @@ const multiselectWithOtherFormQuestion = {
   }
 }
 
+const pages = {
+  organizations: {
+    title: 'Organizations',
+    titleOtherOrganizations: 'Other Organizations',
+    titleYourOrganizations: 'Your Organizations'
+  },
+  sites: { title: 'Sites', newSiteButton: 'New Site' }
+}
+
 const maybePluralize = (count, noun, suffix = 's') => `${count} ${noun}${count !== 1 ? suffix : ''}`
 
 const projectAreaMap = {
@@ -44,4 +53,4 @@ const projectAreaMap = {
   }
 }
 
-export default { error, form, multiselectWithOtherFormQuestion, projectAreaMap }
+export default { error, form, multiselectWithOtherFormQuestion, pages, projectAreaMap }

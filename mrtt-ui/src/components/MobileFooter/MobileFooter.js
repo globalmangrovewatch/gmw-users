@@ -6,20 +6,14 @@ import {
   Language as LandscapesIcon,
   PeopleOutline as OrganizationsIcon
 } from '@mui/icons-material'
+import theme from '../../styles/theme'
 
 const StyledFooter = styled('footer')`
-  /* Hide display in mobile mode in favour of a sidebar */
-  @media (max-width: 767px) {
-    visibility: visible;
-    display: flex;
-  }
-
-  visibility: hidden;
-  display: none;
+  display: flex;
   justify-content: space-around;
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
-  border-top: 1px solid #009b93;
+  border-top: ${theme.border.primary};
   font-family: 'Open Sans', sans-serif;
   text-transform: uppercase;
   font-weight: 300;
@@ -36,15 +30,16 @@ const LinkContainer = styled(Link)`
   align-items: center;
   min-width: 80px;
 
-  color: ${(props) => (props.active === 'true' ? '#00c6bd' : '#121212')};
+  color: ${(props) => (props.active === 'true' ? theme.color.primaryHover : theme.color.slub)};
   div {
-    color: #121212;
+    color: theme.color.slub;
   }
 
-  border-bottom-width: 2px;
-  border-bottom-style: solid;
+  border-bottom-width: ${theme.border.primaryWidth};
+  border-bottom-style: ${theme.border.primaryStyle};
 
-  border-bottom-color: ${(props) => (props.active === 'true' ? '#00c6bd' : 'transparent')};
+  border-bottom-color: ${(props) =>
+    props.active === 'true' ? theme.color.primaryHover : 'transparent'};
 `
 
 function MobileFooter() {

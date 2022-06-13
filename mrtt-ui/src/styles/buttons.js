@@ -1,5 +1,9 @@
 import { Button } from '@mui/material'
+import { styled } from '@mui/system'
 import PropTypes from 'prop-types'
+
+const ButtonPrimary = styled(Button)``
+ButtonPrimary.defaultProps = { variant: 'contained' }
 
 const ButtonSubmit = ({ isSubmitting }) => {
   return (
@@ -13,4 +17,4 @@ ButtonSubmit.propTypes = {
   isSubmitting: PropTypes.bool.isRequired
 }
 
-export default ButtonSubmit
+export { ButtonPrimary, ButtonSubmit }

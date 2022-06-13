@@ -27,12 +27,12 @@ import {
   SubTitle,
   SubTitle2
 } from '../styles/forms'
-import { ErrorText } from '../styles/typography'
-import ButtonSubmit from './ButtonSubmit'
+import { ButtonSubmit } from '../styles/buttons'
 import { causesOfDecline } from '../data/questions'
-import { questionMapping } from '../data/questionMapping'
 import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
+import { ErrorText } from '../styles/typography'
 import { mapDataForApi } from '../library/mapDataForApi'
+import { questionMapping } from '../data/questionMapping'
 import formatApiAnswersForForm from '../library/formatApiAnswersForForm'
 import language from '../language'
 import LoadingIndicator from './LoadingIndicator'

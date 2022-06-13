@@ -1,9 +1,9 @@
-import { FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
+import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -12,13 +12,17 @@ import turfConvex from '@turf/convex'
 import turfBbox from '@turf/bbox'
 import turfBboxPolygon from '@turf/bbox-polygon'
 
-import { projectDetails as questions } from '../data/questions'
-import { mapDataForApi } from '../library/mapDataForApi'
+import { ButtonSubmit } from '../styles/buttons'
 import { ErrorText } from '../styles/typography'
 import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/forms'
-import ButtonSubmit from './ButtonSubmit'
+import { mapDataForApi } from '../library/mapDataForApi'
+import { projectDetails as questions } from '../data/questions'
+import { questionMapping } from '../data/questionMapping'
+import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
+import formatApiAnswersForForm from '../library/formatApiAnswersForForm'
 import language from '../language'
-import MangroveCountries from '../data/mangrove_countries.json'
+import mangroveCountries from '../data/mangrove_countries.json'
 import ProjectAreaMap from './ProjectAreaMap'
 
 const sortCountries = (a, b) => {
@@ -27,13 +31,13 @@ const sortCountries = (a, b) => {
 
   return textA < textB ? -1 : textA > textB ? 1 : 0
 }
-const countriesGeojson = MangroveCountries.features.sort(sortCountries)
+const countriesGeojson = mangroveCountries.features.sort(sortCountries)
+const siteAreaError = 'Please provide a site area'
 
 function ProjectDetailsForm() {
   const [mapExtent, setMapExtent] = useState()
-
-  const siteAreaError = 'Please provide a site area'
-  // form validation rules
+  const [isError, setIsError] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const validationSchema = yup.object().shape({
     hasProjectEndDate: yup.boolean(),
     projectStartDate: yup.string().required('Select a start date'),
@@ -49,8 +53,8 @@ function ProjectDetailsForm() {
           code: yup.string()
         })
       )
-      .min(1, 'Select at least ${min} country')
-      .typeError('Select at least 1 country'),
+      .min(1)
+      .typeError('Select at least one country'),
     siteArea: yup
       .object()
       .shape({
@@ -58,13 +62,49 @@ function ProjectDetailsForm() {
       })
       .required(siteAreaError)
   })
-  const formOptions = { resolver: yupResolver(validationSchema) }
-  // get functions to build form with useForm() hook
-  const { control, handleSubmit, formState, watch } = useForm(formOptions)
+  const formOptions = {
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      hasProjectEndDate: false,
+      projectStartDate: undefined,
+      projectEndDate: undefined,
+      countries: undefined,
+      siteArea: {
+        type: 'FeatureCollection',
+        features: []
+      }
+    }
+  }
+
+  const { control, handleSubmit, formState, watch, reset: resetForm } = useForm(formOptions)
   const { errors } = formState
-  const watchHasProjectEndDate = watch('hasProjectEndDate', 'false')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isError, setIsError] = useState(false)
+  const { siteId } = useParams()
+  const registrationAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+  let watchHasProjectEndDate = watch('hasProjectEndDate', false)
+  /* showEndDateInput is a hack because MUI follows native html and casts values to strings.
+   The api casts them to boolean so we support both */
+  const showEndDateInput = watchHasProjectEndDate === 'true' || watchHasProjectEndDate === true
+
+  useEffect(
+    function initializeFormWithApiData() {
+      if (resetForm && registrationAnswersUrl) {
+        axios
+          .get(registrationAnswersUrl)
+          .then(({ data }) => {
+            const initialValuesForForm = formatApiAnswersForForm({
+              apiAnswers: data,
+              questionMapping: questionMapping.projectDetails
+            })
+
+            resetForm(initialValuesForForm)
+          })
+          .catch(() => {
+            toast.error(language.error.apiLoad)
+          })
+      }
+    },
+    [registrationAnswersUrl, resetForm]
+  )
 
   const onCountriesChange = (field, features) => {
     try {
@@ -159,7 +199,7 @@ function ProjectDetailsForm() {
           <ErrorText>{errors.projectStartDate?.message}</ErrorText>
         </FormQuestionDiv>
         {/* End Date */}
-        {watchHasProjectEndDate === 'true' && (
+        {showEndDateInput && (
           <FormQuestionDiv>
             <FormLabel>{questions.projectEndDate.question}</FormLabel>
             <Controller
@@ -196,7 +236,11 @@ function ProjectDetailsForm() {
                 disablePortal
                 multiple
                 options={countriesGeojson}
-                getOptionLabel={(feature) => (feature ? feature.properties.country : '')}
+                getOptionLabel={(feature) => {
+                  console.log(feature)
+                  console.log(countriesGeojson)
+                  return feature ? feature.properties.country : ''
+                }}
                 renderInput={(params) => <TextField {...params} label='Country' />}
                 onChange={(e, values) => {
                   onCountriesChange(field, values)

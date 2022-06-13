@@ -7,7 +7,7 @@ const formatApiAnswersForForm = ({ apiAnswers, questionMapping }) => {
     const [frontEndAnswerId, apiAnswerId] = question
     const apiAnswer = apiAnswers.find((apiAnswer) => apiAnswer.question_id === apiAnswerId)
 
-    return [frontEndAnswerId, apiAnswer.answer_value]
+    return [frontEndAnswerId, apiAnswer?.answer_value]
   })
 
   return Object.fromEntries(answersForUiFormEntries)

@@ -17,13 +17,13 @@ import {
   Typography
 } from '@mui/material'
 
-import { FormQuestionDiv, MainFormDiv, SectionFormTitle } from '../styles/forms'
+import { ButtonSubmit } from '../styles/buttons'
 import { ErrorText } from '../styles/typography'
-import ButtonSubmit from './ButtonSubmit'
+import { FormQuestionDiv, MainFormDiv, SectionFormTitle } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
+import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
 import { siteBackground as questions } from '../data/questions'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
-import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
 
 const ProjectDetailsForm = () => {
   const validationSchema = yup.object().shape({
