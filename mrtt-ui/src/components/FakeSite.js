@@ -10,6 +10,7 @@ const FakeSite = () => {
       <Link to='/site/1/form/site-background'>Site Background</Link>
       <Link to='/site/1/form/restoration-aims'>Restoration Aims</Link>
       <Link to='/site/1/form/causes-of-decline'>Causes of Decline</Link>
+      <Link to='/site/1/form/pre-restoration-assessment'>Pre-restoration Assessment</Link>
     </Stack>
   )
 }

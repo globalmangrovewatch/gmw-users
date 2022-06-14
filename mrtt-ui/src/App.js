@@ -14,6 +14,7 @@ import ProjectDetailsForm from './components/ProjectDetailsForm'
 import SiteBackgroundForm from './components/SiteBackgroundForm'
 import RestorationAimsForm from './components/RestorationAimsForm/RestorationAimsForm'
 import CausesOfDeclineForm from './components/CausesOfDeclineForm'
+import PreRestorationAssessmentForm from './components/PreRestorationAssessmentForm'
 import themeMui from './styles/themeMui'
 import Site from './views/Site'
 
@@ -28,6 +29,10 @@ function App() {
             <Route path='/landscapes' element={<Landscapes />} />
             <Route path='/organizations' element={<Organizations />} />
             <Route path='/site/:siteId' element={<Site />} />
+            <Route
+              path='/site/:siteId/form/pre-restoration-assessment'
+              element={<PreRestorationAssessmentForm />}
+            />
             <Route path='/site/:siteId/form/causes-of-decline' element={<CausesOfDeclineForm />} />
             <Route path='/site/:siteId/form/project-details' element={<ProjectDetailsForm />} />
             <Route path='/site/:siteId/form/restoration-aims' element={<RestorationAimsForm />} />
