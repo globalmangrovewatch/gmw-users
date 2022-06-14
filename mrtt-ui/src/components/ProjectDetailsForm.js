@@ -8,6 +8,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import Autocomplete from '@mui/material/Autocomplete'
 import axios from 'axios'
+import turfConvex from '@turf/convex'
+import turfBbox from '@turf/bbox'
+import turfBboxPolygon from '@turf/bbox-polygon'
 
 import { ButtonSubmit } from '../styles/buttons'
 import { ErrorText } from '../styles/typography'
@@ -17,41 +20,67 @@ import { projectDetails as questions } from '../data/questions'
 import { questionMapping } from '../data/questionMapping'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import countries from '../data/countries.json'
 import formatApiAnswersForForm from '../library/formatApiAnswersForForm'
 import language from '../language'
+import mangroveCountries from '../data/mangrove_countries.json'
+import emptyFeatureCollection from '../data/emptyFeatureCollection'
+import ProjectAreaMap from './ProjectAreaMap'
 
-const validationSchema = yup.object().shape({
-  hasProjectEndDate: yup.boolean(),
-  projectStartDate: yup.string().required('Select a start date'),
-  projectEndDate: yup.string().when('hasProjectEndDate', {
-    is: true,
-    then: yup.string().required('Please select an end date')
-  }),
-  countries: yup
-    .array()
-    .of(
-      yup.object().shape({
-        name: yup.string(),
-        code: yup.string()
-      })
-    )
-    .min(1)
-    .typeError('Select at least one country')
-})
+const sortCountries = (a, b) => {
+  const textA = a.properties.country.toUpperCase()
+  const textB = b.properties.country.toUpperCase()
 
-const ProjectDetailsForm = () => {
+  return textA < textB ? -1 : textA > textB ? 1 : 0
+}
+const countriesGeojson = mangroveCountries.features.sort(sortCountries)
+const siteAreaError = 'Please provide a site area'
+
+function ProjectDetailsForm() {
+  const [mapExtent, setMapExtent] = useState()
   const [isError, setIsError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const validationSchema = yup.object().shape({
+    hasProjectEndDate: yup.boolean(),
+    projectStartDate: yup.string().required('Select a start date'),
+    projectEndDate: yup.string().when('hasProjectEndDate', {
+      is: true,
+      then: yup.string().required('Please select an end date')
+    }),
+    countries: yup
+      .array()
+      .of(
+        yup.object().shape({
+          bbox: yup.array().of(yup.number()),
+          geometry: yup.object().shape({
+            coordinates: yup.array().of(yup.number()),
+            type: yup.string()
+          }),
+          properties: yup.object().shape({
+            country: yup.string(),
+            mangroves: yup.string()
+          })
+        })
+      )
+      .min(1)
+      .typeError('Select at least one country'),
+    siteArea: yup
+      .object()
+      .shape({
+        features: yup.array().min(1, siteAreaError).required(siteAreaError)
+      })
+      .required(siteAreaError)
+  })
   const formOptions = {
     resolver: yupResolver(validationSchema),
     defaultValues: {
       hasProjectEndDate: false,
       projectStartDate: undefined,
       projectEndDate: undefined,
-      countries: undefined
+      countries: undefined,
+      siteArea: emptyFeatureCollection
     }
   }
+
   const { control, handleSubmit, formState, watch, reset: resetForm } = useForm(formOptions)
   const { errors } = formState
   const { siteId } = useParams()
@@ -81,6 +110,32 @@ const ProjectDetailsForm = () => {
     },
     [registrationAnswersUrl, resetForm]
   )
+
+  const onCountriesChange = (field, features) => {
+    try {
+      field.onChange(features)
+      if (features.length > 0) {
+        const bboxFeatureCollection = {
+          features: features.map((feature) => turfBboxPolygon(feature.bbox)),
+          type: 'FeatureCollection'
+        }
+        const totalBbox = turfBbox(turfConvex(bboxFeatureCollection))
+        setMapExtent(totalBbox)
+      } else {
+        setMapExtent(undefined)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const onSiteAreaFeatureCollectionChange = (field, featureCollection) => {
+    field.onChange(featureCollection)
+
+    if (featureCollection.features && featureCollection.features.length) {
+      setMapExtent(turfBbox(featureCollection))
+    }
+  }
 
   const onSubmit = async (data) => {
     setIsSubmitting(true)
@@ -184,20 +239,39 @@ const ProjectDetailsForm = () => {
                 {...field}
                 disablePortal
                 multiple
-                options={countries}
-                getOptionLabel={(option) => (option ? option.name : '')}
+                options={countriesGeojson}
+                getOptionLabel={(feature) => (feature ? feature.properties.country : '')}
                 renderInput={(params) => <TextField {...params} label='Country' />}
                 onChange={(e, values) => {
-                  field.onChange(values)
+                  onCountriesChange(field, values)
                 }}
+                isOptionEqualToValue={(option, value) =>
+                  option.properties.country === value.properties.country
+                }
               />
             )}
           />
           <ErrorText>{errors.countries?.message}</ErrorText>
         </FormQuestionDiv>
-        {/* Draw Pologon - TO BE INSERTED */}
+        {/* Draw or upload site area */}
         <FormQuestionDiv>
           <FormLabel>{questions.siteArea.question}</FormLabel>
+          <Controller
+            name='siteArea'
+            control={control}
+            defaultValue={undefined}
+            render={({ field }) => (
+              <ProjectAreaMap
+                extent={mapExtent}
+                setExtent={setMapExtent}
+                height='400px'
+                siteAreaFeatureCollection={field.value}
+                setSiteAreaFeatureCollection={(value) => {
+                  onSiteAreaFeatureCollectionChange(field, value)
+                }}></ProjectAreaMap>
+            )}
+          />
+          <ErrorText>{errors.siteArea?.features?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && <ErrorText>{language.error.submit}</ErrorText>}
