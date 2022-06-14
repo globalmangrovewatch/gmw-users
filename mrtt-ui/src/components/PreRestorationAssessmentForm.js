@@ -44,9 +44,10 @@ function PreRestorationAssessmentForm() {
   const {
     handleSubmit: validateInputs,
     formState: { errors },
-    control
+    control,
+    watch
   } = reactHookFormInstance
-
+  const mangroveRestorationAttempted = watch('mangroveRestorationAttempted')
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
 
@@ -110,18 +111,20 @@ function PreRestorationAssessmentForm() {
           />
           <ErrorText>{errors.mangroveRestorationAttempted?.message}</ErrorText>
         </FormQuestionDiv>
-        <FormQuestionDiv>
-          <FormLabel>{questions.lastRestorationAttemptYear.question}</FormLabel>
-          <Controller
-            name='lastRestorationAttemptYear'
-            control={control}
-            defaultValue={''}
-            render={({ field }) => (
-              <TextField {...field} value={field.value} label='enter year'></TextField>
-            )}
-          />
-          <ErrorText>{errors.lastRestorationAttemptYear?.message}</ErrorText>
-        </FormQuestionDiv>
+        {mangroveRestorationAttempted === 'Yes' ? (
+          <FormQuestionDiv>
+            <FormLabel>{questions.lastRestorationAttemptYear.question}</FormLabel>
+            <Controller
+              name='lastRestorationAttemptYear'
+              control={control}
+              defaultValue={''}
+              render={({ field }) => (
+                <TextField {...field} value={field.value} label='enter year'></TextField>
+              )}
+            />
+            <ErrorText>{errors.lastRestorationAttemptYear?.message}</ErrorText>
+          </FormQuestionDiv>
+        ) : null}
         <FormQuestionDiv>
           {isError && <ErrorText>Submit failed, please try again</ErrorText>}
           <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
