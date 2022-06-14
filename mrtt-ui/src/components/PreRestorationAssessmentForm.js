@@ -26,7 +26,16 @@ import { ErrorText } from '../styles/typography'
 
 function PreRestorationAssessmentForm() {
   const validationSchema = yup.object().shape({
-    mangrovesPreviouslyOccured: yup.string().required('This field is required')
+    mangrovesPreviouslyOccured: yup.string().required('This field is required'),
+    mangroveRestorationAttempted: yup.string().required('This field is required'),
+    lastRestorationAttemptYear: yup.mixed().when(' mangroveRestorationAttempted', {
+      is: (val) => val && val === 'Yes',
+      then: yup
+        .number()
+        .typeError('You must specify a year')
+        .min(1900, 'Year must be higher than 1900')
+        .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
+    })
   })
   const reactHookFormInstance = useForm({
     defaultValues: {},
@@ -82,6 +91,36 @@ function PreRestorationAssessmentForm() {
             )}
           />
           <ErrorText>{errors.mangrovesPreviouslyOccured?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <FormLabel>{questions.mangroveRestorationAttempted.question}</FormLabel>
+          <Controller
+            name='mangroveRestorationAttempted'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.mangroveRestorationAttempted.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.mangroveRestorationAttempted?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <FormLabel>{questions.lastRestorationAttemptYear.question}</FormLabel>
+          <Controller
+            name='lastRestorationAttemptYear'
+            control={control}
+            defaultValue={''}
+            render={({ field }) => (
+              <TextField {...field} value={field.value} label='enter year'></TextField>
+            )}
+          />
+          <ErrorText>{errors.lastRestorationAttemptYear?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && <ErrorText>Submit failed, please try again</ErrorText>}
