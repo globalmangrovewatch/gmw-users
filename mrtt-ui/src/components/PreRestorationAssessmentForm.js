@@ -23,6 +23,8 @@ import { preRestorationAssessment as questions } from '../data/questions'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { ButtonSubmit } from '../styles/buttons'
 import { ErrorText } from '../styles/typography'
+import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
+import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
 
 function PreRestorationAssessmentForm() {
   const validationSchema = yup.object().shape({
@@ -35,10 +37,15 @@ function PreRestorationAssessmentForm() {
         .typeError('You must specify a year')
         .min(1900, 'Year must be higher than 1900')
         .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
-    })
+    }),
+    previousBiophysicalInterventions: multiselectWithOtherValidation,
+    whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidation
   })
   const reactHookFormInstance = useForm({
-    defaultValues: {},
+    defaultValues: {
+      previousBiophysicalInterventions: { selectedValues: [], otherValue: undefined },
+      whyUnsuccessfulRestorationAttempt: { selectedValues: [], otherValue: undefined }
+    },
     resolver: yupResolver(validationSchema)
   })
   const {
@@ -123,8 +130,29 @@ function PreRestorationAssessmentForm() {
               )}
             />
             <ErrorText>{errors.lastRestorationAttemptYear?.message}</ErrorText>
+            <CheckboxGroupWithLabelAndController
+              fieldName='previousBiophysicalInterventions'
+              reactHookFormInstance={reactHookFormInstance}
+              options={questions.previousBiophysicalInterventions.options}
+              question={questions.previousBiophysicalInterventions.question}
+              shouldAddOtherOptionWithClarification={true}
+            />
+            <ErrorText>
+              {errors.previousBiophysicalInterventions?.selectedValues?.message}
+            </ErrorText>
+            <CheckboxGroupWithLabelAndController
+              fieldName='whyUnsuccessfulRestorationAttempt'
+              reactHookFormInstance={reactHookFormInstance}
+              options={questions.whyUnsuccessfulRestorationAttempt.options}
+              question={questions.whyUnsuccessfulRestorationAttempt.question}
+              shouldAddOtherOptionWithClarification={true}
+            />
+            <ErrorText>
+              {errors.whyUnsuccessfulRestorationAttempt?.selectedValues?.message}
+            </ErrorText>
           </FormQuestionDiv>
         ) : null}
+
         <FormQuestionDiv>
           {isError && <ErrorText>Submit failed, please try again</ErrorText>}
           <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
