@@ -19,7 +19,7 @@ import mockLandscapes from '../data/mockLandscapes'
 
 const validationSchema = yup.object({
   site_name: yup.string().required(language.pages.siteform.validation.nameRequired),
-  landscape: yup.string()
+  landscape: yup.string().required(language.pages.siteform.validation.landscapeRequired)
 })
 
 const formDefaultValues = { site_name: '', landscape: '' }
@@ -125,7 +125,7 @@ const SiteForm = ({ isNewSite }) => {
           )}
         />
         <ErrorText>{errors?.site_name?.message}</ErrorText>
-        <FormLabel htmlFor='landscape'>{language.pages.siteform.labelLandscape} </FormLabel>
+        <FormLabel htmlFor='landscape'>{language.pages.siteform.labelLandscape}* </FormLabel>
         <Controller
           name='landscape'
           control={formControl}

@@ -28,7 +28,8 @@ const pages = {
     labelName: 'Name',
     labelLandscape: 'Landscape',
     validation: {
-      nameRequired: 'Please enter a name'
+      nameRequired: 'Please enter a name',
+      landscapeRequired: 'Please select a landscape'
     }
   }
 }
