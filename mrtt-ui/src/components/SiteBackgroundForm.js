@@ -12,6 +12,7 @@ import {
   Typography
 } from '@mui/material'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -27,6 +28,9 @@ import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndCont
 import language from '../language'
 
 const ProjectDetailsForm = () => {
+  const { siteId } = useParams()
+  const registrationAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+
   const validationSchema = yup.object().shape({
     stakeholders: yup
       .array()
@@ -75,12 +79,10 @@ const ProjectDetailsForm = () => {
     setisSubmitting(true)
     setIsError(false)
 
-    const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
-
     if (!data) return
 
     axios
-      .patch(url, mapDataForApi('siteBackground', data))
+      .patch(registrationAnswersUrl, mapDataForApi('siteBackground', data))
       .then(() => {
         setisSubmitting(false)
       })

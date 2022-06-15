@@ -16,4 +16,18 @@ export const H5 = styled(Typography)(({ theme }) => ({
 }))
 H5.defaultProps = { variant: 'h5' }
 
+export const H5Uppercase = styled(H5)`
+  text-transform: uppercase;
+`
+
 export const Link = (props) => <LinkMui component={LinkReactRouter} {...props} />
+
+export const SmallUpperCase = styled('div')`
+  text-transform: uppercase;
+  font-size: small;
+`
+
+export const XSmallUpperCase = styled('div')`
+  text-transform: uppercase;
+  font-size: x-small;
+`

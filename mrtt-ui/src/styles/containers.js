@@ -1,5 +1,6 @@
-import { styled } from '@mui/system'
 import { Link } from 'react-router-dom'
+import { Stack } from '@mui/material'
+import { styled } from '@mui/system'
 import theme from './theme'
 
 const PagePadding = styled('div')(({ theme }) => ({
@@ -35,4 +36,23 @@ const LinkCard = styled(Link)(({ theme: themeMui }) => ({
   color: theme.color.text
 }))
 
-export { PagePadding, RowSpaceBetween, LinkCard, RowCenterCenter, RowFlexEnd, ButtonContainer }
+const PaddedPageTopSection = styled(Stack)(({ theme: themeMui }) => ({
+  padding: themeMui.spacing(2),
+  borderBottom: theme.border.primary,
+  backgroundColor: theme.color.bodyBackground
+}))
+
+const PaddedPageSection = styled(Stack)(({ theme: themeMui }) => ({
+  padding: themeMui.spacing(2)
+}))
+
+export {
+  ButtonContainer,
+  LinkCard,
+  PaddedPageSection,
+  PaddedPageTopSection,
+  PagePadding,
+  RowCenterCenter,
+  RowFlexEnd,
+  RowSpaceBetween
+}
