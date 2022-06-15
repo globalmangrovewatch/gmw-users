@@ -1,7 +1,6 @@
-import { toast } from 'react-toastify'
-import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
+import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
@@ -14,9 +13,9 @@ import { multiselectWithOtherValidation } from '../../validation/multiSelectWith
 import { questionMapping } from '../../data/questionMapping'
 import { restorationAims as questions } from '../../data/questions'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import formatApiAnswersForForm from '../../library/formatApiAnswersForForm'
 import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
+import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 
 const RestorationAimsForm = () => {
   const { siteId } = useParams()
@@ -43,24 +42,12 @@ const RestorationAimsForm = () => {
     reset: resetForm
   } = reactHookFormInstance
 
-  const _loadSiteData = useEffect(() => {
-    if (apiAnswersUrl && resetForm) {
-      setIsLoading(true)
-      axios
-        .get(apiAnswersUrl)
-        .then(({ data }) => {
-          setIsLoading(false)
-          const initialValuesForForm = formatApiAnswersForForm({
-            apiAnswers: data,
-            questionMapping: questionMapping.restorationAims
-          })
-          resetForm(initialValuesForForm)
-        })
-        .catch(() => {
-          toast.error(language.error.apiLoad)
-        })
-    }
-  }, [apiAnswersUrl, resetForm])
+  useInitializeQuestionMappedForm({
+    apiUrl: apiAnswersUrl,
+    resetForm,
+    questionMapping: questionMapping.restorationAims,
+    setIsLoading
+  })
 
   const handleSubmit = (formData) => {
     setIsSubmitting(true)

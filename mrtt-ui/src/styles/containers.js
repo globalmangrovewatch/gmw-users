@@ -11,6 +11,22 @@ const RowSpaceBetween = styled('div')`
   justify-content: space-between;
 `
 
+const RowFlexEnd = styled('div')`
+  display: flex;
+  justify-content: flex-end;
+`
+
+const ButtonContainer = styled(RowFlexEnd)(({ theme: themeMui }) => ({
+  '&& > *': { marginLeft: themeMui.spacing(2) }
+}))
+
+const RowCenterCenter = styled('div')`
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+`
+
 const LinkCard = styled(Link)(({ theme: themeMui }) => ({
   padding: `${themeMui.spacing(3)} ${themeMui.spacing(1)}`,
   border: theme.border.primary,
@@ -19,4 +35,4 @@ const LinkCard = styled(Link)(({ theme: themeMui }) => ({
   color: theme.color.text
 }))
 
-export { PagePadding, RowSpaceBetween, LinkCard }
+export { PagePadding, RowSpaceBetween, LinkCard, RowCenterCenter, RowFlexEnd, ButtonContainer }

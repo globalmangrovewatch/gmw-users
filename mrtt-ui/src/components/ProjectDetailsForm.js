@@ -2,8 +2,8 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
-import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
+import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -18,13 +18,13 @@ import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/
 import { mapDataForApi } from '../library/mapDataForApi'
 import { projectDetails as questions } from '../data/questions'
 import { questionMapping } from '../data/questionMapping'
-import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import formatApiAnswersForForm from '../library/formatApiAnswersForForm'
-import language from '../language'
-import mangroveCountries from '../data/mangrove_countries.json'
 import emptyFeatureCollection from '../data/emptyFeatureCollection'
+import language from '../language'
+import LoadingIndicator from './LoadingIndicator'
+import mangroveCountries from '../data/mangrove_countries.json'
 import ProjectAreaMap from './ProjectAreaMap'
+import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 
 const sortCountries = (a, b) => {
   const textA = a.properties.country.toUpperCase()
@@ -38,6 +38,7 @@ const siteAreaError = 'Please provide a site area'
 function ProjectDetailsForm() {
   const [mapExtent, setMapExtent] = useState()
   const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const validationSchema = yup.object().shape({
     hasProjectEndDate: yup.boolean(),
@@ -90,26 +91,12 @@ function ProjectDetailsForm() {
    The api casts them to boolean so we support both */
   const showEndDateInput = watchHasProjectEndDate === 'true' || watchHasProjectEndDate === true
 
-  useEffect(
-    function initializeFormWithApiData() {
-      if (resetForm && registrationAnswersUrl) {
-        axios
-          .get(registrationAnswersUrl)
-          .then(({ data }) => {
-            const initialValuesForForm = formatApiAnswersForForm({
-              apiAnswers: data,
-              questionMapping: questionMapping.projectDetails
-            })
-
-            resetForm(initialValuesForForm)
-          })
-          .catch(() => {
-            toast.error(language.error.apiLoad)
-          })
-      }
-    },
-    [registrationAnswersUrl, resetForm]
-  )
+  useInitializeQuestionMappedForm({
+    apiUrl: registrationAnswersUrl,
+    resetForm,
+    questionMapping: questionMapping.projectDetails,
+    setIsLoading
+  })
 
   const onCountriesChange = (field, features) => {
     try {
@@ -155,13 +142,17 @@ function ProjectDetailsForm() {
       })
   }
 
-  return (
+  return isLoading ? (
+    <LoadingIndicator />
+  ) : (
     <MainFormDiv>
       <SectionFormTitle>Project Details Form</SectionFormTitle>
       <Form onSubmit={handleSubmit(onSubmit)}>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
-          <FormLabel>{questions.hasProjectEndDate.question}</FormLabel>
+          <FormLabel id='has-project-end-date-label'>
+            {questions.hasProjectEndDate.question}
+          </FormLabel>
           <Controller
             name='hasProjectEndDate'
             control={control}
@@ -169,7 +160,7 @@ function ProjectDetailsForm() {
             render={({ field }) => (
               <RadioGroup
                 {...field}
-                aria-labelledby='demo-radio-buttons-group-label'
+                aria-labelledby='has-project-end-date-label'
                 name='radio-buttons-group'>
                 <FormControlLabel value={true} control={<Radio />} label='Yes' />
                 <FormControlLabel value={false} control={<Radio />} label='No' />
@@ -180,7 +171,7 @@ function ProjectDetailsForm() {
         {/* Start Date */}
         <FormQuestionDiv>
           <FormLabel>Project Duration</FormLabel>
-          <FormLabel>{questions.projectStartDate.question}</FormLabel>
+          <FormLabel htmlFor='start-date'>{questions.projectStartDate.question}</FormLabel>
           <Controller
             name='projectStartDate'
             control={control}
@@ -189,6 +180,7 @@ function ProjectDetailsForm() {
               <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                 <Stack spacing={3}>
                   <MobileDatePicker
+                    id='start-date'
                     label='Project start date'
                     value={field.value}
                     onChange={(newValue) => {
@@ -205,7 +197,7 @@ function ProjectDetailsForm() {
         {/* End Date */}
         {showEndDateInput && (
           <FormQuestionDiv>
-            <FormLabel>{questions.projectEndDate.question}</FormLabel>
+            <FormLabel htmlFor='end-date'>{questions.projectEndDate.question}</FormLabel>
             <Controller
               name='projectEndDate'
               control={control}
@@ -213,6 +205,7 @@ function ProjectDetailsForm() {
                 <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                   <Stack spacing={3}>
                     <MobileDatePicker
+                      id='end-date'
                       label='Project end date'
                       value={field.value}
                       onChange={(newValue) => {
@@ -229,7 +222,7 @@ function ProjectDetailsForm() {
         )}
         {/* Countries selector */}
         <FormQuestionDiv>
-          <FormLabel>{questions.countries.question}</FormLabel>
+          <FormLabel htmlFor='countries'>{questions.countries.question}</FormLabel>
           <Controller
             name='countries'
             control={control}
@@ -241,7 +234,7 @@ function ProjectDetailsForm() {
                 multiple
                 options={countriesGeojson}
                 getOptionLabel={(feature) => (feature ? feature.properties.country : '')}
-                renderInput={(params) => <TextField {...params} label='Country' />}
+                renderInput={(params) => <TextField {...params} label='Country' id='countries' />}
                 onChange={(e, values) => {
                   onCountriesChange(field, values)
                 }}

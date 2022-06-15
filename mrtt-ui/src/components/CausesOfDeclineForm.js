@@ -217,7 +217,7 @@ function CausesOfDeclineForm() {
     'data', data
 
     axios
-      .put(apiAnswersUrl, mapDataForApi('causesOfDecline', data))
+      .patch(apiAnswersUrl, mapDataForApi('causesOfDecline', data))
       .then(() => {
         setisSubmitting(false)
       })
