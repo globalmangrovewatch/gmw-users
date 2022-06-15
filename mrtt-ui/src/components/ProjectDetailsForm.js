@@ -127,12 +127,11 @@ function ProjectDetailsForm() {
   const onSubmit = async (data) => {
     setIsSubmitting(true)
     setIsError(false)
-    const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
 
     if (!data) return
 
     axios
-      .patch(url, mapDataForApi('projectDetails', data))
+      .patch(registrationAnswersUrl, mapDataForApi('projectDetails', data))
       .then(() => {
         setIsSubmitting(false)
       })

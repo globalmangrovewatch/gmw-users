@@ -1,21 +1,10 @@
-import { Stack } from '@mui/material'
-import { styled } from '@mui/system'
 import React, { useEffect, useState } from 'react'
 
 import { H4, H5 } from '../styles/typography'
 import { UlAlternating } from '../styles/lists'
 import language from '../language'
 import mockOrganizations from '../data/mockOrganizations'
-import theme from '../styles/theme'
-
-const OrganizationListContainer = styled(Stack)(({ theme: themeMui }) => ({
-  padding: themeMui.spacing(2),
-  borderTop: theme.border.primary
-}))
-
-const TopSectionContainer = styled(Stack)(({ theme: themeMui }) => ({
-  padding: themeMui.spacing(2)
-}))
+import { PaddedPageSection, PaddedPageTopSection } from '../styles/containers'
 
 function Organizations() {
   const [yourOrganizations, setYourOrganizations] = useState([])
@@ -46,17 +35,16 @@ function Organizations() {
   )
   return (
     <>
-      <TopSectionContainer>
+      <PaddedPageTopSection>
         <H4>{language.pages.organizations.title}</H4>
-      </TopSectionContainer>
-
-      <OrganizationListContainer>
+      </PaddedPageTopSection>
+      <PaddedPageSection>
         <H5>{language.pages.organizations.titleYourOrganizations}</H5>
         {yourOrganizationsList}
 
         <H5>{language.pages.organizations.titleOtherOrganizations}</H5>
         {otherOrganizationsList}
-      </OrganizationListContainer>
+      </PaddedPageSection>
     </>
   )
 }

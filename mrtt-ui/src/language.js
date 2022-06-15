@@ -32,6 +32,27 @@ const pages = {
       nameRequired: 'Please enter a name',
       landscapeRequired: 'Please select a landscape'
     }
+  },
+  siteQuestionsOverview: {
+    settings: 'Settings',
+
+    formGroupTitle: {
+      intervention: 'Intervention',
+      monitoring: 'Monitoring',
+      registration: 'Registration'
+    },
+    formName: {
+      siteDetails: 'Site Details and Location',
+      siteBackground: 'Site Background',
+      restorationAims: 'Restoration Aims',
+      causesOfDeclin: 'Causes of Decline',
+      preRestorationAssessment: 'Pre-Restoration Assessment',
+      siteInterventions: 'Site Interventions',
+      costs: 'Costs',
+      managementStatus: 'Management Status and Effectiveness',
+      socioeconomicGovernanceStatusOutcomes: 'Socioeconomic and Governance Status and Outcomes',
+      ecologicalStatusOutcomes: 'Ecological Status and Outcomes'
+    }
   }
 }
 
