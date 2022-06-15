@@ -39,7 +39,19 @@ function PreRestorationAssessmentForm() {
         .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
     }),
     previousBiophysicalInterventions: multiselectWithOtherValidation,
-    whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidation
+    whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidation,
+    siteAssessmentBeforeProject: yup.string().required('This field is required'),
+    siteAssessmentType: multiselectWithOtherValidation,
+    referenceCite: yup.string().required('This field is required'),
+    lostMangrovesYear: yup.mixed().when('siteAssessmentBeforeProject', {
+      is: (val) => val && val === 'Yes',
+      then: yup
+        .number()
+        .typeError('You must specify a year')
+        .min(1900, 'Year must be higher than 1900')
+        .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
+    }),
+    naturalRegenerationAtSite: yup.string()
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
@@ -54,7 +66,8 @@ function PreRestorationAssessmentForm() {
     control,
     watch
   } = reactHookFormInstance
-  const mangroveRestorationAttempted = watch('mangroveRestorationAttempted')
+  const mangroveRestorationAttemptedWatcher = watch('mangroveRestorationAttempted')
+  const siteAssessmentBeforeProjectWatcher = watch('siteAssessmentBeforeProject')
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
 
@@ -118,7 +131,7 @@ function PreRestorationAssessmentForm() {
           />
           <ErrorText>{errors.mangroveRestorationAttempted?.message}</ErrorText>
         </FormQuestionDiv>
-        {mangroveRestorationAttempted === 'Yes' ? (
+        {mangroveRestorationAttemptedWatcher === 'Yes' ? (
           <FormQuestionDiv>
             <FormLabel>{questions.lastRestorationAttemptYear.question}</FormLabel>
             <Controller
@@ -152,7 +165,84 @@ function PreRestorationAssessmentForm() {
             </ErrorText>
           </FormQuestionDiv>
         ) : null}
-
+        <FormQuestionDiv>
+          <FormLabel>{questions.siteAssessmentBeforeProject.question}</FormLabel>
+          <Controller
+            name='siteAssessmentBeforeProject'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.siteAssessmentBeforeProject.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.siteAssessmentBeforeProject?.message}</ErrorText>
+        </FormQuestionDiv>
+        {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
+          <div>
+            <CheckboxGroupWithLabelAndController
+              fieldName='siteAssessmentType'
+              reactHookFormInstance={reactHookFormInstance}
+              options={questions.siteAssessmentType.options}
+              question={questions.siteAssessmentType.question}
+              shouldAddOtherOptionWithClarification={false}
+            />
+            <ErrorText>{errors.siteAssessmentType?.selectedValues?.message}</ErrorText>
+            <FormQuestionDiv>
+              <FormLabel>{questions.referenceCite.question}</FormLabel>
+              <Controller
+                name='referenceCite'
+                control={control}
+                defaultValue=''
+                render={({ field }) => (
+                  <TextField {...field} select value={field.value} label='select'>
+                    {questions.referenceCite.options.map((item, index) => (
+                      <MenuItem key={index} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+              <ErrorText>{errors.referenceCite?.message}</ErrorText>
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <FormLabel>{questions.lostMangrovesYear.question}</FormLabel>
+              <Controller
+                name='lostMangrovesYear'
+                control={control}
+                defaultValue={''}
+                render={({ field }) => (
+                  <TextField {...field} value={field.value} label='enter year'></TextField>
+                )}
+              />
+              <ErrorText>{errors.lostMangrovesYear?.message}</ErrorText>
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <FormLabel>{questions.naturalRegenerationAtSite.question}</FormLabel>
+              <Controller
+                name='naturalRegenerationAtSite'
+                control={control}
+                defaultValue=''
+                render={({ field }) => (
+                  <TextField {...field} select value={field.value} label='select'>
+                    {questions.naturalRegenerationAtSite.options.map((item, index) => (
+                      <MenuItem key={index} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+              <ErrorText>{errors.naturalRegenerationAtSite?.message}</ErrorText>
+            </FormQuestionDiv>
+          </div>
+        ) : null}
         <FormQuestionDiv>
           {isError && <ErrorText>Submit failed, please try again</ErrorText>}
           <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
