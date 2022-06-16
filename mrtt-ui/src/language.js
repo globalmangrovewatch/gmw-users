@@ -52,7 +52,8 @@ const pages = {
       managementStatus: 'Management Status and Effectiveness',
       socioeconomicGovernanceStatusOutcomes: 'Socioeconomic and Governance Status and Outcomes',
       ecologicalStatusOutcomes: 'Ecological Status and Outcomes'
-    }
+    },
+    addMonitoringSectionButton: 'Add Monitoring Section'
   }
 }
 

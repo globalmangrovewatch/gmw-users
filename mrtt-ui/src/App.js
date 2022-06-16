@@ -12,7 +12,7 @@ import ProjectDetailsForm from './components/ProjectDetailsForm'
 import RestorationAimsForm from './components/RestorationAimsForm/RestorationAimsForm'
 import SiteBackgroundForm from './components/SiteBackgroundForm'
 import SiteForm from './views/SiteForm'
-import SiteQuestionsOverview from './views/SiteQuestionsOverview'
+import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOverview'
 import Sites from './views/Sites'
 import themeMui from './styles/themeMui'
 
