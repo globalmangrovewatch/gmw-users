@@ -51,7 +51,9 @@ function PreRestorationAssessmentForm() {
         .min(1900, 'Year must be higher than 1900')
         .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
     }),
-    naturalRegenerationAtSite: yup.string()
+    naturalRegenerationAtSite: yup.string(),
+    // add propor validation
+    speciesComposition: yup.array()
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
@@ -243,6 +245,11 @@ function PreRestorationAssessmentForm() {
             </FormQuestionDiv>
           </div>
         ) : null}
+        <FormQuestionDiv>
+          <FormLabel>{questions.mangroveSpeciesPresent.question}</FormLabel>
+
+          <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
+        </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && <ErrorText>Submit failed, please try again</ErrorText>}
           <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
