@@ -25,9 +25,6 @@ const SettingsLinkWrapper = styled(Link)`
   text-decoration: none;
   color: ${theme.color.text};
 `
-const TinyTd = styled('td')`
-  text-align: center;
-`
 const WideTh = styled('th')`
   width: 100%;
 `
@@ -82,6 +79,9 @@ const SiteOverview = () => {
       </PaddedPageTopSection>
       <PaddedPageSection>
         <H5Uppercase>{pageLanguage.formGroupTitle.registration}</H5Uppercase>
+        {/* this is a table instead of a ul to leave room for a cell that shows
+         how many questions are filled out. Feature cut for now
+         to manage timeline risk. */}
         <TableAlertnatingRows>
           <tbody>
             <tr>
@@ -90,7 +90,6 @@ const SiteOverview = () => {
                   {pageLanguage.formName.siteDetails}
                 </Link>
               </WideTh>
-              <TinyTd>x/5</TinyTd>
             </tr>
             <tr>
               <WideTh>
@@ -98,7 +97,6 @@ const SiteOverview = () => {
                   {pageLanguage.formName.siteBackground}
                 </Link>
               </WideTh>
-              <TinyTd>x/7</TinyTd>
             </tr>
             <tr>
               <WideTh>
@@ -106,7 +104,6 @@ const SiteOverview = () => {
                   {pageLanguage.formName.restorationAims}
                 </Link>
               </WideTh>
-              <TinyTd>x/4</TinyTd>
             </tr>
             <tr>
               <WideTh>
@@ -114,11 +111,9 @@ const SiteOverview = () => {
                   {pageLanguage.formName.causesOfDeclin}
                 </Link>
               </WideTh>
-              <TinyTd>x/4</TinyTd>
             </tr>
             <tr>
               <WideTh>{pageLanguage.formName.preRestorationAssessment}</WideTh>
-              <TinyTd>x/4</TinyTd>
             </tr>
           </tbody>
         </TableAlertnatingRows>
@@ -127,11 +122,9 @@ const SiteOverview = () => {
           <tbody>
             <tr>
               <WideTh>{pageLanguage.formName.siteInterventions}</WideTh>
-              <TinyTd>x/4</TinyTd>
             </tr>
             <tr>
               <WideTh>{pageLanguage.formName.costs}</WideTh>
-              <TinyTd>x/6</TinyTd>
             </tr>
           </tbody>
         </TableAlertnatingRows>
