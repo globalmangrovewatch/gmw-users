@@ -53,7 +53,9 @@ function PreRestorationAssessmentForm() {
     }),
     naturalRegenerationAtSite: yup.string(),
     // add propor validation
-    speciesComposition: yup.array()
+    speciesComposition: yup.array(),
+    pilotTestConducted: yup.string(),
+    guidanceForSiteRestoration: yup.string()
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
@@ -247,8 +249,53 @@ function PreRestorationAssessmentForm() {
         ) : null}
         <FormQuestionDiv>
           <FormLabel>{questions.mangroveSpeciesPresent.question}</FormLabel>
-
+          {/* add in 5.3e - mangrove species list from section 1*/}
           <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <FormLabel>{questions.speciesComposition.question}</FormLabel>
+          {/* add in 5.3f - estimate species compositon percentage from previous q*/}
+          <ErrorText>{errors.speciesComposition?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <FormLabel>{questions.physicalMeasurementsTaken.question}</FormLabel>
+          <ErrorText>{errors.physicalMeasurementsTaken?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <FormLabel>{questions.pilotTestConducted.question}</FormLabel>
+          <Controller
+            name='pilotTestConducted'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.pilotTestConducted.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.pilotTestConducted?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <FormLabel>{questions.guidanceForSiteRestoration.question}</FormLabel>
+          <Controller
+            name='guidanceForSiteRestoration'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.guidanceForSiteRestoration.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.guidanceForSiteRestoration?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
           {isError && <ErrorText>Submit failed, please try again</ErrorText>}
