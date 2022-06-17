@@ -7,18 +7,15 @@ import {
 } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { FormLabel, MenuItem, TextField } from '@mui/material'
+import { Button, FormLabel, MenuItem, TextField } from '@mui/material'
 
 import {
   Form,
   FormQuestionDiv,
   MainFormDiv,
-  //   NestedFormSectionDiv,
   SectionFormTitle,
   TabularInputSection,
   TabularLabel
-  //   SubTitle,
-  //   SubTitle2
 } from '../styles/forms'
 // import { questionMapping } from '../data/questionMapping'
 import { preRestorationAssessment as questions } from '../data/questions'
@@ -363,6 +360,7 @@ function PreRestorationAssessmentForm() {
               />
             </TabularInputSection>
             <ErrorText>{errors.physicalMeasurementsTaken?.message}</ErrorText>
+            <Button>+ Add measurement row</Button>
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>
