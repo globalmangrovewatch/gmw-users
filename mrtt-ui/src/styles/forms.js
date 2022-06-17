@@ -41,3 +41,15 @@ export const SubTitle2 = styled(Typography)`
   font-weight: bold;
   margin-top: '0.75em';
 `
+
+export const TabularInputSection = styled('div')`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  margin-top: 1em;
+  justify-content: space-between;
+`
+
+export const TabularLabel = styled('label')`
+  margin-right: 2.5em;
+`

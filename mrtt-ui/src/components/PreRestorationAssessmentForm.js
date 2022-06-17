@@ -14,7 +14,9 @@ import {
   FormQuestionDiv,
   MainFormDiv,
   //   NestedFormSectionDiv,
-  SectionFormTitle
+  SectionFormTitle,
+  TabularInputSection,
+  TabularLabel
   //   SubTitle,
   //   SubTitle2
 } from '../styles/forms'
@@ -52,7 +54,19 @@ function PreRestorationAssessmentForm() {
         .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
     }),
     naturalRegenerationAtSite: yup.string(),
-    // add propor validation
+    // add proper validation for mangrovesSpeciesPresent 5.3e
+    mangroveSpeciesPresent: yup.array(),
+    // add proper validation for speciesComposition 5.3f
+    physicalMeasurementsTaken: yup.object().shape({
+      tidalRange: yup.mixed(),
+      elevationToSeaLevel: yup.mixed(),
+      waterSalinity: yup.mixed(),
+      soilPoreWaterSalinity: yup.mixed(),
+      waterPH: yup.mixed(),
+      soilPoreWaterPH: yup.mixed(),
+      soilType: yup.mixed(),
+      soilOrganicMatter: yup.mixed()
+    }),
     speciesComposition: yup.array(),
     pilotTestConducted: yup.string(),
     guidanceForSiteRestoration: yup.string()
@@ -258,7 +272,95 @@ function PreRestorationAssessmentForm() {
           <ErrorText>{errors.speciesComposition?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          <FormLabel>{questions.physicalMeasurementsTaken.question}</FormLabel>
+          <TabularLabel>{questions.physicalMeasurementsTaken.question}</TabularLabel>
+          <TabularInputSection>
+            <TabularLabel>{questions.physicalMeasurementsTaken.options[0]}</TabularLabel>
+            <Controller
+              name={`physicalMeasurementsTaken.tidalRange`}
+              control={control}
+              defaultValue={''}
+              render={({ field }) => (
+                <TextField {...field} value={field.value} label='value'></TextField>
+              )}
+            />
+          </TabularInputSection>
+          <TabularInputSection>
+            <TabularLabel>{questions.physicalMeasurementsTaken.options[1]}</TabularLabel>
+            <Controller
+              name={`physicalMeasurementsTaken.elevationToSeaLevel`}
+              control={control}
+              defaultValue={''}
+              render={({ field }) => (
+                <TextField {...field} value={field.value} label='value'></TextField>
+              )}
+            />
+          </TabularInputSection>
+          <TabularInputSection>
+            <TabularLabel>{questions.physicalMeasurementsTaken.options[2]}</TabularLabel>
+            <Controller
+              name={`physicalMeasurementsTaken.waterSalinity`}
+              control={control}
+              defaultValue={''}
+              render={({ field }) => (
+                <TextField {...field} value={field.value} label='value'></TextField>
+              )}
+            />
+          </TabularInputSection>
+          <TabularInputSection>
+            <TabularLabel>{questions.physicalMeasurementsTaken.options[3]}</TabularLabel>
+            <Controller
+              name={`physicalMeasurementsTaken.soilPoreWaterSalinity`}
+              control={control}
+              defaultValue={''}
+              render={({ field }) => (
+                <TextField {...field} value={field.value} label='value'></TextField>
+              )}
+            />
+          </TabularInputSection>
+          <TabularInputSection>
+            <TabularLabel>{questions.physicalMeasurementsTaken.options[4]}</TabularLabel>
+            <Controller
+              name={`physicalMeasurementsTaken.waterPH`}
+              control={control}
+              defaultValue={''}
+              render={({ field }) => (
+                <TextField {...field} value={field.value} label='value'></TextField>
+              )}
+            />
+          </TabularInputSection>
+          <TabularInputSection>
+            <TabularLabel>{questions.physicalMeasurementsTaken.options[5]}</TabularLabel>
+            <Controller
+              name={`physicalMeasurementsTaken.soilPoreWaterPH`}
+              control={control}
+              defaultValue={''}
+              render={({ field }) => (
+                <TextField {...field} value={field.value} label='value'></TextField>
+              )}
+            />
+          </TabularInputSection>
+          <TabularInputSection>
+            <TabularLabel>{questions.physicalMeasurementsTaken.options[6]}</TabularLabel>
+            <Controller
+              name={`physicalMeasurementsTaken.soilType`}
+              control={control}
+              defaultValue={''}
+              render={({ field }) => (
+                <TextField {...field} value={field.value} label='value'></TextField>
+              )}
+            />
+          </TabularInputSection>
+          <TabularInputSection>
+            <TabularLabel>{questions.physicalMeasurementsTaken.options[7]}</TabularLabel>
+            <Controller
+              name={`physicalMeasurementsTaken.soilOrganicMatter`}
+              control={control}
+              defaultValue={''}
+              render={({ field }) => (
+                <TextField {...field} value={field.value} label='value'></TextField>
+              )}
+            />
+          </TabularInputSection>
           <ErrorText>{errors.physicalMeasurementsTaken?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
