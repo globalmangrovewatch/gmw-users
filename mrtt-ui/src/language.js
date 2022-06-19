@@ -19,12 +19,14 @@ const pages = {
   organizations: {
     title: 'Organizations',
     titleOtherOrganizations: 'Other Organizations',
-    titleYourOrganizations: 'Your Organizations'
+    titleYourOrganizations: 'Your Organizations',
+    noYourOrganizations: 'You dont have any organizations',
+    noOtherOrganizations: 'There are no other organizations'
   },
   sites: { title: 'Sites', newSiteButton: 'New Site' },
   siteform: {
-    getEditSiteSuccessMessage: (siteName) => `The site had been renamed to ${siteName}`,
-    getNewSiteSuccessMessage: (siteName) => `The site, ${siteName}, has been created`,
+    getEditSiteSuccessMessage: (siteName) => `${siteName} has been edited`,
+    getNewSiteSuccessMessage: (siteName) => `${siteName}, has been created`,
     titleNewSite: 'Create a site',
     labelName: 'Name',
     labelLandscape: 'Landscape',
