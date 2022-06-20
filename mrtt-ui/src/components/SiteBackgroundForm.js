@@ -266,7 +266,7 @@ const ProjectDetailsForm = () => {
           question={questions.landTenure.question}
           shouldAddOtherOptionWithClarification={true}
         />
-        <ErrorText>{errors.protectionStatus?.selectedValues?.message}</ErrorText>
+        <ErrorText>{errors.landTenure?.selectedValues?.message}</ErrorText>
         {/* customaryRights */}
         <FormQuestionDiv>
           <FormLabel>{questions.customaryRights.question}</FormLabel>
