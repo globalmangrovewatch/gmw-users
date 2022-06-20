@@ -26,6 +26,7 @@ const pages = {
     noOtherOrganizations: 'There are no other organizations'
   },
   sites: { title: 'Sites', newSiteButton: 'New Site' },
+  landscapes: { title: 'Landscapes', newLandscapeButton: 'New Landscape' },
   siteform: {
     getEditSiteSuccessMessage: (siteName) => `${siteName} has been edited`,
     getNewSiteSuccessMessage: (siteName) => `${siteName}, has been created`,
