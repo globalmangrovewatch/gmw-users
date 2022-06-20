@@ -13,11 +13,12 @@ import turfBbox from '@turf/bbox'
 import turfBboxPolygon from '@turf/bbox-polygon'
 
 import { ButtonSubmit } from '../styles/buttons'
-import { ErrorText } from '../styles/typography'
+import { ErrorText, Link } from '../styles/typography'
 import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { projectDetails as questions } from '../data/questions'
 import { questionMapping } from '../data/questionMapping'
+import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import emptyFeatureCollection from '../data/emptyFeatureCollection'
 import language from '../language'
@@ -140,10 +141,12 @@ function ProjectDetailsForm() {
       .patch(apiAnswersUrl, mapDataForApi('projectDetails', formData))
       .then(() => {
         setIsSubmitting(false)
+        toast.success(language.success.submit)
       })
       .catch(() => {
         setIsError(true)
         setIsSubmitting(false)
+        toast.error(language.error.submit)
       })
   }
 
@@ -152,6 +155,7 @@ function ProjectDetailsForm() {
   ) : (
     <MainFormDiv>
       <SectionFormTitle>Project Details Form</SectionFormTitle>
+      <Link to={-1}>&lt; {language.form.navigateBackToSiteOverview}</Link>
       <Form onSubmit={validateInputs(handleSubmit)}>
         {/* Has project end date radio group */}
         <FormQuestionDiv>

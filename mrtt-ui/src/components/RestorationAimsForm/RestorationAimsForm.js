@@ -6,12 +6,13 @@ import * as yup from 'yup'
 import axios from 'axios'
 
 import { ButtonSubmit } from '../../styles/buttons'
-import { ErrorText } from '../../styles/typography'
+import { ErrorText, Link } from '../../styles/typography'
 import { Form, MainFormDiv, SectionFormTitle } from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { multiselectWithOtherValidation } from '../../validation/multiSelectWithOther'
 import { questionMapping } from '../../data/questionMapping'
 import { restorationAims as questions } from '../../data/questions'
+import { toast } from 'react-toastify'
 import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
 import RestorationAimsCheckboxGroupWithLabel from './RestorationAimsCheckboxGroupWithLabel'
@@ -65,10 +66,12 @@ const RestorationAimsForm = () => {
       .patch(apiAnswersUrl, mapDataForApi('restorationAims', formData))
       .then(() => {
         setIsSubmitting(false)
+        toast.success(language.success.submit)
       })
       .catch(() => {
         setIsSubmitting(false)
         setIsSubmitError(true)
+        toast.error(language.error.submit)
       })
   }
 
@@ -77,6 +80,7 @@ const RestorationAimsForm = () => {
   ) : (
     <MainFormDiv>
       <SectionFormTitle>Restoration Aims</SectionFormTitle>
+      <Link to={-1}>&lt; {language.form.navigateBackToSiteOverview}</Link>
       <Form onSubmit={validateInputs(handleSubmit)}>
         <RestorationAimsCheckboxGroupWithLabel
           stakeholders={stakeholders}

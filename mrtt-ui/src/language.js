@@ -3,9 +3,11 @@ const error = {
   apiLoad: 'Loading data from the api failed. Please try again.',
   getItemDoesntExistMessage: (item) => `That ${item} doesnt exits.`
 }
+const success = { submit: 'The data has been saved.' }
 const form = {
-  checkboxGroupOtherLabel: 'Other',
   checkboxGroupOtherInputPlaceholder: 'If other, please state.',
+  checkboxGroupOtherLabel: 'Other',
+  navigateBackToSiteOverview: 'Return to site form overview',
   selectLabel: 'Select'
 }
 const multiselectWithOtherFormQuestion = {
@@ -96,4 +98,12 @@ const projectAreaMap = {
   }
 }
 
-export default { error, form, multiselectWithOtherFormQuestion, pages, buttons, projectAreaMap }
+export default {
+  buttons,
+  error,
+  form,
+  multiselectWithOtherFormQuestion,
+  pages,
+  projectAreaMap,
+  success
+}
