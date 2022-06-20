@@ -116,7 +116,7 @@ const ProjectDetailsForm = () => {
     stakeholdersFields.find((field) => field.stakeholderType === stakeholder)
 
   return isLoading ? (
-    <LoadingIndicator></LoadingIndicator>
+    <LoadingIndicator />
   ) : (
     <MainFormDiv>
       {/* Select Stakeholders */}
