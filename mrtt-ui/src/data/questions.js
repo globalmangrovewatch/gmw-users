@@ -109,6 +109,10 @@ const siteBackground = {
 }
 
 const restorationAims = {
+  nestedStakeholderBenefitsRanking: {
+    question: 'Identify which are primary, or co-benefits.',
+    options: ['Primary-aims', 'Co-benefit', 'Neither']
+  },
   ecologicalAims: {
     question: '3 .1 What are the ecological aim(s) of the project activities at the site?',
     options: [

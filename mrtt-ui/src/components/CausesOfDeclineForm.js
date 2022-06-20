@@ -22,7 +22,6 @@ import {
   Form,
   FormQuestionDiv,
   MainFormDiv,
-  NestedFormSectionDiv,
   SectionFormTitle,
   SubTitle,
   SubTitle2
@@ -217,7 +216,7 @@ function CausesOfDeclineForm() {
     'data', data
 
     axios
-      .put(apiAnswersUrl, mapDataForApi('causesOfDecline', data))
+      .patch(apiAnswersUrl, mapDataForApi('causesOfDecline', data))
       .then(() => {
         setisSubmitting(false)
       })
@@ -288,21 +287,21 @@ function CausesOfDeclineForm() {
                             (secondaryChildOption, secondaryChildIndex) => {
                               return (
                                 <ListItem key={secondaryChildIndex}>
-                                  <NestedFormSectionDiv>
-                                    <Checkbox
-                                      value={secondaryChildOption}
-                                      onChange={(event) =>
-                                        handleCausesOfDeclineOnChange({
-                                          event,
-                                          mainCauseLabel: mainCause.label,
-                                          subCauseLabel: subCause.secondaryLabel,
-                                          secondaryChildOption
-                                        })
-                                      }></Checkbox>
-                                    <Typography variant='subtitle2'>
-                                      {secondaryChildOption}{' '}
-                                    </Typography>
-                                  </NestedFormSectionDiv>
+                                  <FormControlLabel
+                                    control={
+                                      <Checkbox
+                                        value={secondaryChildOption}
+                                        onChange={(event) =>
+                                          handleCausesOfDeclineOnChange({
+                                            event,
+                                            mainCauseLabel: mainCause.label,
+                                            subCauseLabel: subCause.secondaryLabel,
+                                            secondaryChildOption
+                                          })
+                                        }></Checkbox>
+                                    }
+                                    label={<>{secondaryChildOption} </>}
+                                  />
                                 </ListItem>
                               )
                             }

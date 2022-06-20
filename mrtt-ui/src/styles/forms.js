@@ -28,12 +28,6 @@ export const Form = styled('form')`
   flex-direction: column;
 `
 
-export const NestedFormSectionDiv = styled('div')`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-
 export const SubTitle = styled(Typography)`
   font-weight: bold;
 `
@@ -53,3 +47,7 @@ export const TabularInputSection = styled('div')`
 export const TabularLabel = styled('label')`
   margin-right: 2.5em;
 `
+export const NestedQuestion = styled('div')(({ theme }) => ({
+  padding: theme.spacing(1),
+  paddingLeft: theme.spacing(2)
+}))

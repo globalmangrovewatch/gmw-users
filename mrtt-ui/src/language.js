@@ -1,10 +1,12 @@
 const error = {
   submit: 'Submit failed. please try again.',
-  apiLoad: 'Loading data from the api failed. Please try again.'
+  apiLoad: 'Loading data from the api failed. Please try again.',
+  getItemDoesntExistMessage: (item) => `That ${item} doesnt exits.`
 }
 const form = {
   checkboxGroupOtherLabel: 'Other',
-  checkboxGroupOtherInputPlaceholder: 'If other, please state.'
+  checkboxGroupOtherInputPlaceholder: 'If other, please state.',
+  selectLabel: 'Select'
 }
 const multiselectWithOtherFormQuestion = {
   validation: {
@@ -19,7 +21,45 @@ const pages = {
     titleOtherOrganizations: 'Other Organizations',
     titleYourOrganizations: 'Your Organizations'
   },
-  sites: { title: 'Sites', newSiteButton: 'New Site' }
+  sites: { title: 'Sites', newSiteButton: 'New Site' },
+  siteform: {
+    getEditSiteSuccessMessage: (siteName) => `The site had been renamed to ${siteName}`,
+    getNewSiteSuccessMessage: (siteName) => `The site, ${siteName}, has been created`,
+    titleNewSite: 'Create a site',
+    labelName: 'Name',
+    labelLandscape: 'Landscape',
+    validation: {
+      nameRequired: 'Please enter a name',
+      landscapeRequired: 'Please select a landscape'
+    }
+  },
+  siteQuestionsOverview: {
+    settings: 'Settings',
+
+    formGroupTitle: {
+      intervention: 'Intervention',
+      monitoring: 'Monitoring',
+      registration: 'Registration'
+    },
+    formName: {
+      siteDetails: 'Site Details and Location',
+      siteBackground: 'Site Background',
+      restorationAims: 'Restoration Aims',
+      causesOfDeclin: 'Causes of Decline',
+      preRestorationAssessment: 'Pre-Restoration Assessment',
+      siteInterventions: 'Site Interventions',
+      costs: 'Costs',
+      managementStatus: 'Management Status and Effectiveness',
+      socioeconomicGovernanceStatusOutcomes: 'Socioeconomic and Governance Status and Outcomes',
+      ecologicalStatusOutcomes: 'Ecological Status and Outcomes'
+    }
+  }
+}
+
+const buttons = {
+  cancel: 'Cancel',
+  submit: 'Submit',
+  submitting: 'Submitting...'
 }
 
 const maybePluralize = (count, noun, suffix = 's') => `${count} ${noun}${count !== 1 ? suffix : ''}`
@@ -53,4 +93,4 @@ const projectAreaMap = {
   }
 }
 
-export default { error, form, multiselectWithOtherFormQuestion, pages, projectAreaMap }
+export default { error, form, multiselectWithOtherFormQuestion, pages, buttons, projectAreaMap }

@@ -1,8 +1,3 @@
-import { useState } from 'react'
-import axios from 'axios'
-import { useForm, useFieldArray, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import {
   Box,
   Checkbox,
@@ -16,6 +11,12 @@ import {
   TextField,
   Typography
 } from '@mui/material'
+import { useForm, useFieldArray, Controller } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
+import { useState } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import axios from 'axios'
 
 import { ButtonSubmit } from '../styles/buttons'
 import { ErrorText } from '../styles/typography'
@@ -24,8 +25,12 @@ import { mapDataForApi } from '../library/mapDataForApi'
 import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
 import { siteBackground as questions } from '../data/questions'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
+import language from '../language'
 
 const ProjectDetailsForm = () => {
+  const { siteId } = useParams()
+  const registrationAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+
   const validationSchema = yup.object().shape({
     stakeholders: yup
       .array()
@@ -74,12 +79,10 @@ const ProjectDetailsForm = () => {
     setisSubmitting(true)
     setIsError(false)
 
-    const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
-
     if (!data) return
 
     axios
-      .put(url, mapDataForApi('siteBackground', data))
+      .patch(registrationAnswersUrl, mapDataForApi('siteBackground', data))
       .then(() => {
         setisSubmitting(false)
       })
@@ -153,7 +156,7 @@ const ProjectDetailsForm = () => {
             control={control}
             defaultValue=''
             render={({ field }) => (
-              <TextField {...field} select value={field.value} label='select'>
+              <TextField {...field} select value={field.value} label={language.form.selectLabel}>
                 {questions.managementStatus.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
@@ -172,7 +175,7 @@ const ProjectDetailsForm = () => {
             control={control}
             defaultValue=''
             render={({ field }) => (
-              <TextField {...field} select value={field.value} label='select'>
+              <TextField {...field} select value={field.value} label={language.form.selectLabel}>
                 {questions.lawStatus.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
@@ -211,7 +214,7 @@ const ProjectDetailsForm = () => {
             control={control}
             defaultValue=''
             render={({ field }) => (
-              <TextField {...field} select value={field.value} label='select'>
+              <TextField {...field} select value={field.value} label={language.form.selectLabel}>
                 {questions.areStakeholdersInvolved.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
@@ -236,7 +239,7 @@ const ProjectDetailsForm = () => {
                 {...field}
                 multiple
                 value={field.value}
-                label='select'
+                label={language.form.selectLabel}
                 input={<OutlinedInput id='select-multiple-chip' label='Chip' />}
                 renderValue={(selected) => (
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -272,7 +275,7 @@ const ProjectDetailsForm = () => {
             control={control}
             defaultValue=''
             render={({ field }) => (
-              <TextField {...field} select value={field.value} label='select'>
+              <TextField {...field} select value={field.value} label={language.form.selectLabel}>
                 {questions.customaryRights.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
