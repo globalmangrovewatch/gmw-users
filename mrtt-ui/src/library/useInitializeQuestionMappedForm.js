@@ -30,6 +30,7 @@ const useInitializeQuestionMappedForm = ({
             }
           })
           .catch(() => {
+            setIsLoading(false)
             toast.error(language.error.apiLoad)
           })
       }

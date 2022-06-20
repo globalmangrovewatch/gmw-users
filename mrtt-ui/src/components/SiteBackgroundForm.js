@@ -26,10 +26,16 @@ import { multiselectWithOtherValidation } from '../validation/multiSelectWithOth
 import { siteBackground as questions } from '../data/questions'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
 import language from '../language'
+import LoadingIndicator from './LoadingIndicator'
+import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
+import { questionMapping } from '../data/questionMapping'
 
 const ProjectDetailsForm = () => {
   const { siteId } = useParams()
-  const registrationAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+  const [isSubmitting, setisSubmitting] = useState(false)
+  const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const validationSchema = yup.object().shape({
     stakeholders: yup
@@ -46,7 +52,7 @@ const ProjectDetailsForm = () => {
     lawStatus: yup.string(),
     managementArea: yup.string(),
     protectionStatus: multiselectWithOtherValidation,
-    areStakeholdersInvolved: yup.string(),
+    areStakeholdersInvolved: yup.string().nullable(),
     govermentArrangement: yup.array().of(yup.string()),
     landTenure: multiselectWithOtherValidation,
     customaryRights: yup.string()
@@ -63,7 +69,8 @@ const ProjectDetailsForm = () => {
   const {
     handleSubmit: validateInputs,
     formState: { errors },
-    control
+    control,
+    reset: resetForm
   } = reactHookFormInstance
 
   const {
@@ -72,17 +79,21 @@ const ProjectDetailsForm = () => {
     remove: stakeholdersRemove
   } = useFieldArray({ name: 'stakeholders', control })
 
-  const [isSubmitting, setisSubmitting] = useState(false)
-  const [isError, setIsError] = useState(false)
+  useInitializeQuestionMappedForm({
+    apiUrl: apiAnswersUrl,
+    questionMapping: questionMapping.siteBackground,
+    resetForm,
+    setIsLoading
+  })
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (formData) => {
     setisSubmitting(true)
     setIsError(false)
 
-    if (!data) return
+    if (!formData) return
 
     axios
-      .patch(registrationAnswersUrl, mapDataForApi('siteBackground', data))
+      .patch(apiAnswersUrl, mapDataForApi('siteBackground', formData))
       .then(() => {
         setisSubmitting(false)
       })
@@ -104,7 +115,9 @@ const ProjectDetailsForm = () => {
   const getStakeholder = (stakeholder) =>
     stakeholdersFields.find((field) => field.stakeholderType === stakeholder)
 
-  return (
+  return isLoading ? (
+    <LoadingIndicator />
+  ) : (
     <MainFormDiv>
       {/* Select Stakeholders */}
       <SectionFormTitle>Site Background Form</SectionFormTitle>
@@ -210,7 +223,7 @@ const ProjectDetailsForm = () => {
         <FormQuestionDiv>
           <FormLabel>{questions.areStakeholdersInvolved.question}</FormLabel>
           <Controller
-            name='areStakeholdersInvolved '
+            name='areStakeholdersInvolved'
             control={control}
             defaultValue=''
             render={({ field }) => (
@@ -266,7 +279,7 @@ const ProjectDetailsForm = () => {
           question={questions.landTenure.question}
           shouldAddOtherOptionWithClarification={true}
         />
-        <ErrorText>{errors.protectionStatus?.selectedValues?.message}</ErrorText>
+        <ErrorText>{errors.landTenure?.selectedValues?.message}</ErrorText>
         {/* customaryRights */}
         <FormQuestionDiv>
           <FormLabel>{questions.customaryRights.question}</FormLabel>
