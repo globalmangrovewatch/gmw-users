@@ -29,7 +29,7 @@ import {
 import { ButtonSubmit } from '../styles/buttons'
 import { causesOfDecline } from '../data/questions'
 import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
-import { ErrorText } from '../styles/typography'
+import { ErrorText, Link } from '../styles/typography'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { questionMapping } from '../data/questionMapping'
 import formatApiAnswersForForm from '../library/formatApiAnswersForForm'
@@ -219,6 +219,7 @@ function CausesOfDeclineForm() {
       .patch(apiAnswersUrl, mapDataForApi('causesOfDecline', data))
       .then(() => {
         setisSubmitting(false)
+        toast.success(language.success.submit)
       })
       .catch(() => {
         setIsError(true)
@@ -232,6 +233,7 @@ function CausesOfDeclineForm() {
   ) : (
     <MainFormDiv>
       <SectionFormTitle>Causes of Decline</SectionFormTitle>
+      <Link to={-1}>&lt; {language.form.navigateBackToSiteOverview}</Link>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormQuestionDiv>
           <FormLabel>{causesOfDecline.lossKnown.question}</FormLabel>

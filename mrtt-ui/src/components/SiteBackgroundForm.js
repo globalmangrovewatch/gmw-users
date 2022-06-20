@@ -19,11 +19,12 @@ import * as yup from 'yup'
 import axios from 'axios'
 
 import { ButtonSubmit } from '../styles/buttons'
-import { ErrorText } from '../styles/typography'
+import { ErrorText, Link } from '../styles/typography'
 import { FormQuestionDiv, MainFormDiv, SectionFormTitle } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
 import { siteBackground as questions } from '../data/questions'
+import { toast } from 'react-toastify'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
 import language from '../language'
 import LoadingIndicator from './LoadingIndicator'
@@ -96,10 +97,12 @@ const ProjectDetailsForm = () => {
       .patch(apiAnswersUrl, mapDataForApi('siteBackground', formData))
       .then(() => {
         setisSubmitting(false)
+        toast.success(language.success.submit)
       })
       .catch(() => {
         setIsError(true)
         setisSubmitting(false)
+        toast.error(language.error.submit)
       })
   }
 
@@ -121,6 +124,7 @@ const ProjectDetailsForm = () => {
     <MainFormDiv>
       {/* Select Stakeholders */}
       <SectionFormTitle>Site Background Form</SectionFormTitle>
+      <Link to={-1}>&lt; {language.form.navigateBackToSiteOverview}</Link>
       <form onSubmit={validateInputs(handleSubmit)}>
         <FormQuestionDiv>
           <FormLabel>{questions.stakeholders.question}</FormLabel>
