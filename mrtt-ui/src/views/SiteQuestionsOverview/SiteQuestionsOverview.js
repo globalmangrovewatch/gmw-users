@@ -39,17 +39,20 @@ const SiteOverview = () => {
   const [doesSiteExist, setDoesSiteExist] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
   const [site, setSite] = useState()
+  const [landscape, setLandscape] = useState()
   const { siteId } = useParams()
 
   useEffect(
     function loadDataFromServer() {
       if (siteId) {
         const sitesDataUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}`
+        const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes`
 
-        Promise.all([axios.get(sitesDataUrl)])
-          .then(([{ data: siteData }]) => {
+        Promise.all([axios.get(sitesDataUrl), axios.get(landscapesUrl)])
+          .then(([{ data: siteData }, { data: landscapesData }]) => {
             setIsLoading(false)
             setSite(siteData)
+            setLandscape(landscapesData.find((landscape) => landscape.id === siteData.landscape_id))
           })
           .catch((err) => {
             setIsLoading(false)
@@ -72,7 +75,7 @@ const SiteOverview = () => {
         <RowSpaceBetween>
           <Stack>
             <H4>{site?.site_name}</H4>
-            <SmallUpperCase>Landscape Placeholder</SmallUpperCase>
+            <SmallUpperCase>{landscape?.landscape_name}</SmallUpperCase>
           </Stack>
           <SettingsLink to={`/site/${siteId}/edit`} />
         </RowSpaceBetween>
