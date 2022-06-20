@@ -15,23 +15,25 @@ import { FormLabel, MenuItem, Select, TextField } from '@mui/material'
 import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
-import mockLandscapes from '../data/mockLandscapes'
 
 const validationSchema = yup.object({
   site_name: yup.string().required(language.pages.siteform.validation.nameRequired),
-  landscape: yup.string().required(language.pages.siteform.validation.landscapeRequired)
+  landscape_id: yup.number().required(language.pages.siteform.validation.landscapeRequired)
 })
 
-const formDefaultValues = { site_name: '', landscape: '' }
+const formDefaultValues = { site_name: '', landscape_id: '' }
 
 const SiteForm = ({ isNewSite }) => {
-  const { siteId } = useParams()
+  const [doesItemExist, setDoesItemExist] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [doesItemExist, setDoesItemExist] = useState(true)
-  const sitesUrl = `${process.env.REACT_APP_API_URL}/sites/`
+  const [landscapes, setLandscapes] = useState([])
+  const { siteId } = useParams()
+  const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes`
   const navigate = useNavigate()
+  const sitesUrl = `${process.env.REACT_APP_API_URL}/sites`
+  const siteUrl = `${sitesUrl}/${siteId}`
 
   const {
     control: formControl,
@@ -41,14 +43,23 @@ const SiteForm = ({ isNewSite }) => {
   } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
 
   useEffect(
-    function initializeFormWithApiData() {
-      if (resetForm && sitesUrl && siteId && !isNewSite) {
+    function loadApiData() {
+      if (resetForm && sitesUrl && landscapesUrl) {
         setIsLoading(true)
-        axios
-          .get(`${sitesUrl}${siteId}`)
-          .then(({ data }) => {
+
+        const serverDataPromises = [axios.get(landscapesUrl)]
+        if (!isNewSite && siteId) {
+          serverDataPromises.push(axios.get(siteUrl))
+        }
+
+        Promise.all(serverDataPromises)
+          .then(([{ data: landscapesData }, siteResponse]) => {
             setIsLoading(false)
-            resetForm(data)
+
+            setLandscapes(landscapesData)
+            if (!isNewSite) {
+              resetForm(siteResponse?.data)
+            }
           })
           .catch((err) => {
             setIsLoading(false)
@@ -60,7 +71,7 @@ const SiteForm = ({ isNewSite }) => {
           })
       }
     },
-    [siteId, resetForm, sitesUrl, isNewSite]
+    [siteId, resetForm, sitesUrl, isNewSite, landscapesUrl, siteUrl]
   )
 
   const postNewSite = (formData) => {
@@ -80,7 +91,7 @@ const SiteForm = ({ isNewSite }) => {
 
   const editSite = (formData) => {
     axios
-      .patch(`${sitesUrl}${siteId}`, formData)
+      .patch(siteUrl, formData)
       .then(({ data: { site_name } }) => {
         setIsSubmitting(false)
         toast.success(language.pages.siteform.getEditSiteSuccessMessage(site_name))
@@ -127,13 +138,13 @@ const SiteForm = ({ isNewSite }) => {
         <ErrorText>{errors?.site_name?.message}</ErrorText>
         <FormLabel htmlFor='landscape'>{language.pages.siteform.labelLandscape}* </FormLabel>
         <Controller
-          name='landscape'
+          name='landscape_id'
           control={formControl}
           render={({ field }) => (
             <Select {...field} id='landscape' label={language.pages.siteform.labelLandscape}>
-              {mockLandscapes.map((landscape) => (
+              {landscapes.map((landscape) => (
                 <MenuItem key={landscape.id} value={landscape.id}>
-                  {landscape.name}
+                  {landscape.landscape_name}
                 </MenuItem>
               ))}
             </Select>

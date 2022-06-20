@@ -13,11 +13,12 @@ import turfBbox from '@turf/bbox'
 import turfBboxPolygon from '@turf/bbox-polygon'
 
 import { ButtonSubmit } from '../styles/buttons'
-import { ErrorText } from '../styles/typography'
+import { ErrorText, Link } from '../styles/typography'
 import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { projectDetails as questions } from '../data/questions'
 import { questionMapping } from '../data/questionMapping'
+import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import emptyFeatureCollection from '../data/emptyFeatureCollection'
 import language from '../language'
@@ -82,17 +83,23 @@ function ProjectDetailsForm() {
     }
   }
 
-  const { control, handleSubmit, formState, watch, reset: resetForm } = useForm(formOptions)
+  const {
+    control,
+    handleSubmit: validateInputs,
+    formState,
+    watch,
+    reset: resetForm
+  } = useForm(formOptions)
   const { errors } = formState
   const { siteId } = useParams()
-  const registrationAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   let watchHasProjectEndDate = watch('hasProjectEndDate', false)
   /* showEndDateInput is a hack because MUI follows native html and casts values to strings.
    The api casts them to boolean so we support both */
   const showEndDateInput = watchHasProjectEndDate === 'true' || watchHasProjectEndDate === true
 
   useInitializeQuestionMappedForm({
-    apiUrl: registrationAnswersUrl,
+    apiUrl: apiAnswersUrl,
     resetForm,
     questionMapping: questionMapping.projectDetails,
     setIsLoading
@@ -124,20 +131,22 @@ function ProjectDetailsForm() {
     }
   }
 
-  const onSubmit = async (data) => {
+  const handleSubmit = async (formData) => {
     setIsSubmitting(true)
     setIsError(false)
 
-    if (!data) return
+    if (!formData) return
 
     axios
-      .patch(registrationAnswersUrl, mapDataForApi('projectDetails', data))
+      .patch(apiAnswersUrl, mapDataForApi('projectDetails', formData))
       .then(() => {
         setIsSubmitting(false)
+        toast.success(language.success.submit)
       })
       .catch(() => {
         setIsError(true)
         setIsSubmitting(false)
+        toast.error(language.error.submit)
       })
   }
 
@@ -146,7 +155,8 @@ function ProjectDetailsForm() {
   ) : (
     <MainFormDiv>
       <SectionFormTitle>Project Details Form</SectionFormTitle>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Link to={-1}>&lt; {language.form.navigateBackToSiteOverview}</Link>
+      <Form onSubmit={validateInputs(handleSubmit)}>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
           <FormLabel id='has-project-end-date-label'>

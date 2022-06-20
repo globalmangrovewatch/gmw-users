@@ -3,9 +3,11 @@ const error = {
   apiLoad: 'Loading data from the api failed. Please try again.',
   getItemDoesntExistMessage: (item) => `That ${item} doesnt exits.`
 }
+const success = { submit: 'The data has been saved.' }
 const form = {
-  checkboxGroupOtherLabel: 'Other',
   checkboxGroupOtherInputPlaceholder: 'If other, please state.',
+  checkboxGroupOtherLabel: 'Other',
+  navigateBackToSiteOverview: 'Return to site form overview',
   selectLabel: 'Select'
 }
 const multiselectWithOtherFormQuestion = {
@@ -19,12 +21,14 @@ const pages = {
   organizations: {
     title: 'Organizations',
     titleOtherOrganizations: 'Other Organizations',
-    titleYourOrganizations: 'Your Organizations'
+    titleYourOrganizations: 'Your Organizations',
+    noYourOrganizations: 'You dont have any organizations',
+    noOtherOrganizations: 'There are no other organizations'
   },
   sites: { title: 'Sites', newSiteButton: 'New Site' },
   siteform: {
-    getEditSiteSuccessMessage: (siteName) => `The site had been renamed to ${siteName}`,
-    getNewSiteSuccessMessage: (siteName) => `The site, ${siteName}, has been created`,
+    getEditSiteSuccessMessage: (siteName) => `${siteName} has been edited`,
+    getNewSiteSuccessMessage: (siteName) => `${siteName}, has been created`,
     titleNewSite: 'Create a site',
     labelName: 'Name',
     labelLandscape: 'Landscape',
@@ -52,7 +56,8 @@ const pages = {
       managementStatus: 'Management Status and Effectiveness',
       socioeconomicGovernanceStatusOutcomes: 'Socioeconomic and Governance Status and Outcomes',
       ecologicalStatusOutcomes: 'Ecological Status and Outcomes'
-    }
+    },
+    addMonitoringSectionButton: 'Add Monitoring Section'
   }
 }
 
@@ -93,4 +98,12 @@ const projectAreaMap = {
   }
 }
 
-export default { error, form, multiselectWithOtherFormQuestion, pages, buttons, projectAreaMap }
+export default {
+  buttons,
+  error,
+  form,
+  multiselectWithOtherFormQuestion,
+  pages,
+  projectAreaMap,
+  success
+}

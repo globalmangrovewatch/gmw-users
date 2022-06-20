@@ -14,7 +14,7 @@ export const questionMapping = {
     protectionStatus: '2.5',
     areStakeholdersInvolved: '2.6',
     governmentArrangement: '2.7',
-    landTenture: '2.8',
+    landTenure: '2.8',
     customaryRights: '2.9'
   },
   restorationAims: {
