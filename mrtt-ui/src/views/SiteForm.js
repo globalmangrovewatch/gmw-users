@@ -18,7 +18,7 @@ import LoadingIndicator from '../components/LoadingIndicator'
 
 const validationSchema = yup.object({
   site_name: yup.string().required(language.pages.siteform.validation.nameRequired),
-  landscape_id: yup.number().required(language.pages.siteform.validation.landscapeRequired)
+  landscape_id: yup.string().required(language.pages.siteform.validation.landscapeRequired)
 })
 
 const formDefaultValues = { site_name: '', landscape_id: '' }
@@ -150,7 +150,7 @@ const SiteForm = ({ isNewSite }) => {
             </Select>
           )}
         />
-        <ErrorText>{errors?.landscape?.message}</ErrorText>
+        <ErrorText>{errors?.landscape_id?.message}</ErrorText>
         <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
         <ButtonContainer>
           <ButtonCancel onClick={handleCancelClick} />

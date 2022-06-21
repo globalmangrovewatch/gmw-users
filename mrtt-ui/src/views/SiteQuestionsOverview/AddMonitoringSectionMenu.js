@@ -5,13 +5,13 @@ import language from '../../language'
 import { ArrowDropDown } from '@mui/icons-material'
 
 const AddMonitoringSectionMenu = () => {
-  const [anchorElement, setMenuanchorElementement] = React.useState(null)
-  const isMenuOpen = Boolean(anchorElement)
+  const [menuAnchorElement, setMenuAnchorElement] = React.useState(null)
+  const isMenuOpen = Boolean(menuAnchorElement)
   const handleMenuButtonClick = (event) => {
-    setMenuanchorElementement(event.currentTarget)
+    setMenuAnchorElement(event.currentTarget)
   }
   const handleMenuClose = () => {
-    setMenuanchorElementement(null)
+    setMenuAnchorElement(null)
   }
 
   return (
@@ -25,10 +25,9 @@ const AddMonitoringSectionMenu = () => {
         {language.pages.siteQuestionsOverview.addMonitoringSectionButton}
         <ArrowDropDown />
       </ButtonPrimary>
-
       <Menu
         id='add-monitoring-section-menu'
-        anchorElement={anchorElement}
+        anchorEl={menuAnchorElement}
         open={isMenuOpen}
         onClose={handleMenuClose}
         MenuListProps={{
