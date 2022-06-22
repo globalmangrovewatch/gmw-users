@@ -84,7 +84,6 @@ function CausesOfDeclineForm() {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [causesOfDeclineCopy, setCausesOfDeclineCopy] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
 
@@ -99,9 +98,6 @@ function CausesOfDeclineForm() {
             apiAnswers: data,
             questionMapping: questionMapping.causesOfDecline
           })
-          // nested answer set requires a custom solution for setting initial values
-          setCausesOfDeclineCopy(initialValuesForForm.causesOfDecline)
-          console.log('initial vals: ', initialValuesForForm.causesOfDecline)
 
           resetForm(initialValuesForForm)
         })
@@ -232,13 +228,6 @@ function CausesOfDeclineForm() {
       })
   }
 
-  const checkIfMainAnswerExists = (mainCauseIndex, childIndex, childOption) => {
-    const answer =
-      causesOfDeclineCopy?.[mainCauseIndex]?.mainCauseAnswers?.[childIndex]?.mainCauseAnswer
-
-    return answer === childOption ? true : false
-  }
-
   return isLoading ? (
     <LoadingIndicator />
   ) : (
@@ -278,11 +267,6 @@ function CausesOfDeclineForm() {
                             <ListItem>
                               <Checkbox
                                 value={childOption}
-                                checked={checkIfMainAnswerExists(
-                                  mainCauseIndex,
-                                  childIndex,
-                                  childOption
-                                )}
                                 onChange={(event) =>
                                   handleCausesOfDeclineOnChange({
                                     event,
