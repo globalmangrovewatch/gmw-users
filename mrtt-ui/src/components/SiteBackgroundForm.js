@@ -1,19 +1,16 @@
 import {
   Box,
   Checkbox,
-  // Chip,
   FormLabel,
   List,
   ListItem,
   MenuItem,
-  // OutlinedInput,
-  // Select,
   TextField,
   Typography
 } from '@mui/material'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
@@ -37,6 +34,7 @@ const ProjectDetailsForm = () => {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [stakeholderTypes, setStakeholderTypes] = useState([])
 
   const validationSchema = yup.object().shape({
     stakeholders: yup
@@ -54,7 +52,7 @@ const ProjectDetailsForm = () => {
     managementArea: yup.string(),
     protectionStatus: multiselectWithOtherValidation,
     areStakeholdersInvolved: yup.string().nullable(),
-    governmentArrangement: yup.array().of(yup.string()),
+    governmentArrangement: multiselectWithOtherValidation,
     landTenure: multiselectWithOtherValidation,
     customaryRights: yup.string()
   })
@@ -80,11 +78,22 @@ const ProjectDetailsForm = () => {
     remove: stakeholdersRemove
   } = useFieldArray({ name: 'stakeholders', control })
 
+  const setInitialStakeholderTypesFromServerData = useCallback((serverResponse) => {
+    const initialStakeholders =
+      serverResponse?.data.find((dataItem) => dataItem.question_id === '2.1')?.answer_value ?? []
+
+    const initialStakeholderTypes = initialStakeholders?.map(
+      (stakeholder) => stakeholder.stakeholderType
+    )
+    setStakeholderTypes(initialStakeholderTypes)
+  }, [])
+
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.siteBackground,
     resetForm,
-    setIsLoading
+    setIsLoading,
+    successCallback: setInitialStakeholderTypesFromServerData
   })
 
   const handleSubmit = async (formData) => {
@@ -107,11 +116,18 @@ const ProjectDetailsForm = () => {
   }
 
   const handleStakeholdersOnChange = (event, stakeholder) => {
+    const stakeholderTypesCopy = stakeholderTypes
     if (event.target.checked) {
       stakeholdersAppend({ stakeholderType: stakeholder })
+      stakeholderTypes.push(stakeholder)
     } else {
-      const index = stakeholdersFields.findIndex((field) => field.stakeholderType === stakeholder)
-      stakeholdersRemove(index)
+      const fieldIndex = stakeholdersFields.findIndex(
+        (field) => field.stakeholderType === stakeholder
+      )
+      const typeIndex = stakeholderTypesCopy.findIndex((type) => type === stakeholder)
+      stakeholderTypesCopy.splice(typeIndex, 1)
+      setStakeholderTypes(stakeholderTypesCopy)
+      stakeholdersRemove(fieldIndex)
     }
   }
 
@@ -135,6 +151,7 @@ const ProjectDetailsForm = () => {
                   <Box>
                     <Checkbox
                       value={stakeholder}
+                      checked={stakeholderTypes.includes(stakeholder)}
                       onChange={(event) =>
                         handleStakeholdersOnChange(event, stakeholder)
                       }></Checkbox>
@@ -250,9 +267,9 @@ const ProjectDetailsForm = () => {
           reactHookFormInstance={reactHookFormInstance}
           options={siteBackground.governmentArrangement.options}
           question={siteBackground.governmentArrangement.question}
-          // shouldAddOtherOptionWithClarification={true}
+          shouldAddOtherOptionWithClarification={true}
         />
-        <ErrorText>{errors.govermentArrangement?.message}</ErrorText>
+        <ErrorText>{errors.governmentArrangement?.selectedValues?.message}</ErrorText>
         {/* Land Tenure */}
         <CheckboxGroupWithLabelAndController
           fieldName='landTenure'
