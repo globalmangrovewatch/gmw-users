@@ -253,36 +253,6 @@ const ProjectDetailsForm = () => {
           // shouldAddOtherOptionWithClarification={true}
         />
         <ErrorText>{errors.govermentArrangement?.message}</ErrorText>
-        {/* <FormQuestionDiv>
-          <FormLabel>{siteBackground.govermentArrangement.question}</FormLabel>
-          <Controller
-            name='governmentArrangement'
-            control={control}
-            defaultValue={[]}
-            render={({ field }) => (
-              <Select
-                {...field}
-                multiple
-                value={field.value}
-                label={language.form.selectLabel}
-                input={<OutlinedInput id='select-multiple-chip' label='Chip' />}
-                renderValue={(selected) => (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
-                  </Box>
-                )}>
-                {siteBackground.govermentArrangement.options.map((item, index) => (
-                  <MenuItem key={index} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
-          />
-          <ErrorText>{errors.govermentArrangement?.message}</ErrorText>
-        </FormQuestionDiv> */}
         {/* Land Tenure */}
         <CheckboxGroupWithLabelAndController
           fieldName='landTenure'
