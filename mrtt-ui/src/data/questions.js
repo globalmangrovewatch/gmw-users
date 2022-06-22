@@ -77,7 +77,7 @@ const siteBackground = {
       '2.6 Are the stakeholders involved in project activities able to influence site management rules?',
     options: ['Yes', 'No', 'Partially']
   },
-  govermentArrangement: {
+  governmentArrangement: {
     question:
       '2.7 What best describes the governance arrangement of the site immediately before the project started?',
     options: [

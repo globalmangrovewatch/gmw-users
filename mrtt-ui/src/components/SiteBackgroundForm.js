@@ -1,13 +1,13 @@
 import {
   Box,
   Checkbox,
-  Chip,
+  // Chip,
   FormLabel,
   List,
   ListItem,
   MenuItem,
-  OutlinedInput,
-  Select,
+  // OutlinedInput,
+  // Select,
   TextField,
   Typography
 } from '@mui/material'
@@ -23,7 +23,7 @@ import { ErrorText, Link } from '../styles/typography'
 import { FormQuestionDiv, MainFormDiv, SectionFormTitle } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
-import { siteBackground as questions } from '../data/questions'
+import { siteBackground } from '../data/questions'
 import { toast } from 'react-toastify'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
 import language from '../language'
@@ -54,7 +54,7 @@ const ProjectDetailsForm = () => {
     managementArea: yup.string(),
     protectionStatus: multiselectWithOtherValidation,
     areStakeholdersInvolved: yup.string().nullable(),
-    govermentArrangement: yup.array().of(yup.string()),
+    governmentArrangement: yup.array().of(yup.string()),
     landTenure: multiselectWithOtherValidation,
     customaryRights: yup.string()
   })
@@ -127,9 +127,9 @@ const ProjectDetailsForm = () => {
       <Link to={-1}>&lt; {language.form.navigateBackToSiteOverview}</Link>
       <form onSubmit={validateInputs(handleSubmit)}>
         <FormQuestionDiv>
-          <FormLabel>{questions.stakeholders.question}</FormLabel>
+          <FormLabel>{siteBackground.stakeholders.question}</FormLabel>
           <List>
-            {questions.stakeholders.options.map((stakeholder, index) => (
+            {siteBackground.stakeholders.options.map((stakeholder, index) => (
               <ListItem key={index}>
                 <Box>
                   <Box>
@@ -167,14 +167,14 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Select Management Status*/}
         <FormQuestionDiv>
-          <FormLabel>{questions.managementStatus.question}</FormLabel>
+          <FormLabel>{siteBackground.managementStatus.question}</FormLabel>
           <Controller
             name='managementStatus'
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label={language.form.selectLabel}>
-                {questions.managementStatus.options.map((item, index) => (
+                {siteBackground.managementStatus.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -186,14 +186,14 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Law recognition */}
         <FormQuestionDiv>
-          <FormLabel>{questions.lawStatus.question}</FormLabel>
+          <FormLabel>{siteBackground.lawStatus.question}</FormLabel>
           <Controller
             name='lawStatus'
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label={language.form.selectLabel}>
-                {questions.lawStatus.options.map((item, index) => (
+                {siteBackground.lawStatus.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -205,7 +205,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Management Area*/}
         <FormQuestionDiv>
-          <FormLabel>{questions.managementArea.question}</FormLabel>
+          <FormLabel>{siteBackground.managementArea.question}</FormLabel>
           <Controller
             name='managementArea'
             control={control}
@@ -218,21 +218,21 @@ const ProjectDetailsForm = () => {
         <CheckboxGroupWithLabelAndController
           fieldName='protectionStatus'
           reactHookFormInstance={reactHookFormInstance}
-          options={questions.protectionStatus.options}
-          question={questions.protectionStatus.question}
+          options={siteBackground.protectionStatus.options}
+          question={siteBackground.protectionStatus.question}
           shouldAddOtherOptionWithClarification={true}
         />
         <ErrorText>{errors.protectionStatus?.selectedValues?.message}</ErrorText>
         {/* areStakeholdersInvolved */}
         <FormQuestionDiv>
-          <FormLabel>{questions.areStakeholdersInvolved.question}</FormLabel>
+          <FormLabel>{siteBackground.areStakeholdersInvolved.question}</FormLabel>
           <Controller
             name='areStakeholdersInvolved'
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label={language.form.selectLabel}>
-                {questions.areStakeholdersInvolved.options.map((item, index) => (
+                {siteBackground.areStakeholdersInvolved.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -245,8 +245,16 @@ const ProjectDetailsForm = () => {
           </ErrorText>
         </FormQuestionDiv>
         {/* Government Arrangement */}
-        <FormQuestionDiv>
-          <FormLabel>{questions.govermentArrangement.question}</FormLabel>
+        <CheckboxGroupWithLabelAndController
+          fieldName='governmentArrangement'
+          reactHookFormInstance={reactHookFormInstance}
+          options={siteBackground.governmentArrangement.options}
+          question={siteBackground.governmentArrangement.question}
+          // shouldAddOtherOptionWithClarification={true}
+        />
+        <ErrorText>{errors.govermentArrangement?.message}</ErrorText>
+        {/* <FormQuestionDiv>
+          <FormLabel>{siteBackground.govermentArrangement.question}</FormLabel>
           <Controller
             name='governmentArrangement'
             control={control}
@@ -265,7 +273,7 @@ const ProjectDetailsForm = () => {
                     ))}
                   </Box>
                 )}>
-                {questions.govermentArrangement.options.map((item, index) => (
+                {siteBackground.govermentArrangement.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -274,26 +282,26 @@ const ProjectDetailsForm = () => {
             )}
           />
           <ErrorText>{errors.govermentArrangement?.message}</ErrorText>
-        </FormQuestionDiv>
+        </FormQuestionDiv> */}
         {/* Land Tenure */}
         <CheckboxGroupWithLabelAndController
           fieldName='landTenure'
           reactHookFormInstance={reactHookFormInstance}
-          options={questions.landTenure.options}
-          question={questions.landTenure.question}
+          options={siteBackground.landTenure.options}
+          question={siteBackground.landTenure.question}
           shouldAddOtherOptionWithClarification={true}
         />
         <ErrorText>{errors.landTenure?.selectedValues?.message}</ErrorText>
         {/* customaryRights */}
         <FormQuestionDiv>
-          <FormLabel>{questions.customaryRights.question}</FormLabel>
+          <FormLabel>{siteBackground.customaryRights.question}</FormLabel>
           <Controller
             name='customaryRights'
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label={language.form.selectLabel}>
-                {questions.customaryRights.options.map((item, index) => (
+                {siteBackground.customaryRights.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
