@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import {
@@ -85,16 +85,54 @@ function CausesOfDeclineForm() {
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   // an array for managing isChecked items
-  // const [causesOfDeclineTypes, setCausesOfDeclineTypes] = useState([])
+  const [causesOfDeclineTypes, setCausesOfDeclineTypes] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+
+  const setInitialCausesOfDeclineTypesFromServerData = useCallback((serverResponse) => {
+    // get answers for 4.2 if they exist
+    const initialCausesOfDecline =
+      serverResponse?.data.find((dataItem) => dataItem.question_id === '4.2')?.answer_value ?? []
+
+    const initialCausesOfDeclineTypes = []
+
+    // function that adds `${cause}-${causeAnswer}` to initialCausesOfDeclineTypes array, to simplify
+    // isChecked lookups (as opposed to searching through deeply nested values every time)
+    initialCausesOfDecline?.forEach((cause) => {
+      // map types for mainCause options
+      if (cause.mainCauseAnswers) {
+        const mainCauseAnswers = cause.mainCauseAnswers?.map((answer) => answer.mainCauseAnswer)
+
+        // adding maincause label appended to answer to avoid situations
+        // where we have the same answers for different causes
+        mainCauseAnswers.forEach((answer) =>
+          initialCausesOfDeclineTypes.push(`${cause.mainCauseLabel}-${answer}`)
+        )
+      }
+      // map types for subCase options
+      else {
+        // adding subcase label appended to subcase answer since
+        // there are subcauses that have some of the same answers (ex: 'other')
+        cause.subCauses?.map((subCause) => {
+          const label = subCause.subCauseLabel
+          const answers = subCause.subCauseAnswers
+          answers.forEach((answer) => {
+            initialCausesOfDeclineTypes.push(`${label}-${answer.subCauseAnswer}`)
+          })
+        })
+      }
+    })
+    setCausesOfDeclineTypes(initialCausesOfDeclineTypes)
+  }, [])
+
+  console.log('causeOF Types', causesOfDeclineTypes)
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.causesOfDecline,
     resetForm,
-    setIsLoading
-    // successCallback: setInitialStakeholderTypesFromServerData
+    setIsLoading,
+    successCallback: setInitialCausesOfDeclineTypesFromServerData
   })
 
   // big function with many different cases for Q4.2 due to the nesting involved in this question type
