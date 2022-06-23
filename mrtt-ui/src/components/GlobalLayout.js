@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 import Footer from './MobileFooter'
+import Header from './Header/Header'
 
 const LayoutWrapper = styled('div')`
   display: flex;
@@ -13,12 +14,10 @@ const LayoutWrapper = styled('div')`
   }
 `
 
-const Header = styled('header')``
-
 const GlobalLayout = ({ children }) => {
   return (
     <LayoutWrapper>
-      <Header>Header placeholder</Header>
+      <Header />
       <main>{children}</main>
       <Footer />
     </LayoutWrapper>
