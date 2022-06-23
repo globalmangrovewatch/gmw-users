@@ -34,6 +34,7 @@ const ProjectDetailsForm = () => {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  // an array for managing isChecked items
   const [stakeholderTypes, setStakeholderTypes] = useState([])
 
   const validationSchema = yup.object().shape({

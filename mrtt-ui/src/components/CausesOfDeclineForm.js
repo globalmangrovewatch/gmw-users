@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import {
@@ -32,9 +32,9 @@ import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
 import { ErrorText, Link } from '../styles/typography'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { questionMapping } from '../data/questionMapping'
-import formatApiAnswersForForm from '../library/formatApiAnswersForForm'
 import language from '../language'
 import LoadingIndicator from './LoadingIndicator'
+import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 
 function CausesOfDeclineForm() {
   const validationSchema = yup.object().shape({
@@ -84,28 +84,18 @@ function CausesOfDeclineForm() {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  // an array for managing isChecked items
+  // const [causesOfDeclineTypes, setCausesOfDeclineTypes] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
 
-  const _loadSiteData = useEffect(() => {
-    if (apiAnswersUrl && resetForm) {
-      setIsLoading(true)
-      axios
-        .get(apiAnswersUrl)
-        .then(({ data }) => {
-          setIsLoading(false)
-          const initialValuesForForm = formatApiAnswersForForm({
-            apiAnswers: data,
-            questionMapping: questionMapping.causesOfDecline
-          })
-
-          resetForm(initialValuesForForm)
-        })
-        .catch(() => {
-          toast.error(language.error.apiLoad)
-        })
-    }
-  }, [apiAnswersUrl, resetForm])
+  useInitializeQuestionMappedForm({
+    apiUrl: apiAnswersUrl,
+    questionMapping: questionMapping.causesOfDecline,
+    resetForm,
+    setIsLoading
+    // successCallback: setInitialStakeholderTypesFromServerData
+  })
 
   // big function with many different cases for Q4.2 due to the nesting involved in this question type
   const handleCausesOfDeclineOnChange = ({
