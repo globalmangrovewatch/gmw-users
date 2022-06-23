@@ -120,16 +120,16 @@ const ProjectDetailsForm = () => {
     const stakeholderTypesCopy = stakeholderTypes
     if (event.target.checked) {
       stakeholdersAppend({ stakeholderType: stakeholder })
-      stakeholderTypes.push(stakeholder)
+      stakeholderTypesCopy.push(stakeholder)
     } else {
       const fieldIndex = stakeholdersFields.findIndex(
         (field) => field.stakeholderType === stakeholder
       )
       const typeIndex = stakeholderTypesCopy.findIndex((type) => type === stakeholder)
       stakeholderTypesCopy.splice(typeIndex, 1)
-      setStakeholderTypes(stakeholderTypesCopy)
       stakeholdersRemove(fieldIndex)
     }
+    setStakeholderTypes(stakeholderTypesCopy)
   }
 
   const getStakeholder = (stakeholder) =>
