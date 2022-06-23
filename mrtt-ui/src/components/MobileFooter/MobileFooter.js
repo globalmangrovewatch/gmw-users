@@ -13,11 +13,23 @@ const StyledFooter = styled('footer')`
   justify-content: space-around;
   padding-top: 0.2rem;
   padding-bottom: 0.2rem;
-  border-top: ${theme.border.primary};
-  font-family: 'Open Sans', sans-serif;
+  border-color: ${theme.color.primary};
+  border-style: solid;
+  border-width: 1px 0 0 0;
   text-transform: uppercase;
-  font-weight: 300;
-
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  z-index: 2;
+  @media (min-width: ${theme.spacing.mediaQueryMobile}) {
+    flex-direction: column;
+    left: 0;
+    top: ${theme.spacing.headerHeight};
+    width: ${theme.spacing.navWidth};
+    justify-content: flex-start;
+    border-width: 0 1px 0 0;
+  }
   a,
   a:visited {
     text-decoration: none;
@@ -28,18 +40,12 @@ const LinkContainer = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 80px;
-
-  color: ${(props) => (props.active === 'true' ? theme.color.primaryHover : theme.color.slub)};
-  div {
-    color: theme.color.slub;
+  @media (min-width: ${theme.spacing.mediaQueryMobile}) {
+    flex-direction: row;
+    gap: 1rem;
+    padding: ${theme.spacing.xsmall} ${theme.spacing.small};
   }
-
-  border-bottom-width: ${theme.border.primaryWidth};
-  border-bottom-style: ${theme.border.primaryStyle};
-
-  border-bottom-color: ${(props) =>
-    props.active === 'true' ? theme.color.primaryHover : 'transparent'};
+  color: ${(props) => (props.active === 'true' ? theme.color.primary : theme.color.text)};
 `
 
 function MobileFooter() {
@@ -49,15 +55,15 @@ function MobileFooter() {
     <StyledFooter>
       <LinkContainer to='/sites' active={String(/^\/sites/.test(pathname))}>
         <SitesIcon />
-        <div>Sites</div>
+        <span>Sites</span>
       </LinkContainer>
       <LinkContainer to='/landscapes' active={String(/^\/landscapes/.test(pathname))}>
         <LandscapesIcon />
-        <div>landscapes</div>
+        <span>landscapes</span>
       </LinkContainer>
       <LinkContainer to='/organizations' active={String(/^\/organizations/.test(pathname))}>
         <OrganizationsIcon />
-        <div>organizations</div>
+        <span>organizations</span>
       </LinkContainer>
     </StyledFooter>
   )

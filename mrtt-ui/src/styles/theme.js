@@ -16,4 +16,15 @@ const border = {
   primaryWidth: 'thin'
 }
 
-export default { color, border }
+const spacing = {
+  headerHeight: '5rem',
+  navWidth: '13rem',
+  mediaQueryMobile: '599px',
+  xsmall: '0.5rem',
+  small: '1rem',
+  medium: '1.5rem',
+  large: '2rem',
+  xlarge: '3rem'
+}
+
+export default { color, border, spacing }
