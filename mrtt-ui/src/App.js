@@ -12,6 +12,7 @@ import ProjectDetailsForm from './components/ProjectDetailsForm'
 import RestorationAimsForm from './components/RestorationAimsForm/RestorationAimsForm'
 import SiteBackgroundForm from './components/SiteBackgroundForm'
 import SiteForm from './views/SiteForm'
+import SignupForm from './views/Auth/SignupForm'
 import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOverview'
 import Sites from './views/Sites'
 import themeMui from './styles/themeMui'
@@ -34,6 +35,7 @@ function App() {
             <Route path='/site/:siteId/overview' element={<SiteQuestionsOverview />} />
             <Route path='/site/new' element={<SiteForm isNewSite={true} />} />
             <Route path='/sites' element={<Sites />} />
+            <Route path='/auth/signup' element={<SignupForm />} />
           </Routes>
         </GlobalLayout>
       </Router>

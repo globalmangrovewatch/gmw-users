@@ -4,6 +4,7 @@ import React from 'react'
 import theme from '../styles/theme'
 
 import Footer from './MobileFooter'
+import Header from './Header/Header'
 
 const LayoutWrapper = styled('div')`
   display: flex;
@@ -38,8 +39,8 @@ const Header = styled('header')`
 const GlobalLayout = ({ children }) => {
   return (
     <LayoutWrapper>
-      <Header>Header placeholder</Header>
-      <Main>{children}</Main>
+      <Header />
+      <main>{children}</main>
       <Footer />
     </LayoutWrapper>
   )

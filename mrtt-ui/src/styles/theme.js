@@ -7,7 +7,8 @@ const color = {
   secondary: '#02b1a8',
   secondaryHover: '#02b1a8',
   slub: '#333333D9',
-  text: '#000000D9'
+  text: '#000000D9',
+  white: '#ffffff'
 }
 
 const typography = {

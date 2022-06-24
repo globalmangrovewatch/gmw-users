@@ -26,6 +26,7 @@ const pages = {
     noOtherOrganizations: 'There are no other organizations'
   },
   sites: { title: 'Sites', newSiteButton: 'New Site' },
+  landscapes: { title: 'Landscapes', newLandscapeButton: 'New Landscape' },
   siteform: {
     getEditSiteSuccessMessage: (siteName) => `${siteName} has been edited`,
     getNewSiteSuccessMessage: (siteName) => `${siteName}, has been created`,
@@ -98,10 +99,15 @@ const projectAreaMap = {
   }
 }
 
+const header = {
+  logout: 'Logout'
+}
+
 export default {
   buttons,
   error,
   form,
+  header,
   multiselectWithOtherFormQuestion,
   pages,
   projectAreaMap,
