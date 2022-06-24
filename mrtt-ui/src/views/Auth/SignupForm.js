@@ -48,7 +48,7 @@ const SignupForm = () => {
       .then(({ data }) => {
         setIsSubmitting(false)
         toast.success(data.message)
-        // navigate('/sites')
+        // TODO: navigate to another page
       })
       .catch((error) => {
         setIsSubmitting(false)
