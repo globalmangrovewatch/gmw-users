@@ -7,6 +7,7 @@ import {
   PeopleOutline as OrganizationsIcon
 } from '@mui/icons-material'
 import theme from '../../styles/theme'
+import themeMui from '../../styles/themeMui'
 
 const StyledFooter = styled('footer')`
   display: flex;
@@ -22,11 +23,11 @@ const StyledFooter = styled('footer')`
   width: 100%;
   background: white;
   z-index: 2;
-  @media (min-width: ${theme.spacing.mediaQueryMobile}) {
+  @media (min-width: ${theme.layout.mediaQueryDesktop}) {
     flex-direction: column;
     left: 0;
-    top: ${theme.spacing.headerHeight};
-    width: ${theme.spacing.navWidth};
+    top: ${theme.layout.headerHeight};
+    width: ${theme.layout.navWidth};
     justify-content: flex-start;
     border-width: 0 1px 0 0;
   }
@@ -40,12 +41,12 @@ const LinkContainer = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  @media (min-width: ${theme.spacing.mediaQueryMobile}) {
+  color: ${(props) => (props.active === 'true' ? theme.color.primary : theme.color.text)};
+  @media (min-width: ${theme.layout.mediaQueryDesktop}) {
     flex-direction: row;
     gap: 1rem;
-    padding: ${theme.spacing.xsmall} ${theme.spacing.small};
+    padding: ${themeMui.spacing(1)} ${themeMui.spacing(2)};
   }
-  color: ${(props) => (props.active === 'true' ? theme.color.primary : theme.color.text)};
 `
 
 function MobileFooter() {

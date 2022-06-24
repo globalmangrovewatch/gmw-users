@@ -13,13 +13,13 @@ const LayoutWrapper = styled('div')`
   & main {
     flex-grow: 2;
   }
-  @media (min-width: ${theme.spacing.mediaQueryMobile}) {
-    margin-left: ${theme.spacing.navWidth};
+  @media (min-width: ${theme.layout.mediaQueryDesktop}) {
+    margin-left: ${theme.layout.navWidth};
   }
 `
 const Main = styled('main')`
-  margin-top: ${theme.spacing.headerHeight};
-  max-width: 69rem;
+  margin-top: ${theme.layout.headerHeight};
+  max-width: ${theme.layout.maxContentWidth};
 `
 const Header = styled('header')`
   position: fixed;
@@ -27,10 +27,10 @@ const Header = styled('header')`
   background: ${theme.color.primary};
   color: white;
   padding: 1rem;
-  height: ${theme.spacing.headerHeight};
+  height: ${theme.layout.headerHeight};
   width: 100vw;
   z-index: 2;
-  @media (min-width: ${theme.spacing.mediaQueryMobile}) {
+  @media (min-width: ${theme.layout.mediaQueryDesktop}) {
     left: 0;
   }
 `

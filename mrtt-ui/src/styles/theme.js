@@ -10,21 +10,19 @@ const color = {
   text: '#000000D9'
 }
 
+const typography = {
+  fontStack: ['Open Sans', 'sans-serif']
+}
 const border = {
   primary: `solid thin ${color.primary}`,
   primaryStyle: 'solid',
   primaryWidth: 'thin'
 }
-
-const spacing = {
+const layout = {
   headerHeight: '5rem',
-  navWidth: '13rem',
-  mediaQueryMobile: '599px',
-  xsmall: '0.5rem',
-  small: '1rem',
-  medium: '1.5rem',
-  large: '2rem',
-  xlarge: '3rem'
+  navWidth: '18rem',
+  mediaQueryDesktop: '599px',
+  maxContentWidth: '96rem'
 }
 
-export default { color, border, spacing }
+export default { color, border, layout, typography }
