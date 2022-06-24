@@ -22,25 +22,12 @@ const Main = styled('main')`
   margin-top: ${theme.layout.headerHeight};
   max-width: ${theme.layout.maxContentWidth};
 `
-const Header = styled('header')`
-  position: fixed;
-  top: 0;
-  background: ${theme.color.primary};
-  color: white;
-  padding: 1rem;
-  height: ${theme.layout.headerHeight};
-  width: 100vw;
-  z-index: 2;
-  @media (min-width: ${theme.layout.mediaQueryDesktop}) {
-    left: 0;
-  }
-`
 
 const GlobalLayout = ({ children }) => {
   return (
     <LayoutWrapper>
       <Header />
-      <main>{children}</main>
+      <Main>{children}</Main>
       <Footer />
     </LayoutWrapper>
   )
