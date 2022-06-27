@@ -84,8 +84,7 @@ function CausesOfDeclineForm() {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  // an array for managing isChecked items
-  const [causesOfDeclineTypes, setCausesOfDeclineTypes] = useState([])
+  const [causesOfDeclineTypesIsChecked, setCausesOfDeclineTypes] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
 
@@ -147,7 +146,7 @@ function CausesOfDeclineForm() {
       (subCause) => subCause.subCauseLabel === subCauseLabel
     )
     const currentSubCause = currentMainCause?.subCauses?.[subCauseIndex]
-    const causesOfDeclineTypesCopy = causesOfDeclineTypes
+    const causesOfDeclineTypesIsCheckedCopy = causesOfDeclineTypesIsChecked
 
     //  case: checked, no subCause, and mainCause does not exist
     if (event.target.checked && !subCauseLabel && mainCauseIndex === -1) {
@@ -155,7 +154,7 @@ function CausesOfDeclineForm() {
         mainCauseLabel,
         mainCauseAnswers: [{ mainCauseAnswer: childOption, levelOfDegredation: '' }]
       })
-      causesOfDeclineTypesCopy.push(`${mainCauseLabel}-${childOption}`)
+      causesOfDeclineTypesIsCheckedCopy.push(`${mainCauseLabel}-${childOption}`)
     }
     // case: checked, no subCause, mainCause exists
     else if (event.target.checked && !subCauseLabel && mainCauseIndex > -1) {
@@ -164,7 +163,7 @@ function CausesOfDeclineForm() {
         levelOfDegredation: ''
       })
       causesOfDeclineUpdate(currentMainCause)
-      causesOfDeclineTypesCopy.push(`${mainCauseLabel}-${childOption}`)
+      causesOfDeclineTypesIsCheckedCopy.push(`${mainCauseLabel}-${childOption}`)
     }
     // case: checked, subCause, mainCause does not exist
     else if (event.target.checked && subCauseLabel && mainCauseIndex === -1) {
@@ -177,7 +176,7 @@ function CausesOfDeclineForm() {
           }
         ]
       })
-      causesOfDeclineTypesCopy.push(`${subCauseLabel}-${secondaryChildOption}`)
+      causesOfDeclineTypesIsCheckedCopy.push(`${subCauseLabel}-${secondaryChildOption}`)
     }
     // case: checked, subCause, mainCause does exist
     else if (event.target.checked && subCauseLabel && mainCauseIndex > -1) {
@@ -197,7 +196,7 @@ function CausesOfDeclineForm() {
         })
         causesOfDeclineUpdate(currentMainCause)
       }
-      causesOfDeclineTypesCopy.push(`${subCauseLabel}-${secondaryChildOption}`)
+      causesOfDeclineTypesIsCheckedCopy.push(`${subCauseLabel}-${secondaryChildOption}`)
     }
     // case: unchecked, no subCause
     else if (!event.target.checked && !subCauseLabel) {
@@ -213,10 +212,10 @@ function CausesOfDeclineForm() {
         currentMainCause.mainCauseAnswers.splice(childOptionIndex, 1)
         causesOfDeclineUpdate(currentMainCause)
       }
-      const typeIndex = causesOfDeclineTypesCopy.findIndex(
+      const typeIndex = causesOfDeclineTypesIsCheckedCopy.findIndex(
         (type) => type === `${mainCauseLabel}-${childOption}`
       )
-      causesOfDeclineTypesCopy.splice(typeIndex, 1)
+      causesOfDeclineTypesIsCheckedCopy.splice(typeIndex, 1)
     }
     // case: unchecked, subCause exists
     else if (!event.target.checked && subCauseLabel) {
@@ -237,13 +236,12 @@ function CausesOfDeclineForm() {
       if (currentMainCause.subCauses.length === 0) {
         causesOfDeclineRemove(mainCauseIndex)
       }
-      const typeIndex = causesOfDeclineTypesCopy.findIndex(
+      const typeIndex = causesOfDeclineTypesIsCheckedCopy.findIndex(
         (type) => type === `${subCauseLabel}-${secondaryChildOption}`
       )
-      causesOfDeclineTypesCopy.splice(typeIndex, 1)
+      causesOfDeclineTypesIsCheckedCopy.splice(typeIndex, 1)
     }
-    setCausesOfDeclineTypes(causesOfDeclineTypesCopy)
-    console.log('types: ', causesOfDeclineTypes)
+    setCausesOfDeclineTypes(causesOfDeclineTypesIsCheckedCopy)
   }
 
   const onSubmit = async (data) => {
@@ -305,7 +303,7 @@ function CausesOfDeclineForm() {
                             <ListItem>
                               <Checkbox
                                 value={childOption}
-                                checked={causesOfDeclineTypes.includes(
+                                checked={causesOfDeclineTypesIsChecked.includes(
                                   `${mainCause.label}-${childOption}`
                                 )}
                                 onChange={(event) =>
@@ -334,7 +332,7 @@ function CausesOfDeclineForm() {
                                     control={
                                       <Checkbox
                                         value={secondaryChildOption}
-                                        checked={causesOfDeclineTypes.includes(
+                                        checked={causesOfDeclineTypesIsChecked.includes(
                                           `${subCause.secondaryLabel}-${secondaryChildOption}`
                                         )}
                                         onChange={(event) =>
