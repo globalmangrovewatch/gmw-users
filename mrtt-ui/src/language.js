@@ -19,11 +19,12 @@ const multiselectWithOtherFormQuestion = {
 
 const pages = {
   organizations: {
+    newOrganizationButton: 'New Org',
+    noOtherOrganizations: 'There are no other organizations',
+    noYourOrganizations: 'You dont have any organizations',
     title: 'Organizations',
     titleOtherOrganizations: 'Other Organizations',
-    titleYourOrganizations: 'Your Organizations',
-    noYourOrganizations: 'You dont have any organizations',
-    noOtherOrganizations: 'There are no other organizations'
+    titleYourOrganizations: 'Your Organizations'
   },
   sites: { title: 'Sites', newSiteButton: 'New Site' },
   landscapes: { title: 'Landscapes', newLandscapeButton: 'New Landscape' },
@@ -64,6 +65,7 @@ const pages = {
 
 const buttons = {
   cancel: 'Cancel',
+  edit: 'Edit',
   submit: 'Submit',
   submitting: 'Submitting...'
 }
