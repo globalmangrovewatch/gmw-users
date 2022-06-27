@@ -111,12 +111,16 @@ const SiteOverview = () => {
             <tr>
               <WideTh>
                 <Link to={`/site/${siteId}/form/causes-of-decline`}>
-                  {pageLanguage.formName.causesOfDeclin}
+                  {pageLanguage.formName.causesOfDecline}
                 </Link>
               </WideTh>
             </tr>
             <tr>
-              <WideTh>{pageLanguage.formName.preRestorationAssessment}</WideTh>
+              <WideTh>
+                <Link to={`/site/${siteId}/form/pre-restoration-assessment`}>
+                  {pageLanguage.formName.preRestorationAssessment}
+                </Link>
+              </WideTh>
             </tr>
           </tbody>
         </TableAlertnatingRows>

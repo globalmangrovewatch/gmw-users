@@ -50,7 +50,7 @@ const pages = {
       siteDetails: 'Site Details and Location',
       siteBackground: 'Site Background',
       restorationAims: 'Restoration Aims',
-      causesOfDeclin: 'Causes of Decline',
+      causesOfDecline: 'Causes of Decline',
       preRestorationAssessment: 'Pre-Restoration Assessment',
       siteInterventions: 'Site Interventions',
       costs: 'Costs',
