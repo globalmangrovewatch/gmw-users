@@ -1,13 +1,14 @@
-import { Stack } from '@mui/material'
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import LoadingIndicator from '../components/LoadingIndicator'
-import language from '../language'
 import { ButtonPrimary } from '../styles/buttons'
-import { LinkCard, PagePadding, RowSpaceBetween } from '../styles/containers'
 import { H4 } from '../styles/typography'
+import { Link } from 'react-router-dom'
+import { LinkCard, PagePadding, RowSpaceBetween } from '../styles/containers'
+import { Stack } from '@mui/material'
+import { toast } from 'react-toastify'
+import axios from 'axios'
+import EditLink from '../components/EditLink'
+import language from '../language'
+import LoadingIndicator from '../components/LoadingIndicator'
+import React, { useEffect, useState } from 'react'
 
 const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes/`
 function Landscapes() {
@@ -39,7 +40,10 @@ function Landscapes() {
     })
     .map(({ landscape_name, id }) => (
       <LinkCard key={id} to='#'>
-        {landscape_name}
+        <RowSpaceBetween>
+          <>{landscape_name}</>
+          <EditLink to={`/landscapes/${id}/edit`} />
+        </RowSpaceBetween>
       </LinkCard>
     ))
 
@@ -49,7 +53,7 @@ function Landscapes() {
     <PagePadding>
       <RowSpaceBetween>
         <H4>{language.pages.landscapes.title}</H4>
-        <ButtonPrimary component={Link} to='#'>
+        <ButtonPrimary component={Link} to='/landscapes/new'>
           {language.pages.landscapes.newLandscapeButton}
         </ButtonPrimary>
       </RowSpaceBetween>
