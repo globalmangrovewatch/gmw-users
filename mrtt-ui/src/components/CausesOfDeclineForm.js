@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useState, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import {
@@ -32,9 +32,9 @@ import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
 import { ErrorText, Link } from '../styles/typography'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { questionMapping } from '../data/questionMapping'
-import formatApiAnswersForForm from '../library/formatApiAnswersForForm'
 import language from '../language'
 import LoadingIndicator from './LoadingIndicator'
+import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 
 function CausesOfDeclineForm() {
   const validationSchema = yup.object().shape({
@@ -84,28 +84,53 @@ function CausesOfDeclineForm() {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [causesOfDeclineTypesIsChecked, setCausesOfDeclineTypesIsChecked] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
 
-  const _loadSiteData = useEffect(() => {
-    if (apiAnswersUrl && resetForm) {
-      setIsLoading(true)
-      axios
-        .get(apiAnswersUrl)
-        .then(({ data }) => {
-          setIsLoading(false)
-          const initialValuesForForm = formatApiAnswersForForm({
-            apiAnswers: data,
-            questionMapping: questionMapping.causesOfDecline
-          })
+  const setInitialCausesOfDeclineTypesFromServerData = useCallback((serverResponse) => {
+    // get answers for 4.2 if they exist
+    const initialCausesOfDecline =
+      serverResponse?.data.find((dataItem) => dataItem.question_id === '4.2')?.answer_value ?? []
 
-          resetForm(initialValuesForForm)
+    const initialCausesOfDeclineTypesIsChecked = []
+
+    // function that adds `${cause}-${causeAnswer}` to initialCausesOfDeclineTypes array, to simplify
+    // isChecked lookups (as opposed to searching through deeply nested values every time)
+    initialCausesOfDecline?.forEach((cause) => {
+      // map types for mainCause options
+      if (cause.mainCauseAnswers) {
+        const mainCauseAnswers = cause.mainCauseAnswers?.map((answer) => answer.mainCauseAnswer)
+        const label = cause.mainCauseLabel
+        // adding maincause label appended to answer to avoid situations
+        // where we have the same answers for different causes
+        mainCauseAnswers.forEach((answer) =>
+          initialCausesOfDeclineTypesIsChecked.push(`${label}-${answer}`)
+        )
+      }
+      // map types for subCase options
+      else {
+        // adding subcase label appended to subcase answer since
+        // there are subcauses that have some of the same answers (ex: 'other')
+        cause.subCauses?.map((subCause) => {
+          const label = subCause.subCauseLabel
+          const answers = subCause.subCauseAnswers
+          answers.forEach((answer) => {
+            initialCausesOfDeclineTypesIsChecked.push(`${label}-${answer.subCauseAnswer}`)
+          })
         })
-        .catch(() => {
-          toast.error(language.error.apiLoad)
-        })
-    }
-  }, [apiAnswersUrl, resetForm])
+      }
+    })
+    setCausesOfDeclineTypesIsChecked(initialCausesOfDeclineTypesIsChecked)
+  }, [])
+
+  useInitializeQuestionMappedForm({
+    apiUrl: apiAnswersUrl,
+    questionMapping: questionMapping.causesOfDecline,
+    resetForm,
+    setIsLoading,
+    successCallback: setInitialCausesOfDeclineTypesFromServerData
+  })
 
   // big function with many different cases for Q4.2 due to the nesting involved in this question type
   const handleCausesOfDeclineOnChange = ({
@@ -123,6 +148,7 @@ function CausesOfDeclineForm() {
       (subCause) => subCause.subCauseLabel === subCauseLabel
     )
     const currentSubCause = currentMainCause?.subCauses?.[subCauseIndex]
+    const causesOfDeclineTypesIsCheckedCopy = causesOfDeclineTypesIsChecked
 
     //  case: checked, no subCause, and mainCause does not exist
     if (event.target.checked && !subCauseLabel && mainCauseIndex === -1) {
@@ -130,6 +156,7 @@ function CausesOfDeclineForm() {
         mainCauseLabel,
         mainCauseAnswers: [{ mainCauseAnswer: childOption, levelOfDegredation: '' }]
       })
+      causesOfDeclineTypesIsCheckedCopy.push(`${mainCauseLabel}-${childOption}`)
     }
     // case: checked, no subCause, mainCause exists
     else if (event.target.checked && !subCauseLabel && mainCauseIndex > -1) {
@@ -137,8 +164,8 @@ function CausesOfDeclineForm() {
         mainCauseAnswer: childOption,
         levelOfDegredation: ''
       })
-
       causesOfDeclineUpdate(currentMainCause)
+      causesOfDeclineTypesIsCheckedCopy.push(`${mainCauseLabel}-${childOption}`)
     }
     // case: checked, subCause, mainCause does not exist
     else if (event.target.checked && subCauseLabel && mainCauseIndex === -1) {
@@ -151,6 +178,7 @@ function CausesOfDeclineForm() {
           }
         ]
       })
+      causesOfDeclineTypesIsCheckedCopy.push(`${subCauseLabel}-${secondaryChildOption}`)
     }
     // case: checked, subCause, mainCause does exist
     else if (event.target.checked && subCauseLabel && mainCauseIndex > -1) {
@@ -170,6 +198,7 @@ function CausesOfDeclineForm() {
         })
         causesOfDeclineUpdate(currentMainCause)
       }
+      causesOfDeclineTypesIsCheckedCopy.push(`${subCauseLabel}-${secondaryChildOption}`)
     }
     // case: unchecked, no subCause
     else if (!event.target.checked && !subCauseLabel) {
@@ -185,6 +214,10 @@ function CausesOfDeclineForm() {
         currentMainCause.mainCauseAnswers.splice(childOptionIndex, 1)
         causesOfDeclineUpdate(currentMainCause)
       }
+      const typeIndex = causesOfDeclineTypesIsCheckedCopy.findIndex(
+        (type) => type === `${mainCauseLabel}-${childOption}`
+      )
+      causesOfDeclineTypesIsCheckedCopy.splice(typeIndex, 1)
     }
     // case: unchecked, subCause exists
     else if (!event.target.checked && subCauseLabel) {
@@ -205,7 +238,12 @@ function CausesOfDeclineForm() {
       if (currentMainCause.subCauses.length === 0) {
         causesOfDeclineRemove(mainCauseIndex)
       }
+      const typeIndex = causesOfDeclineTypesIsCheckedCopy.findIndex(
+        (type) => type === `${subCauseLabel}-${secondaryChildOption}`
+      )
+      causesOfDeclineTypesIsCheckedCopy.splice(typeIndex, 1)
     }
+    setCausesOfDeclineTypesIsChecked(causesOfDeclineTypesIsCheckedCopy)
   }
 
   const onSubmit = async (data) => {
@@ -267,6 +305,9 @@ function CausesOfDeclineForm() {
                             <ListItem>
                               <Checkbox
                                 value={childOption}
+                                checked={causesOfDeclineTypesIsChecked.includes(
+                                  `${mainCause.label}-${childOption}`
+                                )}
                                 onChange={(event) =>
                                   handleCausesOfDeclineOnChange({
                                     event,
@@ -293,6 +334,9 @@ function CausesOfDeclineForm() {
                                     control={
                                       <Checkbox
                                         value={secondaryChildOption}
+                                        checked={causesOfDeclineTypesIsChecked.includes(
+                                          `${subCause.secondaryLabel}-${secondaryChildOption}`
+                                        )}
                                         onChange={(event) =>
                                           handleCausesOfDeclineOnChange({
                                             event,

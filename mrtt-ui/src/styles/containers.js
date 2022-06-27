@@ -46,11 +46,16 @@ const PaddedPageSection = styled(Stack)(({ theme: themeMui }) => ({
   padding: themeMui.spacing(2)
 }))
 
+const PaddedSection = styled(Stack)(({ theme: themeMui }) => ({
+  padding: themeMui.spacing(2)
+}))
+
 export {
   ButtonContainer,
   LinkCard,
   PaddedPageSection,
   PaddedPageTopSection,
+  PaddedSection,
   PagePadding,
   RowCenterCenter,
   RowFlexEnd,

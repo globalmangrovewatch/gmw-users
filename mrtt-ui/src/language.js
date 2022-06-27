@@ -99,10 +99,15 @@ const projectAreaMap = {
   }
 }
 
+const header = {
+  logout: 'Logout'
+}
+
 export default {
   buttons,
   error,
   form,
+  header,
   multiselectWithOtherFormQuestion,
   pages,
   projectAreaMap,
