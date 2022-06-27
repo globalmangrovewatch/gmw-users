@@ -10,6 +10,5 @@
   },
   "scripts": {
     "prepare": "husky install"
-  },
-  "dependencies": {}
+  }
 }
