@@ -7,7 +7,7 @@ import axios from 'axios'
 
 import { ButtonSubmit } from '../../styles/buttons'
 import { ErrorText, Link } from '../../styles/typography'
-import { Form, MainFormDiv, SectionFormTitle } from '../../styles/forms'
+import { Form, FormPageHeader, MainFormDiv, SectionFormTitle } from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { multiselectWithOtherValidation } from '../../validation/multiSelectWithOther'
 import { questionMapping } from '../../data/questionMapping'
@@ -79,8 +79,10 @@ const RestorationAimsForm = () => {
     <LoadingIndicator />
   ) : (
     <MainFormDiv>
-      <SectionFormTitle>Restoration Aims</SectionFormTitle>
-      <Link to={-1}>&lt; {language.form.navigateBackToSiteOverview}</Link>
+      <FormPageHeader>
+        <SectionFormTitle>Restoration Aims</SectionFormTitle>
+        <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
+      </FormPageHeader>
       <Form onSubmit={validateInputs(handleSubmit)}>
         <RestorationAimsCheckboxGroupWithLabel
           stakeholders={stakeholders}

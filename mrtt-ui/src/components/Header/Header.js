@@ -13,7 +13,7 @@ const HeaderContainer = styled('header')`
   color: white;
   height: ${theme.layout.headerHeight};
   width: 100vw;
-  z-index: 2;
+  z-index: 3;
   @media (min-width: ${theme.layout.mediaQueryDesktop}) {
     left: 0;
   }
