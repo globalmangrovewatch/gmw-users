@@ -2,6 +2,10 @@ import { createTheme } from '@mui/material/styles'
 import theme from './theme'
 
 const themeMui = createTheme({
+  typography: {
+    fontFamily: theme.typography.fontStack.join(','),
+    htmlFontSize: 10
+  },
   palette: {
     primary: {
       main: theme.color.primary
@@ -10,6 +14,8 @@ const themeMui = createTheme({
       main: theme.color.secondary
     }
   },
+  spacing: (factor) => `${0.5 * factor}rem`,
+
   components: {
     MuiDropzoneArea: {
       styleOverrides: {
