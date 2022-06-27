@@ -30,6 +30,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-hook-form": "^7.30.0",
+    "react-jwt": "^1.1.6",
     "react-map-gl": "^7.0.11",
     "react-mui-dropzone": "^4.0.6",
     "react-router-dom": "^6.3.0",
