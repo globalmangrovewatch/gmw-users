@@ -84,7 +84,7 @@ function CausesOfDeclineForm() {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [causesOfDeclineTypesIsChecked, setCausesOfDeclineTypes] = useState([])
+  const [causesOfDeclineTypesIsChecked, setCausesOfDeclineTypesIsChecked] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
 
@@ -93,7 +93,7 @@ function CausesOfDeclineForm() {
     const initialCausesOfDecline =
       serverResponse?.data.find((dataItem) => dataItem.question_id === '4.2')?.answer_value ?? []
 
-    const initialCausesOfDeclineTypes = []
+    const initialCausesOfDeclineTypesIsChecked = []
 
     // function that adds `${cause}-${causeAnswer}` to initialCausesOfDeclineTypes array, to simplify
     // isChecked lookups (as opposed to searching through deeply nested values every time)
@@ -104,7 +104,9 @@ function CausesOfDeclineForm() {
         const label = cause.mainCauseLabel
         // adding maincause label appended to answer to avoid situations
         // where we have the same answers for different causes
-        mainCauseAnswers.forEach((answer) => initialCausesOfDeclineTypes.push(`${label}-${answer}`))
+        mainCauseAnswers.forEach((answer) =>
+          initialCausesOfDeclineTypesIsChecked.push(`${label}-${answer}`)
+        )
       }
       // map types for subCase options
       else {
@@ -114,12 +116,12 @@ function CausesOfDeclineForm() {
           const label = subCause.subCauseLabel
           const answers = subCause.subCauseAnswers
           answers.forEach((answer) => {
-            initialCausesOfDeclineTypes.push(`${label}-${answer.subCauseAnswer}`)
+            initialCausesOfDeclineTypesIsChecked.push(`${label}-${answer.subCauseAnswer}`)
           })
         })
       }
     })
-    setCausesOfDeclineTypes(initialCausesOfDeclineTypes)
+    setCausesOfDeclineTypesIsChecked(initialCausesOfDeclineTypesIsChecked)
   }, [])
 
   useInitializeQuestionMappedForm({
@@ -241,7 +243,7 @@ function CausesOfDeclineForm() {
       )
       causesOfDeclineTypesIsCheckedCopy.splice(typeIndex, 1)
     }
-    setCausesOfDeclineTypes(causesOfDeclineTypesIsCheckedCopy)
+    setCausesOfDeclineTypesIsChecked(causesOfDeclineTypesIsCheckedCopy)
   }
 
   const onSubmit = async (data) => {

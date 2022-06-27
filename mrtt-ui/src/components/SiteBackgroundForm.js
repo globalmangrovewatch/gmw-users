@@ -34,8 +34,7 @@ const ProjectDetailsForm = () => {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  // an array for managing isChecked items
-  const [stakeholderTypes, setStakeholderTypes] = useState([])
+  const [stakeholderTypesIsChecked, setStakeholderTypesIsChecked] = useState([])
 
   const validationSchema = yup.object().shape({
     stakeholders: yup
@@ -83,10 +82,10 @@ const ProjectDetailsForm = () => {
     const initialStakeholders =
       serverResponse?.data.find((dataItem) => dataItem.question_id === '2.1')?.answer_value ?? []
 
-    const initialStakeholderTypes = initialStakeholders?.map(
+    const initialStakeholderTypesIsChecked = initialStakeholders?.map(
       (stakeholder) => stakeholder.stakeholderType
     )
-    setStakeholderTypes(initialStakeholderTypes)
+    setStakeholderTypesIsChecked(initialStakeholderTypesIsChecked)
   }, [])
 
   useInitializeQuestionMappedForm({
@@ -117,19 +116,19 @@ const ProjectDetailsForm = () => {
   }
 
   const handleStakeholdersOnChange = (event, stakeholder) => {
-    const stakeholderTypesCopy = stakeholderTypes
+    const stakeholderTypesIsCheckedCopy = stakeholderTypesIsChecked
     if (event.target.checked) {
       stakeholdersAppend({ stakeholderType: stakeholder })
-      stakeholderTypesCopy.push(stakeholder)
+      stakeholderTypesIsCheckedCopy.push(stakeholder)
     } else {
       const fieldIndex = stakeholdersFields.findIndex(
         (field) => field.stakeholderType === stakeholder
       )
-      const typeIndex = stakeholderTypesCopy.findIndex((type) => type === stakeholder)
-      stakeholderTypesCopy.splice(typeIndex, 1)
+      const typeIndex = stakeholderTypesIsCheckedCopy.findIndex((type) => type === stakeholder)
+      stakeholderTypesIsCheckedCopy.splice(typeIndex, 1)
       stakeholdersRemove(fieldIndex)
     }
-    setStakeholderTypes(stakeholderTypesCopy)
+    setStakeholderTypesIsChecked(stakeholderTypesIsCheckedCopy)
   }
 
   const getStakeholder = (stakeholder) =>
@@ -152,7 +151,7 @@ const ProjectDetailsForm = () => {
                   <Box>
                     <Checkbox
                       value={stakeholder}
-                      checked={stakeholderTypes.includes(stakeholder)}
+                      checked={stakeholderTypesIsChecked.includes(stakeholder)}
                       onChange={(event) =>
                         handleStakeholdersOnChange(event, stakeholder)
                       }></Checkbox>
