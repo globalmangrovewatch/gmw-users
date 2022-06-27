@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FormQuestionDiv } from '../styles/forms'
-import { FormLabel } from '@mui/material'
+import { FormQuestionDiv, StickyFormLabel } from '../styles/forms'
 import { Controller } from 'react-hook-form'
 import CheckboxGroup from './CheckboxGroup/CheckboxGroup'
 import getOptionsValuesAndLabels from '../library/getOptionsValuesAndLabels'
@@ -20,23 +19,23 @@ const CheckboxGroupWithLabelAndController = ({
   return (
     <>
       <FormQuestionDiv>
-        <FormLabel id={labelId}>{question}</FormLabel>
+        <StickyFormLabel id={labelId}>{question}</StickyFormLabel>
+        <Controller
+          name={fieldName}
+          control={formControl}
+          render={({ field }) => {
+            return (
+              <CheckboxGroup
+                {...field}
+                options={optionsValueLabels}
+                aria-labelledby={labelId}
+                shouldAddOtherOptionWithClarification={shouldAddOtherOptionWithClarification}
+                id={fieldName}
+              />
+            )
+          }}
+        />
       </FormQuestionDiv>
-      <Controller
-        name={fieldName}
-        control={formControl}
-        render={({ field }) => {
-          return (
-            <CheckboxGroup
-              {...field}
-              options={optionsValueLabels}
-              aria-labelledby={labelId}
-              shouldAddOtherOptionWithClarification={shouldAddOtherOptionWithClarification}
-              id={fieldName}
-            />
-          )
-        }}
-      />
     </>
   )
 }

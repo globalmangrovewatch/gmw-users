@@ -26,7 +26,7 @@ const themeMui = createTheme({
         },
         text: {
           '&.MuiTypography-h5': {
-            fontSize: '0.8rem'
+            fontSize: '1rem'
           }
         }
       }
