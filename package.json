@@ -10,5 +10,8 @@
   },
   "scripts": {
     "prepare": "husky install"
+  },
+  "dependencies": {
+    "react-jwt": "^1.1.6"
   }
 }

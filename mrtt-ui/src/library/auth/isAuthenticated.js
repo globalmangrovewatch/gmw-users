@@ -1,7 +1,9 @@
+import { isExpired } from 'react-jwt'
+
 const isAuthenticated = () => {
   const token = localStorage.getItem('token')
-  // TODO: Validate token instead of just checking for existence
-  return token != null
+  const expired = isExpired(token)
+  return token != null && !expired
 }
 
 export default isAuthenticated
