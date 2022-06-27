@@ -6,7 +6,17 @@ import HeaderMenu from './HeaderMenu'
 const HeaderContainer = styled('header')`
   background-color: ${theme.color.secondary};
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  position: fixed;
+  top: 0;
+  color: white;
+  height: ${theme.layout.headerHeight};
+  width: 100vw;
+  z-index: 2;
+  @media (min-width: ${theme.layout.mediaQueryDesktop}) {
+    left: 0;
+  }
 `
 const LogoWrapper = styled('div')`
   background-color: ${theme.color.primary};
