@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import axios from 'axios'
+import { useParams } from 'react-router-dom'
 import {
   useForm,
   // useFieldArray,
@@ -17,13 +18,20 @@ import {
   TabularInputSection,
   TabularLabel
 } from '../styles/forms'
-// import { questionMapping } from '../data/questionMapping'
+import { questionMapping } from '../data/questionMapping'
 import { preRestorationAssessment as questions } from '../data/questions'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { ButtonSubmit } from '../styles/buttons'
 import { ErrorText } from '../styles/typography'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
+import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
+import LoadingIndicator from './LoadingIndicator'
+import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
+
+const getSiteCountries = (registrationAnswersFromServer) =>
+  registrationAnswersFromServer?.data.find((dataItem) => dataItem.question_id === '1.2')
+    ?.answer_value ?? []
 
 function PreRestorationAssessmentForm() {
   const validationSchema = yup.object().shape({
@@ -51,8 +59,7 @@ function PreRestorationAssessmentForm() {
         .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
     }),
     naturalRegenerationAtSite: yup.string(),
-    // add proper validation for mangrovesSpeciesPresent 5.3e
-    mangroveSpeciesPresent: yup.array().default([]),
+    mangroveSpeciesPresent: multiselectWithOtherValidation,
     // add proper validation for speciesComposition 5.3f
     speciesComposition: yup.array().default([]),
     physicalMeasurementsTaken: yup.object().shape({
@@ -79,12 +86,45 @@ function PreRestorationAssessmentForm() {
     handleSubmit: validateInputs,
     formState: { errors },
     control,
+    reset: resetForm,
     watch
   } = reactHookFormInstance
   const mangroveRestorationAttemptedWatcher = watch('mangroveRestorationAttempted')
   const siteAssessmentBeforeProjectWatcher = watch('siteAssessmentBeforeProject')
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
+  const { siteId } = useParams()
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+
+  const loadSiteCountriesAndSetSpeciesFromServerData = useCallback((serverResponse) => {
+    const siteCountriesResponse = getSiteCountries(serverResponse)
+
+    if (siteCountriesResponse.length) {
+      const countriesList = siteCountriesResponse.map(
+        (countryItem) => countryItem.properties.country
+      )
+      const species = []
+      countriesList.forEach((countrySelected) => {
+        mangroveSpeciesPerCountryList.forEach((countryItem) => {
+          if (countryItem.country.name === countrySelected) {
+            species.push(...countryItem.species)
+          }
+        })
+      })
+      const uniqueSpecies = [...new Set(species)]
+      setMangroveSpeciesForCountriesSelected(uniqueSpecies)
+    }
+  }, [])
+
+  useInitializeQuestionMappedForm({
+    apiUrl: apiAnswersUrl,
+    questionMapping: questionMapping.restorationAims,
+    resetForm,
+    setIsLoading,
+    successCallback: loadSiteCountriesAndSetSpeciesFromServerData
+  })
 
   const handleSubmit = async (data) => {
     setisSubmitting(true)
@@ -106,7 +146,9 @@ function PreRestorationAssessmentForm() {
       })
   }
 
-  return (
+  return isLoading ? (
+    <LoadingIndicator />
+  ) : (
     <MainFormDiv>
       <SectionFormTitle>Pre-restoration Assessment</SectionFormTitle>
       <Form onSubmit={validateInputs(handleSubmit)}>
@@ -256,13 +298,17 @@ function PreRestorationAssessmentForm() {
               />
               <ErrorText>{errors.naturalRegenerationAtSite?.message}</ErrorText>
             </FormQuestionDiv>
+
+            <CheckboxGroupWithLabelAndController
+              fieldName='mangroveSpeciesPresent'
+              reactHookFormInstance={reactHookFormInstance}
+              options={mangroveSpeciesForCountriesSelected}
+              question={questions.mangroveSpeciesPresent.question}
+              shouldAddOtherOptionWithClarification={false}
+            />
+            <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
           </div>
         ) : null}
-        <FormQuestionDiv>
-          <FormLabel>{questions.mangroveSpeciesPresent.question}</FormLabel>
-          {/* add in 5.3e - mangrove species list from section 1*/}
-          <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
-        </FormQuestionDiv>
         <FormQuestionDiv>
           <FormLabel>{questions.speciesComposition.question}</FormLabel>
           {/* add in 5.3f - estimate species compositon percentage from previous q*/}
