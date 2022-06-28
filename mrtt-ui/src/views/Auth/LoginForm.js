@@ -14,7 +14,6 @@ import { FormLabel, TextField } from '@mui/material'
 import Button from '@mui/material/Button'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
-import getBaseUrl from '../../library/auth/getBaseUrl'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),
@@ -29,7 +28,7 @@ const LoginForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
 
-  const authUrl = `${getBaseUrl(process.env.REACT_APP_API_URL)}/users/sign_in`
+  const authUrl = `${process.env.REACT_APP_AUTH_URL}/users/sign_in`
 
   const {
     control: formControl,
