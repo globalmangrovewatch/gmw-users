@@ -13,7 +13,6 @@ import { Form, MainFormDiv, SectionFormTitle } from '../../styles/forms'
 import { FormLabel, TextField } from '@mui/material'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
-import getBaseUrl from '../../library/auth/getBaseUrl'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),
@@ -28,7 +27,7 @@ const SignupForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
 
-  const authUrl = `${getBaseUrl(process.env.REACT_APP_API_URL)}/users`
+  const authUrl = `${process.env.REACT_APP_AUTH_URL}/users`
 
   const {
     control: formControl,
