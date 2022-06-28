@@ -11,6 +11,7 @@ import { ButtonContainer, RowFlexEnd } from '../../styles/containers'
 import { ErrorText } from '../../styles/typography'
 import { Form, MainFormDiv, SectionFormTitle } from '../../styles/forms'
 import { FormLabel, TextField } from '@mui/material'
+import Button from '@mui/material/Button'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
 import getBaseUrl from '../../library/auth/getBaseUrl'
@@ -48,11 +49,8 @@ const LoginForm = () => {
       .post(authUrl, { user: formData }, options)
       .then(({ data }) => {
         setIsSubmitting(false)
-        toast.success(data.message)
-
         if (data.token) {
           localStorage.setItem('token', data.token)
-          // TODO: navigate to another page
           navigate('/sites')
         }
       })
@@ -72,6 +70,10 @@ const LoginForm = () => {
 
   const handleCancelClick = () => {
     navigate(-1)
+  }
+
+  const handleSignUpOnClick = () => {
+    navigate('/auth/signup')
   }
 
   const form = (
@@ -95,6 +97,9 @@ const LoginForm = () => {
         <ErrorText>{errors?.password?.message}</ErrorText>
         <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
         <ButtonContainer>
+          <Button variant='text' onClick={handleSignUpOnClick}>
+            Sign Up
+          </Button>
           <ButtonCancel onClick={handleCancelClick} />
           <ButtonSubmit isSubmitting={isSubmitting} />
         </ButtonContainer>

@@ -42,7 +42,7 @@ const SignupForm = () => {
       .then(({ data }) => {
         setIsSubmitting(false)
         toast.success(data.message)
-        // TODO: navigate to another page
+        navigate('/auth/login')
       })
       .catch((error) => {
         setIsSubmitting(false)
@@ -66,6 +66,14 @@ const SignupForm = () => {
     <MainFormDiv>
       <SectionFormTitle>Sign-up</SectionFormTitle>
       <Form onSubmit={validateInputs(handleSubmit)}>
+        <FormLabel htmlFor='name'>Name </FormLabel>
+        <Controller
+          name='name'
+          control={formControl}
+          render={({ field }) => <TextField {...field} id='name' />}
+        />
+        <ErrorText>{errors?.email?.message}</ErrorText>
+
         <FormLabel htmlFor='email'>Email* </FormLabel>
         <Controller
           name='email'

@@ -8,6 +8,8 @@ import { PaddedSection, RowFlexEnd } from '../../styles/containers'
 import language from '../../language'
 import theme from '../../styles/theme'
 
+import { useNavigate } from 'react-router-dom'
+
 const CustomButton = styled(Button)`
   margin: 0;
   color: ${theme.color.white};
@@ -15,6 +17,13 @@ const CustomButton = styled(Button)`
 
 function HeaderMenu() {
   const [anchorElement, setAnchorElement] = React.useState(null)
+  const navigate = useNavigate()
+
+  function handleLogoutOnClick() {
+    localStorage.removeItem('token')
+    navigate('/auth/login')
+    setAnchorElement(null)
+  }
 
   function handleMenuClick(event) {
     setAnchorElement(event.currentTarget)
@@ -42,7 +51,9 @@ function HeaderMenu() {
           <Stack>
             <>Profile Placeholder</>
             <RowFlexEnd>
-              <ButtonSecondary>{language.header.logout}</ButtonSecondary>
+              <ButtonSecondary onClick={handleLogoutOnClick}>
+                {language.header.logout}
+              </ButtonSecondary>
             </RowFlexEnd>
           </Stack>
         </PaddedSection>
