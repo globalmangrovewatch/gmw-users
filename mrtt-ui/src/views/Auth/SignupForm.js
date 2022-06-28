@@ -15,8 +15,11 @@ import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
 
 const validationSchema = yup.object({
-  email: yup.string().required('Email required'),
-  password: yup.string().required('Password required')
+  email: yup.string().required('Email required').email('Must be a valid email'),
+  password: yup
+    .string()
+    .required('Password required')
+    .min(8, 'Password must be at the minimum 8 characters long')
 })
 
 const formDefaultValues = { email: '', password: '' }
@@ -71,7 +74,6 @@ const SignupForm = () => {
           control={formControl}
           render={({ field }) => <TextField {...field} id='name' />}
         />
-        <ErrorText>{errors?.email?.message}</ErrorText>
 
         <FormLabel htmlFor='email'>Email* </FormLabel>
         <Controller
