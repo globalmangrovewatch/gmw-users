@@ -22,7 +22,7 @@ const validationSchema = yup.object({
     .min(8, 'Password must be at the minimum 8 characters long')
 })
 
-const formDefaultValues = { email: '', password: '' }
+const formDefaultValues = { name: '', email: '', password: '' }
 
 const SignupForm = () => {
   const [isLoading] = useState(false)
