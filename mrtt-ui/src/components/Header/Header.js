@@ -21,13 +21,13 @@ const HeaderContainer = styled('header')`
 `
 
 const StyledGmwLogo = styled(GmwLogo)`
-  align-self: flex-start;
+  height: 100%;
+  width: auto;
 `
 const Header = () => {
   return (
     <HeaderContainer>
       <StyledGmwLogo />
-
       <HeaderMenu />
     </HeaderContainer>
   )
