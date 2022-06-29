@@ -7,7 +7,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 
 import { ButtonCancel, ButtonSubmit } from '../../styles/buttons'
-import { ButtonContainer, RowFlexEnd } from '../../styles/containers'
+import { ButtonContainer, PagePadding, RowFlexEnd } from '../../styles/containers'
 import { ErrorText } from '../../styles/typography'
 import { Form, MainFormDiv, SectionFormTitle } from '../../styles/forms'
 import { FormLabel, TextField } from '@mui/material'
@@ -66,36 +66,38 @@ const SignupForm = () => {
 
   const form = (
     <MainFormDiv>
-      <SectionFormTitle>Sign-up</SectionFormTitle>
-      <Form onSubmit={validateInputs(handleSubmit)}>
-        <FormLabel htmlFor='name'>Name </FormLabel>
-        <Controller
-          name='name'
-          control={formControl}
-          render={({ field }) => <TextField {...field} id='name' />}
-        />
+      <PagePadding>
+        <SectionFormTitle>Sign-up</SectionFormTitle>
+        <Form onSubmit={validateInputs(handleSubmit)}>
+          <FormLabel htmlFor='name'>Name </FormLabel>
+          <Controller
+            name='name'
+            control={formControl}
+            render={({ field }) => <TextField {...field} id='name' />}
+          />
 
-        <FormLabel htmlFor='email'>Email* </FormLabel>
-        <Controller
-          name='email'
-          control={formControl}
-          render={({ field }) => <TextField {...field} id='email' />}
-        />
-        <ErrorText>{errors?.email?.message}</ErrorText>
+          <FormLabel htmlFor='email'>Email* </FormLabel>
+          <Controller
+            name='email'
+            control={formControl}
+            render={({ field }) => <TextField {...field} id='email' />}
+          />
+          <ErrorText>{errors?.email?.message}</ErrorText>
 
-        <FormLabel htmlFor='password'>Password* </FormLabel>
-        <Controller
-          name='password'
-          control={formControl}
-          render={({ field }) => <TextField {...field} id='password' type='password' />}
-        />
-        <ErrorText>{errors?.password?.message}</ErrorText>
-        <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
-        <ButtonContainer>
-          <ButtonCancel onClick={handleCancelClick} />
-          <ButtonSubmit isSubmitting={isSubmitting} />
-        </ButtonContainer>
-      </Form>
+          <FormLabel htmlFor='password'>Password* </FormLabel>
+          <Controller
+            name='password'
+            control={formControl}
+            render={({ field }) => <TextField {...field} id='password' type='password' />}
+          />
+          <ErrorText>{errors?.password?.message}</ErrorText>
+          <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
+          <ButtonContainer>
+            <ButtonCancel onClick={handleCancelClick} />
+            <ButtonSubmit isSubmitting={isSubmitting} />
+          </ButtonContainer>
+        </Form>
+      </PagePadding>
     </MainFormDiv>
   )
 
