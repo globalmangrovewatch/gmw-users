@@ -21,13 +21,13 @@ const validationSchema = yup.object({
 
 const formDefaultValues = { email: '', password: '' }
 
-const SignupForm = () => {
+const LoginForm = () => {
   const [isLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
 
-  const authUrl = `${process.env.REACT_APP_AUTH_URL}/users`
+  const authUrl = `${process.env.REACT_APP_AUTH_URL}/users/sign_in`
 
   const {
     control: formControl,
@@ -35,13 +35,24 @@ const SignupForm = () => {
     formState: { errors }
   } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
 
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
+    }
+  }
+
   const signUp = (formData) => {
     axios
-      .post(authUrl, { user: formData })
+      .post(authUrl, { user: formData }, options)
       .then(({ data }) => {
         setIsSubmitting(false)
         toast.success(data.message)
-        // TODO: navigate to another page
+
+        if (data.token) {
+          localStorage.setItem('token', data.token)
+          navigate('/sites')
+        }
       })
       .catch((error) => {
         setIsSubmitting(false)
@@ -63,7 +74,7 @@ const SignupForm = () => {
 
   const form = (
     <MainFormDiv>
-      <SectionFormTitle>Sign-up</SectionFormTitle>
+      <SectionFormTitle>Login</SectionFormTitle>
       <Form onSubmit={validateInputs(handleSubmit)}>
         <FormLabel htmlFor='email'>Email* </FormLabel>
         <Controller
@@ -92,4 +103,4 @@ const SignupForm = () => {
   return isLoading ? <LoadingIndicator /> : form
 }
 
-export default SignupForm
+export default LoginForm
