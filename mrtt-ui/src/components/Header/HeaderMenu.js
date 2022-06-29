@@ -9,6 +9,7 @@ import language from '../../language'
 import theme from '../../styles/theme'
 
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
 
 const CustomButton = styled(Button)`
   margin: 0;
@@ -18,9 +19,10 @@ const CustomButton = styled(Button)`
 function HeaderMenu() {
   const [anchorElement, setAnchorElement] = React.useState(null)
   const navigate = useNavigate()
+  const { logout } = useAuth()
 
   function handleLogoutOnClick() {
-    localStorage.removeItem('token')
+    logout()
     navigate('/auth/login')
     setAnchorElement(null)
   }

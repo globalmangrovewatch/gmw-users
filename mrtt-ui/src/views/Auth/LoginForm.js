@@ -15,6 +15,8 @@ import Button from '@mui/material/Button'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
 
+import { useAuth } from '../../hooks/useAuth'
+
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),
   password: yup.string().required('Password required')
@@ -30,6 +32,8 @@ const LoginForm = () => {
 
   const authUrl = `${process.env.REACT_APP_AUTH_URL}/users/sign_in`
 
+  const { login } = useAuth()
+
   const {
     control: formControl,
     handleSubmit: validateInputs,
@@ -43,13 +47,13 @@ const LoginForm = () => {
     }
   }
 
-  const signUp = (formData) => {
+  const signIn = (formData) => {
     axios
       .post(authUrl, { user: formData }, options)
       .then(({ data }) => {
         setIsSubmitting(false)
         if (data.token) {
-          localStorage.setItem('token', data.token)
+          login(data.token)
           navigate('/sites')
         }
       })
@@ -63,7 +67,7 @@ const LoginForm = () => {
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
-    signUp(formData)
+    signIn(formData)
     setIsSubmitting(false)
   }
 

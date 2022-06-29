@@ -6,6 +6,8 @@ import theme from '../styles/theme'
 import Footer from './MobileFooter'
 import Header from './Header/Header'
 
+import { useAuth } from '../hooks/useAuth'
+
 const LayoutWrapper = styled('div')`
   display: flex;
   flex-direction: column;
@@ -24,11 +26,12 @@ const Main = styled('main')`
 `
 
 const GlobalLayout = ({ children }) => {
+  const { isLoggedIn } = useAuth()
   return (
     <LayoutWrapper>
       <Header />
       <Main>{children}</Main>
-      <Footer />
+      {isLoggedIn && <Footer />}
     </LayoutWrapper>
   )
 }
