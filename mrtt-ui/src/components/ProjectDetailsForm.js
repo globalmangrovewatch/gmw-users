@@ -14,7 +14,14 @@ import turfBboxPolygon from '@turf/bbox-polygon'
 
 import { ButtonSubmit } from '../styles/buttons'
 import { ErrorText, Link } from '../styles/typography'
-import { MainFormDiv, FormQuestionDiv, SectionFormTitle, Form } from '../styles/forms'
+import {
+  StickyFormLabel,
+  MainFormDiv,
+  FormPageHeader,
+  FormQuestionDiv,
+  SectionFormTitle,
+  Form
+} from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { projectDetails as questions } from '../data/questions'
 import { questionMapping } from '../data/questionMapping'
@@ -154,14 +161,16 @@ function ProjectDetailsForm() {
     <LoadingIndicator />
   ) : (
     <MainFormDiv>
-      <SectionFormTitle>Project Details Form</SectionFormTitle>
-      <Link to={-1}>&lt; {language.form.navigateBackToSiteOverview}</Link>
+      <FormPageHeader>
+        <SectionFormTitle>Project Details Form</SectionFormTitle>
+        <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
+      </FormPageHeader>
       <Form onSubmit={validateInputs(handleSubmit)}>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
-          <FormLabel id='has-project-end-date-label'>
+          <StickyFormLabel id='has-project-end-date-label'>
             {questions.hasProjectEndDate.question}
-          </FormLabel>
+          </StickyFormLabel>
           <Controller
             name='hasProjectEndDate'
             control={control}
@@ -231,7 +240,7 @@ function ProjectDetailsForm() {
         )}
         {/* Countries selector */}
         <FormQuestionDiv>
-          <FormLabel htmlFor='countries'>{questions.countries.question}</FormLabel>
+          <StickyFormLabel htmlFor='countries'>{questions.countries.question}</StickyFormLabel>
           <Controller
             name='countries'
             control={control}
@@ -257,7 +266,7 @@ function ProjectDetailsForm() {
         </FormQuestionDiv>
         {/* Draw or upload site area */}
         <FormQuestionDiv>
-          <FormLabel>{questions.siteArea.question}</FormLabel>
+          <StickyFormLabel>{questions.siteArea.question}</StickyFormLabel>
           <Controller
             name='siteArea'
             control={control}

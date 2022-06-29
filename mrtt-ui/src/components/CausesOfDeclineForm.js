@@ -6,7 +6,6 @@ import {
   Box,
   Checkbox,
   FormControlLabel,
-  FormLabel,
   ListItem,
   MenuItem,
   Radio,
@@ -16,6 +15,7 @@ import {
 } from '@mui/material'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { FormPageHeader, StickyFormLabel } from '../styles/forms'
 import * as yup from 'yup'
 
 import {
@@ -271,11 +271,13 @@ function CausesOfDeclineForm() {
     <LoadingIndicator />
   ) : (
     <MainFormDiv>
-      <SectionFormTitle>Causes of Decline</SectionFormTitle>
-      <Link to={-1}>&lt; {language.form.navigateBackToSiteOverview}</Link>
+      <FormPageHeader>
+        <SectionFormTitle>Causes of Decline</SectionFormTitle>
+        <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
+      </FormPageHeader>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormQuestionDiv>
-          <FormLabel>{causesOfDecline.lossKnown.question}</FormLabel>
+          <StickyFormLabel>{causesOfDecline.lossKnown.question}</StickyFormLabel>
           <Controller
             name='lossKnown'
             control={control}
@@ -294,7 +296,7 @@ function CausesOfDeclineForm() {
         </FormQuestionDiv>
         {lossKnownWatcher === 'true' ? (
           <FormQuestionDiv>
-            <FormLabel>{causesOfDecline.causesOfDecline.question}</FormLabel>
+            <StickyFormLabel>{causesOfDecline.causesOfDecline.question}</StickyFormLabel>
             {causesOfDeclineOptions.map((mainCause, mainCauseIndex) => {
               return (
                 <Box key={mainCauseIndex} sx={{ marginTop: '0.75em', marginBottom: '1.5em' }}>
@@ -363,7 +365,7 @@ function CausesOfDeclineForm() {
         ) : null}
         {causesOfDeclineFields.length ? (
           <FormQuestionDiv>
-            <FormLabel>{causesOfDecline.levelsOfDegredation.question}</FormLabel>
+            <StickyFormLabel>{causesOfDecline.levelsOfDegredation.question}</StickyFormLabel>
             {causesOfDeclineFields.map((mainCause, mainCauseIndex) => (
               <Box key={mainCauseIndex}>
                 <SubTitle sx={{ marginBottom: '0.5em', marginTop: '1em' }}>

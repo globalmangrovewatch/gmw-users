@@ -5,22 +5,19 @@ import theme from '../styles/theme'
 
 import Footer from './MobileFooter'
 import Header from './Header/Header'
+import themeMui from '../styles/themeMui'
 
 const LayoutWrapper = styled('div')`
   display: flex;
   flex-direction: column;
   background-color: ${theme.color.bodyBackground};
   height: 100vh;
-  & main {
-    flex-grow: 2;
-  }
   @media (min-width: ${theme.layout.mediaQueryDesktop}) {
     margin-left: ${theme.layout.navWidth};
   }
 `
 const Main = styled('main')`
-  margin-top: ${theme.layout.headerHeight};
-  max-width: ${theme.layout.maxContentWidth};
+  margin: ${theme.layout.headerHeight} 0 ${themeMui.spacing(4)} 0;
 `
 
 const GlobalLayout = ({ children }) => {

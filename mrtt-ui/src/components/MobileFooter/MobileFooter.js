@@ -23,6 +23,7 @@ const StyledFooter = styled('footer')`
   width: 100%;
   background: white;
   z-index: 2;
+  height: ${theme.layout.footerHeight};
   @media (min-width: ${theme.layout.mediaQueryDesktop}) {
     flex-direction: column;
     left: 0;

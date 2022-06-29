@@ -21,6 +21,7 @@ const border = {
 }
 const layout = {
   headerHeight: '5rem',
+  footerHeight: '6rem',
   navWidth: '18rem',
   mediaQueryDesktop: '599px',
   maxContentWidth: '96rem'
