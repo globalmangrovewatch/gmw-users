@@ -9,7 +9,7 @@ const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useLocalStorage('token', null)
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    return false
+    return !isExpired(token)
   })
   const value = useMemo(() => {
     const login = async (token) => {
