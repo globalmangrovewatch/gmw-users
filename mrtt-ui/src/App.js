@@ -13,9 +13,11 @@ import RestorationAimsForm from './components/RestorationAimsForm/RestorationAim
 import SiteBackgroundForm from './components/SiteBackgroundForm'
 import SiteForm from './views/SiteForm'
 import SignupForm from './views/Auth/SignupForm'
+import LoginForm from './views/Auth/LoginForm'
 import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOverview'
 import Sites from './views/Sites'
 import themeMui from './styles/themeMui'
+import ProtectedRoutes from './components/Auth/ProtectedRoutes'
 
 function App() {
   return (
@@ -24,18 +26,25 @@ function App() {
         <GlobalLayout>
           <CustomToastContainer />
           <Routes>
-            <Route path='/' element={<Navigate to='/sites' replace />} />
-            <Route path='/landscapes' element={<Landscapes />} />
-            <Route path='/organizations' element={<Organizations />} />
-            <Route path='/site/:siteId/edit' element={<SiteForm isNewSite={false} />} />
-            <Route path='/site/:siteId/form/causes-of-decline' element={<CausesOfDeclineForm />} />
-            <Route path='/site/:siteId/form/project-details' element={<ProjectDetailsForm />} />
-            <Route path='/site/:siteId/form/restoration-aims' element={<RestorationAimsForm />} />
-            <Route path='/site/:siteId/form/site-background' element={<SiteBackgroundForm />} />
-            <Route path='/site/:siteId/overview' element={<SiteQuestionsOverview />} />
-            <Route path='/site/new' element={<SiteForm isNewSite={true} />} />
-            <Route path='/sites' element={<Sites />} />
+            <Route element={<ProtectedRoutes />}>
+              <Route path='/' element={<Navigate to='/sites' replace />} />
+              <Route path='/landscapes' element={<Landscapes />} />
+              <Route path='/organizations' element={<Organizations />} />
+              <Route path='/sites' element={<Sites />} />
+              <Route path='/site/:siteId/edit' element={<SiteForm isNewSite={false} />} />
+              <Route
+                path='/site/:siteId/form/causes-of-decline'
+                element={<CausesOfDeclineForm />}
+              />
+              <Route path='/site/:siteId/form/project-details' element={<ProjectDetailsForm />} />
+              <Route path='/site/:siteId/form/restoration-aims' element={<RestorationAimsForm />} />
+              <Route path='/site/:siteId/form/site-background' element={<SiteBackgroundForm />} />
+              <Route path='/site/:siteId/overview' element={<SiteQuestionsOverview />} />
+              <Route path='/site/new' element={<SiteForm isNewSite={true} />} />
+            </Route>
+
             <Route path='/auth/signup' element={<SignupForm />} />
+            <Route path='/auth/login' element={<LoginForm />} />
           </Routes>
         </GlobalLayout>
       </Router>
