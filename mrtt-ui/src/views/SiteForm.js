@@ -10,7 +10,13 @@ import PropTypes from 'prop-types'
 import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
 import { ButtonContainer, RowFlexEnd } from '../styles/containers'
 import { ErrorText } from '../styles/typography'
-import { Form, MainFormDiv, SectionFormTitle } from '../styles/forms'
+import {
+  Form,
+  FormPageHeader,
+  MainFormDiv,
+  SectionFormTitle,
+  StickyFormLabel
+} from '../styles/forms'
 import { FormLabel, MenuItem, Select, TextField } from '@mui/material'
 import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
@@ -123,11 +129,13 @@ const SiteForm = ({ isNewSite }) => {
     <ItemDoesntExist item='site' />
   ) : (
     <MainFormDiv>
-      <SectionFormTitle>
-        {isNewSite ? language.pages.siteform.titleNewSite : 'placeholder name'}
-      </SectionFormTitle>
+      <FormPageHeader>
+        <SectionFormTitle>
+          {isNewSite ? language.pages.siteform.titleNewSite : 'placeholder name'}
+        </SectionFormTitle>
+      </FormPageHeader>
       <Form onSubmit={validateInputs(handleSubmit)}>
-        <FormLabel htmlFor='name'>{language.pages.siteform.labelName}* </FormLabel>
+        <StickyFormLabel htmlFor='name'>{language.pages.siteform.labelName}* </StickyFormLabel>
         <Controller
           name='site_name'
           control={formControl}
