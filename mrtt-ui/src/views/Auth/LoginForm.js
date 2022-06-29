@@ -68,7 +68,6 @@ const LoginForm = () => {
     setIsSubmitting(true)
     setIsSubmitError(false)
     signIn(formData)
-    setIsSubmitting(false)
   }
 
   const handleCancelClick = () => {
