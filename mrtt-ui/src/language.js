@@ -1,5 +1,5 @@
 const error = {
-  submit: 'Submit failed. please try again.',
+  submit: 'Submit failed. Please try again.',
   apiLoad: 'Loading data from the api failed. Please try again.',
   getItemDoesntExistMessage: (item) => `That ${item} doesnt exits.`
 }
