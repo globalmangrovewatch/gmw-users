@@ -1,20 +1,27 @@
 import { useState, useCallback } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
-import {
-  useForm,
-  // useFieldArray,
-  Controller
-} from 'react-hook-form'
+import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Button, FormLabel, MenuItem, TextField } from '@mui/material'
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormLabel,
+  List,
+  ListItem,
+  MenuItem,
+  TextField,
+  Typography
+} from '@mui/material'
 
 import {
   Form,
   FormQuestionDiv,
   MainFormDiv,
   SectionFormTitle,
+  SelectedInputSection,
   TabularInputSection,
   TabularLabel
 } from '../styles/forms'
@@ -59,9 +66,16 @@ function PreRestorationAssessmentForm() {
         .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
     }),
     naturalRegenerationAtSite: yup.string(),
-    mangroveSpeciesPresent: multiselectWithOtherValidation,
-    // add proper validation for speciesComposition 5.3f
-    speciesComposition: yup.array().default([]),
+    mangroveSpeciesPresent: yup.array().of(yup.string()),
+    speciesComposition: yup
+      .array()
+      .of(
+        yup.object().shape({
+          mangroveSpeciesType: yup.mixed(),
+          percentageComposition: yup.number().nullable()
+        })
+      )
+      .default([]),
     physicalMeasurementsTaken: yup.object().shape({
       tidalRange: yup.mixed(),
       elevationToSeaLevel: yup.mixed(),
@@ -87,14 +101,25 @@ function PreRestorationAssessmentForm() {
     formState: { errors },
     control,
     reset: resetForm,
+    setValue,
     watch
   } = reactHookFormInstance
+
+  const {
+    fields: speciesCompositionFields,
+    append: speciesCompositionAppend,
+    remove: speciesCompositionRemove
+    // update: speciesCompositionUpdate
+  } = useFieldArray({ name: 'speciesComposition', control })
+
   const mangroveRestorationAttemptedWatcher = watch('mangroveRestorationAttempted')
   const siteAssessmentBeforeProjectWatcher = watch('siteAssessmentBeforeProject')
+  const speciesCompositionWatcher = watch('speciesComposition')
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
+  const [mangroveSpeciesTypesIsChecked, setMangroveSpeciesTypesIsChecked] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
 
@@ -144,6 +169,24 @@ function PreRestorationAssessmentForm() {
         setIsError(true)
         setisSubmitting(false)
       })
+  }
+
+  const handleMangroveSpeciesPresentOnChange = (event, specie) => {
+    const mangroveSpeciesTypesIsCheckedCopy = mangroveSpeciesTypesIsChecked
+    if (event.target.checked) {
+      speciesCompositionAppend({ mangroveSpeciesType: specie, percentageComposition: '' })
+      mangroveSpeciesTypesIsCheckedCopy.push(specie)
+    } else {
+      const fieldIndex = speciesCompositionFields.findIndex(
+        (field) => field.mangroveSpeciesType === specie
+      )
+      const typeIndex = mangroveSpeciesTypesIsCheckedCopy.findIndex((type) => type === specie)
+      mangroveSpeciesTypesIsCheckedCopy.splice(typeIndex, 1)
+      speciesCompositionRemove(fieldIndex)
+    }
+    setMangroveSpeciesTypesIsChecked(mangroveSpeciesTypesIsCheckedCopy)
+    setValue('mangroveSpeciesPresent', mangroveSpeciesTypesIsCheckedCopy)
+    // console.log('water', speciesCompositionWatcher)
   }
 
   return isLoading ? (
@@ -298,22 +341,50 @@ function PreRestorationAssessmentForm() {
               />
               <ErrorText>{errors.naturalRegenerationAtSite?.message}</ErrorText>
             </FormQuestionDiv>
-
-            <CheckboxGroupWithLabelAndController
-              fieldName='mangroveSpeciesPresent'
-              reactHookFormInstance={reactHookFormInstance}
-              options={mangroveSpeciesForCountriesSelected}
-              question={questions.mangroveSpeciesPresent.question}
-              shouldAddOtherOptionWithClarification={false}
-            />
-            <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
+            <FormQuestionDiv>
+              <FormLabel>{questions.mangroveSpeciesPresent.question}</FormLabel>
+              <List>
+                {mangroveSpeciesForCountriesSelected.map((specie, index) => (
+                  <ListItem key={index}>
+                    <Box>
+                      <Box>
+                        <Checkbox
+                          value={specie}
+                          onChange={(event) =>
+                            handleMangroveSpeciesPresentOnChange(event, specie)
+                          }></Checkbox>
+                        <Typography variant='subtitle'>{specie}</Typography>
+                      </Box>
+                    </Box>
+                  </ListItem>
+                ))}
+              </List>
+              <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
+            </FormQuestionDiv>
           </div>
         ) : null}
-        <FormQuestionDiv>
-          <FormLabel>{questions.speciesComposition.question}</FormLabel>
-          {/* add in 5.3f - estimate species compositon percentage from previous q*/}
-          <ErrorText>{errors.speciesComposition?.message}</ErrorText>
-        </FormQuestionDiv>
+        {mangroveSpeciesTypesIsChecked.length > 0 ? (
+          <FormQuestionDiv>
+            <FormLabel>{questions.speciesComposition.question}</FormLabel>
+            {speciesCompositionWatcher?.map((mangroveSpecie, mangroveSpecieIndex) => {
+              return (
+                <SelectedInputSection key={mangroveSpecieIndex}>
+                  <FormLabel>{mangroveSpecie.mangroveSpeciesType}</FormLabel>
+                  <Controller
+                    name={`speciesComposition.${mangroveSpecieIndex}.percentageComposition`}
+                    control={control}
+                    defaultValue={''}
+                    render={({ field }) => (
+                      <TextField {...field} sx={{ maxWidth: '10em' }} label='% Number'></TextField>
+                    )}
+                  />
+                </SelectedInputSection>
+              )
+            })}
+            <ErrorText>{errors.speciesComposition?.message}</ErrorText>
+          </FormQuestionDiv>
+        ) : null}
+
         {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
           <FormQuestionDiv>
             <TabularLabel>{questions.physicalMeasurementsTaken.question}</TabularLabel>

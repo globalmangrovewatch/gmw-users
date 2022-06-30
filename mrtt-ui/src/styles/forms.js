@@ -51,3 +51,10 @@ export const NestedQuestion = styled('div')(({ theme }) => ({
   padding: theme.spacing(1),
   paddingLeft: theme.spacing(2)
 }))
+
+export const SelectedInputSection = styled('div')`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+`
