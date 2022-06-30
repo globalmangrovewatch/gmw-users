@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-function interceptor() {
+function initializeAxiosAuthenticationInterceptor() {
   axios.interceptors.request.use((request) => {
     const token = localStorage.getItem('token')
     const isApiUrl = request.url.startsWith(`${process.env.REACT_APP_API_URL}`)
@@ -12,4 +12,4 @@ function interceptor() {
   })
 }
 
-export default interceptor
+export default initializeAxiosAuthenticationInterceptor
