@@ -10,7 +10,8 @@ const useInitializeQuestionMappedForm = ({
   resetForm,
   setIsLoading,
   questionMapping,
-  successCallback
+  successCallback,
+  secondSuccessCallback
 }) => {
   useEffect(
     function initializeFormWithApiData() {
@@ -28,6 +29,9 @@ const useInitializeQuestionMappedForm = ({
             if (successCallback) {
               successCallback(response)
             }
+            if (secondSuccessCallback) {
+              secondSuccessCallback(response)
+            }
           })
           .catch(() => {
             setIsLoading(false)
@@ -35,7 +39,7 @@ const useInitializeQuestionMappedForm = ({
           })
       }
     },
-    [apiUrl, resetForm, setIsLoading, questionMapping, successCallback]
+    [apiUrl, resetForm, setIsLoading, questionMapping, successCallback, secondSuccessCallback]
   )
 }
 

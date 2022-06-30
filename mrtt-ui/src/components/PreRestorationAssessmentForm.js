@@ -15,6 +15,7 @@ import {
   TextField,
   Typography
 } from '@mui/material'
+import { toast } from 'react-toastify'
 
 import {
   Form,
@@ -35,9 +36,14 @@ import { multiselectWithOtherValidation } from '../validation/multiSelectWithOth
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 import LoadingIndicator from './LoadingIndicator'
 import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
+import language from '../language'
 
 const getSiteCountries = (registrationAnswersFromServer) =>
   registrationAnswersFromServer?.data.find((dataItem) => dataItem.question_id === '1.2')
+    ?.answer_value ?? []
+
+const getMangroveSpecies = (registrationAnswersFromServer) =>
+  registrationAnswersFromServer?.data.find((dataItem) => dataItem.question_id === '5.3e')
     ?.answer_value ?? []
 
 function PreRestorationAssessmentForm() {
@@ -119,7 +125,7 @@ function PreRestorationAssessmentForm() {
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
-  const [mangroveSpeciesTypesIsChecked, setMangroveSpeciesTypesIsChecked] = useState([])
+  const [mangroveSpeciesTypesChecked, setMangroveSpeciesTypesChecked] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
 
@@ -143,50 +149,53 @@ function PreRestorationAssessmentForm() {
     }
   }, [])
 
+  const loadMangroveSpeciesFromServerData = useCallback((serverResponse) => {
+    setMangroveSpeciesTypesChecked(getMangroveSpecies(serverResponse))
+  }, [])
+
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
-    questionMapping: questionMapping.restorationAims,
+    questionMapping: questionMapping.preRestorationAssessment,
     resetForm,
     setIsLoading,
-    successCallback: loadSiteCountriesAndSetSpeciesFromServerData
+    successCallback: loadSiteCountriesAndSetSpeciesFromServerData,
+    secondSuccessCallback: loadMangroveSpeciesFromServerData
   })
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (formData) => {
     setisSubmitting(true)
     setIsError(false)
 
-    console.log('data: ', data)
-    const url = `${process.env.REACT_APP_API_URL}/sites/1/registration_answers`
-
-    if (!data) return
+    if (!formData) return
 
     axios
-      .put(url, mapDataForApi('siteBackground', data))
+      .patch(apiAnswersUrl, mapDataForApi('preRestorationAssessment', formData))
       .then(() => {
         setisSubmitting(false)
+        toast.success(language.success.submit)
       })
       .catch(() => {
         setIsError(true)
         setisSubmitting(false)
+        toast.error(language.error.submit)
       })
   }
 
   const handleMangroveSpeciesPresentOnChange = (event, specie) => {
-    const mangroveSpeciesTypesIsCheckedCopy = mangroveSpeciesTypesIsChecked
+    const mangroveSpeciesTypesCheckedCopy = mangroveSpeciesTypesChecked
     if (event.target.checked) {
       speciesCompositionAppend({ mangroveSpeciesType: specie, percentageComposition: '' })
-      mangroveSpeciesTypesIsCheckedCopy.push(specie)
+      mangroveSpeciesTypesCheckedCopy.push(specie)
     } else {
       const fieldIndex = speciesCompositionFields.findIndex(
         (field) => field.mangroveSpeciesType === specie
       )
-      const typeIndex = mangroveSpeciesTypesIsCheckedCopy.findIndex((type) => type === specie)
-      mangroveSpeciesTypesIsCheckedCopy.splice(typeIndex, 1)
+      const typeIndex = mangroveSpeciesTypesCheckedCopy.findIndex((type) => type === specie)
+      mangroveSpeciesTypesCheckedCopy.splice(typeIndex, 1)
       speciesCompositionRemove(fieldIndex)
     }
-    setMangroveSpeciesTypesIsChecked(mangroveSpeciesTypesIsCheckedCopy)
-    setValue('mangroveSpeciesPresent', mangroveSpeciesTypesIsCheckedCopy)
-    // console.log('water', speciesCompositionWatcher)
+    setMangroveSpeciesTypesChecked(mangroveSpeciesTypesCheckedCopy)
+    setValue('mangroveSpeciesPresent', mangroveSpeciesTypesCheckedCopy)
   }
 
   return isLoading ? (
@@ -350,6 +359,7 @@ function PreRestorationAssessmentForm() {
                       <Box>
                         <Checkbox
                           value={specie}
+                          checked={mangroveSpeciesTypesChecked.includes(specie)}
                           onChange={(event) =>
                             handleMangroveSpeciesPresentOnChange(event, specie)
                           }></Checkbox>
@@ -363,7 +373,7 @@ function PreRestorationAssessmentForm() {
             </FormQuestionDiv>
           </div>
         ) : null}
-        {mangroveSpeciesTypesIsChecked.length > 0 ? (
+        {mangroveSpeciesTypesChecked.length > 0 ? (
           <FormQuestionDiv>
             <FormLabel>{questions.speciesComposition.question}</FormLabel>
             {speciesCompositionWatcher?.map((mangroveSpecie, mangroveSpecieIndex) => {
