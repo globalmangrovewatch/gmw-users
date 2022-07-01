@@ -37,14 +37,17 @@ import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMap
 import LoadingIndicator from './LoadingIndicator'
 import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
 import language from '../language'
+import TabularInput from './TabularInput'
+import { findDataItem } from '../library/findDataItem'
 
 const getSiteCountries = (registrationAnswersFromServer) =>
-  registrationAnswersFromServer?.data.find((dataItem) => dataItem.question_id === '1.2')
-    ?.answer_value ?? []
+  findDataItem(registrationAnswersFromServer, '1.2') ?? []
 
 const getMangroveSpecies = (registrationAnswersFromServer) =>
-  registrationAnswersFromServer?.data.find((dataItem) => dataItem.question_id === '5.3e')
-    ?.answer_value ?? []
+  findDataItem(registrationAnswersFromServer, '5.3e') ?? []
+
+const getPhysicalMeasurementsTaken = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '5.3g') ?? []
 
 function PreRestorationAssessmentForm() {
   const validationSchema = yup.object().shape({
@@ -78,20 +81,26 @@ function PreRestorationAssessmentForm() {
       .of(
         yup.object().shape({
           mangroveSpeciesType: yup.mixed(),
-          percentageComposition: yup.number().nullable()
+          percentageComposition: yup.array().nullable()
         })
       )
       .default([]),
-    physicalMeasurementsTaken: yup.object().shape({
-      tidalRange: yup.mixed(),
-      elevationToSeaLevel: yup.mixed(),
-      waterSalinity: yup.mixed(),
-      soilPoreWaterSalinity: yup.mixed(),
-      waterPH: yup.mixed(),
-      soilPoreWaterPH: yup.mixed(),
-      soilType: yup.mixed(),
-      soilOrganicMatter: yup.mixed()
-    }),
+    physicalMeasurementsTaken: yup.array().of(
+      yup.object().shape({
+        measurementType: yup.string(),
+        measurementValue: yup.mixed()
+      })
+    ),
+    // physicalMeasurementsTaken: yup.object().shape({
+    //   tidalRange: yup.mixed(),
+    //   elevationToSeaLevel: yup.mixed(),
+    //   waterSalinity: yup.mixed(),
+    //   soilPoreWaterSalinity: yup.mixed(),
+    //   waterPH: yup.mixed(),
+    //   soilPoreWaterPH: yup.mixed(),
+    //   soilType: yup.mixed(),
+    //   soilOrganicMatter: yup.mixed()
+    // }),
     pilotTestConducted: yup.string(),
     guidanceForSiteRestoration: yup.string()
   })
@@ -115,8 +124,14 @@ function PreRestorationAssessmentForm() {
     fields: speciesCompositionFields,
     append: speciesCompositionAppend,
     remove: speciesCompositionRemove
-    // update: speciesCompositionUpdate
   } = useFieldArray({ name: 'speciesComposition', control })
+
+  // const {
+  //   fields: physicalMeasurementsTakenFields,
+  //   append: physicalMeasurementsTakenAppend,
+  //   remove: physicalMeasurementsTakenRemove
+  //   update: physicalMeasurementsTakenUpdate
+  // } = useFieldArray({ name: 'physicalMeasurementsTaken', control })
 
   const mangroveRestorationAttemptedWatcher = watch('mangroveRestorationAttempted')
   const siteAssessmentBeforeProjectWatcher = watch('siteAssessmentBeforeProject')
@@ -128,6 +143,16 @@ function PreRestorationAssessmentForm() {
   const [mangroveSpeciesTypesChecked, setMangroveSpeciesTypesChecked] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+  const [measurementsTaken] = useState([
+    { measurementType: 'tidalRange', measurementValue: 0 },
+    { measurementType: 'elevationToSeaLevel', measurementValue: 0 },
+    { measurementType: 'waterSalinity', measurementValue: 0 },
+    { measurementType: 'soilPoreWaterSalinity', measurementValue: 0 },
+    { measurementType: 'waterPH', measurementValue: 0 },
+    { measurementType: 'soilPoreWaterPH', measurementValue: 0 },
+    { measurementType: 'soilType', measurementValue: 0 },
+    { measurementType: 'soilOrganicMatter', measurementValue: 0 }
+  ])
 
   const loadSiteCountriesAndSetSpeciesFromServerData = useCallback((serverResponse) => {
     const siteCountriesResponse = getSiteCountries(serverResponse)
@@ -153,13 +178,19 @@ function PreRestorationAssessmentForm() {
     setMangroveSpeciesTypesChecked(getMangroveSpecies(serverResponse))
   }, [])
 
+  const loadPhysicalMeasurementsTakenFromServerData = useCallback((serverResponse) => {
+    const physicalMeasurementsTakenInitialVal = getPhysicalMeasurementsTaken(serverResponse)
+    console.log(physicalMeasurementsTakenInitialVal)
+  }, [])
+
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.preRestorationAssessment,
     resetForm,
     setIsLoading,
     successCallback: loadSiteCountriesAndSetSpeciesFromServerData,
-    secondSuccessCallback: loadMangroveSpeciesFromServerData
+    secondSuccessCallback: loadMangroveSpeciesFromServerData,
+    thirdSuccessCallback: loadPhysicalMeasurementsTakenFromServerData
   })
 
   const handleSubmit = async (formData) => {
@@ -398,17 +429,14 @@ function PreRestorationAssessmentForm() {
         {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
           <FormQuestionDiv>
             <TabularLabel>{questions.physicalMeasurementsTaken.question}</TabularLabel>
-            <TabularInputSection>
-              <TabularLabel>{questions.physicalMeasurementsTaken.options[0]}</TabularLabel>
-              <Controller
-                name={`physicalMeasurementsTaken.tidalRange`}
+            {measurementsTaken.map((measurementItem, measurementItemIndex) => (
+              <TabularInput
+                key={measurementItemIndex}
                 control={control}
-                defaultValue={''}
-                render={({ field }) => (
-                  <TextField {...field} value={field.value} label='value'></TextField>
-                )}
-              />
-            </TabularInputSection>
+                label={measurementItem.measurementType}
+                controlName={`physicalMeasurementsTaken.tidalRange`}></TabularInput>
+            ))}
+
             <TabularInputSection>
               <TabularLabel>{questions.physicalMeasurementsTaken.options[1]}</TabularLabel>
               <Controller
