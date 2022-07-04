@@ -55,7 +55,7 @@ function HeaderMenu() {
             <div>
               <ButtonSecondary onClick={handleLogoutOnClick}>
                 {language.header.logout}
-              </ButtonSecondary>            
+              </ButtonSecondary>
             </div>
           </Stack>
         </PaddedSection>
