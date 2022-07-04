@@ -116,12 +116,11 @@ function PreRestorationAssessmentForm() {
     remove: speciesCompositionRemove
   } = useFieldArray({ name: 'speciesComposition', control })
 
-  // const {
-  //   fields: physicalMeasurementsTakenFields,
-  //   append: physicalMeasurementsTakenAppend
-  //   remove: physicalMeasurementsTakenRemove
-  //   update: physicalMeasurementsTakenUpdate
-  // } = useFieldArray({ name: 'physicalMeasurementsTaken', control })
+  const {
+    fields: physicalMeasurementsTakenFields,
+    append: physicalMeasurementsTakenAppend,
+    remove: physicalMeasurementsTakenRemove
+  } = useFieldArray({ name: 'physicalMeasurementsTaken', control })
 
   const mangroveRestorationAttemptedWatcher = watch('mangroveRestorationAttempted')
   const siteAssessmentBeforeProjectWatcher = watch('siteAssessmentBeforeProject')
@@ -133,57 +132,57 @@ function PreRestorationAssessmentForm() {
   const [mangroveSpeciesTypesChecked, setMangroveSpeciesTypesChecked] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
-  const [initialMeasurementsTaken, setInitialMeasurementsTaken] = useState([
-    { measurementType: 'tidalRange', measurementValue: 0 },
-    { measurementType: 'elevationToSeaLevel', measurementValue: 0 },
-    { measurementType: 'waterSalinity', measurementValue: 0 },
-    { measurementType: 'soilPoreWaterSalinity', measurementValue: 0 },
-    { measurementType: 'waterPH', measurementValue: 0 },
-    { measurementType: 'soilPoreWaterPH', measurementValue: 0 },
-    { measurementType: 'soilType', measurementValue: 0 },
-    { measurementType: 'soilOrganicMatter', measurementValue: 0 }
-  ])
+
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
 
-  const loadSiteCountriesAndSetSpeciesFromServerData = useCallback((serverResponse) => {
-    const siteCountriesResponse = getSiteCountries(serverResponse)
+  const loadServerData = useCallback(
+    (serverResponse) => {
+      const defaultMeasurementsTaken = [
+        { measurementType: 'Tidal range', measurementValue: 0 },
+        { measurementType: 'Elevation to sea level', measurementValue: 0 },
+        { measurementType: 'Water salinity', measurementValue: 0 },
+        { measurementType: 'Soil pore water salinity', measurementValue: 0 },
+        { measurementType: 'Water PH', measurementValue: 0 },
+        { measurementType: 'Soil pore water PH', measurementValue: 0 },
+        { measurementType: 'Soil type', measurementValue: 0 },
+        { measurementType: 'Soil organic matter', measurementValue: 0 }
+      ]
 
-    if (siteCountriesResponse.length) {
-      const countriesList = siteCountriesResponse.map(
-        (countryItem) => countryItem.properties.country
-      )
-      const species = []
-      countriesList.forEach((countrySelected) => {
-        mangroveSpeciesPerCountryList.forEach((countryItem) => {
-          if (countryItem.country.name === countrySelected) {
-            species.push(...countryItem.species)
-          }
+      const siteCountriesResponse = getSiteCountries(serverResponse)
+
+      if (siteCountriesResponse.length) {
+        const countriesList = siteCountriesResponse.map(
+          (countryItem) => countryItem.properties.country
+        )
+        const species = []
+        countriesList.forEach((countrySelected) => {
+          mangroveSpeciesPerCountryList.forEach((countryItem) => {
+            if (countryItem.country.name === countrySelected) {
+              species.push(...countryItem.species)
+            }
+          })
         })
-      })
-      const uniqueSpecies = [...new Set(species)]
-      setMangroveSpeciesForCountriesSelected(uniqueSpecies)
-    }
-  }, [])
+        const uniqueSpecies = [...new Set(species)]
+        setMangroveSpeciesForCountriesSelected(uniqueSpecies)
+      }
+      setMangroveSpeciesTypesChecked(getMangroveSpecies(serverResponse))
 
-  const loadMangroveSpeciesFromServerData = useCallback((serverResponse) => {
-    setMangroveSpeciesTypesChecked(getMangroveSpecies(serverResponse))
-  }, [])
+      const physicalMeasurementsTakenInitialVal = getPhysicalMeasurementsTaken(serverResponse)
 
-  const loadPhysicalMeasurementsTakenFromServerData = useCallback((serverResponse) => {
-    const physicalMeasurementsTakenInitialVal = getPhysicalMeasurementsTaken(serverResponse)
-    if (physicalMeasurementsTakenInitialVal.length) {
-      setInitialMeasurementsTaken(physicalMeasurementsTakenInitialVal)
-    }
-  }, [])
+      if (physicalMeasurementsTakenInitialVal.length === 0) {
+        // maybe needs rerender ?
+        setValue('physicalMeasurementsTaken', defaultMeasurementsTaken)
+      }
+    },
+    [setValue]
+  )
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.preRestorationAssessment,
     resetForm,
     setIsLoading,
-    successCallback: loadSiteCountriesAndSetSpeciesFromServerData,
-    secondSuccessCallback: loadMangroveSpeciesFromServerData,
-    thirdSuccessCallback: loadPhysicalMeasurementsTakenFromServerData
+    successCallback: loadServerData
   })
 
   const handleSubmit = async (formData) => {
@@ -191,6 +190,8 @@ function PreRestorationAssessmentForm() {
     setIsError(false)
 
     if (!formData) return
+
+    console.log('data: ', formData)
 
     axios
       .patch(apiAnswersUrl, mapDataForApi('preRestorationAssessment', formData))
@@ -227,8 +228,16 @@ function PreRestorationAssessmentForm() {
     return setShowAddTabularInputRow(boolean)
   }
 
-  const saveMeasurementItem = () => {
-    console.log('saving measurement item')
+  const saveMeasurementItem = (measurementType, measurementValue) => {
+    physicalMeasurementsTakenAppend({
+      measurementType,
+      measurementValue
+    })
+    console.log('fields: ', physicalMeasurementsTakenFields)
+  }
+
+  const deleteMeasurementItem = (measurementIndex) => {
+    physicalMeasurementsTakenRemove(measurementIndex)
   }
 
   return isLoading ? (
@@ -431,12 +440,15 @@ function PreRestorationAssessmentForm() {
         {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
           <FormQuestionDiv>
             <TabularLabel>{questions.physicalMeasurementsTaken.question}</TabularLabel>
-            {initialMeasurementsTaken.length > 0
-              ? initialMeasurementsTaken.map((measurementItem, measurementItemIndex) => (
+            {physicalMeasurementsTakenFields.length > 0
+              ? physicalMeasurementsTakenFields.map((measurementItem, measurementItemIndex) => (
                   <TabularInputRow
                     key={measurementItemIndex}
                     control={control}
                     label={measurementItem.measurementType}
+                    value={measurementItem.measurementValue}
+                    index={measurementItemIndex}
+                    deleteMeasurementItem={deleteMeasurementItem}
                     controlName={`physicalMeasurementsTaken.${measurementItemIndex}.measurementValue}`}></TabularInputRow>
                 ))
               : null}
@@ -446,7 +458,9 @@ function PreRestorationAssessmentForm() {
                 saveMeasurementItem={saveMeasurementItem}
                 updateTabularInputDisplay={updateTabularInputDisplay}></AddTabularInputRow>
             ) : null}
-            <Button onClick={() => setShowAddTabularInputRow(true)}>+ Add measurement row</Button>
+            {!showAddTabularInputRow ? (
+              <Button onClick={() => setShowAddTabularInputRow(true)}>+ Add measurement row</Button>
+            ) : null}
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>

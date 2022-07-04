@@ -19,7 +19,7 @@ export const FormQuestionDiv = styled('div')(() => ({
 }))
 
 export const SectionFormTitle = styled(Typography)`
-  margin-bottom: '0.5em';
+  margin-bottom: 0.5em;
 `
 SectionFormTitle.defaultProps = { variant: 'h4' }
 
@@ -33,7 +33,7 @@ export const SubTitle = styled(Typography)`
 `
 export const SubTitle2 = styled(Typography)`
   font-weight: bold;
-  margin-top: '0.75em';
+  margin-top: 0.75em;
 `
 
 export const TabularInputSection = styled('div')`
