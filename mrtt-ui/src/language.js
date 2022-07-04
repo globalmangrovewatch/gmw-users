@@ -1,9 +1,14 @@
 const error = {
   submit: 'Submit failed. Please try again.',
   apiLoad: 'Loading data from the api failed. Please try again.',
-  getItemDoesntExistMessage: (item) => `That ${item} doesnt exits.`
+  getItemDoesntExistMessage: (item) => `That ${item} doesnt exist.`
 }
-const success = { submit: 'The data has been saved.' }
+
+const success = {
+  submit: 'The data has been saved.',
+  getEditThingSuccessMessage: (thing) => `${thing} has been edited`,
+  getCreateThingSuccessMessage: (thing) => `${thing}, has been created`
+}
 const form = {
   checkboxGroupOtherInputPlaceholder: 'If other, please state.',
   checkboxGroupOtherLabel: 'Other',
@@ -28,13 +33,26 @@ const pages = {
     titleYourOrganizations: 'Your Organizations'
   },
   sites: { title: 'Sites', newSiteButton: 'New Site' },
-  landscapes: { title: 'Landscapes', newLandscapeButton: 'New Landscape' },
+  landscapeForm: {
+    landscape: 'landscape',
+    titleEdit: 'Edit Landscape',
+    titleNew: 'New Landscape',
+    labelName: 'Name',
+    labelOrganizations: 'Organizations',
+    validation: {
+      nameRequired: 'Please enter a name'
+    }
+  },
+  landscapes: {
+    title: 'Landscapes',
+    newLandscapeButton: 'New Landscape'
+  },
   siteform: {
-    getEditSiteSuccessMessage: (siteName) => `${siteName} has been edited`,
-    getNewSiteSuccessMessage: (siteName) => `${siteName}, has been created`,
+    titleEditSite: 'Site Settings',
     titleNewSite: 'Create a site',
     labelName: 'Site Name',
     labelLandscape: 'Landscape',
+    site: 'site',
     validation: {
       nameRequired: 'Please enter a name',
       landscapeRequired: 'Please select a landscape'
