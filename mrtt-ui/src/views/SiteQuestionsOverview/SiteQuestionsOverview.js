@@ -58,9 +58,9 @@ const SiteOverview = () => {
             setSite(siteData)
             setLandscape(landscapesData.find((landscape) => landscape.id === siteData.landscape_id))
           })
-          .catch((err) => {
+          .catch((error) => {
             setIsLoading(false)
-            if (err?.response?.status === 404) {
+            if (error?.response?.status === 404) {
               setDoesSiteExist(false)
             } else {
               toast.error(language.error.apiLoad)
@@ -81,7 +81,7 @@ const SiteOverview = () => {
             <ItemTitle as='h2'>{site?.site_name}</ItemTitle>
             <ItemSubTitle>{landscape?.landscape_name}</ItemSubTitle>
           </Stack>
-          <SettingsLink to={`/site/${siteId}/edit`} />
+          <SettingsLink to={`/sites/${siteId}/edit`} />
         </TitleAndActionContainer>
         <StyledSectionHeader>{pageLanguage.formGroupTitle.registration}</StyledSectionHeader>
         {/* this is a table instead of a ul to leave room for a cell that shows
@@ -91,28 +91,28 @@ const SiteOverview = () => {
           <tbody>
             <tr>
               <WideTh>
-                <Link to={`/site/${siteId}/form/project-details`}>
+                <Link to={`/sites/${siteId}/form/project-details`}>
                   {pageLanguage.formName.siteDetails}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/site/${siteId}/form/site-background`}>
+                <Link to={`/sites/${siteId}/form/site-background`}>
                   {pageLanguage.formName.siteBackground}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/site/${siteId}/form/restoration-aims`}>
+                <Link to={`/sites/${siteId}/form/restoration-aims`}>
                   {pageLanguage.formName.restorationAims}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/site/${siteId}/form/causes-of-decline`}>
+                <Link to={`/sites/${siteId}/form/causes-of-decline`}>
                   {pageLanguage.formName.causesOfDeclin}
                 </Link>
               </WideTh>

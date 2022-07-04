@@ -40,7 +40,7 @@ function Sites() {
       return 0
     })
     .map(({ site_name, landscape_name, id }) => (
-      <LinkCard key={id} to={`/site/${id}/overview`}>
+      <LinkCard key={id} to={`/sites/${id}/overview`}>
         <ItemTitle>{site_name}</ItemTitle>
         <ItemSubTitle>{landscape_name}</ItemSubTitle>
       </LinkCard>
@@ -52,7 +52,7 @@ function Sites() {
     <ContentWrapper>
       <TitleAndActionContainer>
         <PageTitle>{language.pages.sites.title}</PageTitle>
-        <ButtonPrimary component={Link} to='/site/new'>
+        <ButtonPrimary component={Link} to='/sites/new'>
           {language.pages.sites.newSiteButton}
         </ButtonPrimary>
       </TitleAndActionContainer>

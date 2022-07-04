@@ -61,9 +61,9 @@ const SiteForm = ({ isNewSite }) => {
               resetForm(siteResponse?.data)
             }
           })
-          .catch((err) => {
+          .catch((error) => {
             setIsLoading(false)
-            if (err?.response?.status === 404) {
+            if (error?.response?.status === 404) {
               setDoesItemExist(false)
             } else {
               toast.error(language.error.apiLoad)
@@ -79,7 +79,7 @@ const SiteForm = ({ isNewSite }) => {
       .post(sitesUrl, formData)
       .then(({ data: { site_name } }) => {
         setIsSubmitting(false)
-        toast.success(language.pages.siteform.getNewSiteSuccessMessage(site_name))
+        toast.success(language.success.getCreateThingSuccessMessage(site_name))
         navigate('/sites')
       })
       .catch(() => {
@@ -94,7 +94,7 @@ const SiteForm = ({ isNewSite }) => {
       .patch(siteUrl, formData)
       .then(({ data: { site_name } }) => {
         setIsSubmitting(false)
-        toast.success(language.pages.siteform.getEditSiteSuccessMessage(site_name))
+        toast.success(language.success.getEditThingSuccessMessage(site_name))
         navigate('/sites')
       })
       .catch(() => {
@@ -116,11 +116,11 @@ const SiteForm = ({ isNewSite }) => {
   }
 
   const handleCancelClick = () => {
-    navigate(-1)
+    navigate('/sites')
   }
 
   const form = !doesItemExist ? (
-    <ItemDoesntExist item='site' />
+    <ItemDoesntExist item={language.pages.siteform.site} />
   ) : (
     <ContentWrapper>
       <PageTitle>{isNewSite ? language.pages.siteform.titleNewSite : 'placeholder name'}</PageTitle>
