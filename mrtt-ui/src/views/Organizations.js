@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
-
 import { ContentWrapper, PaddedPageSection, TitleAndActionContainer } from '../styles/containers'
+import { ButtonPrimary } from '../styles/buttons'
+import { H4, H5 } from '../styles/typography'
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { UlAlternating } from '../styles/lists'
 import axios from 'axios'
@@ -49,12 +51,16 @@ function Organizations() {
       <ContentWrapper>
         <TitleAndActionContainer>
           <PageTitle>{language.pages.organizations.title}</PageTitle>
+          <ButtonPrimary component={Link} to='/organizations/new'>
+            {language.pages.organizations.newOrganizationButton}
+          </ButtonPrimary>          
         </TitleAndActionContainer>
         <PaddedPageSection>
           <h5>{language.pages.organizations.titleYourOrganizations}</h5>
           {yourOrganizations.length
             ? yourOrganizationsList
             : language.pages.organizations.noYourOrganizations}
+
 
           <h5>{language.pages.organizations.titleOtherOrganizations}</h5>
           {otherOrganizations.length

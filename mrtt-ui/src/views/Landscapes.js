@@ -1,13 +1,18 @@
-import { Stack } from '@mui/material'
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { ButtonPrimary } from '../styles/buttons'
+import { H4 } from '../styles/typography'
 import { Link } from 'react-router-dom'
+import { LinkCard, PagePadding, RowSpaceBetween } from '../styles/containers'
+import { Stack } from '@mui/material'
 import { toast } from 'react-toastify'
-import LoadingIndicator from '../components/LoadingIndicator'
+import axios from 'axios'
+import EditLink from '../components/EditLink'
 import language from '../language'
 import { ButtonPrimary } from '../styles/buttons'
 import { LinkCard, ContentWrapper, TitleAndActionContainer } from '../styles/containers'
 import { CardTitle, PageTitle } from '../styles/typography'
+import LoadingIndicator from '../components/LoadingIndicator'
+import React, { useEffect, useState } from 'react'
+
 
 const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes/`
 function Landscapes() {
@@ -40,6 +45,7 @@ function Landscapes() {
     .map(({ landscape_name, id }) => (
       <LinkCard key={id} to='#'>
         <CardTitle>{landscape_name}</CardTitle>
+        <EditLink to={`/landscapes/${id}/edit`} />
       </LinkCard>
     ))
 
@@ -49,7 +55,7 @@ function Landscapes() {
     <ContentWrapper>
       <TitleAndActionContainer>
         <PageTitle>{language.pages.landscapes.title}</PageTitle>
-        <ButtonPrimary component={Link} to='#'>
+        <ButtonPrimary component={Link} to='/landscapes/new'>
           {language.pages.landscapes.newLandscapeButton}
         </ButtonPrimary>
       </TitleAndActionContainer>
