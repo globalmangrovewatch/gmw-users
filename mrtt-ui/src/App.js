@@ -45,16 +45,19 @@ function App() {
                 path='/organizations/new'
                 element={<OrganizationForm isNewOrganization={true} />}
               />
-              <Route path='/site/:siteId/edit' element={<SiteForm isNewSite={false} />} />
+              <Route path='/sites/:siteId/edit' element={<SiteForm isNewSite={false} />} />
               <Route
-                path='/site/:siteId/form/causes-of-decline'
+                path='/sites/:siteId/form/causes-of-decline'
                 element={<CausesOfDeclineForm />}
               />
-              <Route path='/site/:siteId/form/project-details' element={<ProjectDetailsForm />} />
-              <Route path='/site/:siteId/form/restoration-aims' element={<RestorationAimsForm />} />
-              <Route path='/site/:siteId/form/site-background' element={<SiteBackgroundForm />} />
-              <Route path='/site/:siteId/overview' element={<SiteQuestionsOverview />} />
-              <Route path='/site/new' element={<SiteForm isNewSite={true} />} />
+              <Route path='/sites/:siteId/form/project-details' element={<ProjectDetailsForm />} />
+              <Route
+                path='/sites/:siteId/form/restoration-aims'
+                element={<RestorationAimsForm />}
+              />
+              <Route path='/sites/:siteId/form/site-background' element={<SiteBackgroundForm />} />
+              <Route path='/sites/:siteId/overview' element={<SiteQuestionsOverview />} />
+              <Route path='/sites/new' element={<SiteForm isNewSite={true} />} />
               <Route path='/sites' element={<Sites />} />
             </Route>
 

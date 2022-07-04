@@ -20,7 +20,6 @@ const ButtonContainer = styled(RowFlexEnd)`
 `
 const RowCenterCenter = styled('div')`
   display: flex;
-  height: 100%;
   align-items: center;
   justify-content: center;
 `
@@ -75,10 +74,11 @@ const QuestionWrapper = styled('div')`
   flex-direction: column;
   max-width: ${theme.layout.maxContentWidth};
 `
+
 export {
   ButtonContainer,
-  LinkCard,
   Card,
+  LinkCard,
   ContentWrapper,
   TitleAndActionContainer,
   PaddedPageSection,

@@ -2,13 +2,20 @@ import { Link } from 'react-router-dom'
 import { Stack } from '@mui/material'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+
+import { ButtonPrimary } from '../styles/buttons'
+import {
+  Card,
+  ContentWrapper,
+  RowCenterCenter,
+  RowSpaceBetween,
+  TitleAndActionContainer
+} from '../styles/containers'
+import { ItemTitle, PageTitle } from '../styles/typography'
 import EditLink from '../components/EditLink'
 import language from '../language'
-import { ButtonPrimary } from '../styles/buttons'
 import LoadingIndicator from '../components/LoadingIndicator'
 import React, { useEffect, useState } from 'react'
-import { Card, ContentWrapper, TitleAndActionContainer } from '../styles/containers'
-import { ItemTitle, PageTitle } from '../styles/typography'
 
 const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes/`
 function Landscapes() {
@@ -40,8 +47,12 @@ function Landscapes() {
     })
     .map(({ landscape_name, id }) => (
       <Card key={id}>
-        <ItemTitle>{landscape_name}</ItemTitle>
-        <EditLink component={Link} to={`/landscapes/${id}/edit`} />
+        <RowSpaceBetween>
+          <ItemTitle>{landscape_name}</ItemTitle>
+          <RowCenterCenter>
+            <EditLink to={`/landscapes/${id}/edit`} />
+          </RowCenterCenter>
+        </RowSpaceBetween>
       </Card>
     ))
 
