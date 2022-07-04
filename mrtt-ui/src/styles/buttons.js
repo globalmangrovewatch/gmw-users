@@ -11,7 +11,7 @@ ButtonSecondary.defaultProps = { variant: 'outlined' }
 
 const ButtonSubmit = ({ isSubmitting }) => {
   return (
-    <Button sx={{ marginTop: '1em' }} variant='contained' type='submit' disabled={isSubmitting}>
+    <Button variant='contained' type='submit' disabled={isSubmitting}>
       {isSubmitting ? language.buttons.submitting : language.buttons.submit}
     </Button>
   )

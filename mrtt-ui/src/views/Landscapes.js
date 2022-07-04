@@ -6,8 +6,8 @@ import { toast } from 'react-toastify'
 import LoadingIndicator from '../components/LoadingIndicator'
 import language from '../language'
 import { ButtonPrimary } from '../styles/buttons'
-import { LinkCard, PagePadding, RowSpaceBetween } from '../styles/containers'
-import { H4 } from '../styles/typography'
+import { LinkCard, ContentWrapper, TitleAndActionContainer } from '../styles/containers'
+import { CardTitle, PageTitle } from '../styles/typography'
 
 const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes/`
 function Landscapes() {
@@ -39,22 +39,22 @@ function Landscapes() {
     })
     .map(({ landscape_name, id }) => (
       <LinkCard key={id} to='#'>
-        {landscape_name}
+        <CardTitle>{landscape_name}</CardTitle>
       </LinkCard>
     ))
 
   return isLoading ? (
     <LoadingIndicator />
   ) : (
-    <PagePadding>
-      <RowSpaceBetween>
-        <H4>{language.pages.landscapes.title}</H4>
+    <ContentWrapper>
+      <TitleAndActionContainer>
+        <PageTitle>{language.pages.landscapes.title}</PageTitle>
         <ButtonPrimary component={Link} to='#'>
           {language.pages.landscapes.newLandscapeButton}
         </ButtonPrimary>
-      </RowSpaceBetween>
+      </TitleAndActionContainer>
       <Stack>{landscapesList}</Stack>
-    </PagePadding>
+    </ContentWrapper>
   )
 }
 

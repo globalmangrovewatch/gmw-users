@@ -4,7 +4,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 
 import { ButtonSecondary } from '../../styles/buttons'
-import { PaddedSection, RowFlexEnd } from '../../styles/containers'
+import { PaddedSection } from '../../styles/containers'
 import language from '../../language'
 import theme from '../../styles/theme'
 
@@ -40,10 +40,10 @@ function HeaderMenu() {
         onClose={handleMenuClose}>
         <PaddedSection>
           <Stack>
-            <>Profile Placeholder</>
-            <RowFlexEnd>
+            <label>Profile Placeholder</label>
+            <div>
               <ButtonSecondary>{language.header.logout}</ButtonSecondary>
-            </RowFlexEnd>
+            </div>
           </Stack>
         </PaddedSection>
       </Menu>
