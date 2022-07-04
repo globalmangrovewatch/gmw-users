@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Controller } from 'react-hook-form'
 import { TextField } from '@mui/material'
-import { TabularInputSection, TabularLabel } from '../styles/forms'
+import { TabularInputSection, TabularLabel } from '../../styles/forms'
 
-const TabularInput = ({ control, label, controlName }) => {
+const TabularInputRow = ({ control, label, controlName }) => {
   return (
     <TabularInputSection>
       <TabularLabel>{label}</TabularLabel>
@@ -18,10 +18,10 @@ const TabularInput = ({ control, label, controlName }) => {
   )
 }
 
-TabularInput.propTypes = {
+TabularInputRow.propTypes = {
   control: PropTypes.any.isRequired,
   label: PropTypes.string.isRequired,
   controlName: PropTypes.string.isRequired
 }
 
-export default TabularInput
+export default TabularInputRow

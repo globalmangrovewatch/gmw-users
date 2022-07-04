@@ -23,7 +23,6 @@ import {
   MainFormDiv,
   SectionFormTitle,
   SelectedInputSection,
-  TabularInputSection,
   TabularLabel
 } from '../styles/forms'
 import { questionMapping } from '../data/questionMapping'
@@ -37,7 +36,8 @@ import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMap
 import LoadingIndicator from './LoadingIndicator'
 import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
 import language from '../language'
-import TabularInput from './TabularInput'
+import TabularInputRow from './TabularInput/TabularInputRow'
+import AddTabularInputRow from './TabularInput/AddTabularInputRow'
 import { findDataItem } from '../library/findDataItem'
 
 const getSiteCountries = (registrationAnswersFromServer) =>
@@ -51,8 +51,8 @@ const getPhysicalMeasurementsTaken = (registrationAnswersFromServer) =>
 
 function PreRestorationAssessmentForm() {
   const validationSchema = yup.object().shape({
-    mangrovesPreviouslyOccured: yup.string().required('This field is required'),
-    mangroveRestorationAttempted: yup.string().required('This field is required'),
+    mangrovesPreviouslyOccured: yup.string(),
+    mangroveRestorationAttempted: yup.string(),
     lastRestorationAttemptYear: yup.mixed().when(' mangroveRestorationAttempted', {
       is: (val) => val && val === 'Yes',
       then: yup
@@ -63,9 +63,9 @@ function PreRestorationAssessmentForm() {
     }),
     previousBiophysicalInterventions: multiselectWithOtherValidation,
     whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidation,
-    siteAssessmentBeforeProject: yup.string().required('This field is required'),
+    siteAssessmentBeforeProject: yup.string(),
     siteAssessmentType: multiselectWithOtherValidation,
-    referenceCite: yup.string().required('This field is required'),
+    referenceCite: yup.string(),
     lostMangrovesYear: yup.mixed().when('siteAssessmentBeforeProject', {
       is: (val) => val && val === 'Yes',
       then: yup
@@ -91,16 +91,6 @@ function PreRestorationAssessmentForm() {
         measurementValue: yup.mixed()
       })
     ),
-    // physicalMeasurementsTaken: yup.object().shape({
-    //   tidalRange: yup.mixed(),
-    //   elevationToSeaLevel: yup.mixed(),
-    //   waterSalinity: yup.mixed(),
-    //   soilPoreWaterSalinity: yup.mixed(),
-    //   waterPH: yup.mixed(),
-    //   soilPoreWaterPH: yup.mixed(),
-    //   soilType: yup.mixed(),
-    //   soilOrganicMatter: yup.mixed()
-    // }),
     pilotTestConducted: yup.string(),
     guidanceForSiteRestoration: yup.string()
   })
@@ -128,7 +118,7 @@ function PreRestorationAssessmentForm() {
 
   // const {
   //   fields: physicalMeasurementsTakenFields,
-  //   append: physicalMeasurementsTakenAppend,
+  //   append: physicalMeasurementsTakenAppend
   //   remove: physicalMeasurementsTakenRemove
   //   update: physicalMeasurementsTakenUpdate
   // } = useFieldArray({ name: 'physicalMeasurementsTaken', control })
@@ -143,7 +133,7 @@ function PreRestorationAssessmentForm() {
   const [mangroveSpeciesTypesChecked, setMangroveSpeciesTypesChecked] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
-  const [measurementsTaken] = useState([
+  const [initialMeasurementsTaken, setInitialMeasurementsTaken] = useState([
     { measurementType: 'tidalRange', measurementValue: 0 },
     { measurementType: 'elevationToSeaLevel', measurementValue: 0 },
     { measurementType: 'waterSalinity', measurementValue: 0 },
@@ -153,6 +143,7 @@ function PreRestorationAssessmentForm() {
     { measurementType: 'soilType', measurementValue: 0 },
     { measurementType: 'soilOrganicMatter', measurementValue: 0 }
   ])
+  const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
 
   const loadSiteCountriesAndSetSpeciesFromServerData = useCallback((serverResponse) => {
     const siteCountriesResponse = getSiteCountries(serverResponse)
@@ -180,7 +171,9 @@ function PreRestorationAssessmentForm() {
 
   const loadPhysicalMeasurementsTakenFromServerData = useCallback((serverResponse) => {
     const physicalMeasurementsTakenInitialVal = getPhysicalMeasurementsTaken(serverResponse)
-    console.log(physicalMeasurementsTakenInitialVal)
+    if (physicalMeasurementsTakenInitialVal.length) {
+      setInitialMeasurementsTaken(physicalMeasurementsTakenInitialVal)
+    }
   }, [])
 
   useInitializeQuestionMappedForm({
@@ -227,6 +220,15 @@ function PreRestorationAssessmentForm() {
     }
     setMangroveSpeciesTypesChecked(mangroveSpeciesTypesCheckedCopy)
     setValue('mangroveSpeciesPresent', mangroveSpeciesTypesCheckedCopy)
+  }
+
+  // called within AddTabularInputRow component
+  const updateTabularInputDisplay = (boolean) => {
+    return setShowAddTabularInputRow(boolean)
+  }
+
+  const saveMeasurementItem = () => {
+    console.log('saving measurement item')
   }
 
   return isLoading ? (
@@ -429,93 +431,22 @@ function PreRestorationAssessmentForm() {
         {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
           <FormQuestionDiv>
             <TabularLabel>{questions.physicalMeasurementsTaken.question}</TabularLabel>
-            {measurementsTaken.map((measurementItem, measurementItemIndex) => (
-              <TabularInput
-                key={measurementItemIndex}
-                control={control}
-                label={measurementItem.measurementType}
-                controlName={`physicalMeasurementsTaken.tidalRange`}></TabularInput>
-            ))}
-
-            <TabularInputSection>
-              <TabularLabel>{questions.physicalMeasurementsTaken.options[1]}</TabularLabel>
-              <Controller
-                name={`physicalMeasurementsTaken.elevationToSeaLevel`}
-                control={control}
-                defaultValue={''}
-                render={({ field }) => (
-                  <TextField {...field} value={field.value} label='value'></TextField>
-                )}
-              />
-            </TabularInputSection>
-            <TabularInputSection>
-              <TabularLabel>{questions.physicalMeasurementsTaken.options[2]}</TabularLabel>
-              <Controller
-                name={`physicalMeasurementsTaken.waterSalinity`}
-                control={control}
-                defaultValue={''}
-                render={({ field }) => (
-                  <TextField {...field} value={field.value} label='value'></TextField>
-                )}
-              />
-            </TabularInputSection>
-            <TabularInputSection>
-              <TabularLabel>{questions.physicalMeasurementsTaken.options[3]}</TabularLabel>
-              <Controller
-                name={`physicalMeasurementsTaken.soilPoreWaterSalinity`}
-                control={control}
-                defaultValue={''}
-                render={({ field }) => (
-                  <TextField {...field} value={field.value} label='value'></TextField>
-                )}
-              />
-            </TabularInputSection>
-            <TabularInputSection>
-              <TabularLabel>{questions.physicalMeasurementsTaken.options[4]}</TabularLabel>
-              <Controller
-                name={`physicalMeasurementsTaken.waterPH`}
-                control={control}
-                defaultValue={''}
-                render={({ field }) => (
-                  <TextField {...field} value={field.value} label='value'></TextField>
-                )}
-              />
-            </TabularInputSection>
-            <TabularInputSection>
-              <TabularLabel>{questions.physicalMeasurementsTaken.options[5]}</TabularLabel>
-              <Controller
-                name={`physicalMeasurementsTaken.soilPoreWaterPH`}
-                control={control}
-                defaultValue={''}
-                render={({ field }) => (
-                  <TextField {...field} value={field.value} label='value'></TextField>
-                )}
-              />
-            </TabularInputSection>
-            <TabularInputSection>
-              <TabularLabel>{questions.physicalMeasurementsTaken.options[6]}</TabularLabel>
-              <Controller
-                name={`physicalMeasurementsTaken.soilType`}
-                control={control}
-                defaultValue={''}
-                render={({ field }) => (
-                  <TextField {...field} value={field.value} label='value'></TextField>
-                )}
-              />
-            </TabularInputSection>
-            <TabularInputSection>
-              <TabularLabel>{questions.physicalMeasurementsTaken.options[7]}</TabularLabel>
-              <Controller
-                name={`physicalMeasurementsTaken.soilOrganicMatter`}
-                control={control}
-                defaultValue={''}
-                render={({ field }) => (
-                  <TextField {...field} value={field.value} label='value'></TextField>
-                )}
-              />
-            </TabularInputSection>
+            {initialMeasurementsTaken.length > 0
+              ? initialMeasurementsTaken.map((measurementItem, measurementItemIndex) => (
+                  <TabularInputRow
+                    key={measurementItemIndex}
+                    control={control}
+                    label={measurementItem.measurementType}
+                    controlName={`physicalMeasurementsTaken.${measurementItemIndex}.measurementValue}`}></TabularInputRow>
+                ))
+              : null}
             <ErrorText>{errors.physicalMeasurementsTaken?.message}</ErrorText>
-            <Button>+ Add measurement row</Button>
+            {showAddTabularInputRow ? (
+              <AddTabularInputRow
+                saveMeasurementItem={saveMeasurementItem}
+                updateTabularInputDisplay={updateTabularInputDisplay}></AddTabularInputRow>
+            ) : null}
+            <Button onClick={() => setShowAddTabularInputRow(true)}>+ Add measurement row</Button>
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>
