@@ -44,8 +44,12 @@ const pages = {
     }
   },
   landscapes: {
-    title: 'Landscapes',
-    newLandscapeButton: 'New Landscape'
+    newLandscapeButton: 'New Landscape',
+    noOrganizarions: 'No organizations in this landscape',
+    noSites: 'No sites in this landscape',
+    organizations: 'Organizations',
+    sites: 'Sites',
+    title: 'Landscapes'
   },
   siteform: {
     titleEditSite: 'Site Settings',

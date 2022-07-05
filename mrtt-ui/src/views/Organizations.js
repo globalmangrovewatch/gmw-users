@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ContentWrapper, PaddedPageSection, TitleAndActionContainer } from '../styles/containers'
+import { ContentWrapper, PaddedSection, TitleAndActionContainer } from '../styles/containers'
 import { ButtonPrimary } from '../styles/buttons'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -54,7 +54,7 @@ function Organizations() {
             {language.pages.organizations.newOrganizationButton}
           </ButtonPrimary>
         </TitleAndActionContainer>
-        <PaddedPageSection>
+        <PaddedSection>
           <h5>{language.pages.organizations.titleYourOrganizations}</h5>
           {yourOrganizations.length
             ? yourOrganizationsList
@@ -64,7 +64,7 @@ function Organizations() {
           {otherOrganizations.length
             ? otherOrganizationsList
             : language.pages.organizations.noOtherOrganizations}
-        </PaddedPageSection>
+        </PaddedSection>
       </ContentWrapper>
     </>
   )
