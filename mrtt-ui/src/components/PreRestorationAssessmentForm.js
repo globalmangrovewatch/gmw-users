@@ -192,8 +192,6 @@ function PreRestorationAssessmentForm() {
 
     if (!formData) return
 
-    console.log('data: ', formData)
-
     axios
       .patch(apiAnswersUrl, mapDataForApi('preRestorationAssessment', formData))
       .then(() => {
@@ -449,14 +447,11 @@ function PreRestorationAssessmentForm() {
               ? physicalMeasurementsTakenFields.map((measurementItem, measurementItemIndex) => (
                   <TabularInputRow
                     key={measurementItemIndex}
-                    // control={control}
                     label={measurementItem.measurementType}
                     value={measurementItem.measurementValue}
                     index={measurementItemIndex}
                     deleteMeasurementItem={deleteMeasurementItem}
-                    updateMeasurementItem={updateMeasurementItem}
-                    // controlName={`physicalMeasurementsTaken.${measurementItemIndex}.measurementValue}`}
-                  ></TabularInputRow>
+                    updateMeasurementItem={updateMeasurementItem}></TabularInputRow>
                 ))
               : null}
             <ErrorText>{errors.physicalMeasurementsTaken?.message}</ErrorText>
