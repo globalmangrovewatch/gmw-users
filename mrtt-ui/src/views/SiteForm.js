@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
 import { QuestionWrapper, ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
 import { ErrorText, PageTitle } from '../styles/typography'
-import { Form } from '../styles/forms'
+import { Form, RequiredIndicator } from '../styles/forms'
 import { FormLabel, MenuItem, Select, TextField } from '@mui/material'
 import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
@@ -126,7 +126,12 @@ const SiteForm = ({ isNewSite }) => {
       <PageTitle>{isNewSite ? language.pages.siteform.titleNewSite : 'placeholder name'}</PageTitle>
       <Form onSubmit={validateInputs(handleSubmit)}>
         <QuestionWrapper>
-          <FormLabel htmlFor='name'>{language.pages.siteform.labelName}* </FormLabel>
+          <FormLabel htmlFor='name'>
+            {language.pages.siteform.labelName}
+            <RequiredIndicator aria-label={language.form.requiredIndicator}>
+              *
+            </RequiredIndicator>{' '}
+          </FormLabel>
           <Controller
             name='site_name'
             required='true'
@@ -136,7 +141,12 @@ const SiteForm = ({ isNewSite }) => {
           <ErrorText>{errors?.site_name?.message}</ErrorText>
         </QuestionWrapper>
         <QuestionWrapper>
-          <FormLabel htmlFor='landscape'>{language.pages.siteform.labelLandscape}* </FormLabel>
+          <FormLabel htmlFor='landscape'>
+            {language.pages.siteform.labelLandscape}
+            <RequiredIndicator aria-label={language.form.requiredIndicator}>
+              *
+            </RequiredIndicator>{' '}
+          </FormLabel>
           <Controller
             name='landscape_id'
             required='true'

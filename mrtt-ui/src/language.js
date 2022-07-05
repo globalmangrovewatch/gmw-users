@@ -8,7 +8,8 @@ const form = {
   checkboxGroupOtherInputPlaceholder: 'If other, please state.',
   checkboxGroupOtherLabel: 'Other',
   navigateBackToSiteOverview: 'Return to site form overview',
-  selectLabel: 'Select'
+  selectLabel: 'Select',
+  requiredIndicator: 'Indicates required field'
 }
 const multiselectWithOtherFormQuestion = {
   validation: {
