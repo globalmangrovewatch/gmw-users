@@ -18,14 +18,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { FormPageHeader, StickyFormLabel } from '../styles/forms'
 import * as yup from 'yup'
 
-import {
-  Form,
-  FormQuestionDiv,
-  MainFormDiv,
-  SectionFormTitle,
-  SubTitle,
-  SubTitle2
-} from '../styles/forms'
+import { Form, FormQuestionDiv, SectionFormTitle, SubTitle, SubTitle2 } from '../styles/forms'
 import { ButtonSubmit } from '../styles/buttons'
 import { causesOfDecline } from '../data/questions'
 import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
@@ -35,6 +28,7 @@ import { questionMapping } from '../data/questionMapping'
 import language from '../language'
 import LoadingIndicator from './LoadingIndicator'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
+import { ContentWrapper } from '../styles/containers'
 
 function CausesOfDeclineForm() {
   const validationSchema = yup.object().shape({
@@ -270,7 +264,7 @@ function CausesOfDeclineForm() {
   return isLoading ? (
     <LoadingIndicator />
   ) : (
-    <MainFormDiv>
+    <ContentWrapper>
       <FormPageHeader>
         <SectionFormTitle>Causes of Decline</SectionFormTitle>
         <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
@@ -460,7 +454,7 @@ function CausesOfDeclineForm() {
           <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
         </FormQuestionDiv>
       </Form>
-    </MainFormDiv>
+    </ContentWrapper>
   )
 }
 

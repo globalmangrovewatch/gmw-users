@@ -39,6 +39,7 @@ export const Form = styled('form')`
   display: flex;
   flex-direction: column;
   padding-bottom: ${theme.layout.footerHeight};
+  gap: ${themeMui.spacing(3)};
   @media (min-width: ${theme.layout.mediaQueryDesktop}) {
     padding-bottom: 0;
   }
