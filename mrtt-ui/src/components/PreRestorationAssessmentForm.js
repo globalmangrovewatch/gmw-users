@@ -124,6 +124,8 @@ function PreRestorationAssessmentForm() {
     update: physicalMeasurementsTakenUpdate
   } = useFieldArray({ name: 'physicalMeasurementsTaken', control })
 
+  const { siteId } = useParams()
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const mangroveRestorationAttemptedWatcher = watch('mangroveRestorationAttempted')
   const siteAssessmentBeforeProjectWatcher = watch('siteAssessmentBeforeProject')
   const speciesCompositionWatcher = watch('speciesComposition')
@@ -132,9 +134,6 @@ function PreRestorationAssessmentForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
   const [mangroveSpeciesTypesChecked, setMangroveSpeciesTypesChecked] = useState([])
-  const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
-
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
 
   const loadServerData = useCallback(
