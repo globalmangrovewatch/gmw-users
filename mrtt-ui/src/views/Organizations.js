@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
-
+import { ContentWrapper, PaddedPageSection, TitleAndActionContainer } from '../styles/containers'
 import { ButtonPrimary } from '../styles/buttons'
-import { H4, H5 } from '../styles/typography'
 import { Link } from 'react-router-dom'
-import { PaddedPageSection, PaddedPageTopSection, RowSpaceBetween } from '../styles/containers'
 import { toast } from 'react-toastify'
 import { UlAlternating } from '../styles/lists'
 import axios from 'axios'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
+import { PageTitle } from '../styles/typography'
 
 const organizationsUrl = `${process.env.REACT_APP_API_URL}/organizations`
 
@@ -48,25 +47,25 @@ function Organizations() {
     <LoadingIndicator />
   ) : (
     <>
-      <PaddedPageTopSection>
-        <RowSpaceBetween>
-          <H4>{language.pages.organizations.title}</H4>
+      <ContentWrapper>
+        <TitleAndActionContainer>
+          <PageTitle>{language.pages.organizations.title}</PageTitle>
           <ButtonPrimary component={Link} to='/organizations/new'>
             {language.pages.organizations.newOrganizationButton}
           </ButtonPrimary>
-        </RowSpaceBetween>
-      </PaddedPageTopSection>
-      <PaddedPageSection>
-        <H5>{language.pages.organizations.titleYourOrganizations}</H5>
-        {yourOrganizations.length
-          ? yourOrganizationsList
-          : language.pages.organizations.noYourOrganizations}
+        </TitleAndActionContainer>
+        <PaddedPageSection>
+          <h5>{language.pages.organizations.titleYourOrganizations}</h5>
+          {yourOrganizations.length
+            ? yourOrganizationsList
+            : language.pages.organizations.noYourOrganizations}
 
-        <H5>{language.pages.organizations.titleOtherOrganizations}</H5>
-        {otherOrganizations.length
-          ? otherOrganizationsList
-          : language.pages.organizations.noOtherOrganizations}
-      </PaddedPageSection>
+          <h5>{language.pages.organizations.titleOtherOrganizations}</h5>
+          {otherOrganizations.length
+            ? otherOrganizationsList
+            : language.pages.organizations.noOtherOrganizations}
+        </PaddedPageSection>
+      </ContentWrapper>
     </>
   )
 }

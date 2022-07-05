@@ -6,13 +6,20 @@ const color = {
   rowOdd: '#f2f2f2',
   secondary: '#02b1a8',
   secondaryHover: '#02b1a8',
+  lightGrey: '#AFC4C3',
+  darkGrey: '#2E3333',
   slub: '#333333D9',
   text: '#000000D9',
   white: '#ffffff'
 }
 
 const typography = {
-  fontStack: ['Open Sans', 'sans-serif']
+  fontStack: ['Open Sans', 'sans-serif'],
+  xsmallFontSize: '1rem',
+  smallFontSize: '1.5rem',
+  fontSize: '2rem',
+  largeFontSize: '2.5rem',
+  xlargeFontSize: '3rem'
 }
 const border = {
   primary: `solid thin ${color.primary}`,

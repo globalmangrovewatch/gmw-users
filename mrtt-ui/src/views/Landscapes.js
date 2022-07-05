@@ -1,14 +1,14 @@
-import { ButtonPrimary } from '../styles/buttons'
-import { H4 } from '../styles/typography'
 import { Link } from 'react-router-dom'
-import { LinkCard, PagePadding, RowSpaceBetween } from '../styles/containers'
 import { Stack } from '@mui/material'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import EditLink from '../components/EditLink'
 import language from '../language'
+import { ButtonPrimary } from '../styles/buttons'
 import LoadingIndicator from '../components/LoadingIndicator'
 import React, { useEffect, useState } from 'react'
+import { LinkCard, ContentWrapper, TitleAndActionContainer } from '../styles/containers'
+import { ItemTitle, PageTitle } from '../styles/typography'
 
 const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes/`
 function Landscapes() {
@@ -40,25 +40,23 @@ function Landscapes() {
     })
     .map(({ landscape_name, id }) => (
       <LinkCard key={id} to='#'>
-        <RowSpaceBetween>
-          <>{landscape_name}</>
-          <EditLink to={`/landscapes/${id}/edit`} />
-        </RowSpaceBetween>
+        <ItemTitle>{landscape_name}</ItemTitle>
+        <EditLink to={`/landscapes/${id}/edit`} />
       </LinkCard>
     ))
 
   return isLoading ? (
     <LoadingIndicator />
   ) : (
-    <PagePadding>
-      <RowSpaceBetween>
-        <H4>{language.pages.landscapes.title}</H4>
+    <ContentWrapper>
+      <TitleAndActionContainer>
+        <PageTitle>{language.pages.landscapes.title}</PageTitle>
         <ButtonPrimary component={Link} to='/landscapes/new'>
           {language.pages.landscapes.newLandscapeButton}
         </ButtonPrimary>
-      </RowSpaceBetween>
+      </TitleAndActionContainer>
       <Stack>{landscapesList}</Stack>
-    </PagePadding>
+    </ContentWrapper>
   )
 }
 
