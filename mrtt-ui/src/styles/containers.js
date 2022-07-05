@@ -41,6 +41,9 @@ const LinkCard = styled(Link)`
 `
 const ContentWrapper = styled('div')`
   padding: ${themeMui.spacing(2)};
+  max-width: ${theme.layout.maxContentWidth};
+  margin-inline: auto;
+  min-height: calc(100vh - ${theme.layout.headerHeight});
 `
 const TitleAndActionContainer = styled('div')`
   display: flex;
@@ -50,13 +53,17 @@ const TitleAndActionContainer = styled('div')`
 const PaddedPageTopSection = styled(Stack)`
   padding: ${themeMui.spacing(2)};
   border-bottom: ${theme.border.primary};
-  background-color: ${theme.color.bodyBackground};
 `
 const PaddedPageSection = styled(Stack)`
   padding: ${themeMui.spacing(2)};
 `
 const PaddedSection = styled(Stack)`
   padding: ${themeMui.spacing(2)};
+`
+const QuestionWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
+  max-width: ${theme.layout.maxContentWidth};
 `
 export {
   ButtonContainer,
@@ -69,5 +76,6 @@ export {
   PagePadding,
   RowCenterCenter,
   RowFlexEnd,
-  RowSpaceBetween
+  RowSpaceBetween,
+  QuestionWrapper
 }

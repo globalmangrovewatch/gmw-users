@@ -8,7 +8,8 @@ const form = {
   checkboxGroupOtherInputPlaceholder: 'If other, please state.',
   checkboxGroupOtherLabel: 'Other',
   navigateBackToSiteOverview: 'Return to site form overview',
-  selectLabel: 'Select'
+  selectLabel: 'Select',
+  requiredIndicator: 'Indicates required field'
 }
 const multiselectWithOtherFormQuestion = {
   validation: {
@@ -32,7 +33,7 @@ const pages = {
     getEditSiteSuccessMessage: (siteName) => `${siteName} has been edited`,
     getNewSiteSuccessMessage: (siteName) => `${siteName}, has been created`,
     titleNewSite: 'Create a site',
-    labelName: 'Name',
+    labelName: 'Site Name',
     labelLandscape: 'Landscape',
     validation: {
       nameRequired: 'Please enter a name',

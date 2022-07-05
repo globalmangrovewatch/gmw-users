@@ -8,15 +8,9 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 
 import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
-import { ButtonContainer, RowFlexEnd } from '../styles/containers'
-import { ErrorText } from '../styles/typography'
-import {
-  Form,
-  FormPageHeader,
-  MainFormDiv,
-  SectionFormTitle,
-  StickyFormLabel
-} from '../styles/forms'
+import { QuestionWrapper, ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
+import { ErrorText, PageTitle } from '../styles/typography'
+import { Form, RequiredIndicator } from '../styles/forms'
 import { FormLabel, MenuItem, Select, TextField } from '@mui/material'
 import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
@@ -128,44 +122,54 @@ const SiteForm = ({ isNewSite }) => {
   const form = !doesItemExist ? (
     <ItemDoesntExist item='site' />
   ) : (
-    <MainFormDiv>
-      <FormPageHeader>
-        <SectionFormTitle>
-          {isNewSite ? language.pages.siteform.titleNewSite : 'placeholder name'}
-        </SectionFormTitle>
-      </FormPageHeader>
+    <ContentWrapper>
+      <PageTitle>{isNewSite ? language.pages.siteform.titleNewSite : 'placeholder name'}</PageTitle>
       <Form onSubmit={validateInputs(handleSubmit)}>
-        <StickyFormLabel htmlFor='name'>{language.pages.siteform.labelName}* </StickyFormLabel>
-        <Controller
-          name='site_name'
-          control={formControl}
-          render={({ field }) => (
-            <TextField {...field} id='name' label={language.pages.siteform.labelName} />
-          )}
-        />
-        <ErrorText>{errors?.site_name?.message}</ErrorText>
-        <FormLabel htmlFor='landscape'>{language.pages.siteform.labelLandscape}* </FormLabel>
-        <Controller
-          name='landscape_id'
-          control={formControl}
-          render={({ field }) => (
-            <Select {...field} id='landscape' label={language.pages.siteform.labelLandscape}>
-              {landscapes.map((landscape) => (
-                <MenuItem key={landscape.id} value={landscape.id}>
-                  {landscape.landscape_name}
-                </MenuItem>
-              ))}
-            </Select>
-          )}
-        />
-        <ErrorText>{errors?.landscape_id?.message}</ErrorText>
+        <QuestionWrapper>
+          <FormLabel htmlFor='name'>
+            {language.pages.siteform.labelName}
+            <RequiredIndicator aria-label={language.form.requiredIndicator}>
+              *
+            </RequiredIndicator>{' '}
+          </FormLabel>
+          <Controller
+            name='site_name'
+            required='true'
+            control={formControl}
+            render={({ field }) => <TextField {...field} id='name' />}
+          />
+          <ErrorText>{errors?.site_name?.message}</ErrorText>
+        </QuestionWrapper>
+        <QuestionWrapper>
+          <FormLabel htmlFor='landscape'>
+            {language.pages.siteform.labelLandscape}
+            <RequiredIndicator aria-label={language.form.requiredIndicator}>
+              *
+            </RequiredIndicator>{' '}
+          </FormLabel>
+          <Controller
+            name='landscape_id'
+            required='true'
+            control={formControl}
+            render={({ field }) => (
+              <Select {...field} id='landscape' label={language.pages.siteform.labelLandscape}>
+                {landscapes.map((landscape) => (
+                  <MenuItem key={landscape.id} value={landscape.id}>
+                    {landscape.landscape_name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          <ErrorText>{errors?.landscape_id?.message}</ErrorText>
+        </QuestionWrapper>
         <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
         <ButtonContainer>
           <ButtonCancel onClick={handleCancelClick} />
           <ButtonSubmit isSubmitting={isSubmitting} />
         </ButtonContainer>
       </Form>
-    </MainFormDiv>
+    </ContentWrapper>
   )
 
   return isLoading ? <LoadingIndicator /> : form

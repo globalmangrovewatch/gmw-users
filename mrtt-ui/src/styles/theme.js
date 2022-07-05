@@ -10,7 +10,12 @@ const color = {
   darkGrey: '#2E3333',
   slub: '#333333D9',
   text: '#000000D9',
-  white: '#ffffff'
+  white: '#ffffff',
+  red: '#B20000'
+}
+
+const form = {
+  requiredIndicatorColor: `${color.red}`
 }
 
 const typography = {
@@ -34,4 +39,4 @@ const layout = {
   maxContentWidth: '96rem'
 }
 
-export default { color, border, layout, typography }
+export default { color, border, layout, typography, form }

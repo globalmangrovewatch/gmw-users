@@ -7,7 +7,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
 import { ItemSubTitle, ItemTitle, XSmallUpperCase } from '../../styles/typography'
-import { ContentWrapper, PaddedPageSection, TitleAndActionContainer } from '../../styles/containers'
+import { ContentWrapper, TitleAndActionContainer } from '../../styles/containers'
 import { TableAlertnatingRows } from '../../styles/table'
 import AddMonitoringSectionMenu from './AddMonitoringSectionMenu'
 import ItemDoesntExist from '../../components/ItemDoesntExist'
@@ -83,8 +83,6 @@ const SiteOverview = () => {
           </Stack>
           <SettingsLink to={`/site/${siteId}/edit`} />
         </TitleAndActionContainer>
-      </ContentWrapper>
-      <PaddedPageSection>
         <StyledSectionHeader>{pageLanguage.formGroupTitle.registration}</StyledSectionHeader>
         {/* this is a table instead of a ul to leave room for a cell that shows
          how many questions are filled out. Feature cut for now
@@ -137,7 +135,7 @@ const SiteOverview = () => {
         </TableAlertnatingRows>
         <StyledSectionHeader>{pageLanguage.formGroupTitle.monitoring}</StyledSectionHeader>
         <AddMonitoringSectionMenu />
-      </PaddedPageSection>
+      </ContentWrapper>
     </>
   )
 

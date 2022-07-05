@@ -12,8 +12,6 @@ import { useAuth } from '../hooks/useAuth'
 const LayoutWrapper = styled('div')`
   display: flex;
   flex-direction: column;
-  background-color: ${theme.color.bodyBackground};
-  height: 100vh;
   @media (min-width: ${theme.layout.mediaQueryDesktop}) {
     margin-left: ${theme.layout.navWidth};
   }
