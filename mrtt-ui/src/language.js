@@ -1,13 +1,15 @@
 const error = {
-  submit: 'Submit failed. Please try again.',
   apiLoad: 'Loading data from the api failed. Please try again.',
-  getItemDoesntExistMessage: (item) => `That ${item} doesnt exist.`
+  delete: 'Deleting that item failed. Please try again.',
+  getItemDoesntExistMessage: (item) => `That ${item} doesnt exist.`,
+  submit: 'Submit failed. Please try again.'
 }
 
 const success = {
   submit: 'The data has been saved.',
-  getEditThingSuccessMessage: (thing) => `${thing} has been edited`,
-  getCreateThingSuccessMessage: (thing) => `${thing}, has been created`
+  getEditThingSuccessMessage: (thing) => `${thing} has been edited.`,
+  getCreateThingSuccessMessage: (thing) => `${thing}, has been created.`,
+  getDeleteThingSuccessMessage: (thing) => `${thing} has been deleted.`
 }
 const form = {
   checkboxGroupOtherInputPlaceholder: 'If other, please state.',
@@ -34,11 +36,15 @@ const pages = {
   },
   sites: { title: 'Sites', newSiteButton: 'New Site' },
   landscapeForm: {
-    landscape: 'landscape',
-    titleEdit: 'Edit Landscape',
-    titleNew: 'New Landscape',
+    delete: 'Delete this landscape',
+    isAssociatedSites:
+      'You must change the associated sites to another landscape before you can delete this landscape.',
     labelName: 'Name',
     labelOrganizations: 'Organizations',
+    landscape: 'landscape',
+    noAssociatedSites: 'This landscape has no associated sites.',
+    titleEdit: 'Edit Landscape',
+    titleNew: 'New Landscape',
     validation: {
       nameRequired: 'Please enter a name'
     }
@@ -88,6 +94,7 @@ const pages = {
 
 const buttons = {
   cancel: 'Cancel',
+  deleting: 'Deleting...',
   edit: 'Edit',
   submit: 'Submit',
   submitting: 'Submitting...'
