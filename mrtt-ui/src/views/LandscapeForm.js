@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react'
 
 import {
   ButtonContainer,
-  PaddedPageSection,
+  PaddedSection,
   PaddedPageTopSection,
   RowFlexEnd
 } from '../styles/containers'
@@ -146,7 +146,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
             : language.pages.landscapeForm.titleEdit}
         </SectionFormTitle>
       </PaddedPageTopSection>
-      <PaddedPageSection>
+      <PaddedSection>
         <Form onSubmit={validateInputs(handleSubmit)}>
           <FormLabel htmlFor='name'>{language.pages.landscapeForm.labelName}* </FormLabel>
           <Controller
@@ -187,7 +187,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
             <ButtonSubmit isSubmitting={isSubmitting} />
           </ButtonContainer>
         </Form>
-      </PaddedPageSection>
+      </PaddedSection>
     </>
   )
 
