@@ -1,6 +1,5 @@
 import { Controller } from 'react-hook-form'
-import { FormLabel } from '@mui/material'
-import { FormQuestionDiv } from '../../styles/forms'
+import { FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
 import PropTypes from 'prop-types'
 import React from 'react'
 
@@ -49,34 +48,34 @@ const RestorationAimsCheckboxGroupWithLabel = ({
   return (
     <>
       <FormQuestionDiv>
-        <FormLabel id={id}>{question}</FormLabel>
+        <StickyFormLabel id={id}>{question}</StickyFormLabel>
+        <Controller
+          name={fieldName}
+          control={formControl}
+          render={({ field }) => {
+            return (
+              <CheckboxGroup
+                {...field}
+                onChange={handleAimChangeAndResetStakeholdersIfAppropriate}
+                options={optionsValueLabels}
+                aria-labelledby={id}
+                shouldAddOtherOptionWithClarification={true}
+                shouldReturnEvent={true}
+                id={fieldName}
+                SelectedMarkup={({ optionId, optionValue }) => (
+                  <StakeholderBenefitsInputs
+                    stakeholders={stakeholders}
+                    reactHookFormInstance={reactHookFormInstance}
+                    parentQuestionFieldName={fieldName}
+                    optionId={optionId}
+                    optionValue={optionValue}
+                  />
+                )}
+              />
+            )
+          }}
+        />
       </FormQuestionDiv>
-      <Controller
-        name={fieldName}
-        control={formControl}
-        render={({ field }) => {
-          return (
-            <CheckboxGroup
-              {...field}
-              onChange={handleAimChangeAndResetStakeholdersIfAppropriate}
-              options={optionsValueLabels}
-              aria-labelledby={id}
-              shouldAddOtherOptionWithClarification={true}
-              shouldReturnEvent={true}
-              id={fieldName}
-              SelectedMarkup={({ optionId, optionValue }) => (
-                <StakeholderBenefitsInputs
-                  stakeholders={stakeholders}
-                  reactHookFormInstance={reactHookFormInstance}
-                  parentQuestionFieldName={fieldName}
-                  optionId={optionId}
-                  optionValue={optionValue}
-                />
-              )}
-            />
-          )
-        }}
-      />
     </>
   )
 }

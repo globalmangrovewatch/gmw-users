@@ -20,7 +20,8 @@ const border = {
   primaryWidth: 'thin'
 }
 const layout = {
-  headerHeight: '5rem',
+  headerHeight: '7rem',
+  footerHeight: '6rem',
   navWidth: '18rem',
   mediaQueryDesktop: '599px',
   maxContentWidth: '96rem'

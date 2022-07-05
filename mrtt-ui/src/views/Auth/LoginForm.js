@@ -11,26 +11,28 @@ import { ButtonContainer, PagePadding, RowFlexEnd } from '../../styles/container
 import { ErrorText } from '../../styles/typography'
 import { Form, MainFormDiv, SectionFormTitle } from '../../styles/forms'
 import { FormLabel, TextField } from '@mui/material'
+import Button from '@mui/material/Button'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
 
+import { useAuth } from '../../hooks/useAuth'
+
 const validationSchema = yup.object({
-  email: yup.string().required('Email required').email('Must be a valid email'),
-  password: yup
-    .string()
-    .required('Password is required')
-    .min(8, 'Password must be at the minimum 8 characters long')
+  email: yup.string().required('Email required'),
+  password: yup.string().required('Password required')
 })
 
-const formDefaultValues = { name: '', email: '', password: '' }
+const formDefaultValues = { email: '', password: '' }
 
-const SignupForm = () => {
+const LoginForm = () => {
   const [isLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
 
-  const authUrl = `${process.env.REACT_APP_AUTH_URL}/users`
+  const authUrl = `${process.env.REACT_APP_AUTH_URL}/users/sign_in`
+
+  const { login } = useAuth()
 
   const {
     control: formControl,
@@ -38,13 +40,22 @@ const SignupForm = () => {
     formState: { errors }
   } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
 
-  const signUp = (formData) => {
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
+    }
+  }
+
+  const signIn = (formData) => {
     axios
-      .post(authUrl, { user: formData })
+      .post(authUrl, { user: formData }, options)
       .then(({ data }) => {
         setIsSubmitting(false)
-        toast.success(data.message)
-        navigate('/auth/login')
+        if (data.token) {
+          login(data.token)
+          navigate('/sites')
+        }
       })
       .catch((error) => {
         setIsSubmitting(false)
@@ -56,26 +67,22 @@ const SignupForm = () => {
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
-    signUp(formData)
-    setIsSubmitting(false)
+    signIn(formData)
   }
 
   const handleCancelClick = () => {
     navigate(-1)
   }
 
+  const handleSignUpOnClick = () => {
+    navigate('/auth/signup')
+  }
+
   const form = (
     <MainFormDiv>
       <PagePadding>
-        <SectionFormTitle>Sign-up</SectionFormTitle>
+        <SectionFormTitle>Login</SectionFormTitle>
         <Form onSubmit={validateInputs(handleSubmit)}>
-          <FormLabel htmlFor='name'>Name </FormLabel>
-          <Controller
-            name='name'
-            control={formControl}
-            render={({ field }) => <TextField {...field} id='name' />}
-          />
-
           <FormLabel htmlFor='email'>Email* </FormLabel>
           <Controller
             name='email'
@@ -93,6 +100,9 @@ const SignupForm = () => {
           <ErrorText>{errors?.password?.message}</ErrorText>
           <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
           <ButtonContainer>
+            <Button variant='text' onClick={handleSignUpOnClick}>
+              Sign Up
+            </Button>
             <ButtonCancel onClick={handleCancelClick} />
             <ButtonSubmit isSubmitting={isSubmitting} />
           </ButtonContainer>
@@ -104,4 +114,4 @@ const SignupForm = () => {
   return isLoading ? <LoadingIndicator /> : form
 }
 
-export default SignupForm
+export default LoginForm

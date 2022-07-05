@@ -1,13 +1,4 @@
-import {
-  Box,
-  Checkbox,
-  FormLabel,
-  List,
-  ListItem,
-  MenuItem,
-  TextField,
-  Typography
-} from '@mui/material'
+import { Box, Checkbox, List, ListItem, MenuItem, TextField, Typography } from '@mui/material'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { useState, useCallback } from 'react'
@@ -18,7 +9,14 @@ import { toast } from 'react-toastify'
 
 import { ButtonSubmit } from '../styles/buttons'
 import { ErrorText, Link } from '../styles/typography'
-import { FormQuestionDiv, MainFormDiv, SectionFormTitle } from '../styles/forms'
+import {
+  StickyFormLabel,
+  Form,
+  FormQuestionDiv,
+  MainFormDiv,
+  SectionFormTitle,
+  FormPageHeader
+} from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
 import { siteBackground } from '../data/questions'
@@ -34,7 +32,7 @@ const ProjectDetailsForm = () => {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [stakeholderTypesIsChecked, setStakeholderTypesIsChecked] = useState([])
+  const [stakeholderTypesChecked, setStakeholderTypesChecked] = useState([])
 
   const validationSchema = yup.object().shape({
     stakeholders: yup
@@ -82,10 +80,10 @@ const ProjectDetailsForm = () => {
     const initialStakeholders =
       serverResponse?.data.find((dataItem) => dataItem.question_id === '2.1')?.answer_value ?? []
 
-    const initialStakeholderTypesIsChecked = initialStakeholders?.map(
+    const initialStakeholderTypesChecked = initialStakeholders?.map(
       (stakeholder) => stakeholder.stakeholderType
     )
-    setStakeholderTypesIsChecked(initialStakeholderTypesIsChecked)
+    setStakeholderTypesChecked(initialStakeholderTypesChecked)
   }, [])
 
   useInitializeQuestionMappedForm({
@@ -116,19 +114,19 @@ const ProjectDetailsForm = () => {
   }
 
   const handleStakeholdersOnChange = (event, stakeholder) => {
-    const stakeholderTypesIsCheckedCopy = stakeholderTypesIsChecked
+    const stakeholderTypesCheckedCopy = stakeholderTypesChecked
     if (event.target.checked) {
       stakeholdersAppend({ stakeholderType: stakeholder })
-      stakeholderTypesIsCheckedCopy.push(stakeholder)
+      stakeholderTypesCheckedCopy.push(stakeholder)
     } else {
       const fieldIndex = stakeholdersFields.findIndex(
         (field) => field.stakeholderType === stakeholder
       )
-      const typeIndex = stakeholderTypesIsCheckedCopy.findIndex((type) => type === stakeholder)
-      stakeholderTypesIsCheckedCopy.splice(typeIndex, 1)
+      const typeIndex = stakeholderTypesCheckedCopy.findIndex((type) => type === stakeholder)
+      stakeholderTypesCheckedCopy.splice(typeIndex, 1)
       stakeholdersRemove(fieldIndex)
     }
-    setStakeholderTypesIsChecked(stakeholderTypesIsCheckedCopy)
+    setStakeholderTypesChecked(stakeholderTypesCheckedCopy)
   }
 
   const getStakeholder = (stakeholder) =>
@@ -139,11 +137,13 @@ const ProjectDetailsForm = () => {
   ) : (
     <MainFormDiv>
       {/* Select Stakeholders */}
-      <SectionFormTitle>Site Background Form</SectionFormTitle>
-      <Link to={-1}>&lt; {language.form.navigateBackToSiteOverview}</Link>
-      <form onSubmit={validateInputs(handleSubmit)}>
+      <FormPageHeader>
+        <SectionFormTitle>Site Background Form</SectionFormTitle>
+        <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
+      </FormPageHeader>
+      <Form onSubmit={validateInputs(handleSubmit)}>
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.stakeholders.question}</FormLabel>
+          <StickyFormLabel>{siteBackground.stakeholders.question}</StickyFormLabel>
           <List>
             {siteBackground.stakeholders.options.map((stakeholder, index) => (
               <ListItem key={index}>
@@ -151,7 +151,7 @@ const ProjectDetailsForm = () => {
                   <Box>
                     <Checkbox
                       value={stakeholder}
-                      checked={stakeholderTypesIsChecked.includes(stakeholder)}
+                      checked={stakeholderTypesChecked.includes(stakeholder)}
                       onChange={(event) =>
                         handleStakeholdersOnChange(event, stakeholder)
                       }></Checkbox>
@@ -184,7 +184,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Select Management Status*/}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.managementStatus.question}</FormLabel>
+          <StickyFormLabel>{siteBackground.managementStatus.question}</StickyFormLabel>
           <Controller
             name='managementStatus'
             control={control}
@@ -203,7 +203,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Law recognition */}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.lawStatus.question}</FormLabel>
+          <StickyFormLabel>{siteBackground.lawStatus.question}</StickyFormLabel>
           <Controller
             name='lawStatus'
             control={control}
@@ -222,7 +222,7 @@ const ProjectDetailsForm = () => {
         </FormQuestionDiv>
         {/* Management Area*/}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.managementArea.question}</FormLabel>
+          <StickyFormLabel>{siteBackground.managementArea.question}</StickyFormLabel>
           <Controller
             name='managementArea'
             control={control}
@@ -242,7 +242,7 @@ const ProjectDetailsForm = () => {
         <ErrorText>{errors.protectionStatus?.selectedValues?.message}</ErrorText>
         {/* areStakeholdersInvolved */}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.areStakeholdersInvolved.question}</FormLabel>
+          <StickyFormLabel>{siteBackground.areStakeholdersInvolved.question}</StickyFormLabel>
           <Controller
             name='areStakeholdersInvolved'
             control={control}
@@ -281,7 +281,7 @@ const ProjectDetailsForm = () => {
         <ErrorText>{errors.landTenure?.selectedValues?.message}</ErrorText>
         {/* customaryRights */}
         <FormQuestionDiv>
-          <FormLabel>{siteBackground.customaryRights.question}</FormLabel>
+          <StickyFormLabel>{siteBackground.customaryRights.question}</StickyFormLabel>
           <Controller
             name='customaryRights'
             control={control}
@@ -302,7 +302,7 @@ const ProjectDetailsForm = () => {
           {isError && <ErrorText>Submit failed, please try again</ErrorText>}
           <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
         </FormQuestionDiv>
-      </form>
+      </Form>
     </MainFormDiv>
   )
 }
