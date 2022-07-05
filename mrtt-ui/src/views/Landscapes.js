@@ -8,7 +8,7 @@ import { ButtonPrimary } from '../styles/buttons'
 import LoadingIndicator from '../components/LoadingIndicator'
 import React, { useEffect, useState } from 'react'
 import { LinkCard, ContentWrapper, TitleAndActionContainer } from '../styles/containers'
-import { CardTitle, PageTitle } from '../styles/typography'
+import { ItemTitle, PageTitle } from '../styles/typography'
 
 const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes/`
 function Landscapes() {
@@ -40,7 +40,7 @@ function Landscapes() {
     })
     .map(({ landscape_name, id }) => (
       <LinkCard key={id} to='#'>
-        <CardTitle>{landscape_name}</CardTitle>
+        <ItemTitle>{landscape_name}</ItemTitle>
         <EditLink to={`/landscapes/${id}/edit`} />
       </LinkCard>
     ))

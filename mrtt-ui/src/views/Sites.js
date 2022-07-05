@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react'
 
 import { ButtonPrimary } from '../styles/buttons'
 import { LinkCard, ContentWrapper, TitleAndActionContainer } from '../styles/containers'
-import { CardTitle, CardSubTitle, PageTitle } from '../styles/typography'
+import { ItemTitle, ItemSubTitle, PageTitle } from '../styles/typography'
 import language from '../language'
 
 const sitesUrl = `${process.env.REACT_APP_API_URL}/sites/`
@@ -41,8 +41,8 @@ function Sites() {
     })
     .map(({ site_name, landscape_name, id }) => (
       <LinkCard key={id} to={`/site/${id}/overview`}>
-        <CardTitle>{site_name}</CardTitle>
-        <CardSubTitle>{landscape_name}</CardSubTitle>
+        <ItemTitle>{site_name}</ItemTitle>
+        <ItemSubTitle>{landscape_name}</ItemSubTitle>
       </LinkCard>
     ))
 

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
-import { CardSubTitle, CardTitle, XSmallUpperCase } from '../../styles/typography'
+import { ItemSubTitle, ItemTitle, XSmallUpperCase } from '../../styles/typography'
 import { ContentWrapper, PaddedPageSection, TitleAndActionContainer } from '../../styles/containers'
 import { TableAlertnatingRows } from '../../styles/table'
 import AddMonitoringSectionMenu from './AddMonitoringSectionMenu'
@@ -78,8 +78,8 @@ const SiteOverview = () => {
       <ContentWrapper>
         <TitleAndActionContainer>
           <Stack>
-            <CardTitle as='h2'>{site?.site_name}</CardTitle>
-            <CardSubTitle>{landscape?.landscape_name}</CardSubTitle>
+            <ItemTitle as='h2'>{site?.site_name}</ItemTitle>
+            <ItemSubTitle>{landscape?.landscape_name}</ItemSubTitle>
           </Stack>
           <SettingsLink to={`/site/${siteId}/edit`} />
         </TitleAndActionContainer>

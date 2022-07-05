@@ -29,7 +29,7 @@ export const XSmallUpperCase = styled('div')`
   font-size: ${theme.typography.xsmallFontSize};
 `
 
-export const CardTitle = styled('h3')`
+export const ItemTitle = styled('h3')`
   margin: 0;
   font-weight: 200;
   font-size: ${theme.typography.xlargeFontSize};
@@ -40,7 +40,7 @@ export const PageTitle = styled('h2')`
   text-transform: uppercase;
   letter-spacing: 2px;
 `
-export const CardSubTitle = styled('p')`
+export const ItemSubTitle = styled('p')`
   color: ${theme.color.slub};
   text-transform: uppercase;
   letter-spacing: 1px;
