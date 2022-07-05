@@ -75,7 +75,7 @@ function PreRestorationAssessmentForm() {
         .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
     }),
     naturalRegenerationAtSite: yup.string(),
-    mangroveSpeciesPresent: yup.array().of(yup.string()),
+    mangroveSpeciesPresent: yup.array().of(yup.string()).nullable(),
     speciesComposition: yup
       .array()
       .of(
@@ -119,7 +119,9 @@ function PreRestorationAssessmentForm() {
   const {
     fields: physicalMeasurementsTakenFields,
     append: physicalMeasurementsTakenAppend,
-    remove: physicalMeasurementsTakenRemove
+    remove: physicalMeasurementsTakenRemove,
+    replace: physicalMeasurementsTakenReplace,
+    update: physicalMeasurementsTakenUpdate
   } = useFieldArray({ name: 'physicalMeasurementsTaken', control })
 
   const mangroveRestorationAttemptedWatcher = watch('mangroveRestorationAttempted')
@@ -138,14 +140,14 @@ function PreRestorationAssessmentForm() {
   const loadServerData = useCallback(
     (serverResponse) => {
       const defaultMeasurementsTaken = [
-        { measurementType: 'Tidal range', measurementValue: 0 },
-        { measurementType: 'Elevation to sea level', measurementValue: 0 },
-        { measurementType: 'Water salinity', measurementValue: 0 },
-        { measurementType: 'Soil pore water salinity', measurementValue: 0 },
-        { measurementType: 'Water PH', measurementValue: 0 },
-        { measurementType: 'Soil pore water PH', measurementValue: 0 },
-        { measurementType: 'Soil type', measurementValue: 0 },
-        { measurementType: 'Soil organic matter', measurementValue: 0 }
+        { measurementType: 'Tidal range', measurementValue: '' },
+        { measurementType: 'Elevation to sea level', measurementValue: '' },
+        { measurementType: 'Water salinity', measurementValue: '' },
+        { measurementType: 'Soil pore water salinity', measurementValue: '' },
+        { measurementType: 'Water PH', measurementValue: '' },
+        { measurementType: 'Soil pore water PH', measurementValue: '' },
+        { measurementType: 'Soil type', measurementValue: '' },
+        { measurementType: 'Soil organic matter', measurementValue: '' }
       ]
 
       const siteCountriesResponse = getSiteCountries(serverResponse)
@@ -170,11 +172,10 @@ function PreRestorationAssessmentForm() {
       const physicalMeasurementsTakenInitialVal = getPhysicalMeasurementsTaken(serverResponse)
 
       if (physicalMeasurementsTakenInitialVal.length === 0) {
-        // maybe needs rerender ?
-        setValue('physicalMeasurementsTaken', defaultMeasurementsTaken)
+        physicalMeasurementsTakenReplace(defaultMeasurementsTaken)
       }
     },
-    [setValue]
+    [physicalMeasurementsTakenReplace]
   )
 
   useInitializeQuestionMappedForm({
@@ -223,7 +224,6 @@ function PreRestorationAssessmentForm() {
     setValue('mangroveSpeciesPresent', mangroveSpeciesTypesCheckedCopy)
   }
 
-  // called within AddTabularInputRow component
   const updateTabularInputDisplay = (boolean) => {
     return setShowAddTabularInputRow(boolean)
   }
@@ -233,11 +233,16 @@ function PreRestorationAssessmentForm() {
       measurementType,
       measurementValue
     })
-    console.log('fields: ', physicalMeasurementsTakenFields)
   }
 
   const deleteMeasurementItem = (measurementIndex) => {
     physicalMeasurementsTakenRemove(measurementIndex)
+  }
+
+  const updateMeasurementItem = (measurementIndex, newVal) => {
+    const currentItem = physicalMeasurementsTakenFields[measurementIndex]
+    currentItem.measurementValue = newVal
+    physicalMeasurementsTakenUpdate(measurementIndex, currentItem)
   }
 
   return isLoading ? (
@@ -444,12 +449,14 @@ function PreRestorationAssessmentForm() {
               ? physicalMeasurementsTakenFields.map((measurementItem, measurementItemIndex) => (
                   <TabularInputRow
                     key={measurementItemIndex}
-                    control={control}
+                    // control={control}
                     label={measurementItem.measurementType}
                     value={measurementItem.measurementValue}
                     index={measurementItemIndex}
                     deleteMeasurementItem={deleteMeasurementItem}
-                    controlName={`physicalMeasurementsTaken.${measurementItemIndex}.measurementValue}`}></TabularInputRow>
+                    updateMeasurementItem={updateMeasurementItem}
+                    // controlName={`physicalMeasurementsTaken.${measurementItemIndex}.measurementValue}`}
+                  ></TabularInputRow>
                 ))
               : null}
             <ErrorText>{errors.physicalMeasurementsTaken?.message}</ErrorText>

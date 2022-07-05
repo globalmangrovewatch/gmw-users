@@ -1,31 +1,37 @@
-import React from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Controller } from 'react-hook-form'
 import { TextField } from '@mui/material'
-import { Delete } from '@mui/icons-material'
+import { Delete, Save } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
 
-const TabularInputRow = ({ control, label, value, index, controlName, deleteMeasurementItem }) => {
+const TabularInputRow = ({ label, value, index, deleteMeasurementItem, updateMeasurementItem }) => {
+  const [initialVal, setOriginalVal] = useState('')
+  const [currentVal, setCurrentVal] = useState('')
   const handleDelete = () => {
     deleteMeasurementItem(index)
   }
+
+  const handleUpdate = () => {
+    updateMeasurementItem(index, currentVal)
+  }
+
+  useEffect(() => {
+    if (value) {
+      setCurrentVal(value)
+      setOriginalVal(value)
+    }
+  }, [value])
+
   return (
     <TabularInputSection>
       <TabularLabel>{label}</TabularLabel>
       <TabularBox>
-        <Controller
-          name={controlName}
-          control={control}
-          defaultValue={''}
-          render={({ field }) => (
-            // still buggy, still  looking into it
-            <TextField {...field} value={field.value}>
-              {value}
-            </TextField>
-          )}
-        />
+        <TextField value={currentVal} onChange={(e) => setCurrentVal(e.target.value)}></TextField>
+        {currentVal !== initialVal ? (
+          <Save onClick={handleUpdate} sx={{ marginLeft: '0.5em' }}></Save>
+        ) : null}
         <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
       </TabularBox>
     </TabularInputSection>
@@ -33,11 +39,10 @@ const TabularInputRow = ({ control, label, value, index, controlName, deleteMeas
 }
 
 TabularInputRow.propTypes = {
-  control: PropTypes.any.isRequired,
   label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  controlName: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   deleteMeasurementItem: PropTypes.func.isRequired,
+  updateMeasurementItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired
 }
 
