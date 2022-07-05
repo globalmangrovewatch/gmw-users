@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles'
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
 
 const TabularInputRow = ({ label, value, index, deleteMeasurementItem, updateMeasurementItem }) => {
-  const [initialVal, setOriginalVal] = useState('')
+  const [initialVal, setInitialVal] = useState('')
   const [currentVal, setCurrentVal] = useState('')
   const handleDelete = () => {
     deleteMeasurementItem(index)
@@ -20,7 +20,7 @@ const TabularInputRow = ({ label, value, index, deleteMeasurementItem, updateMea
   useEffect(() => {
     if (value) {
       setCurrentVal(value)
-      setOriginalVal(value)
+      setInitialVal(value)
     }
   }, [value])
 
