@@ -63,9 +63,7 @@ const PaddedPageTopSection = styled(Stack)`
   padding: ${themeMui.spacing(2)};
   border-bottom: ${theme.border.primary};
 `
-const PaddedPageSection = styled(Stack)`
-  padding: ${themeMui.spacing(2)};
-`
+
 const PaddedSection = styled(Stack)`
   padding: ${themeMui.spacing(2)};
 `
@@ -81,7 +79,6 @@ export {
   LinkCard,
   ContentWrapper,
   TitleAndActionContainer,
-  PaddedPageSection,
   PaddedPageTopSection,
   PaddedSection,
   PagePadding,

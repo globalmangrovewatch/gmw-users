@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { Stack } from '@mui/material'
 import { toast } from 'react-toastify'
 import axios from 'axios'
@@ -7,11 +6,13 @@ import { ButtonPrimary } from '../styles/buttons'
 import {
   Card,
   ContentWrapper,
+  PaddedSection,
   RowCenterCenter,
   RowSpaceBetween,
   TitleAndActionContainer
 } from '../styles/containers'
-import { ItemTitle, PageTitle } from '../styles/typography'
+import { H4, ItemTitle, Link, PageTitle, SmallUpperCase } from '../styles/typography'
+import { UlUndecorated } from '../styles/lists'
 import EditLink from '../components/EditLink'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
@@ -22,7 +23,7 @@ function Landscapes() {
   const [isLoading, setIsLoading] = useState(true)
   const [landscapes, setLandscapes] = useState([])
 
-  useEffect(function loadSitesData() {
+  useEffect(function loadApiData() {
     axios
       .get(landscapesUrl)
       .then(({ data }) => {
@@ -45,16 +46,43 @@ function Landscapes() {
       }
       return 0
     })
-    .map(({ landscape_name, id }) => (
-      <Card key={id}>
-        <RowSpaceBetween>
-          <ItemTitle>{landscape_name}</ItemTitle>
-          <RowCenterCenter>
-            <EditLink to={`/landscapes/${id}/edit`} />
-          </RowCenterCenter>
-        </RowSpaceBetween>
-      </Card>
-    ))
+    .map(({ landscape_name, id, organizations, sites }) => {
+      const landscapeAssociatedSites = !sites.length ? (
+        <SmallUpperCase>{language.pages.landscapes.noSites}</SmallUpperCase>
+      ) : (
+        <UlUndecorated>
+          {sites.map(({ site_name, site_id }) => (
+            <li key={site_id}>
+              <Link to={`/sites/${site_id}/overview`}>{site_name}</Link>
+            </li>
+          ))}
+        </UlUndecorated>
+      )
+
+      const landscapeAssociatedOrganizations = (
+        <UlUndecorated>
+          {organizations.map(({ organization_name, id }) => (
+            <li key={id}>{organization_name}</li>
+          ))}
+        </UlUndecorated>
+      )
+
+      return (
+        <Card key={id}>
+          <RowSpaceBetween>
+            <ItemTitle>{landscape_name}</ItemTitle>
+            <RowCenterCenter>
+              <EditLink to={`/landscapes/${id}/edit`} />
+            </RowCenterCenter>
+          </RowSpaceBetween>
+          <H4>{language.pages.landscapes.sites}</H4>
+          <PaddedSection>{landscapeAssociatedSites}</PaddedSection>
+
+          <H4>{language.pages.landscapes.organizations}</H4>
+          <PaddedSection>{landscapeAssociatedOrganizations}</PaddedSection>
+        </Card>
+      )
+    })
 
   return isLoading ? (
     <LoadingIndicator />
