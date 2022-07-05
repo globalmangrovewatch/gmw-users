@@ -246,7 +246,9 @@ function PreRestorationAssessmentForm() {
     <LoadingIndicator />
   ) : (
     <MainFormDiv>
-      <SectionFormTitle>Pre-restoration Assessment</SectionFormTitle>
+      <SectionFormTitle>
+        {language.pages.siteQuestionsOverview.formName.preRestorationAssessment}
+      </SectionFormTitle>
       <Form onSubmit={validateInputs(handleSubmit)}>
         <FormQuestionDiv>
           <FormLabel>{questions.mangrovesPreviouslyOccured.question}</FormLabel>
@@ -397,21 +399,27 @@ function PreRestorationAssessmentForm() {
             <FormQuestionDiv>
               <FormLabel>{questions.mangroveSpeciesPresent.question}</FormLabel>
               <List>
-                {mangroveSpeciesForCountriesSelected.map((specie, index) => (
-                  <ListItem key={index}>
-                    <Box>
+                {mangroveSpeciesForCountriesSelected.length ? (
+                  mangroveSpeciesForCountriesSelected.map((specie, index) => (
+                    <ListItem key={index}>
                       <Box>
-                        <Checkbox
-                          value={specie}
-                          checked={mangroveSpeciesTypesChecked.includes(specie)}
-                          onChange={(event) =>
-                            handleMangroveSpeciesPresentOnChange(event, specie)
-                          }></Checkbox>
-                        <Typography variant='subtitle'>{specie}</Typography>
+                        <Box>
+                          <Checkbox
+                            value={specie}
+                            checked={mangroveSpeciesTypesChecked.includes(specie)}
+                            onChange={(event) =>
+                              handleMangroveSpeciesPresentOnChange(event, specie)
+                            }></Checkbox>
+                          <Typography variant='subtitle'>{specie}</Typography>
+                        </Box>
                       </Box>
-                    </Box>
-                  </ListItem>
-                ))}
+                    </ListItem>
+                  ))
+                ) : (
+                  <ErrorText>
+                    No items to display. Please select countries in Site Details and Location (1.2).
+                  </ErrorText>
+                )}
               </List>
               <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
             </FormQuestionDiv>
