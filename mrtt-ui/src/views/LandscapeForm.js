@@ -1,10 +1,11 @@
+import { Autocomplete, FormLabel, TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
+import { styled } from '@mui/system'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
-import language from '../language'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 
@@ -14,13 +15,20 @@ import {
   PaddedPageTopSection,
   RowFlexEnd
 } from '../styles/containers'
-import { Autocomplete, FormLabel, TextField } from '@mui/material'
 import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
 import { ErrorText } from '../styles/typography'
 import { Form, SectionFormTitle } from '../styles/forms'
 import ItemDoesntExist from '../components/ItemDoesntExist'
+import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
 import SubmitErrorWithExtraErrorContent from '../components/SubmitErrorWithExtraErrorContent'
+
+import themeMui from '../styles/themeMui'
+import ButtonSecondaryWithLoader from '../components/ButtonSecondaryWithLoader'
+
+const DeleteSectionWrapper = styled('div')`
+  margin-top: ${themeMui.spacing(2)};
+`
 
 const validationSchema = yup.object({
   landscape_name: yup.string().required(language.pages.landscapeForm.validation.nameRequired),
@@ -31,9 +39,12 @@ const formDefaultValues = { landscape_name: '', selectedOrganizations: [] }
 
 const LandscapeForm = ({ isNewLandscape }) => {
   const [doesLandscapeExist, setDoesLandscapeExist] = useState(true)
+  const [isAssociatedSites, setIsAssociatedSites] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [landscapeName, setLandscapeName] = useState()
   const [organizationOptions, setOrganizationOptions] = useState([])
   const { landscapeId } = useParams()
   const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes`
@@ -58,12 +69,19 @@ const LandscapeForm = ({ isNewLandscape }) => {
       Promise.all(serverDataPromises)
         .then(([{ data: organizationsData }, landscapeResponse]) => {
           if (!isNewLandscape && landscapeId && landscapeResponse) {
-            const { landscape_name, organizations: selectedOrganizations } = landscapeResponse.data
+            const {
+              landscape_name,
+              organizations: selectedOrganizations,
+              sites
+            } = landscapeResponse.data
             const landscapeDataFormattedForForm = {
               landscape_name,
               selectedOrganizations
             }
             resetForm(landscapeDataFormattedForForm)
+            console.log(sites, !!sites.length)
+            setIsAssociatedSites(!!sites.length)
+            setLandscapeName(landscape_name)
           }
 
           setOrganizationOptions(organizationsData)
@@ -135,6 +153,22 @@ const LandscapeForm = ({ isNewLandscape }) => {
   const handleCancelClick = () => {
     navigate('/landscapes')
   }
+
+  const handleDeleteClick = () => {
+    setIsDeleting(true)
+    axios
+      .delete(landscapeUrl)
+      .then(() => {
+        setIsDeleting(false)
+        toast.success(language.success.getDeleteThingSuccessMessage(landscapeName))
+        navigate('/landscapes')
+      })
+      .catch(() => {
+        setIsDeleting(false)
+        toast.error(language.error.delete)
+      })
+  }
+
   const form = !doesLandscapeExist ? (
     <ItemDoesntExist item={language.pages.landscapeForm.landscape} />
   ) : (
@@ -187,6 +221,20 @@ const LandscapeForm = ({ isNewLandscape }) => {
             <ButtonSubmit isSubmitting={isSubmitting} />
           </ButtonContainer>
         </Form>
+        <DeleteSectionWrapper>
+          {isAssociatedSites ? (
+            <p>{language.pages.landscapeForm.isAssociatedSites}</p>
+          ) : (
+            <p>{language.pages.landscapeForm.noAssociatedSites}</p>
+          )}
+          <ButtonSecondaryWithLoader
+            disabled={isAssociatedSites}
+            onClick={handleDeleteClick}
+            isHolding={isDeleting}
+            holdingContent={language.buttons.deleting}>
+            {language.pages.landscapeForm.delete}
+          </ButtonSecondaryWithLoader>
+        </DeleteSectionWrapper>
       </PaddedSection>
     </>
   )
