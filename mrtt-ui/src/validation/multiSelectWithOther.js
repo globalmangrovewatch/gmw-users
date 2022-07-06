@@ -14,6 +14,20 @@ export const otherIsCheckedButInputIsEmptyValidation = (schema) =>
   })
 
 export const multiselectWithOtherValidation = yup.object({
+  selectedValues: yup
+    .array()
+    .default([])
+    .when('isOtherChecked', {
+      is: false,
+      then: (schema) =>
+        schema.min(1, language.multiselectWithOtherFormQuestion.validation.selectAtleastOneItem),
+      otherwise: otherIsCheckedButInputIsEmptyValidation
+    }),
+  otherValue: yup.string(),
+  isOtherChecked: yup.bool().default(false)
+})
+
+export const multiselectWithOtherValidationNoMinimum = yup.object({
   selectedValues: yup.array().default([]).when('isOtherChecked', {
     is: false,
     otherwise: otherIsCheckedButInputIsEmptyValidation

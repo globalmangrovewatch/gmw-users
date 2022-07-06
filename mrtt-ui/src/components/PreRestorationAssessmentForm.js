@@ -31,7 +31,7 @@ import { mapDataForApi } from '../library/mapDataForApi'
 import { ButtonSubmit } from '../styles/buttons'
 import { ErrorText } from '../styles/typography'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
-import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
+import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 import LoadingIndicator from './LoadingIndicator'
 import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
@@ -61,10 +61,10 @@ function PreRestorationAssessmentForm() {
         .min(1900, 'Year must be higher than 1900')
         .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
     }),
-    previousBiophysicalInterventions: multiselectWithOtherValidation,
-    whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidation,
+    previousBiophysicalInterventions: multiselectWithOtherValidationNoMinimum,
+    whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidationNoMinimum,
     siteAssessmentBeforeProject: yup.string(),
-    siteAssessmentType: multiselectWithOtherValidation,
+    siteAssessmentType: multiselectWithOtherValidationNoMinimum,
     referenceCite: yup.string(),
     lostMangrovesYear: yup.mixed().when('siteAssessmentBeforeProject', {
       is: (val) => val && val === 'Yes',
