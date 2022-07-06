@@ -108,8 +108,8 @@ function PreRestorationAssessmentForm() {
     formState: { errors },
     control,
     reset: resetForm,
-    setValue,
-    watch
+    setValue: setFormValue,
+    watch: watchForm
   } = reactHookFormInstance
 
   const {
@@ -128,9 +128,9 @@ function PreRestorationAssessmentForm() {
 
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
-  const mangroveRestorationAttemptedWatcher = watch('mangroveRestorationAttempted')
-  const siteAssessmentBeforeProjectWatcher = watch('siteAssessmentBeforeProject')
-  const speciesCompositionWatcher = watch('speciesComposition')
+  const mangroveRestorationAttemptedWatcher = watchForm('mangroveRestorationAttempted')
+  const siteAssessmentBeforeProjectWatcher = watchForm('siteAssessmentBeforeProject')
+  const speciesCompositionWatcher = watchForm('speciesComposition')
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -220,7 +220,7 @@ function PreRestorationAssessmentForm() {
       speciesCompositionRemove(fieldIndex)
     }
     setMangroveSpeciesTypesChecked(mangroveSpeciesTypesCheckedCopy)
-    setValue('mangroveSpeciesPresent', mangroveSpeciesTypesCheckedCopy)
+    setFormValue('mangroveSpeciesPresent', mangroveSpeciesTypesCheckedCopy)
   }
 
   const updateTabularInputDisplay = (boolean) => {
