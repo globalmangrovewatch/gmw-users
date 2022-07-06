@@ -11,6 +11,6 @@ const SubmitErrorWithExtraErrorContent = ({ extraErrorContent }) => {
   )
 }
 
-SubmitErrorWithExtraErrorContent.propTypes = { extraErrorContent: PropTypes.node.isRequired }
-
+SubmitErrorWithExtraErrorContent.propTypes = { extraErrorContent: PropTypes.node }
+SubmitErrorWithExtraErrorContent.defaultProps = { extraErrorContent: undefined }
 export default SubmitErrorWithExtraErrorContent
