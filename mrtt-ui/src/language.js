@@ -37,6 +37,11 @@ const pages = {
   sites: { title: 'Sites', newSiteButton: 'New Site' },
   landscapeForm: {
     delete: 'Delete this landscape',
+    deletePropmt: {
+      title: 'Delete Landscape',
+      propmtText: 'Are you sure you wan to delete this landscape?',
+      buttonText: 'Yes, delete this landscape'
+    },
     isAssociatedSites:
       'You must change the associated sites to another landscape before you can delete this landscape.',
     labelName: 'Name',

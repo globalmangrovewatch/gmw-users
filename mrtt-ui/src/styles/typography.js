@@ -9,6 +9,10 @@ export const ErrorText = styled(Typography)`
 `
 ErrorText.defaultProps = { variant: 'subtitle' }
 
+export const H2 = styled('h2')`
+  margin: ${themeMui.spacing(1)} 0;
+`
+
 export const H4 = styled('h4')`
   margin: ${themeMui.spacing(1)} 0;
 `
