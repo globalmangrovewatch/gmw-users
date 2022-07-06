@@ -79,7 +79,6 @@ const LandscapeForm = ({ isNewLandscape }) => {
               selectedOrganizations
             }
             resetForm(landscapeDataFormattedForForm)
-            console.log(sites, !!sites.length)
             setIsAssociatedSites(!!sites.length)
             setLandscapeName(landscape_name)
           }

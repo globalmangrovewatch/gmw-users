@@ -34,6 +34,15 @@ const pages = {
     titleOtherOrganizations: 'Other Organizations',
     titleYourOrganizations: 'Your Organizations'
   },
+  organizationForm: {
+    labelName: 'name',
+    organization: 'organization',
+    titleEdit: 'Edit Organization',
+    titleNew: 'New Organization',
+    validation: {
+      nameRequired: 'Please enter a name'
+    }
+  },
   sites: { title: 'Sites', newSiteButton: 'New Site' },
   landscapeForm: {
     delete: 'Delete this landscape',
