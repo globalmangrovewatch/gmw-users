@@ -32,7 +32,9 @@ const DeleteSectionWrapper = styled('div')`
 
 const validationSchema = yup.object({
   landscape_name: yup.string().required(language.pages.landscapeForm.validation.nameRequired),
-  organizations: yup.array()
+  selectedOrganizations: yup
+    .array()
+    .min(1, language.pages.landscapeForm.validation.organizationRequired)
 })
 
 const formDefaultValues = { landscape_name: '', selectedOrganizations: [] }
@@ -79,7 +81,6 @@ const LandscapeForm = ({ isNewLandscape }) => {
               selectedOrganizations
             }
             resetForm(landscapeDataFormattedForForm)
-            console.log(sites, !!sites.length)
             setIsAssociatedSites(!!sites.length)
             setLandscapeName(landscape_name)
           }
@@ -192,7 +193,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
           />
           <ErrorText>{errors?.landscape_name?.message}</ErrorText>
           <FormLabel htmlFor='organizations'>
-            {language.pages.landscapeForm.labelOrganizations}
+            {language.pages.landscapeForm.labelOrganizations}*
           </FormLabel>
           <Controller
             name='selectedOrganizations'
@@ -214,7 +215,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
               />
             )}
           />
-          <ErrorText>{errors?.organizations?.message}</ErrorText>
+          <ErrorText>{errors?.selectedOrganizations?.message}</ErrorText>
           <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
           <ButtonContainer>
             <ButtonCancel onClick={handleCancelClick} />
