@@ -6,30 +6,51 @@ import { styled } from '@mui/material/styles'
 
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
 
-const TabularInputRow = ({ label, value, index, deleteMeasurementItem, updateMeasurementItem }) => {
-  const [initialVal, setInitialVal] = useState('')
-  const [currentVal, setCurrentVal] = useState('')
+const TabularInputRow = ({
+  label,
+  rowValue1,
+  rowValue2,
+  index,
+  deleteMeasurementItem,
+  updateMeasurementItem
+}) => {
+  const [initialVal1, setInitialVal1] = useState('')
+  const [currentVal1, setCurrentVal1] = useState('')
+  const [initialVal2, setInitialVal2] = useState('')
+  const [currentVal2, setCurrentVal2] = useState('')
   const handleDelete = () => {
     deleteMeasurementItem(index)
   }
 
   const handleUpdate = () => {
-    updateMeasurementItem(index, currentVal)
+    updateMeasurementItem(index, currentVal1, currentVal2)
   }
 
   useEffect(() => {
-    if (value) {
-      setCurrentVal(value)
-      setInitialVal(value)
+    if (rowValue1) {
+      setCurrentVal1(rowValue1)
+      setInitialVal1(rowValue1)
     }
-  }, [value])
+    if (rowValue2) {
+      setCurrentVal2(rowValue2)
+      setInitialVal2(rowValue2)
+    }
+  }, [rowValue1, rowValue2])
 
   return (
     <TabularInputSection>
       <TabularLabel>{label}</TabularLabel>
       <TabularBox>
-        <TextField value={currentVal} onChange={(e) => setCurrentVal(e.target.value)}></TextField>
-        {currentVal !== initialVal ? (
+        <TextField
+          value={currentVal1}
+          label='value'
+          onChange={(e) => setCurrentVal1(e.target.value)}></TextField>
+        <TextField
+          sx={{ maxWidth: '7em', marginLeft: '0.5em' }}
+          value={currentVal2}
+          label='unit'
+          onChange={(e) => setCurrentVal2(e.target.value)}></TextField>
+        {currentVal1 !== initialVal1 || currentVal2 !== initialVal2 ? (
           <Save onClick={handleUpdate} sx={{ marginLeft: '0.5em' }}></Save>
         ) : null}
         <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
@@ -40,7 +61,8 @@ const TabularInputRow = ({ label, value, index, deleteMeasurementItem, updateMea
 
 TabularInputRow.propTypes = {
   label: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  rowValue1: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  rowValue2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   deleteMeasurementItem: PropTypes.func.isRequired,
   updateMeasurementItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired

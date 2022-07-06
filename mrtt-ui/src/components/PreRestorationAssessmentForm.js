@@ -66,7 +66,7 @@ function PreRestorationAssessmentForm() {
     whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidationNoMinimum,
     siteAssessmentBeforeProject: yup.string(),
     siteAssessmentType: multiselectWithOtherValidationNoMinimum,
-    referenceSite: yup.string().nullable(),
+    referenceSite: yup.string(),
     lostMangrovesYear: yup.mixed().when('siteAssessmentBeforeProject', {
       is: (val) => val && val === 'Yes',
       then: yup
@@ -75,7 +75,7 @@ function PreRestorationAssessmentForm() {
         .min(1900, 'Year must be higher than 1900')
         .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
     }),
-    naturalRegenerationAtSite: yup.string().nullable(),
+    naturalRegenerationAtSite: yup.string(),
     mangroveSpeciesPresent: yup.array().of(yup.string()).nullable(),
     speciesComposition: yup
       .array()
@@ -89,7 +89,8 @@ function PreRestorationAssessmentForm() {
     physicalMeasurementsTaken: yup.array().of(
       yup.object().shape({
         measurementType: yup.string(),
-        measurementValue: yup.mixed()
+        measurementValue: yup.mixed(),
+        measurementUnit: yup.string()
       })
     ),
     pilotTestConducted: yup.string(),
@@ -140,14 +141,14 @@ function PreRestorationAssessmentForm() {
   const loadServerData = useCallback(
     (serverResponse) => {
       const defaultMeasurementsTaken = [
-        { measurementType: 'Tidal range', measurementValue: '' },
-        { measurementType: 'Elevation to sea level', measurementValue: '' },
-        { measurementType: 'Water salinity', measurementValue: '' },
-        { measurementType: 'Soil pore water salinity', measurementValue: '' },
-        { measurementType: 'Water PH', measurementValue: '' },
-        { measurementType: 'Soil pore water PH', measurementValue: '' },
-        { measurementType: 'Soil type', measurementValue: '' },
-        { measurementType: 'Soil organic matter', measurementValue: '' }
+        { measurementType: 'Tidal range' },
+        { measurementType: 'Elevation to sea level' },
+        { measurementType: 'Water salinity' },
+        { measurementType: 'Soil pore water salinity' },
+        { measurementType: 'Water PH' },
+        { measurementType: 'Soil pore water PH' },
+        { measurementType: 'Soil type' },
+        { measurementType: 'Soil organic matter' }
       ]
 
       const siteCountriesResponse = getSiteCountries(serverResponse)
@@ -237,9 +238,10 @@ function PreRestorationAssessmentForm() {
     physicalMeasurementsTakenRemove(measurementIndex)
   }
 
-  const updateMeasurementItem = (measurementIndex, newVal) => {
+  const updateMeasurementItem = (measurementIndex, value, unit) => {
     const currentItem = physicalMeasurementsTakenFields[measurementIndex]
-    currentItem.measurementValue = newVal
+    if (value) currentItem.measurementValue = value
+    if (unit) currentItem.measurementUnit = unit
     physicalMeasurementsTakenUpdate(measurementIndex, currentItem)
   }
 
@@ -248,7 +250,7 @@ function PreRestorationAssessmentForm() {
   ) : (
     <MainFormDiv>
       <FormPageHeader>
-        <SectionFormTitle>Restoration Aims</SectionFormTitle>
+        <SectionFormTitle>Pre Restoration Assessment Form</SectionFormTitle>
         <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
       </FormPageHeader>
       <Form onSubmit={validateInputs(handleSubmit)}>
@@ -457,7 +459,8 @@ function PreRestorationAssessmentForm() {
                   <TabularInputRow
                     key={measurementItemIndex}
                     label={measurementItem.measurementType}
-                    value={measurementItem.measurementValue}
+                    rowValue1={measurementItem.measurementValue}
+                    rowValue2={measurementItem.measurementUnit}
                     index={measurementItemIndex}
                     deleteMeasurementItem={deleteMeasurementItem}
                     updateMeasurementItem={updateMeasurementItem}></TabularInputRow>
