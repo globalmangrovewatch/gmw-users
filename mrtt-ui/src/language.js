@@ -46,7 +46,8 @@ const pages = {
     titleEdit: 'Edit Landscape',
     titleNew: 'New Landscape',
     validation: {
-      nameRequired: 'Please enter a name'
+      nameRequired: 'Please enter a name.',
+      organizationRequired: 'Please choose at least one organization.'
     }
   },
   landscapes: {
