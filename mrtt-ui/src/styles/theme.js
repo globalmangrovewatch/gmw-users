@@ -1,3 +1,4 @@
+import { css } from '@emotion/react'
 const color = {
   bodyBackground: '#fafafa',
   primary: '#009b93',
@@ -17,7 +18,6 @@ const color = {
 const form = {
   requiredIndicatorColor: `${color.red}`
 }
-
 const typography = {
   fontStack: ['Open Sans', 'sans-serif'],
   xsmallFontSize: '1rem',
@@ -39,4 +39,11 @@ const layout = {
   maxContentWidth: '96rem'
 }
 
-export default { color, border, layout, typography, form }
+const hoverState = (content) => css`
+  @media (hover: hover) {
+    &:hover:not([disabled]) {
+      ${content};
+    }
+  }
+`
+export default { hoverState, color, border, layout, typography, form }

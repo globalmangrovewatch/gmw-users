@@ -39,9 +39,9 @@ function Landscapes() {
       return 0
     })
     .map(({ landscape_name, id }) => (
-      <LinkCard key={id} to='#'>
+      <LinkCard key={id} to={`/landscapes/${id}/edit`}>
         <ItemTitle>{landscape_name}</ItemTitle>
-        <EditLink to={`/landscapes/${id}/edit`} />
+        <EditLink component={Link} to={`/landscapes/${id}/edit`} />
       </LinkCard>
     ))
 

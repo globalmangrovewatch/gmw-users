@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Stack } from '@mui/material'
-import { styled } from '@mui/system'
+import { styled, css } from '@mui/system'
 import theme from './theme'
 import themeMui from './themeMui'
 
@@ -33,10 +33,13 @@ const LinkCard = styled(Link)`
   margin: ${themeMui.spacing(2)} 0;
   text-decoration: none;
   padding: ${themeMui.spacing(3)};
-  &:hover {
+  ${theme.hoverState(css`
     color: ${theme.color.text};
     border-color: ${theme.color.primary};
     border-width: 2px;
+  `)}
+  @media(hover: none) {
+    border-color: ${theme.color.primary};
   }
 `
 const ContentWrapper = styled('div')`

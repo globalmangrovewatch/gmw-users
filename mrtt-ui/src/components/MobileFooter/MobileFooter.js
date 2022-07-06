@@ -1,5 +1,5 @@
 import React from 'react'
-import { styled } from '@mui/system'
+import { styled, css } from '@mui/system'
 import { Link, useLocation } from 'react-router-dom'
 import {
   Map as SitesIcon,
@@ -47,6 +47,9 @@ const LinkContainer = styled(Link)`
     gap: 1rem;
     padding: ${themeMui.spacing(1)} ${themeMui.spacing(2)};
   }
+  ${theme.hoverState(css`
+    color: ${theme.color.primaryHover};
+  `)}
 `
 
 function MobileFooter() {
@@ -60,11 +63,11 @@ function MobileFooter() {
       </LinkContainer>
       <LinkContainer to='/landscapes' active={String(/^\/landscapes/.test(pathname))}>
         <LandscapesIcon />
-        <span>landscapes</span>
+        <span>Landscapes</span>
       </LinkContainer>
       <LinkContainer to='/organizations' active={String(/^\/organizations/.test(pathname))}>
         <OrganizationsIcon />
-        <span>organizations</span>
+        <span>Organizations</span>
       </LinkContainer>
     </StyledFooter>
   )

@@ -1,4 +1,5 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { Link } from '../../styles/typography'
 import { Settings } from '@mui/icons-material'
 import { Stack } from '@mui/material'
 import { styled } from '@mui/system'
@@ -6,25 +7,17 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
-import { ItemSubTitle, ItemTitle, XSmallUpperCase } from '../../styles/typography'
+import { ItemSubTitle, ItemTitle } from '../../styles/typography'
 import { ContentWrapper, TitleAndActionContainer } from '../../styles/containers'
 import { TableAlertnatingRows } from '../../styles/table'
 import AddMonitoringSectionMenu from './AddMonitoringSectionMenu'
 import ItemDoesntExist from '../../components/ItemDoesntExist'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
-import theme from '../../styles/theme'
+import { ButtonSecondary } from '../../styles/buttons'
 
 const pageLanguage = language.pages.siteQuestionsOverview
 
-const SettingsLinkWrapper = styled(Link)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-decoration: none;
-  color: ${theme.color.text};
-`
 const WideTh = styled('th')`
   width: 100%;
 `
@@ -32,12 +25,6 @@ const StyledSectionHeader = styled('h3')`
   text-transform: uppercase;
   font-weight: 100;
 `
-const SettingsLink = (props) => (
-  <SettingsLinkWrapper {...props}>
-    <Settings />
-    <XSmallUpperCase>{pageLanguage.settings}</XSmallUpperCase>
-  </SettingsLinkWrapper>
-)
 
 const SiteOverview = () => {
   const [doesSiteExist, setDoesSiteExist] = useState(true)
@@ -81,7 +68,9 @@ const SiteOverview = () => {
             <ItemTitle as='h2'>{site?.site_name}</ItemTitle>
             <ItemSubTitle>{landscape?.landscape_name}</ItemSubTitle>
           </Stack>
-          <SettingsLink to={`/site/${siteId}/edit`} />
+          <ButtonSecondary component={Link} to={`/site/${siteId}/edit`}>
+            <Settings /> Settings
+          </ButtonSecondary>
         </TitleAndActionContainer>
         <StyledSectionHeader>{pageLanguage.formGroupTitle.registration}</StyledSectionHeader>
         {/* this is a table instead of a ul to leave room for a cell that shows
