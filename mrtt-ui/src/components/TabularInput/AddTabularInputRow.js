@@ -67,14 +67,14 @@ AddTabularInputRow.propTypes = {
   updateTabularInputDisplay: PropTypes.func.isRequired
 }
 
-export const ButtonsDiv = styled('div')`
+const ButtonsDiv = styled('div')`
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 1em;
 `
 
-export const SectionDiv = styled('div')`
+const SectionDiv = styled('div')`
   margin-top: 2em;
 `
 

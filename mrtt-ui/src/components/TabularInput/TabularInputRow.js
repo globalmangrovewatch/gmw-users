@@ -26,7 +26,7 @@ const TabularInputRow = ({
     updateMeasurementItem(index, currentVal1, currentVal2)
   }
 
-  useEffect(() => {
+  const _setFormValues = useEffect(() => {
     if (rowValue1) {
       setCurrentVal1(rowValue1)
       setInitialVal1(rowValue1)
