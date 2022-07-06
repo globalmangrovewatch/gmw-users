@@ -19,6 +19,7 @@ import { toast } from 'react-toastify'
 
 import {
   Form,
+  FormPageHeader,
   FormQuestionDiv,
   MainFormDiv,
   SectionFormTitle,
@@ -29,7 +30,7 @@ import { questionMapping } from '../data/questionMapping'
 import { preRestorationAssessment as questions } from '../data/questions'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { ButtonSubmit } from '../styles/buttons'
-import { ErrorText } from '../styles/typography'
+import { ErrorText, Link } from '../styles/typography'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
@@ -65,7 +66,7 @@ function PreRestorationAssessmentForm() {
     whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidationNoMinimum,
     siteAssessmentBeforeProject: yup.string(),
     siteAssessmentType: multiselectWithOtherValidationNoMinimum,
-    referenceSite: yup.string(),
+    referenceSite: yup.string().nullable(),
     lostMangrovesYear: yup.mixed().when('siteAssessmentBeforeProject', {
       is: (val) => val && val === 'Yes',
       then: yup
@@ -74,7 +75,7 @@ function PreRestorationAssessmentForm() {
         .min(1900, 'Year must be higher than 1900')
         .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
     }),
-    naturalRegenerationAtSite: yup.string(),
+    naturalRegenerationAtSite: yup.string().nullable(),
     mangroveSpeciesPresent: yup.array().of(yup.string()).nullable(),
     speciesComposition: yup
       .array()
@@ -246,9 +247,10 @@ function PreRestorationAssessmentForm() {
     <LoadingIndicator />
   ) : (
     <MainFormDiv>
-      <SectionFormTitle>
-        {language.pages.siteQuestionsOverview.formName.preRestorationAssessment}
-      </SectionFormTitle>
+      <FormPageHeader>
+        <SectionFormTitle>Restoration Aims</SectionFormTitle>
+        <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
+      </FormPageHeader>
       <Form onSubmit={validateInputs(handleSubmit)}>
         <FormQuestionDiv>
           <FormLabel>{questions.mangrovesPreviouslyOccured.question}</FormLabel>
