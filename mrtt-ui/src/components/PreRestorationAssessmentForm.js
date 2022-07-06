@@ -65,7 +65,7 @@ function PreRestorationAssessmentForm() {
     whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidationNoMinimum,
     siteAssessmentBeforeProject: yup.string(),
     siteAssessmentType: multiselectWithOtherValidationNoMinimum,
-    referenceCite: yup.string(),
+    referenceSite: yup.string(),
     lostMangrovesYear: yup.mixed().when('siteAssessmentBeforeProject', {
       is: (val) => val && val === 'Yes',
       then: yup
@@ -349,14 +349,14 @@ function PreRestorationAssessmentForm() {
             />
             <ErrorText>{errors.siteAssessmentType?.selectedValues?.message}</ErrorText>
             <FormQuestionDiv>
-              <FormLabel>{questions.referenceCite.question}</FormLabel>
+              <FormLabel>{questions.referenceSite.question}</FormLabel>
               <Controller
-                name='referenceCite'
+                name='referenceSite'
                 control={control}
                 defaultValue=''
                 render={({ field }) => (
                   <TextField {...field} select value={field.value} label='select'>
-                    {questions.referenceCite.options.map((item, index) => (
+                    {questions.referenceSite.options.map((item, index) => (
                       <MenuItem key={index} value={item}>
                         {item}
                       </MenuItem>
@@ -364,7 +364,7 @@ function PreRestorationAssessmentForm() {
                   </TextField>
                 )}
               />
-              <ErrorText>{errors.referenceCite?.message}</ErrorText>
+              <ErrorText>{errors.referenceSite?.message}</ErrorText>
             </FormQuestionDiv>
             <FormQuestionDiv>
               <FormLabel>{questions.lostMangrovesYear.question}</FormLabel>

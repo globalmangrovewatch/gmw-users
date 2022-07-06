@@ -34,7 +34,7 @@ export const questionMapping = {
     whyUnsuccessfulRestorationAttempt: '5.2c',
     siteAssessmentBeforeProject: '5.3',
     siteAssessmentType: '5.3a',
-    referenceCite: '5.3b',
+    referenceSite: '5.3b',
     lostMangrovesYear: '5.3c',
     naturalRegenerationAtSite: '5.3d',
     mangroveSpeciesPresent: '5.3e',
