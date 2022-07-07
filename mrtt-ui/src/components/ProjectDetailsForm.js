@@ -169,7 +169,7 @@ function ProjectDetailsForm() {
         {/* Has project end date radio group */}
         <FormQuestionDiv>
           <StickyFormLabel id='has-project-end-date-label'>
-            {questions.hasProjectEndDate.question}
+            {questions.hasProjectEndDate.question}*
           </StickyFormLabel>
           <Controller
             name='hasProjectEndDate'
@@ -188,7 +188,7 @@ function ProjectDetailsForm() {
         </FormQuestionDiv>
         {/* Start Date */}
         <FormQuestionDiv>
-          <FormLabel>Project Duration</FormLabel>
+          <FormLabel>Project Duration*</FormLabel>
           <FormLabel htmlFor='start-date'>{questions.projectStartDate.question}</FormLabel>
           <Controller
             name='projectStartDate'
@@ -240,7 +240,7 @@ function ProjectDetailsForm() {
         )}
         {/* Countries selector */}
         <FormQuestionDiv>
-          <StickyFormLabel htmlFor='countries'>{questions.countries.question}</StickyFormLabel>
+          <StickyFormLabel htmlFor='countries'>{questions.countries.question}*</StickyFormLabel>
           <Controller
             name='countries'
             control={control}
@@ -266,7 +266,7 @@ function ProjectDetailsForm() {
         </FormQuestionDiv>
         {/* Draw or upload site area */}
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.siteArea.question}</StickyFormLabel>
+          <StickyFormLabel>{questions.siteArea.question}*</StickyFormLabel>
           <Controller
             name='siteArea'
             control={control}

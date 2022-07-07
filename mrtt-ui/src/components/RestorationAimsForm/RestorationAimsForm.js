@@ -94,6 +94,7 @@ const RestorationAimsForm = () => {
           reactHookFormInstance={reactHookFormInstance}
           options={questions.ecologicalAims.options}
           question={questions.ecologicalAims.question}
+          showAsterisk
         />
         <ErrorText>{errors.ecologicalAims?.selectedValues?.message}</ErrorText>
         <RestorationAimsCheckboxGroupWithLabel
@@ -102,6 +103,7 @@ const RestorationAimsForm = () => {
           reactHookFormInstance={reactHookFormInstance}
           options={questions.socioEconomicAims.options}
           question={questions.socioEconomicAims.question}
+          showAsterisk
         />
         <ErrorText>{errors.socioEconomicAims?.selectedValues?.message}</ErrorText>
         <RestorationAimsCheckboxGroupWithLabel
