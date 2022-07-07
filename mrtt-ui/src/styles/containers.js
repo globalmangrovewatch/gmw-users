@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Stack } from '@mui/material'
-import { css, styled } from '@mui/system'
+import { styled, css } from '@mui/system'
 import theme from './theme'
 import themeMui from './themeMui'
 
@@ -23,28 +23,30 @@ const RowCenterCenter = styled('div')`
   align-items: center;
   justify-content: center;
 `
-
-const cardCss = css`
+const sharedCardStyles = css`
   background: white;
-  border-color: ${theme.color.lightGrey};
   border-width: 2px;
   border-style: solid;
-  color: ${theme.color.slub};
   margin: ${themeMui.spacing(2)} 0;
   padding: ${themeMui.spacing(3)};
 `
-
 const LinkCard = styled(Link)`
-  ${cardCss}
+  ${sharedCardStyles};
+  border-color: ${theme.color.lightGrey};
+  color: ${theme.color.slub};
   text-decoration: none;
-  &:hover {
+  ${theme.hoverState(css`
     color: ${theme.color.text};
     border-color: ${theme.color.primary};
     border-width: 2px;
+  `)}
+  @media(hover: none) {
+    border-color: ${theme.color.primary};
   }
 `
 const Card = styled('div')`
-  ${cardCss}
+  ${sharedCardStyles}
+  border-color: ${theme.color.primary}
 `
 const ContentWrapper = styled('div')`
   padding: ${themeMui.spacing(2)};
