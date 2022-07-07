@@ -24,15 +24,18 @@ const RowCenterCenter = styled('div')`
   align-items: center;
   justify-content: center;
 `
-const LinkCard = styled(Link)`
+const sharedCardStyles = css`
   background: white;
-  border-color: ${theme.color.lightGrey};
   border-width: 2px;
   border-style: solid;
-  color: ${theme.color.slub};
   margin: ${themeMui.spacing(2)} 0;
-  text-decoration: none;
   padding: ${themeMui.spacing(3)};
+`
+const LinkCard = styled(Link)`
+  ${sharedCardStyles};
+  border-color: ${theme.color.lightGrey};
+  color: ${theme.color.slub};
+  text-decoration: none;
   ${theme.hoverState(css`
     color: ${theme.color.text};
     border-color: ${theme.color.primary};
@@ -41,6 +44,10 @@ const LinkCard = styled(Link)`
   @media(hover: none) {
     border-color: ${theme.color.primary};
   }
+`
+const Card = styled('div')`
+  ${sharedCardStyles}
+  border-color: ${theme.color.primary}
 `
 const ContentWrapper = styled('div')`
   padding: ${themeMui.spacing(2)};
@@ -71,6 +78,7 @@ const QuestionWrapper = styled('div')`
 export {
   ButtonContainer,
   LinkCard,
+  Card,
   ContentWrapper,
   TitleAndActionContainer,
   PaddedPageSection,

@@ -7,7 +7,7 @@ import language from '../language'
 import { ButtonPrimary } from '../styles/buttons'
 import LoadingIndicator from '../components/LoadingIndicator'
 import React, { useEffect, useState } from 'react'
-import { LinkCard, ContentWrapper, TitleAndActionContainer } from '../styles/containers'
+import { Card, ContentWrapper, TitleAndActionContainer } from '../styles/containers'
 import { ItemTitle, PageTitle } from '../styles/typography'
 
 const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes/`
@@ -39,10 +39,10 @@ function Landscapes() {
       return 0
     })
     .map(({ landscape_name, id }) => (
-      <LinkCard key={id} to={`/landscapes/${id}/edit`}>
+      <Card key={id}>
         <ItemTitle>{landscape_name}</ItemTitle>
         <EditLink component={Link} to={`/landscapes/${id}/edit`} />
-      </LinkCard>
+      </Card>
     ))
 
   return isLoading ? (
