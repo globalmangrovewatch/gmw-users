@@ -2,19 +2,20 @@ import { useState } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import {
-  useForm
+  useForm,
   // useFieldArray,
-  // Controller
+  Controller
 } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { toast } from 'react-toastify'
+import { FormLabel, MenuItem, TextField } from '@mui/material'
 
 import { ContentWrapper } from '../styles/containers'
 import {
   //   StickyFormLabel,
   FormPageHeader,
-  //   FormQuestionDiv,
+  FormQuestionDiv,
   SectionFormTitle,
   Form
 } from '../styles/forms'
@@ -31,7 +32,11 @@ import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndCont
 
 function SiteInterventionsForm() {
   const validationSchema = yup.object({
-    whichStakeholdersInvolved: multiselectWithOtherValidation
+    whichStakeholdersInvolved: multiselectWithOtherValidation,
+    biophysicalInterventionsUsed: multiselectWithOtherValidation,
+    localParticipantTraining: yup.string(),
+    organizationsProvidingTraining: multiselectWithOtherValidation,
+    otherActivitiesImplemented: multiselectWithOtherValidation
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
@@ -46,7 +51,9 @@ function SiteInterventionsForm() {
   const {
     handleSubmit: validateInputs,
     formState: { errors },
-    reset: resetForm
+    reset: resetForm,
+    watch: watchForm,
+    control
   } = reactHookFormInstance
 
   const { siteId } = useParams()
@@ -54,6 +61,7 @@ function SiteInterventionsForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const localParticipantTrainingWatcher = watchForm('localParticipantTraining')
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
@@ -105,14 +113,36 @@ function SiteInterventionsForm() {
         />
         <ErrorText>{errors.biophysicalInterventionsUsed?.selectedValues?.message}</ErrorText>
 
-        <CheckboxGroupWithLabelAndController
-          fieldName='organizationsProvidingTraining'
-          reactHookFormInstance={reactHookFormInstance}
-          options={questions.organizationsProvidingTraining.options}
-          question={questions.organizationsProvidingTraining.question}
-          shouldAddOtherOptionWithClarification={true}
-        />
-        <ErrorText>{errors.organizationsProvidingTraining?.selectedValues?.message}</ErrorText>
+        <FormQuestionDiv>
+          <FormLabel>{questions.localParticipantTraining.question}</FormLabel>
+          <Controller
+            name='localParticipantTraining'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.localParticipantTraining.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.localParticipantTraining?.message}</ErrorText>
+        </FormQuestionDiv>
+        {localParticipantTrainingWatcher === 'Yes' ? (
+          <div>
+            <CheckboxGroupWithLabelAndController
+              fieldName='organizationsProvidingTraining'
+              reactHookFormInstance={reactHookFormInstance}
+              options={questions.organizationsProvidingTraining.options}
+              question={questions.organizationsProvidingTraining.question}
+              shouldAddOtherOptionWithClarification={true}
+            />
+            <ErrorText>{errors.organizationsProvidingTraining?.selectedValues?.message}</ErrorText>
+          </div>
+        ) : null}
         <CheckboxGroupWithLabelAndController
           fieldName='otherActivitiesImplemented'
           reactHookFormInstance={reactHookFormInstance}
