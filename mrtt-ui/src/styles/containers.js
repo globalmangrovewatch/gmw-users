@@ -77,7 +77,6 @@ export {
   ButtonContainer,
   Card,
   LinkCard,
-  Card,
   ContentWrapper,
   TitleAndActionContainer,
   PaddedPageTopSection,
