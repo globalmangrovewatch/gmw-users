@@ -36,7 +36,9 @@ function SiteInterventionsForm() {
   const reactHookFormInstance = useForm({
     defaultValues: {
       whichStakeholdersInvolved: { selectedValues: [], otherValue: undefined },
-      biophysicalInterventionsUsed: { selectedValues: [], otherValue: undefined }
+      biophysicalInterventionsUsed: { selectedValues: [], otherValue: undefined },
+      organizationsProvidingTraining: { selectedValues: [], otherValue: undefined },
+      otherActivitiesImplemented: { selectedValues: [], otherValue: undefined }
     },
     resolver: yupResolver(validationSchema)
   })
@@ -102,6 +104,23 @@ function SiteInterventionsForm() {
           shouldAddOtherOptionWithClarification={true}
         />
         <ErrorText>{errors.biophysicalInterventionsUsed?.selectedValues?.message}</ErrorText>
+
+        <CheckboxGroupWithLabelAndController
+          fieldName='organizationsProvidingTraining'
+          reactHookFormInstance={reactHookFormInstance}
+          options={questions.organizationsProvidingTraining.options}
+          question={questions.organizationsProvidingTraining.question}
+          shouldAddOtherOptionWithClarification={true}
+        />
+        <ErrorText>{errors.organizationsProvidingTraining?.selectedValues?.message}</ErrorText>
+        <CheckboxGroupWithLabelAndController
+          fieldName='otherActivitiesImplemented'
+          reactHookFormInstance={reactHookFormInstance}
+          options={questions.otherActivitiesImplemented.options}
+          question={questions.otherActivitiesImplemented.question}
+          shouldAddOtherOptionWithClarification={true}
+        />
+        <ErrorText>{errors.otherActivitiesImplemented?.selectedValues?.message}</ErrorText>
 
         {isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}
         <ButtonSubmit isSubmitting={isSubmitting} />
