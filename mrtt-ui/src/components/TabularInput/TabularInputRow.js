@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { TextField } from '@mui/material'
-import { Delete, Save } from '@mui/icons-material'
+import { Delete } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
@@ -23,7 +23,9 @@ const TabularInputRow = ({
   }
 
   const handleUpdate = () => {
-    updateMeasurementItem(index, currentVal1, currentVal2)
+    if (currentVal1 !== initialVal1 || currentVal2 !== initialVal2) {
+      updateMeasurementItem(index, currentVal1, currentVal2)
+    }
   }
 
   const _setFormValues = useEffect(() => {
@@ -44,15 +46,14 @@ const TabularInputRow = ({
         <TextField
           value={currentVal1}
           label='value'
+          onBlur={handleUpdate}
           onChange={(e) => setCurrentVal1(e.target.value)}></TextField>
         <TextField
           sx={{ maxWidth: '7em', marginLeft: '0.5em' }}
           value={currentVal2}
           label='unit'
+          onBlur={handleUpdate}
           onChange={(e) => setCurrentVal2(e.target.value)}></TextField>
-        {currentVal1 !== initialVal1 || currentVal2 !== initialVal2 ? (
-          <Save onClick={handleUpdate} sx={{ marginLeft: '0.5em' }}></Save>
-        ) : null}
         <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
       </TabularBox>
     </TabularInputSection>
