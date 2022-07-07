@@ -262,7 +262,7 @@ const preRestorationAssessment = {
     question: '5.3a How was the assessment undertaken?',
     options: ['Field assessment', 'Remote assessment']
   },
-  referenceCite: {
+  referenceSite: {
     question: '5.3b Has the site been compared to a reference site?',
     options: ['Yes', 'No', 'Unknown']
   },

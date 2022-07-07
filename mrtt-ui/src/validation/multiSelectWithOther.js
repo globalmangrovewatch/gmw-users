@@ -26,3 +26,12 @@ export const multiselectWithOtherValidation = yup.object({
   otherValue: yup.string(),
   isOtherChecked: yup.bool().default(false)
 })
+
+export const multiselectWithOtherValidationNoMinimum = yup.object({
+  selectedValues: yup.array().default([]).when('isOtherChecked', {
+    is: false,
+    otherwise: otherIsCheckedButInputIsEmptyValidation
+  }),
+  otherValue: yup.string(),
+  isOtherChecked: yup.bool().default(false)
+})

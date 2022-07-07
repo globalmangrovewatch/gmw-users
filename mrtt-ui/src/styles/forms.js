@@ -60,3 +60,21 @@ export const NestedQuestion = styled('div')`
   padding: ${themeMui.spacing(1)};
   padding-left: ${themeMui.spacing(2)};
 `
+export const TabularInputSection = styled('div')`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  margin-top: 1em;
+  justify-content: space-between;
+`
+
+export const TabularLabel = styled('label')`
+  margin-right: 2.5em;
+`
+
+export const SelectedInputSection = styled('div')`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+`
