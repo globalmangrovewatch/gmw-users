@@ -14,6 +14,7 @@ import Organizations from './views/Organizations'
 import ProjectDetailsForm from './components/ProjectDetailsForm'
 import ProtectedRoutes from './components/Auth/ProtectedRoutes'
 import RestorationAimsForm from './components/RestorationAimsForm/RestorationAimsForm'
+import PreRestorationAssessmentForm from './components/PreRestorationAssessmentForm'
 import SignupForm from './views/Auth/SignupForm'
 import SiteBackgroundForm from './components/SiteBackgroundForm'
 import SiteForm from './views/SiteForm'
@@ -46,6 +47,10 @@ function App() {
                 element={<OrganizationForm isNewOrganization={true} />}
               />
               <Route path='/sites/:siteId/edit' element={<SiteForm isNewSite={false} />} />
+              <Route
+                path='/sites/:siteId/form/pre-restoration-assessment'
+                element={<PreRestorationAssessmentForm />}
+              />
               <Route
                 path='/sites/:siteId/form/causes-of-decline'
                 element={<CausesOfDeclineForm />}

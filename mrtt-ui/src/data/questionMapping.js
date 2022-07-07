@@ -25,5 +25,22 @@ export const questionMapping = {
   causesOfDecline: {
     lossKnown: '4.1',
     causesOfDecline: '4.2'
+  },
+  preRestorationAssessment: {
+    mangrovesPreviouslyOccured: '5.1',
+    mangroveRestorationAttempted: '5.2',
+    lastRestorationAttemptYear: '5.2a',
+    previousBiophysicalInterventions: '5.2b',
+    whyUnsuccessfulRestorationAttempt: '5.2c',
+    siteAssessmentBeforeProject: '5.3',
+    siteAssessmentType: '5.3a',
+    referenceSite: '5.3b',
+    lostMangrovesYear: '5.3c',
+    naturalRegenerationAtSite: '5.3d',
+    mangroveSpeciesPresent: '5.3e',
+    speciesComposition: '5.3f',
+    physicalMeasurementsTaken: '5.3g',
+    pilotTestConducted: '5.4',
+    guidanceForSiteRestoration: '5.5'
   }
 }
