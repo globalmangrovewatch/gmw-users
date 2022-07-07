@@ -12,6 +12,7 @@ const RestorationAimsCheckboxGroupWithLabel = ({
   options,
   question,
   reactHookFormInstance,
+  showAsterisk,
   stakeholders
 }) => {
   const {
@@ -48,7 +49,10 @@ const RestorationAimsCheckboxGroupWithLabel = ({
   return (
     <>
       <FormQuestionDiv>
-        <StickyFormLabel id={id}>{question}</StickyFormLabel>
+        <StickyFormLabel id={id}>
+          {question}
+          {showAsterisk ? <>*</> : null}
+        </StickyFormLabel>
         <Controller
           name={fieldName}
           control={formControl}
@@ -85,8 +89,9 @@ RestorationAimsCheckboxGroupWithLabel.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
   question: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
   reactHookFormInstance: PropTypes.any.isRequired,
+  showAsterisk: PropTypes.bool,
   stakeholders: stakeholdersPropType.isRequired
 }
-CheckboxGroup.defaultProps = { shouldAddOtherOptionWithClarification: false }
+RestorationAimsCheckboxGroupWithLabel.defaultProps = { showAsterisk: false }
 
 export default RestorationAimsCheckboxGroupWithLabel
