@@ -34,9 +34,23 @@ const pages = {
     titleOtherOrganizations: 'Other Organizations',
     titleYourOrganizations: 'Your Organizations'
   },
+  organizationForm: {
+    labelName: 'name',
+    organization: 'organization',
+    titleEdit: 'Edit Organization',
+    titleNew: 'New Organization',
+    validation: {
+      nameRequired: 'Please enter a name'
+    }
+  },
   sites: { title: 'Sites', newSiteButton: 'New Site' },
   landscapeForm: {
     delete: 'Delete this landscape',
+    deletePropmt: {
+      title: 'Delete Landscape',
+      propmtText: 'Are you sure you wan to delete this landscape?',
+      buttonText: 'Yes, delete this landscape'
+    },
     isAssociatedSites:
       'You must change the associated sites to another landscape before you can delete this landscape.',
     labelName: 'Name',
@@ -46,7 +60,8 @@ const pages = {
     titleEdit: 'Edit Landscape',
     titleNew: 'New Landscape',
     validation: {
-      nameRequired: 'Please enter a name'
+      nameRequired: 'Please enter a name.',
+      organizationRequired: 'Please choose at least one organization.'
     }
   },
   landscapes: {
