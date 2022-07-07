@@ -13,7 +13,6 @@ import {
   StickyFormLabel,
   Form,
   FormQuestionDiv,
-  MainFormDiv,
   SectionFormTitle,
   FormPageHeader
 } from '../styles/forms'
@@ -25,6 +24,7 @@ import language from '../language'
 import LoadingIndicator from './LoadingIndicator'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 import { questionMapping } from '../data/questionMapping'
+import { ContentWrapper } from '../styles/containers'
 
 const ProjectDetailsForm = () => {
   const { siteId } = useParams()
@@ -135,7 +135,7 @@ const ProjectDetailsForm = () => {
   return isLoading ? (
     <LoadingIndicator />
   ) : (
-    <MainFormDiv>
+    <ContentWrapper>
       {/* Select Stakeholders */}
       <FormPageHeader>
         <SectionFormTitle>Site Background Form</SectionFormTitle>
@@ -303,7 +303,7 @@ const ProjectDetailsForm = () => {
           <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
         </FormQuestionDiv>
       </Form>
-    </MainFormDiv>
+    </ContentWrapper>
   )
 }
 

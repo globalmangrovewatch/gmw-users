@@ -12,4 +12,11 @@ const UlAlternating = styled('ul')`
     background: ${theme.color.rowOdd};
   }
 `
-export { UlAlternating }
+
+const UlUndecorated = styled('ul')`
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+`
+
+export { UlAlternating, UlUndecorated }

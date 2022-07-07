@@ -16,7 +16,6 @@ import { ButtonSubmit } from '../styles/buttons'
 import { ErrorText, Link } from '../styles/typography'
 import {
   StickyFormLabel,
-  MainFormDiv,
   FormPageHeader,
   FormQuestionDiv,
   SectionFormTitle,
@@ -33,6 +32,7 @@ import LoadingIndicator from './LoadingIndicator'
 import mangroveCountries from '../data/mangrove_countries.json'
 import ProjectAreaMap from './ProjectAreaMap'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
+import { ContentWrapper } from '../styles/containers'
 
 const sortCountries = (a, b) => {
   const textA = a.properties.country.toUpperCase()
@@ -160,7 +160,7 @@ function ProjectDetailsForm() {
   return isLoading ? (
     <LoadingIndicator />
   ) : (
-    <MainFormDiv>
+    <ContentWrapper>
       <FormPageHeader>
         <SectionFormTitle>Project Details Form</SectionFormTitle>
         <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
@@ -289,7 +289,7 @@ function ProjectDetailsForm() {
           <ButtonSubmit isSubmitting={isSubmitting} />
         </FormQuestionDiv>
       </Form>
-    </MainFormDiv>
+    </ContentWrapper>
   )
 }
 

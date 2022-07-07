@@ -6,10 +6,12 @@ import LoadingIndicator from '../components/LoadingIndicator'
 import React, { useEffect, useState } from 'react'
 
 import { ButtonPrimary } from '../styles/buttons'
-import { H4 } from '../styles/typography'
-import { LinkCard, PagePadding, RowSpaceBetween } from '../styles/containers'
+import { LinkCard, ContentWrapper, TitleAndActionContainer } from '../styles/containers'
+import { ItemTitle, ItemSubTitle, PageTitle } from '../styles/typography'
 import language from '../language'
+
 const sitesUrl = `${process.env.REACT_APP_API_URL}/sites/`
+
 function Sites() {
   const [isLoading, setIsLoading] = useState(true)
   const [sites, setSites] = useState([])
@@ -37,24 +39,25 @@ function Sites() {
       }
       return 0
     })
-    .map(({ site_name, id }) => (
-      <LinkCard key={id} to={`/site/${id}/overview`}>
-        {site_name}
+    .map(({ site_name, landscape_name, id }) => (
+      <LinkCard key={id} to={`/sites/${id}/overview`}>
+        <ItemTitle>{site_name}</ItemTitle>
+        <ItemSubTitle>{landscape_name}</ItemSubTitle>
       </LinkCard>
     ))
 
   return isLoading ? (
     <LoadingIndicator />
   ) : (
-    <PagePadding>
-      <RowSpaceBetween>
-        <H4>{language.pages.sites.title}</H4>
-        <ButtonPrimary component={Link} to='/site/new'>
+    <ContentWrapper>
+      <TitleAndActionContainer>
+        <PageTitle>{language.pages.sites.title}</PageTitle>
+        <ButtonPrimary component={Link} to='/sites/new'>
           {language.pages.sites.newSiteButton}
         </ButtonPrimary>
-      </RowSpaceBetween>
+      </TitleAndActionContainer>
       <Stack>{sitesList}</Stack>
-    </PagePadding>
+    </ContentWrapper>
   )
 }
 

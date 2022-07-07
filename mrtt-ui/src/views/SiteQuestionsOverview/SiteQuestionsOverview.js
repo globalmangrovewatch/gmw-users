@@ -6,8 +6,8 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
-import { H4, H5Uppercase, SmallUpperCase, XSmallUpperCase } from '../../styles/typography'
-import { PaddedPageSection, PaddedPageTopSection, RowSpaceBetween } from '../../styles/containers'
+import { ItemSubTitle, ItemTitle, XSmallUpperCase } from '../../styles/typography'
+import { ContentWrapper, TitleAndActionContainer } from '../../styles/containers'
 import { TableAlertnatingRows } from '../../styles/table'
 import AddMonitoringSectionMenu from './AddMonitoringSectionMenu'
 import ItemDoesntExist from '../../components/ItemDoesntExist'
@@ -27,6 +27,10 @@ const SettingsLinkWrapper = styled(Link)`
 `
 const WideTh = styled('th')`
   width: 100%;
+`
+const StyledSectionHeader = styled('h3')`
+  text-transform: uppercase;
+  font-weight: 100;
 `
 const SettingsLink = (props) => (
   <SettingsLinkWrapper {...props}>
@@ -54,9 +58,9 @@ const SiteOverview = () => {
             setSite(siteData)
             setLandscape(landscapesData.find((landscape) => landscape.id === siteData.landscape_id))
           })
-          .catch((err) => {
+          .catch((error) => {
             setIsLoading(false)
-            if (err?.response?.status === 404) {
+            if (error?.response?.status === 404) {
               setDoesSiteExist(false)
             } else {
               toast.error(language.error.apiLoad)
@@ -71,17 +75,15 @@ const SiteOverview = () => {
     <ItemDoesntExist item='site' />
   ) : (
     <>
-      <PaddedPageTopSection>
-        <RowSpaceBetween>
+      <ContentWrapper>
+        <TitleAndActionContainer>
           <Stack>
-            <H4>{site?.site_name}</H4>
-            <SmallUpperCase>{landscape?.landscape_name}</SmallUpperCase>
+            <ItemTitle as='h2'>{site?.site_name}</ItemTitle>
+            <ItemSubTitle>{landscape?.landscape_name}</ItemSubTitle>
           </Stack>
-          <SettingsLink to={`/site/${siteId}/edit`} />
-        </RowSpaceBetween>
-      </PaddedPageTopSection>
-      <PaddedPageSection>
-        <H5Uppercase>{pageLanguage.formGroupTitle.registration}</H5Uppercase>
+          <SettingsLink to={`/sites/${siteId}/edit`} />
+        </TitleAndActionContainer>
+        <StyledSectionHeader>{pageLanguage.formGroupTitle.registration}</StyledSectionHeader>
         {/* this is a table instead of a ul to leave room for a cell that shows
          how many questions are filled out. Feature cut for now
          to manage timeline risk. */}
@@ -89,42 +91,42 @@ const SiteOverview = () => {
           <tbody>
             <tr>
               <WideTh>
-                <Link to={`/site/${siteId}/form/project-details`}>
+                <Link to={`/sites/${siteId}/form/project-details`}>
                   {pageLanguage.formName.siteDetails}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/site/${siteId}/form/site-background`}>
+                <Link to={`/sites/${siteId}/form/site-background`}>
                   {pageLanguage.formName.siteBackground}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/site/${siteId}/form/restoration-aims`}>
+                <Link to={`/sites/${siteId}/form/restoration-aims`}>
                   {pageLanguage.formName.restorationAims}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/site/${siteId}/form/causes-of-decline`}>
+                <Link to={`/sites/${siteId}/form/causes-of-decline`}>
                   {pageLanguage.formName.causesOfDecline}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/site/${siteId}/form/pre-restoration-assessment`}>
+                <Link to={`/sites/${siteId}/form/pre-restoration-assessment`}>
                   {pageLanguage.formName.preRestorationAssessment}
                 </Link>
               </WideTh>
             </tr>
           </tbody>
         </TableAlertnatingRows>
-        <H5Uppercase>{pageLanguage.formGroupTitle.intervention}</H5Uppercase>
+        <StyledSectionHeader>{pageLanguage.formGroupTitle.intervention}</StyledSectionHeader>
         <TableAlertnatingRows>
           <tbody>
             <tr>
@@ -135,9 +137,9 @@ const SiteOverview = () => {
             </tr>
           </tbody>
         </TableAlertnatingRows>
-        <H5Uppercase>{pageLanguage.formGroupTitle.monitoring}</H5Uppercase>
+        <StyledSectionHeader>{pageLanguage.formGroupTitle.monitoring}</StyledSectionHeader>
         <AddMonitoringSectionMenu />
-      </PaddedPageSection>
+      </ContentWrapper>
     </>
   )
 

@@ -48,9 +48,7 @@ const themeMui = createTheme({
     },
     MuiButton: {
       styleOverrides: {
-        root: {
-          marginTop: '1em'
-        }
+        root: {}
       }
     }
   }

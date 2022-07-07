@@ -7,7 +7,7 @@ import axios from 'axios'
 
 import { ButtonSubmit } from '../../styles/buttons'
 import { ErrorText, Link } from '../../styles/typography'
-import { Form, FormPageHeader, MainFormDiv, SectionFormTitle } from '../../styles/forms'
+import { Form, FormPageHeader, SectionFormTitle } from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { multiselectWithOtherValidation } from '../../validation/multiSelectWithOther'
 import { questionMapping } from '../../data/questionMapping'
@@ -17,6 +17,7 @@ import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
 import RestorationAimsCheckboxGroupWithLabel from './RestorationAimsCheckboxGroupWithLabel'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import { ContentWrapper } from '../../styles/containers'
 
 const getStakeholders = (registrationAnswersFromServer) =>
   registrationAnswersFromServer?.data.find((dataItem) => dataItem.question_id === '2.1')
@@ -78,7 +79,7 @@ const RestorationAimsForm = () => {
   return isLoading ? (
     <LoadingIndicator />
   ) : (
-    <MainFormDiv>
+    <ContentWrapper>
       <FormPageHeader>
         <SectionFormTitle>Restoration Aims</SectionFormTitle>
         <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
@@ -112,7 +113,7 @@ const RestorationAimsForm = () => {
         {isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}
         <ButtonSubmit isSubmitting={isSubmitting} />
       </Form>
-    </MainFormDiv>
+    </ContentWrapper>
   )
 }
 

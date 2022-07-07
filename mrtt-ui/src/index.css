@@ -18,6 +18,13 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
+body,
+input,
+button,
+textarea {
+  color: #000000d9;
+}
+
 
 code {
   font-family: 'Source Code Pro', Menlo, Monaco, Consolas, 'Courier New', monospace;

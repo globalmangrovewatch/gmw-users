@@ -1,14 +1,22 @@
 const error = {
-  submit: 'Submit failed. Please try again.',
   apiLoad: 'Loading data from the api failed. Please try again.',
-  getItemDoesntExistMessage: (item) => `That ${item} doesnt exits.`
+  delete: 'Deleting that item failed. Please try again.',
+  getItemDoesntExistMessage: (item) => `That ${item} doesnt exist.`,
+  submit: 'Submit failed. Please try again.'
 }
-const success = { submit: 'The data has been saved.' }
+
+const success = {
+  submit: 'The data has been saved.',
+  getEditThingSuccessMessage: (thing) => `${thing} has been edited.`,
+  getCreateThingSuccessMessage: (thing) => `${thing}, has been created.`,
+  getDeleteThingSuccessMessage: (thing) => `${thing} has been deleted.`
+}
 const form = {
   checkboxGroupOtherInputPlaceholder: 'If other, please state.',
   checkboxGroupOtherLabel: 'Other',
   navigateBackToSiteOverview: 'Return to site form overview',
-  selectLabel: 'Select'
+  selectLabel: 'Select',
+  requiredIndicator: 'Indicates required field'
 }
 const multiselectWithOtherFormQuestion = {
   validation: {
@@ -27,13 +35,34 @@ const pages = {
     titleYourOrganizations: 'Your Organizations'
   },
   sites: { title: 'Sites', newSiteButton: 'New Site' },
-  landscapes: { title: 'Landscapes', newLandscapeButton: 'New Landscape' },
-  siteform: {
-    getEditSiteSuccessMessage: (siteName) => `${siteName} has been edited`,
-    getNewSiteSuccessMessage: (siteName) => `${siteName}, has been created`,
-    titleNewSite: 'Create a site',
+  landscapeForm: {
+    delete: 'Delete this landscape',
+    isAssociatedSites:
+      'You must change the associated sites to another landscape before you can delete this landscape.',
     labelName: 'Name',
+    labelOrganizations: 'Organizations',
+    landscape: 'landscape',
+    noAssociatedSites: 'This landscape has no associated sites.',
+    titleEdit: 'Edit Landscape',
+    titleNew: 'New Landscape',
+    validation: {
+      nameRequired: 'Please enter a name'
+    }
+  },
+  landscapes: {
+    newLandscapeButton: 'New Landscape',
+    noOrganizarions: 'No organizations in this landscape',
+    noSites: 'No sites in this landscape',
+    organizations: 'Organizations',
+    sites: 'Sites',
+    title: 'Landscapes'
+  },
+  siteform: {
+    titleEditSite: 'Site Settings',
+    titleNewSite: 'Create a site',
+    labelName: 'Site Name',
     labelLandscape: 'Landscape',
+    site: 'site',
     validation: {
       nameRequired: 'Please enter a name',
       landscapeRequired: 'Please select a landscape'
@@ -65,6 +94,7 @@ const pages = {
 
 const buttons = {
   cancel: 'Cancel',
+  deleting: 'Deleting...',
   edit: 'Edit',
   submit: 'Submit',
   submitting: 'Submitting...'
