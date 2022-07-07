@@ -9,7 +9,10 @@ import { ButtonSubmit } from '../../styles/buttons'
 import { ErrorText, Link } from '../../styles/typography'
 import { Form, FormPageHeader, SectionFormTitle } from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
-import { multiselectWithOtherValidation } from '../../validation/multiSelectWithOther'
+import {
+  multiselectWithOtherValidation,
+  multiselectWithOtherValidationNoMinimum
+} from '../../validation/multiSelectWithOther'
 import { questionMapping } from '../../data/questionMapping'
 import { restorationAims as questions } from '../../data/questions'
 import { toast } from 'react-toastify'
@@ -32,7 +35,7 @@ const RestorationAimsForm = () => {
   const validationSchema = yup.object({
     ecologicalAims: multiselectWithOtherValidation,
     socioEconomicAims: multiselectWithOtherValidation,
-    otherAims: multiselectWithOtherValidation
+    otherAims: multiselectWithOtherValidationNoMinimum
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
