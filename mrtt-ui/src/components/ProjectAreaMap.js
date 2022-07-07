@@ -131,7 +131,7 @@ const ProjectAreaMap = ({
     <>
       <Typography variant='body2'>{language.projectAreaMap.siteAreaInstructions}</Typography>
       <DropzoneArea
-        sx={'margin-top: 20px'}
+        sx={'z-index: 1;margin-top: 20px'}
         onChange={onAddGeomFile}
         filesLimit={1}
         acceptedFiles={acceptedFileMimeTypes}
