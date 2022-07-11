@@ -5,6 +5,7 @@ import { Controller, useForm, useFieldArray } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { toast } from 'react-toastify'
+import { styled } from '@mui/material/styles'
 import {
   Box,
   Checkbox,
@@ -12,9 +13,13 @@ import {
   List,
   ListItem,
   MenuItem,
+  Stack,
   TextField,
   Typography
 } from '@mui/material'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 
 import { ContentWrapper } from '../styles/containers'
 import {
@@ -30,10 +35,7 @@ import { questionMapping } from '../data/questionMapping'
 import { siteInterventions as questions } from '../data/questions'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { ButtonSubmit } from '../styles/buttons'
-import {
-  multiselectWithOtherValidation,
-  multiselectWithOtherValidationNoMinimum
-} from '../validation/multiSelectWithOther'
+import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 import LoadingIndicator from './LoadingIndicator'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
@@ -44,7 +46,7 @@ const getBiophysicalInterventions = (registrationAnswersFromServer) =>
 
 function SiteInterventionsForm() {
   const validationSchema = yup.object({
-    whichStakeholdersInvolved: multiselectWithOtherValidation,
+    whichStakeholdersInvolved: multiselectWithOtherValidationNoMinimum,
     biophysicalInterventionsUsed: yup.array().of(
       yup.object().shape({
         interventionType: yup.string(),
@@ -52,11 +54,9 @@ function SiteInterventionsForm() {
         interventionEndDate: yup.string()
       })
     ),
-    //   .min(1)
-    //   .required('Select at least one intervention'),
     localParticipantTraining: yup.string(),
     organizationsProvidingTraining: multiselectWithOtherValidationNoMinimum,
-    otherActivitiesImplemented: multiselectWithOtherValidation
+    otherActivitiesImplemented: multiselectWithOtherValidationNoMinimum
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
@@ -110,8 +110,6 @@ function SiteInterventionsForm() {
     setIsSubmitting(true)
     setIsSubmitError(false)
 
-    console.log({ formData })
-
     axios
       .patch(apiAnswersUrl, mapDataForApi('siteInterventions', formData))
       .then(() => {
@@ -148,13 +146,18 @@ function SiteInterventionsForm() {
     setBiophysicalInterventionTypesChecked(biophysicalInterventionTypesCheckedCopy)
   }
 
+  const getBiophysicalIntervention = (intervention) =>
+    biophysicalInterventionsFields.find((field) => field.interventionType === intervention)
+
   return isLoading ? (
     <LoadingIndicator />
   ) : (
     <ContentWrapper>
       <FormPageHeader>
         <SectionFormTitle>Site Interventions</SectionFormTitle>
-        <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
+        <Link to={`/sites/${siteId}/overview`}>
+          &larr; {language.form.navigateBackToSiteOverview}
+        </Link>
       </FormPageHeader>
       <Form onSubmit={validateInputs(handleSubmit)}>
         <CheckboxGroupWithLabelAndController
@@ -183,6 +186,66 @@ function SiteInterventionsForm() {
                           handleBiophysicalInterventionsOnChange(event, biophysicalIntervention)
                         }></Checkbox>
                       <Typography variant='subtitle'>{biophysicalIntervention}</Typography>
+                    </Box>
+                    <Box>
+                      {getBiophysicalIntervention(biophysicalIntervention) && (
+                        <Box>
+                          <InnerFormDiv>
+                            <Controller
+                              name={`biophysicalInterventionsUsed.${biophysicalInterventionsFields.findIndex(
+                                (field) => field.interventionType === biophysicalIntervention
+                              )}.interventionStartDate`}
+                              control={control}
+                              defaultValue={new Date()}
+                              render={({ field }) => (
+                                <LocalizationProvider
+                                  dateAdapter={AdapterDateFns}
+                                  {...field}
+                                  ref={null}>
+                                  <Stack spacing={3}>
+                                    <MobileDatePicker
+                                      id='start-date'
+                                      label='Intervention start date'
+                                      value={field.value}
+                                      onChange={(newValue) => {
+                                        field.onChange(newValue)
+                                      }}
+                                      renderInput={(params) => <TextField {...params} />}
+                                    />
+                                  </Stack>
+                                </LocalizationProvider>
+                              )}
+                            />
+                          </InnerFormDiv>
+                          <InnerFormDiv>
+                            <Controller
+                              name={`biophysicalInterventionsUsed.${biophysicalInterventionsFields.findIndex(
+                                (field) => field.interventionType === biophysicalIntervention
+                              )}.interventionEndDate`}
+                              control={control}
+                              defaultValue={new Date()}
+                              render={({ field }) => (
+                                <LocalizationProvider
+                                  dateAdapter={AdapterDateFns}
+                                  {...field}
+                                  ref={null}>
+                                  <Stack spacing={3}>
+                                    <MobileDatePicker
+                                      id='end-date'
+                                      label='Intervention end date'
+                                      value={field.value}
+                                      onChange={(newValue) => {
+                                        field.onChange(newValue)
+                                      }}
+                                      renderInput={(params) => <TextField {...params} />}
+                                    />
+                                  </Stack>
+                                </LocalizationProvider>
+                              )}
+                            />
+                          </InnerFormDiv>
+                        </Box>
+                      )}
                     </Box>
                   </Box>
                 </ListItem>
@@ -239,3 +302,9 @@ function SiteInterventionsForm() {
 }
 
 export default SiteInterventionsForm
+
+const InnerFormDiv = styled('div')`
+  margin-top: 1em;
+  margin-left: 0.75em;
+  max-width: 15em;
+`
