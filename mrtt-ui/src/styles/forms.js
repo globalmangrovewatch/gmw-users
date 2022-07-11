@@ -19,7 +19,6 @@ export const FormQuestionDiv = styled('div')`
   padding: ${themeMui.spacing(3)};
   display: flex;
   flex-direction: column;
-  z-index: 1;
   background: ${theme.color.rowEven};
   &:nth-of-type(odd) {
     background: ${theme.color.rowOdd};
