@@ -40,9 +40,16 @@ import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMap
 import LoadingIndicator from './LoadingIndicator'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
 import { findDataItem } from '../library/findDataItem'
+import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2a') ?? []
+
+const getSiteCountries = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '1.2') ?? []
+
+const getMangroveSpeciesUsed = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '6.2b') ?? []
 
 function SiteInterventionsForm() {
   const validationSchema = yup.object({
@@ -52,6 +59,13 @@ function SiteInterventionsForm() {
         interventionType: yup.string(),
         interventionStartDate: yup.string(),
         interventionEndDate: yup.string()
+      })
+    ),
+    mangroveSpeciesUsed: yup.array().of(
+      yup.object().shape({
+        mangroveSpeciesType: yup.string(),
+        source: yup.string(),
+        count: yup.number()
       })
     ),
     localParticipantTraining: yup.string(),
@@ -81,29 +95,67 @@ function SiteInterventionsForm() {
     remove: biophysicalInterventionsRemove
   } = useFieldArray({ name: 'biophysicalInterventionsUsed', control })
 
+  const {
+    fields: mangroveSpeciesUsedFields,
+    append: mangroveSpeciesUsedAppend,
+    remove: mangroveSpeciesUsedRemove
+  } = useFieldArray({ name: 'mangroveSpeciesUsed', control })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [biophysicalInterventionTypesChecked, setBiophysicalInterventionTypesChecked] = useState([])
+  const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
+  const [mangroveSpeciesUsedChecked, setMangroveSpeciesUsedChecked] = useState([])
   const localParticipantTrainingWatcher = watchForm('localParticipantTraining')
 
-  const setInitialBiophysicalInterventionTypesFromServerData = useCallback((serverResponse) => {
+  const loadServerData = useCallback((serverResponse) => {
+    // set biophysical interventions
     const biophysicalInterventionsInitialVal = getBiophysicalInterventions(serverResponse)
 
     const initialBiophysicalInterventionsTypesChecked = biophysicalInterventionsInitialVal?.map(
       (intervention) => intervention.interventionType
     )
     setBiophysicalInterventionTypesChecked(initialBiophysicalInterventionsTypesChecked)
+
+    // set countries list for countries selected in 1.2
+    const siteCountriesResponse = getSiteCountries(serverResponse)
+
+    if (siteCountriesResponse.length) {
+      const countriesList = siteCountriesResponse.map(
+        (countryItem) => countryItem.properties.country
+      )
+      const species = []
+      countriesList.forEach((countrySelected) => {
+        mangroveSpeciesPerCountryList.forEach((countryItem) => {
+          if (countryItem.country.name === countrySelected) {
+            species.push(...countryItem.species)
+          }
+        })
+      })
+      const uniqueSpecies = [...new Set(species)]
+
+      setMangroveSpeciesForCountriesSelected(uniqueSpecies)
+    }
+
+    // set mangrove species list for items selected in 6.2b
+    const mangroveSpeciesUsedResponse = getMangroveSpeciesUsed(serverResponse)
+    if (mangroveSpeciesUsedResponse.length) {
+      // do what you did for contries list
+    }
+    // setMangroveSpeciesUsedChecked(getMangroveSpeciesUsed(serverResponse))
   }, [])
+
+  console.log({ mangroveSpeciesUsedChecked })
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.siteInterventions,
     resetForm,
     setIsLoading,
-    successCallback: setInitialBiophysicalInterventionTypesFromServerData
+    successCallback: loadServerData
   })
 
   const handleSubmit = (formData) => {
@@ -149,6 +201,27 @@ function SiteInterventionsForm() {
   const getBiophysicalIntervention = (intervention) =>
     biophysicalInterventionsFields.find((field) => field.interventionType === intervention)
 
+  const handleMangroveSpeciesUsedOnChange = (event, specie) => {
+    const mangroveSpeciesUsedCheckedCopy = mangroveSpeciesUsedChecked
+
+    if (event.target.checked) {
+      mangroveSpeciesUsedAppend({
+        mangroveSpeciesType: specie,
+        source: '',
+        count: 0
+      })
+      mangroveSpeciesUsedCheckedCopy.push(specie)
+    } else {
+      const fieldIndex = mangroveSpeciesUsedFields.findIndex(
+        (field) => field.mangroveSpeciesType === specie
+      )
+      const typeIndex = mangroveSpeciesUsedCheckedCopy.findIndex((type) => type === specie)
+      mangroveSpeciesUsedCheckedCopy.splice(typeIndex, 1)
+      mangroveSpeciesUsedRemove(fieldIndex)
+    }
+    setMangroveSpeciesUsedChecked(mangroveSpeciesUsedCheckedCopy)
+  }
+
   return isLoading ? (
     <LoadingIndicator />
   ) : (
@@ -168,7 +241,6 @@ function SiteInterventionsForm() {
           shouldAddOtherOptionWithClarification={true}
         />
         <ErrorText>{errors.whichStakeholdersInvolved?.selectedValues?.message}</ErrorText>
-
         <FormQuestionDiv>
           <StickyFormLabel>{questions.biophysicalInterventionsUsed.question}</StickyFormLabel>
           <List>
@@ -254,6 +326,34 @@ function SiteInterventionsForm() {
           </List>
           <ErrorText>{errors.biophysicalInterventionsUsed?.message}</ErrorText>
         </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.mangroveSpeciesUsed.question}</StickyFormLabel>
+          <List>
+            {mangroveSpeciesForCountriesSelected.length ? (
+              mangroveSpeciesForCountriesSelected.map((specie, index) => (
+                <ListItem key={index}>
+                  <Box>
+                    <Box>
+                      <Checkbox
+                        value={specie}
+                        checked={mangroveSpeciesUsedChecked.includes(specie)}
+                        onChange={(event) =>
+                          handleMangroveSpeciesUsedOnChange(event, specie)
+                        }></Checkbox>
+                      <Typography variant='subtitle'>{specie}</Typography>
+                    </Box>
+                    <Box></Box>
+                  </Box>
+                </ListItem>
+              ))
+            ) : (
+              <ErrorText>
+                No items to display. Please select countries in Site Details and Location (1.2).
+              </ErrorText>
+            )}
+          </List>
+          <ErrorText>{errors.mangroveSpeciesUsed?.message}</ErrorText>
+        </FormQuestionDiv>
 
         <FormQuestionDiv>
           <FormLabel>{questions.localParticipantTraining.question}</FormLabel>
@@ -293,7 +393,6 @@ function SiteInterventionsForm() {
           shouldAddOtherOptionWithClarification={true}
         />
         <ErrorText>{errors.otherActivitiesImplemented?.selectedValues?.message}</ErrorText>
-
         {isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}
         <ButtonSubmit isSubmitting={isSubmitting} />
       </Form>
