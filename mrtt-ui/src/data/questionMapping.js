@@ -42,5 +42,16 @@ export const questionMapping = {
     physicalMeasurementsTaken: '5.3g',
     pilotTestConducted: '5.4',
     guidanceForSiteRestoration: '5.5'
+  },
+  siteInterventions: {
+    whichStakeholdersInvolved: '6.1',
+    biophysicalInterventionsUsed: '6.2',
+    biophysicalInterventionDuration: '6.2a',
+    mangroveSpeciesUsed: '6.2b',
+    sourceOfMangroves: '6.2c',
+    mangroveAssociatedSpecies: '6.2d',
+    localParticipantTraining: '6.3',
+    organizationsProvidingTraining: '6.3a',
+    otherActivitiesImplemented: '6.4'
   }
 }

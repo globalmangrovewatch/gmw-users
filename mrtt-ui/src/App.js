@@ -17,6 +17,7 @@ import RestorationAimsForm from './components/RestorationAimsForm/RestorationAim
 import PreRestorationAssessmentForm from './components/PreRestorationAssessmentForm'
 import SignupForm from './views/Auth/SignupForm'
 import SiteBackgroundForm from './components/SiteBackgroundForm'
+import SiteInterventionsForm from './components/SiteInterventions'
 import SiteForm from './views/SiteForm'
 import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOverview'
 import Sites from './views/Sites'
@@ -47,6 +48,10 @@ function App() {
                 element={<OrganizationForm isNewOrganization={true} />}
               />
               <Route path='/sites/:siteId/edit' element={<SiteForm isNewSite={false} />} />
+              <Route
+                path='/sites/:siteId/form/site-interventions'
+                element={<SiteInterventionsForm />}
+              />
               <Route
                 path='/sites/:siteId/form/pre-restoration-assessment'
                 element={<PreRestorationAssessmentForm />}
