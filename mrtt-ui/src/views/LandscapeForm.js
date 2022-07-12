@@ -8,15 +8,10 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 
-import {
-  ButtonContainer,
-  PaddedSection,
-  PaddedPageTopSection,
-  RowFlexEnd
-} from '../styles/containers'
+import { ButtonContainer, PaddedSection, RowFlexEnd, ContentWrapper } from '../styles/containers'
 import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
-import { ErrorText } from '../styles/typography'
-import { Form, SectionFormTitle } from '../styles/forms'
+import { ErrorText, PageTitle } from '../styles/typography'
+import { Form, RequiredIndicator } from '../styles/forms'
 import ButtonSecondaryWithLoader from '../components/ButtonSecondaryWithLoader'
 import ConfirmPrompt from '../components/ConfirmPrompt/ConfirmPrompt'
 import ItemDoesntExist from '../components/ItemDoesntExist'
@@ -173,26 +168,26 @@ const LandscapeForm = ({ isNewLandscape }) => {
     <ItemDoesntExist item={language.pages.landscapeForm.landscape} />
   ) : (
     <>
-      <PaddedPageTopSection>
-        <SectionFormTitle>
+      <ContentWrapper>
+        <PageTitle>
           {isNewLandscape
             ? language.pages.landscapeForm.titleNew
             : language.pages.landscapeForm.titleEdit}
-        </SectionFormTitle>
-      </PaddedPageTopSection>
-      <PaddedSection>
+        </PageTitle>
         <Form onSubmit={validateInputs(handleSubmit)}>
-          <FormLabel htmlFor='name'>{language.pages.landscapeForm.labelName}* </FormLabel>
+          <FormLabel htmlFor='name'>
+            {language.pages.landscapeForm.labelName}
+            <RequiredIndicator>*</RequiredIndicator>{' '}
+          </FormLabel>
           <Controller
             name='landscape_name'
             control={formControl}
-            render={({ field }) => (
-              <TextField {...field} id='name' label={language.pages.landscapeForm.labelName} />
-            )}
+            render={({ field }) => <TextField {...field} id='name' />}
           />
           <ErrorText>{errors?.landscape_name?.message}</ErrorText>
           <FormLabel htmlFor='organizations'>
-            {language.pages.landscapeForm.labelOrganizations}*
+            {language.pages.landscapeForm.labelOrganizations}
+            <RequiredIndicator>*</RequiredIndicator>
           </FormLabel>
           <Controller
             name='selectedOrganizations'
@@ -204,9 +199,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
                 multiple
                 options={organizationOptions}
                 getOptionLabel={(option) => (option ? option.organization_name : '')}
-                renderInput={(params) => (
-                  <TextField {...params} label='organizations' id='organizations' />
-                )}
+                renderInput={(params) => <TextField {...params} id='organizations' />}
                 onChange={(event, values) => {
                   field.onChange(values)
                 }}
@@ -221,7 +214,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
             <ButtonSubmit isSubmitting={isSubmitting} />
           </ButtonContainer>
         </Form>
-      </PaddedSection>
+      </ContentWrapper>
     </>
   )
 
