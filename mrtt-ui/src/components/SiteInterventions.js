@@ -176,7 +176,7 @@ function SiteInterventionsForm() {
   }
 
   const handleBiophysicalInterventionsOnChange = (event, intervention) => {
-    const biophysicalInterventionTypesCheckedCopy = biophysicalInterventionTypesChecked
+    const biophysicalInterventionTypesCheckedCopy = [...biophysicalInterventionTypesChecked]
 
     if (event.target.checked) {
       biophysicalInterventionsAppend({
@@ -228,9 +228,7 @@ function SiteInterventionsForm() {
     <ContentWrapper>
       <FormPageHeader>
         <SectionFormTitle>Site Interventions</SectionFormTitle>
-        <Link to={`/sites/${siteId}/overview`}>
-          &larr; {language.form.navigateBackToSiteOverview}
-        </Link>
+        <Link to={`/sites/${siteId}/overview`}>{language.form.navigateBackToSiteOverview}</Link>
       </FormPageHeader>
       <Form onSubmit={validateInputs(handleSubmit)}>
         <CheckboxGroupWithLabelAndController
