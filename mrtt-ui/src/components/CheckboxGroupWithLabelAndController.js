@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FormQuestionDiv, StickyFormLabel } from '../styles/forms'
+import { StickyFormLabel } from '../styles/forms'
 import { Controller } from 'react-hook-form'
 import CheckboxGroup from './CheckboxGroup/CheckboxGroup'
 import getOptionsValuesAndLabels from '../library/getOptionsValuesAndLabels'
