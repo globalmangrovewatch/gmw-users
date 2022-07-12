@@ -143,7 +143,7 @@ function CausesOfDeclineForm() {
       (subCause) => subCause.subCauseLabel === subCauseLabel
     )
     const currentSubCause = currentMainCause?.subCauses?.[subCauseIndex]
-    const causesOfDeclineTypesCheckedCopy = causesOfDeclineTypesChecked
+    const causesOfDeclineTypesCheckedCopy = [...causesOfDeclineTypesChecked]
 
     //  case: checked, no subCause, and mainCause does not exist
     if (event.target.checked && !subCauseLabel && mainCauseIndex === -1) {

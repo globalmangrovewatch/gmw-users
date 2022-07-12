@@ -207,7 +207,7 @@ function PreRestorationAssessmentForm() {
   }
 
   const handleMangroveSpeciesPresentOnChange = (event, specie) => {
-    const mangroveSpeciesTypesCheckedCopy = mangroveSpeciesTypesChecked
+    const mangroveSpeciesTypesCheckedCopy = [...mangroveSpeciesTypesChecked]
     if (event.target.checked) {
       speciesCompositionAppend({ mangroveSpeciesType: specie, percentageComposition: '' })
       mangroveSpeciesTypesCheckedCopy.push(specie)
