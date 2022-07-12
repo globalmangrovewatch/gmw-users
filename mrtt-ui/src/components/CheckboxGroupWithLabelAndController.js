@@ -18,24 +18,22 @@ const CheckboxGroupWithLabelAndController = ({
 
   return (
     <>
-      <FormQuestionDiv>
-        <StickyFormLabel id={labelId}>{question}</StickyFormLabel>
-        <Controller
-          name={fieldName}
-          control={formControl}
-          render={({ field }) => {
-            return (
-              <CheckboxGroup
-                {...field}
-                options={optionsValueLabels}
-                aria-labelledby={labelId}
-                shouldAddOtherOptionWithClarification={shouldAddOtherOptionWithClarification}
-                id={fieldName}
-              />
-            )
-          }}
-        />
-      </FormQuestionDiv>
+      <StickyFormLabel id={labelId}>{question}</StickyFormLabel>
+      <Controller
+        name={fieldName}
+        control={formControl}
+        render={({ field }) => {
+          return (
+            <CheckboxGroup
+              {...field}
+              options={optionsValueLabels}
+              aria-labelledby={labelId}
+              shouldAddOtherOptionWithClarification={shouldAddOtherOptionWithClarification}
+              id={fieldName}
+            />
+          )
+        }}
+      />
     </>
   )
 }

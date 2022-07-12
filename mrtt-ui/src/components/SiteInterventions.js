@@ -160,15 +160,16 @@ function SiteInterventionsForm() {
         </Link>
       </FormPageHeader>
       <Form onSubmit={validateInputs(handleSubmit)}>
-        <CheckboxGroupWithLabelAndController
-          fieldName='whichStakeholdersInvolved'
-          reactHookFormInstance={reactHookFormInstance}
-          options={questions.whichStakeholdersInvolved.options}
-          question={questions.whichStakeholdersInvolved.question}
-          shouldAddOtherOptionWithClarification={true}
-        />
-        <ErrorText>{errors.whichStakeholdersInvolved?.selectedValues?.message}</ErrorText>
-
+        <FormQuestionDiv>
+          <CheckboxGroupWithLabelAndController
+            fieldName='whichStakeholdersInvolved'
+            reactHookFormInstance={reactHookFormInstance}
+            options={questions.whichStakeholdersInvolved.options}
+            question={questions.whichStakeholdersInvolved.question}
+            shouldAddOtherOptionWithClarification={true}
+          />
+          <ErrorText>{errors.whichStakeholdersInvolved?.selectedValues?.message}</ErrorText>
+        </FormQuestionDiv>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.biophysicalInterventionsUsed.question}</StickyFormLabel>
           <List>
@@ -273,8 +274,9 @@ function SiteInterventionsForm() {
           />
           <ErrorText>{errors.localParticipantTraining?.message}</ErrorText>
         </FormQuestionDiv>
+
         {localParticipantTrainingWatcher === 'Yes' ? (
-          <div>
+          <FormQuestionDiv>
             <CheckboxGroupWithLabelAndController
               fieldName='organizationsProvidingTraining'
               reactHookFormInstance={reactHookFormInstance}
@@ -283,17 +285,18 @@ function SiteInterventionsForm() {
               shouldAddOtherOptionWithClarification={true}
             />
             <ErrorText>{errors.organizationsProvidingTraining?.selectedValues?.message}</ErrorText>
-          </div>
+          </FormQuestionDiv>
         ) : null}
-        <CheckboxGroupWithLabelAndController
-          fieldName='otherActivitiesImplemented'
-          reactHookFormInstance={reactHookFormInstance}
-          options={questions.otherActivitiesImplemented.options}
-          question={questions.otherActivitiesImplemented.question}
-          shouldAddOtherOptionWithClarification={true}
-        />
-        <ErrorText>{errors.otherActivitiesImplemented?.selectedValues?.message}</ErrorText>
-
+        <FormQuestionDiv>
+          <CheckboxGroupWithLabelAndController
+            fieldName='otherActivitiesImplemented'
+            reactHookFormInstance={reactHookFormInstance}
+            options={questions.otherActivitiesImplemented.options}
+            question={questions.otherActivitiesImplemented.question}
+            shouldAddOtherOptionWithClarification={true}
+          />
+          <ErrorText>{errors.otherActivitiesImplemented?.selectedValues?.message}</ErrorText>
+        </FormQuestionDiv>
         {isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}
         <ButtonSubmit isSubmitting={isSubmitting} />
       </Form>

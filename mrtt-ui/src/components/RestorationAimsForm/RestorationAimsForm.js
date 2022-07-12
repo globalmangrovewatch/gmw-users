@@ -7,7 +7,7 @@ import axios from 'axios'
 
 import { ButtonSubmit } from '../../styles/buttons'
 import { ErrorText, Link } from '../../styles/typography'
-import { Form, FormPageHeader, SectionFormTitle } from '../../styles/forms'
+import { Form, FormPageHeader, FormQuestionDiv, SectionFormTitle } from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import {
   multiselectWithOtherValidation,
@@ -88,33 +88,38 @@ const RestorationAimsForm = () => {
         <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
       </FormPageHeader>
       <Form onSubmit={validateInputs(handleSubmit)}>
-        <RestorationAimsCheckboxGroupWithLabel
-          stakeholders={stakeholders}
-          fieldName='ecologicalAims'
-          reactHookFormInstance={reactHookFormInstance}
-          options={questions.ecologicalAims.options}
-          question={questions.ecologicalAims.question}
-          showAsterisk
-        />
-        <ErrorText>{errors.ecologicalAims?.selectedValues?.message}</ErrorText>
-        <RestorationAimsCheckboxGroupWithLabel
-          stakeholders={stakeholders}
-          fieldName='socioEconomicAims'
-          reactHookFormInstance={reactHookFormInstance}
-          options={questions.socioEconomicAims.options}
-          question={questions.socioEconomicAims.question}
-          showAsterisk
-        />
-        <ErrorText>{errors.socioEconomicAims?.selectedValues?.message}</ErrorText>
-        <RestorationAimsCheckboxGroupWithLabel
-          stakeholders={stakeholders}
-          fieldName='otherAims'
-          reactHookFormInstance={reactHookFormInstance}
-          options={questions.otherAims.options}
-          question={questions.otherAims.question}
-        />
-        <ErrorText>{errors.otherAims?.selectedValues?.message}</ErrorText>
-
+        <FormQuestionDiv>
+          <RestorationAimsCheckboxGroupWithLabel
+            stakeholders={stakeholders}
+            fieldName='ecologicalAims'
+            reactHookFormInstance={reactHookFormInstance}
+            options={questions.ecologicalAims.options}
+            question={questions.ecologicalAims.question}
+            showAsterisk
+          />
+          <ErrorText>{errors.ecologicalAims?.selectedValues?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <RestorationAimsCheckboxGroupWithLabel
+            stakeholders={stakeholders}
+            fieldName='socioEconomicAims'
+            reactHookFormInstance={reactHookFormInstance}
+            options={questions.socioEconomicAims.options}
+            question={questions.socioEconomicAims.question}
+            showAsterisk
+          />
+          <ErrorText>{errors.socioEconomicAims?.selectedValues?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <RestorationAimsCheckboxGroupWithLabel
+            stakeholders={stakeholders}
+            fieldName='otherAims'
+            reactHookFormInstance={reactHookFormInstance}
+            options={questions.otherAims.options}
+            question={questions.otherAims.question}
+          />
+          <ErrorText>{errors.otherAims?.selectedValues?.message}</ErrorText>
+        </FormQuestionDiv>
         {isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}
         <ButtonSubmit isSubmitting={isSubmitting} />
       </Form>
