@@ -124,7 +124,7 @@ function SiteInterventionsForm() {
   }
 
   const handleBiophysicalInterventionsOnChange = (event, intervention) => {
-    const biophysicalInterventionTypesCheckedCopy = biophysicalInterventionTypesChecked
+    const biophysicalInterventionTypesCheckedCopy = [...biophysicalInterventionTypesChecked]
 
     if (event.target.checked) {
       biophysicalInterventionsAppend({
