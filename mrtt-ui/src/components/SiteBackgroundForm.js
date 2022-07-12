@@ -232,14 +232,16 @@ const ProjectDetailsForm = () => {
           <ErrorText>{errors.managementArea?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Protection Status*/}
-        <CheckboxGroupWithLabelAndController
-          fieldName='protectionStatus'
-          reactHookFormInstance={reactHookFormInstance}
-          options={siteBackground.protectionStatus.options}
-          question={siteBackground.protectionStatus.question}
-          shouldAddOtherOptionWithClarification={true}
-        />
-        <ErrorText>{errors.protectionStatus?.selectedValues?.message}</ErrorText>
+        <FormQuestionDiv>
+          <CheckboxGroupWithLabelAndController
+            fieldName='protectionStatus'
+            reactHookFormInstance={reactHookFormInstance}
+            options={siteBackground.protectionStatus.options}
+            question={siteBackground.protectionStatus.question}
+            shouldAddOtherOptionWithClarification={true}
+          />
+          <ErrorText>{errors.protectionStatus?.selectedValues?.message}</ErrorText>
+        </FormQuestionDiv>
         {/* areStakeholdersInvolved */}
         <FormQuestionDiv>
           <StickyFormLabel>{siteBackground.areStakeholdersInvolved.question}</StickyFormLabel>
@@ -262,23 +264,27 @@ const ProjectDetailsForm = () => {
           </ErrorText>
         </FormQuestionDiv>
         {/* Government Arrangement */}
-        <CheckboxGroupWithLabelAndController
-          fieldName='governmentArrangement'
-          reactHookFormInstance={reactHookFormInstance}
-          options={siteBackground.governmentArrangement.options}
-          question={siteBackground.governmentArrangement.question}
-          shouldAddOtherOptionWithClarification={true}
-        />
-        <ErrorText>{errors.governmentArrangement?.selectedValues?.message}</ErrorText>
+        <FormQuestionDiv>
+          <CheckboxGroupWithLabelAndController
+            fieldName='governmentArrangement'
+            reactHookFormInstance={reactHookFormInstance}
+            options={siteBackground.governmentArrangement.options}
+            question={siteBackground.governmentArrangement.question}
+            shouldAddOtherOptionWithClarification={true}
+          />
+          <ErrorText>{errors.governmentArrangement?.selectedValues?.message}</ErrorText>
+        </FormQuestionDiv>
         {/* Land Tenure */}
-        <CheckboxGroupWithLabelAndController
-          fieldName='landTenure'
-          reactHookFormInstance={reactHookFormInstance}
-          options={siteBackground.landTenure.options}
-          question={siteBackground.landTenure.question}
-          shouldAddOtherOptionWithClarification={true}
-        />
-        <ErrorText>{errors.landTenure?.selectedValues?.message}</ErrorText>
+        <FormQuestionDiv>
+          <CheckboxGroupWithLabelAndController
+            fieldName='landTenure'
+            reactHookFormInstance={reactHookFormInstance}
+            options={siteBackground.landTenure.options}
+            question={siteBackground.landTenure.question}
+            shouldAddOtherOptionWithClarification={true}
+          />
+          <ErrorText>{errors.landTenure?.selectedValues?.message}</ErrorText>
+        </FormQuestionDiv>
         {/* customaryRights */}
         <FormQuestionDiv>
           <StickyFormLabel>{siteBackground.customaryRights.question}</StickyFormLabel>

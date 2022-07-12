@@ -16,7 +16,12 @@ const form = {
   checkboxGroupOtherLabel: 'Other',
   navigateBackToSiteOverview: 'Return to site form overview',
   selectLabel: 'Select',
-  requiredIndicator: 'Indicates required field'
+  requiredIndicator: 'Indicates required field',
+  error: {
+    yearTooLow: 'Year must be greater than 1900',
+    noYearProvided: 'You must specifiy a year',
+    yearTooHigh: 'Year must less than or equal to the current year'
+  }
 }
 const multiselectWithOtherFormQuestion = {
   validation: {

@@ -8,15 +8,10 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 
-import {
-  ButtonContainer,
-  PaddedPageTopSection,
-  PaddedSection,
-  RowFlexEnd
-} from '../styles/containers'
+import { ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
 import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
-import { ErrorText } from '../styles/typography'
-import { Form, SectionFormTitle } from '../styles/forms'
+import { ErrorText, PageTitle } from '../styles/typography'
+import { Form, RequiredIndicator } from '../styles/forms'
 import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
@@ -119,22 +114,21 @@ const OrganizationForm = ({ isNewOrganization }) => {
     <ItemDoesntExist item={language.pages.organizationForm.organization} />
   ) : (
     <>
-      <PaddedPageTopSection>
-        <SectionFormTitle>
+      <ContentWrapper>
+        <PageTitle>
           {isNewOrganization
             ? language.pages.organizationForm.titleNew
             : language.pages.organizationForm.titleEdit}
-        </SectionFormTitle>
-      </PaddedPageTopSection>
-      <PaddedSection>
+        </PageTitle>
         <Form onSubmit={validateInputs(handleSubmit)}>
-          <FormLabel htmlFor='name'>{language.pages.organizationForm.labelName}* </FormLabel>
+          <FormLabel htmlFor='name'>
+            {language.pages.organizationForm.labelName}
+            <RequiredIndicator>*</RequiredIndicator>{' '}
+          </FormLabel>
           <Controller
             name='organization_name'
             control={formControl}
-            render={({ field }) => (
-              <TextField {...field} id='name' label={language.pages.organizationForm.labelName} />
-            )}
+            render={({ field }) => <TextField {...field} id='name' />}
           />
           <ErrorText>{errors?.organization_name?.message}</ErrorText>
           <FormLabel htmlFor='organizations'>
@@ -147,7 +141,7 @@ const OrganizationForm = ({ isNewOrganization }) => {
             <ButtonSubmit isSubmitting={isSubmitting} />
           </ButtonContainer>
         </Form>
-      </PaddedSection>
+      </ContentWrapper>
     </>
   )
 
