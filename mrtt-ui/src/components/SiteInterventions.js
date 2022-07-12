@@ -142,10 +142,11 @@ function SiteInterventionsForm() {
 
     // set mangrove species list for items selected in 6.2b
     const mangroveSpeciesUsedResponse = getMangroveSpeciesUsed(serverResponse)
+    let mangroveSpeciesList = []
     if (mangroveSpeciesUsedResponse.length) {
-      // do what you did for contries list
+      mangroveSpeciesList = mangroveSpeciesUsedResponse.map((specie) => specie.mangroveSpeciesType)
     }
-    // setMangroveSpeciesUsedChecked(getMangroveSpeciesUsed(serverResponse))
+    setMangroveSpeciesUsedChecked(mangroveSpeciesList)
   }, [])
 
   useInitializeQuestionMappedForm({
