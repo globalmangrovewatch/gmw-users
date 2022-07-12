@@ -64,8 +64,12 @@ function SiteInterventionsForm() {
     mangroveSpeciesUsed: yup.array().of(
       yup.object().shape({
         mangroveSpeciesType: yup.string(),
-        source: yup.string(),
-        count: yup.number()
+        seed: yup
+          .object()
+          .shape({ checked: yup.bool(), source: yup.string(), count: yup.number() }),
+        propagule: yup
+          .object()
+          .shape({ checked: yup.bool(), source: yup.string(), count: yup.number() })
       })
     ),
     localParticipantTraining: yup.string(),
@@ -206,8 +210,8 @@ function SiteInterventionsForm() {
     if (event.target.checked) {
       mangroveSpeciesUsedAppend({
         mangroveSpeciesType: specie,
-        source: '',
-        count: 0
+        seed: { checked: false, source: '', count: 0 },
+        propagule: { checked: false, source: '', count: 0 }
       })
       mangroveSpeciesUsedCheckedCopy.push(specie)
     } else {
