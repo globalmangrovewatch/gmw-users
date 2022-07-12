@@ -148,8 +148,6 @@ function SiteInterventionsForm() {
     // setMangroveSpeciesUsedChecked(getMangroveSpeciesUsed(serverResponse))
   }, [])
 
-  console.log({ mangroveSpeciesUsedChecked })
-
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.siteInterventions,

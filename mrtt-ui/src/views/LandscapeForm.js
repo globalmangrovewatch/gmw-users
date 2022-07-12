@@ -1,6 +1,5 @@
 import { Autocomplete, FormLabel, TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
-import { styled } from '@mui/system'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -18,21 +17,18 @@ import {
 import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
 import { ErrorText } from '../styles/typography'
 import { Form, SectionFormTitle } from '../styles/forms'
+import ButtonSecondaryWithLoader from '../components/ButtonSecondaryWithLoader'
+import ConfirmPrompt from '../components/ConfirmPrompt/ConfirmPrompt'
 import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
 import SubmitErrorWithExtraErrorContent from '../components/SubmitErrorWithExtraErrorContent'
 
-import themeMui from '../styles/themeMui'
-import ButtonSecondaryWithLoader from '../components/ButtonSecondaryWithLoader'
-
-const DeleteSectionWrapper = styled('div')`
-  margin-top: ${themeMui.spacing(2)};
-`
-
 const validationSchema = yup.object({
   landscape_name: yup.string().required(language.pages.landscapeForm.validation.nameRequired),
-  organizations: yup.array()
+  selectedOrganizations: yup
+    .array()
+    .min(1, language.pages.landscapeForm.validation.organizationRequired)
 })
 
 const formDefaultValues = { landscape_name: '', selectedOrganizations: [] }
@@ -40,6 +36,7 @@ const formDefaultValues = { landscape_name: '', selectedOrganizations: [] }
 const LandscapeForm = ({ isNewLandscape }) => {
   const [doesLandscapeExist, setDoesLandscapeExist] = useState(true)
   const [isAssociatedSites, setIsAssociatedSites] = useState(false)
+  const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
@@ -79,7 +76,6 @@ const LandscapeForm = ({ isNewLandscape }) => {
               selectedOrganizations
             }
             resetForm(landscapeDataFormattedForForm)
-            console.log(sites, !!sites.length)
             setIsAssociatedSites(!!sites.length)
             setLandscapeName(landscape_name)
           }
@@ -154,7 +150,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
     navigate('/landscapes')
   }
 
-  const handleDeleteClick = () => {
+  const handleDeleteConfirm = () => {
     setIsDeleting(true)
     axios
       .delete(landscapeUrl)
@@ -167,6 +163,10 @@ const LandscapeForm = ({ isNewLandscape }) => {
         setIsDeleting(false)
         toast.error(language.error.delete)
       })
+  }
+
+  const handleDeleteClick = () => {
+    setIsDeleteConfirmPromptOpen(true)
   }
 
   const form = !doesLandscapeExist ? (
@@ -192,7 +192,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
           />
           <ErrorText>{errors?.landscape_name?.message}</ErrorText>
           <FormLabel htmlFor='organizations'>
-            {language.pages.landscapeForm.labelOrganizations}
+            {language.pages.landscapeForm.labelOrganizations}*
           </FormLabel>
           <Controller
             name='selectedOrganizations'
@@ -214,19 +214,26 @@ const LandscapeForm = ({ isNewLandscape }) => {
               />
             )}
           />
-          <ErrorText>{errors?.organizations?.message}</ErrorText>
+          <ErrorText>{errors?.selectedOrganizations?.message}</ErrorText>
           <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
           <ButtonContainer>
             <ButtonCancel onClick={handleCancelClick} />
             <ButtonSubmit isSubmitting={isSubmitting} />
           </ButtonContainer>
         </Form>
-        <DeleteSectionWrapper>
-          {isAssociatedSites ? (
-            <p>{language.pages.landscapeForm.isAssociatedSites}</p>
-          ) : (
-            <p>{language.pages.landscapeForm.noAssociatedSites}</p>
-          )}
+      </PaddedSection>
+    </>
+  )
+
+  const deleteLandscapeSection = !isNewLandscape ? (
+    <>
+      <PaddedSection>
+        {isAssociatedSites ? (
+          <p>{language.pages.landscapeForm.isAssociatedSites}</p>
+        ) : (
+          <p>{language.pages.landscapeForm.noAssociatedSites}</p>
+        )}
+        <div>
           <ButtonSecondaryWithLoader
             disabled={isAssociatedSites}
             onClick={handleDeleteClick}
@@ -234,12 +241,27 @@ const LandscapeForm = ({ isNewLandscape }) => {
             holdingContent={language.buttons.deleting}>
             {language.pages.landscapeForm.delete}
           </ButtonSecondaryWithLoader>
-        </DeleteSectionWrapper>
+        </div>
       </PaddedSection>
+      <ConfirmPrompt
+        isOpen={isDeleteConfirmPromptOpen}
+        setIsOpen={setIsDeleteConfirmPromptOpen}
+        title={language.pages.landscapeForm.deletePropmt.title}
+        promptText={language.pages.landscapeForm.deletePropmt.propmtText}
+        confirmButtonText={language.pages.landscapeForm.deletePropmt.buttonText}
+        onConfirm={handleDeleteConfirm}
+      />
+    </>
+  ) : null
+
+  return isLoading ? (
+    <LoadingIndicator />
+  ) : (
+    <>
+      {form}
+      {deleteLandscapeSection}
     </>
   )
-
-  return isLoading ? <LoadingIndicator /> : form
 }
 
 LandscapeForm.propTypes = { isNewLandscape: PropTypes.bool.isRequired }
