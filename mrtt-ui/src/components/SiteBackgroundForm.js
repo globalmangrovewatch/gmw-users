@@ -114,7 +114,7 @@ const ProjectDetailsForm = () => {
   }
 
   const handleStakeholdersOnChange = (event, stakeholder) => {
-    const stakeholderTypesCheckedCopy = stakeholderTypesChecked
+    const stakeholderTypesCheckedCopy = [...stakeholderTypesChecked]
     if (event.target.checked) {
       stakeholdersAppend({ stakeholderType: stakeholder })
       stakeholderTypesCheckedCopy.push(stakeholder)

@@ -45,8 +45,7 @@ export const questionMapping = {
   },
   siteInterventions: {
     whichStakeholdersInvolved: '6.1',
-    biophysicalInterventionsUsed: '6.2',
-    biophysicalInterventionDuration: '6.2a',
+    biophysicalInterventionsUsed: '6.2a',
     mangroveSpeciesUsed: '6.2b',
     sourceOfMangroves: '6.2c',
     mangroveAssociatedSpecies: '6.2d',
