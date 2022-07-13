@@ -1,5 +1,6 @@
 import { styled, Typography, Link as LinkMui } from '@mui/material'
 import { Link as LinkReactRouter } from 'react-router-dom'
+import { ButtonSecondary } from './buttons'
 
 import theme from './theme'
 import themeMui from './themeMui'
@@ -18,6 +19,10 @@ export const H4 = styled('h4')`
 `
 
 export const Link = (props) => <LinkMui component={LinkReactRouter} {...props} />
+
+export const LinkLooksLikeButtonSecondary = (props) => (
+  <ButtonSecondary component={LinkReactRouter} {...props} />
+)
 
 export const SmallUpperCase = styled('div')`
   text-transform: uppercase;

@@ -22,6 +22,7 @@ import SiteForm from './views/SiteForm'
 import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOverview'
 import Sites from './views/Sites'
 import themeMui from './styles/themeMui'
+import CostsForm from './views/CostsForm'
 
 function App() {
   return (
@@ -60,7 +61,8 @@ function App() {
                 path='/sites/:siteId/form/causes-of-decline'
                 element={<CausesOfDeclineForm />}
               />
-              <Route path='/sites/:siteId/form/project-details' element={<ProjectDetailsForm />} />
+              <Route path='/sites/:siteId/form/costs' element={<CostsForm />} />
+              <Route path='/sites/:siteId/form/project-details/' element={<ProjectDetailsForm />} />
               <Route
                 path='/sites/:siteId/form/restoration-aims'
                 element={<RestorationAimsForm />}

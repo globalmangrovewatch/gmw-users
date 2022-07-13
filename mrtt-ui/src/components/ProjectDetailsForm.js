@@ -12,14 +12,14 @@ import turfConvex from '@turf/convex'
 import turfBbox from '@turf/bbox'
 import turfBboxPolygon from '@turf/bbox-polygon'
 
-import { ButtonSubmit } from '../styles/buttons'
-import { ErrorText, Link } from '../styles/typography'
+import { ErrorText } from '../styles/typography'
 import {
   StickyFormLabel,
   FormPageHeader,
   FormQuestionDiv,
   SectionFormTitle,
-  Form
+  Form,
+  SectionFormSubtitle
 } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { projectDetails as questions } from '../data/questions'
@@ -33,6 +33,8 @@ import mangroveCountries from '../data/mangrove_countries.json'
 import ProjectAreaMap from './ProjectAreaMap'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 import { ContentWrapper } from '../styles/containers'
+import QuestionNav from './QuestionNav'
+import useSiteInfo from '../library/useSiteInfo'
 
 const sortCountries = (a, b) => {
   const textA = a.properties.country.toUpperCase()
@@ -48,6 +50,7 @@ function ProjectDetailsForm() {
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { site_name } = useSiteInfo()
   const validationSchema = yup.object().shape({
     hasProjectEndDate: yup.boolean(),
     projectStartDate: yup.string().required('Select a start date'),
@@ -162,10 +165,18 @@ function ProjectDetailsForm() {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>Project Details Form</SectionFormTitle>
-        <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
+        <SectionFormTitle>
+          {language.pages.siteQuestionsOverview.formName.siteDetails}
+        </SectionFormTitle>
+        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
       </FormPageHeader>
-      <Form onSubmit={validateInputs(handleSubmit)}>
+      <QuestionNav
+        isSaving={isSubmitting}
+        isSaveError={isError}
+        onSave={validateInputs(handleSubmit)}
+        currentSection='project-details'
+      />
+      <Form>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
           <StickyFormLabel id='has-project-end-date-label'>
@@ -283,10 +294,6 @@ function ProjectDetailsForm() {
             )}
           />
           <ErrorText>{errors.siteArea?.features?.message}</ErrorText>
-        </FormQuestionDiv>
-        <FormQuestionDiv>
-          {isError && <ErrorText>{language.error.submit}</ErrorText>}
-          <ButtonSubmit isSubmitting={isSubmitting} />
         </FormQuestionDiv>
       </Form>
     </ContentWrapper>

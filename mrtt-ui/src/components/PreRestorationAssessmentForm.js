@@ -1,9 +1,3 @@
-import { useState, useCallback } from 'react'
-import axios from 'axios'
-import { useParams } from 'react-router-dom'
-import { useForm, useFieldArray, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import {
   Box,
   Button,
@@ -16,31 +10,39 @@ import {
   Typography
 } from '@mui/material'
 import { toast } from 'react-toastify'
+import { useForm, useFieldArray, Controller } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
+import { useState, useCallback } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import axios from 'axios'
 
 import {
   Form,
   FormPageHeader,
   FormQuestionDiv,
   StickyFormLabel,
+  SectionFormSubtitle,
   SectionFormTitle,
   SelectedInputSection,
   TabularLabel
 } from '../styles/forms'
 import { ContentWrapper } from '../styles/containers'
-import { questionMapping } from '../data/questionMapping'
-import { preRestorationAssessment as questions } from '../data/questions'
-import { mapDataForApi } from '../library/mapDataForApi'
-import { ButtonSubmit } from '../styles/buttons'
-import { ErrorText, Link } from '../styles/typography'
-import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
-import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
-import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
-import LoadingIndicator from './LoadingIndicator'
-import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
-import language from '../language'
-import TabularInputRow from './TabularInput/TabularInputRow'
-import AddTabularInputRow from './TabularInput/AddTabularInputRow'
+import { ErrorText } from '../styles/typography'
 import { findDataItem } from '../library/findDataItem'
+import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
+import { mapDataForApi } from '../library/mapDataForApi'
+import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
+import { preRestorationAssessment as questions } from '../data/questions'
+import { questionMapping } from '../data/questionMapping'
+import AddTabularInputRow from './TabularInput/AddTabularInputRow'
+import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
+import language from '../language'
+import LoadingIndicator from './LoadingIndicator'
+import QuestionNav from './QuestionNav'
+import TabularInputRow from './TabularInput/TabularInputRow'
+import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
+import useSiteInfo from '../library/useSiteInfo'
 
 const getSiteCountries = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '1.2') ?? []
@@ -52,6 +54,7 @@ const getPhysicalMeasurementsTaken = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '5.3g') ?? []
 
 function PreRestorationAssessmentForm() {
+  const { site_name } = useSiteInfo()
   const validationSchema = yup.object().shape({
     mangrovesPreviouslyOccured: yup.string(),
     mangroveRestorationAttempted: yup.string(),
@@ -251,10 +254,18 @@ function PreRestorationAssessmentForm() {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>Pre Restoration Assessment Form</SectionFormTitle>
-        <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
+        <SectionFormTitle>
+          {language.pages.siteQuestionsOverview.formName.preRestorationAssessment}
+        </SectionFormTitle>
+        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
       </FormPageHeader>
-      <Form onSubmit={validateInputs(handleSubmit)}>
+      <QuestionNav
+        isSaving={isSubmitting}
+        isSaveError={isError}
+        onSave={validateInputs(handleSubmit)}
+        currentSection='pre-restoration-assessment'
+      />
+      <Form>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.mangrovesPreviouslyOccured.question}</StickyFormLabel>
           <Controller
@@ -520,10 +531,6 @@ function PreRestorationAssessmentForm() {
             )}
           />
           <ErrorText>{errors.guidanceForSiteRestoration?.message}</ErrorText>
-        </FormQuestionDiv>
-        <FormQuestionDiv>
-          {isError && <ErrorText>Submit failed, please try again</ErrorText>}
-          <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
         </FormQuestionDiv>
       </Form>
     </ContentWrapper>
