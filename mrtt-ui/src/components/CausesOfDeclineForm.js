@@ -1,7 +1,3 @@
-import { toast } from 'react-toastify'
-import { useState, useCallback } from 'react'
-import axios from 'axios'
-import { useParams } from 'react-router-dom'
 import {
   Box,
   Checkbox,
@@ -13,24 +9,30 @@ import {
   TextField,
   Typography
 } from '@mui/material'
+import { FormPageHeader, SectionFormSubtitle, StickyFormLabel } from '../styles/forms'
+import { toast } from 'react-toastify'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
+import { useState, useCallback } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { FormPageHeader, StickyFormLabel } from '../styles/forms'
 import * as yup from 'yup'
+import axios from 'axios'
 
-import { Form, FormQuestionDiv, SectionFormTitle, SubTitle, SubTitle2 } from '../styles/forms'
-import { ButtonSubmit } from '../styles/buttons'
 import { causesOfDecline } from '../data/questions'
 import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
-import { ErrorText, Link } from '../styles/typography'
+import { ContentWrapper } from '../styles/containers'
+import { ErrorText } from '../styles/typography'
+import { Form, FormQuestionDiv, SectionFormTitle, SubTitle, SubTitle2 } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { questionMapping } from '../data/questionMapping'
 import language from '../language'
 import LoadingIndicator from './LoadingIndicator'
+import QuestionNav from './QuestionNav'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
-import { ContentWrapper } from '../styles/containers'
+import useSiteInfo from '../library/useSiteInfo'
 
 function CausesOfDeclineForm() {
+  const { site_name } = useSiteInfo()
   const validationSchema = yup.object().shape({
     lossKnown: yup.string(),
     causesOfDecline: yup
@@ -266,10 +268,18 @@ function CausesOfDeclineForm() {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>Causes of Decline</SectionFormTitle>
-        <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
+        <SectionFormTitle>
+          {language.pages.siteQuestionsOverview.formName.causesOfDecline}
+        </SectionFormTitle>
+        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
       </FormPageHeader>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <QuestionNav
+        isSaving={isSubmitting}
+        isSaveError={isError}
+        onSave={handleSubmit(onSubmit)}
+        currentSection='causes-of-decline'
+      />
+      <Form>
         <FormQuestionDiv>
           <StickyFormLabel>{causesOfDecline.lossKnown.question}</StickyFormLabel>
           <Controller
@@ -449,10 +459,6 @@ function CausesOfDeclineForm() {
             ))}
           </FormQuestionDiv>
         ) : null}
-        <FormQuestionDiv>
-          {isError && <ErrorText>Submit failed, please try again</ErrorText>}
-          <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
-        </FormQuestionDiv>
       </Form>
     </ContentWrapper>
   )
