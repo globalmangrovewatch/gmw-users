@@ -202,7 +202,7 @@ function ProjectDetailsForm() {
                     label='Project start date'
                     value={field.value}
                     onChange={(newValue) => {
-                      field.onChange(newValue)
+                      field.onChange(newValue?.toISOString())
                     }}
                     renderInput={(params) => <TextField {...params} />}
                   />
@@ -227,7 +227,7 @@ function ProjectDetailsForm() {
                       label='Project end date'
                       value={field.value}
                       onChange={(newValue) => {
-                        field.onChange(newValue)
+                        field.onChange(newValue?.toISOString())
                       }}
                       renderInput={(params) => <TextField {...params} />}
                     />
