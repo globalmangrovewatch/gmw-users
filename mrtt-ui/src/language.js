@@ -48,7 +48,7 @@ const pages = {
       nameRequired: 'Please enter a name'
     }
   },
-  sites: { title: 'Sites', newSiteButton: 'New Site' },
+  sites: { title: 'Sites', newSiteButton: 'New Site', lastUpdated: 'Last updated' },
   landscapeForm: {
     delete: 'Delete this landscape',
     deletePropmt: {
