@@ -1,5 +1,4 @@
-import { useParams } from 'react-router-dom'
-import { Link } from '../../styles/typography'
+import { useParams, Link as LinkReactRouter } from 'react-router-dom'
 import { Settings } from '@mui/icons-material'
 import { Stack } from '@mui/material'
 import { styled } from '@mui/system'
@@ -7,7 +6,7 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
-import { ItemSubTitle, ItemTitle } from '../../styles/typography'
+import { ItemSubTitle, ItemTitle, Link } from '../../styles/typography'
 import { ContentWrapper, TitleAndActionContainer } from '../../styles/containers'
 import { TableAlertnatingRows } from '../../styles/table'
 import AddMonitoringSectionMenu from './AddMonitoringSectionMenu'
@@ -68,7 +67,7 @@ const SiteOverview = () => {
             <ItemTitle as='h2'>{site?.site_name}</ItemTitle>
             <ItemSubTitle>{landscape?.landscape_name}</ItemSubTitle>
           </Stack>
-          <ButtonSecondary component={Link} to={`/site/${siteId}/edit`}>
+          <ButtonSecondary component={LinkReactRouter} to={`/sites/${siteId}/edit`}>
             <Settings /> Settings
           </ButtonSecondary>
         </TitleAndActionContainer>

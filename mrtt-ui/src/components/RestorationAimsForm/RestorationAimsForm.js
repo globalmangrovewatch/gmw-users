@@ -1,37 +1,45 @@
+import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
-import { useCallback, useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 
-import { ButtonSubmit } from '../../styles/buttons'
-import { ErrorText, Link } from '../../styles/typography'
-import { Form, FormPageHeader, FormQuestionDiv, SectionFormTitle } from '../../styles/forms'
-import { mapDataForApi } from '../../library/mapDataForApi'
 import {
   multiselectWithOtherValidation,
   multiselectWithOtherValidationNoMinimum
 } from '../../validation/multiSelectWithOther'
+import {
+  Form,
+  FormPageHeader,
+  FormQuestionDiv,
+  SectionFormSubtitle,
+  SectionFormTitle
+} from '../../styles/forms'
+import { ContentWrapper } from '../../styles/containers'
+import { ErrorText } from '../../styles/typography'
+import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
 import { restorationAims as questions } from '../../data/questions'
 import { toast } from 'react-toastify'
 import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
+import QuestionNav from '../QuestionNav'
 import RestorationAimsCheckboxGroupWithLabel from './RestorationAimsCheckboxGroupWithLabel'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
-import { ContentWrapper } from '../../styles/containers'
+import useSiteInfo from '../../library/useSiteInfo'
 
 const getStakeholders = (registrationAnswersFromServer) =>
   registrationAnswersFromServer?.data.find((dataItem) => dataItem.question_id === '2.1')
     ?.answer_value ?? []
 const RestorationAimsForm = () => {
-  const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [stakeholders, setStakeholders] = useState([])
+  const { site_name } = useSiteInfo()
+  const { siteId } = useParams()
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const validationSchema = yup.object({
     ecologicalAims: multiselectWithOtherValidation,
     socioEconomicAims: multiselectWithOtherValidation,
@@ -84,8 +92,16 @@ const RestorationAimsForm = () => {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>Restoration Aims</SectionFormTitle>
-        <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
+        <SectionFormTitle>
+          {language.pages.siteQuestionsOverview.formName.restorationAims}
+        </SectionFormTitle>
+        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
+        <QuestionNav
+          isSaving={isSubmitting}
+          isSaveError={isSubmitError}
+          onSave={validateInputs(handleSubmit)}
+          currentSection='restoration-aims'
+        />
       </FormPageHeader>
       <Form onSubmit={validateInputs(handleSubmit)}>
         <FormQuestionDiv>
@@ -120,8 +136,6 @@ const RestorationAimsForm = () => {
           />
           <ErrorText>{errors.otherAims?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
-        {isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}
-        <ButtonSubmit isSubmitting={isSubmitting} />
       </Form>
     </ContentWrapper>
   )
