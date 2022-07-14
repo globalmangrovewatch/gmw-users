@@ -39,7 +39,7 @@ export const ItemTitle = styled('h3')`
   font-weight: 200;
   font-size: ${theme.typography.xlargeFontSize};
 `
-export const PageTitle = styled('h2')`
+export const PageTitle = styled('h1')`
   font-size: ${theme.typography.xlargeFontSize};
   font-weight: normal;
   text-transform: uppercase;

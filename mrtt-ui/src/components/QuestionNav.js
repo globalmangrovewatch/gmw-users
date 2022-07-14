@@ -5,22 +5,13 @@ import React from 'react'
 import { ArrowBack, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material'
 import { css, styled } from '@mui/system'
 import { ErrorText, LinkLooksLikeButtonSecondary } from '../styles/typography'
-import { Stack } from '@mui/material'
 import { Link, useParams } from 'react-router-dom'
+import { Stack } from '@mui/material'
 import ButtonSave from './ButtonSave'
 import language from '../language'
+import SECTION_NAMES from '../constants/sectionNames'
 import theme from '../styles/theme'
 import themeMui from '../styles/themeMui'
-
-const SECTION_NAMES = [
-  'project-details',
-  'site-background',
-  'restoration-aims',
-  'causes-of-decline',
-  'pre-restoration-assessment',
-  'site-interventions',
-  'costs'
-]
 
 const getMobileNavButtonSecondaryCss = (props) => css`
   align-items: center;

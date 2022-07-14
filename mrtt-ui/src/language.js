@@ -32,6 +32,7 @@ const multiselectWithOtherFormQuestion = {
 
 const pages = {
   organizations: {
+    manageUsers: 'Manage users',
     newOrganizationButton: 'New Org',
     noOtherOrganizations: 'There are no other organizations',
     noYourOrganizations: 'You dont have any organizations',
