@@ -533,6 +533,12 @@ const SubgroupDiv = styled('div')`
   margin-top: 0.5em;
 `
 
-const seedlingOptions = ['seed1', 'seed2', 'seed3', 'seed4']
+const propaguleOptions = ['Collected from mangrove areas and/or riverbank', 'Unknown', 'Other']
 
-const propaguleOptions = ['prop1', 'prop2', 'prop3', 'prop4']
+const seedlingOptions = [
+  'From a nursery',
+  'Transplanted - no roots and soil',
+  'Transplanted - with roots and soil',
+  'Unknown',
+  'Other'
+]
