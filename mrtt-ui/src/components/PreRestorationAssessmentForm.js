@@ -291,16 +291,18 @@ function PreRestorationAssessmentForm() {
           <ErrorText>{errors.mangroveRestorationAttempted?.message}</ErrorText>
         </FormQuestionDiv>
         {mangroveRestorationAttemptedWatcher === 'Yes' ? (
-          <FormQuestionDiv>
-            <FormLabel>{questions.lastRestorationAttemptYear.question}</FormLabel>
-            <Controller
-              name='lastRestorationAttemptYear'
-              control={control}
-              defaultValue={''}
-              render={({ field }) => (
-                <TextField {...field} value={field.value} label='enter year'></TextField>
-              )}
-            />
+          <div>
+            <FormQuestionDiv>
+              <FormLabel>{questions.lastRestorationAttemptYear.question}</FormLabel>
+              <Controller
+                name='lastRestorationAttemptYear'
+                control={control}
+                defaultValue={''}
+                render={({ field }) => (
+                  <TextField {...field} value={field.value} label='enter year'></TextField>
+                )}
+              />
+            </FormQuestionDiv>
             <ErrorText>{errors.lastRestorationAttemptYear?.message}</ErrorText>
             <CheckboxGroupWithLabelAndController
               fieldName='previousBiophysicalInterventions'
@@ -322,7 +324,7 @@ function PreRestorationAssessmentForm() {
             <ErrorText>
               {errors.whyUnsuccessfulRestorationAttempt?.selectedValues?.message}
             </ErrorText>
-          </FormQuestionDiv>
+          </div>
         ) : null}
         <FormQuestionDiv>
           <FormLabel>{questions.siteAssessmentBeforeProject.question}</FormLabel>

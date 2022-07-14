@@ -102,7 +102,8 @@ function SiteInterventionsForm() {
   const {
     fields: mangroveSpeciesUsedFields,
     append: mangroveSpeciesUsedAppend,
-    remove: mangroveSpeciesUsedRemove
+    remove: mangroveSpeciesUsedRemove,
+    update: mangroveSpeciesUsedUpdate
   } = useFieldArray({ name: 'mangroveSpeciesUsed', control })
 
   const { siteId } = useParams()
@@ -224,6 +225,20 @@ function SiteInterventionsForm() {
     }
     setMangroveSpeciesUsedChecked(mangroveSpeciesUsedCheckedCopy)
   }
+  const getMangroveSpeciesUsedIndex = (specie) => {
+    return mangroveSpeciesUsedFields.findIndex((item) => item.mangroveSpeciesType === specie)
+  }
+
+  const handleSourceOfSeedlingsOnChange = (event, specie, seedlingType) => {
+    const index = getMangroveSpeciesUsedIndex(specie)
+    const item = mangroveSpeciesUsedFields[index]
+    if (seedlingType === 'seedling') {
+      event.target.checked ? (item.seed.checked = true) : (item.seed.checked = false)
+    } else if (seedlingType === 'propagule') {
+      event.target.checked ? (item.propagule.checked = true) : (item.propagule.checked = false)
+    }
+    mangroveSpeciesUsedUpdate(item)
+  }
 
   return isLoading ? (
     <LoadingIndicator />
@@ -251,7 +266,7 @@ function SiteInterventionsForm() {
                   <Box>
                     <Box>
                       <Checkbox
-                        value={biophysicalIntervention}
+                        valque={biophysicalIntervention}
                         checked={biophysicalInterventionTypesChecked.includes(
                           biophysicalIntervention
                         )}
@@ -331,8 +346,8 @@ function SiteInterventionsForm() {
           <StickyFormLabel>{questions.mangroveSpeciesUsed.question}</StickyFormLabel>
           <List>
             {mangroveSpeciesForCountriesSelected.length ? (
-              mangroveSpeciesForCountriesSelected.map((specie, index) => (
-                <ListItem key={index}>
+              mangroveSpeciesForCountriesSelected.map((specie, specieSelectedIndex) => (
+                <ListItem key={specieSelectedIndex}>
                   <Box>
                     <Box>
                       <Checkbox
@@ -343,7 +358,35 @@ function SiteInterventionsForm() {
                         }></Checkbox>
                       <Typography variant='subtitle'>{specie}</Typography>
                     </Box>
-                    <Box></Box>
+                    {mangroveSpeciesUsedChecked.includes(specie) ? (
+                      <InnerCheckboxDiv>
+                        <Typography>{questions.sourceOfMangroves.question}</Typography>
+                        <Box>
+                          <Checkbox
+                            value={specie}
+                            checked={
+                              mangroveSpeciesUsedFields[getMangroveSpeciesUsedIndex(specie)].seed
+                                .checked
+                            }
+                            onChange={(event) =>
+                              handleSourceOfSeedlingsOnChange(event, specie, 'seedling')
+                            }></Checkbox>
+                          <Typography variant='subtitle'>Seedling</Typography>
+                        </Box>
+                        <Box>
+                          <Checkbox
+                            value={specie}
+                            checked={
+                              mangroveSpeciesUsedFields[getMangroveSpeciesUsedIndex(specie)]
+                                .propagule.checked
+                            }
+                            onChange={(event) =>
+                              handleSourceOfSeedlingsOnChange(event, specie, 'propagule')
+                            }></Checkbox>
+                          <Typography variant='subtitle'>Propagule</Typography>
+                        </Box>
+                      </InnerCheckboxDiv>
+                    ) : null}
                   </Box>
                 </ListItem>
               ))
@@ -408,3 +451,12 @@ const InnerFormDiv = styled('div')`
   margin-left: 0.75em;
   max-width: 15em;
 `
+
+const InnerCheckboxDiv = styled('div')`
+  margin-left: 2.7em;
+  margin-top: 0.5em;
+`
+
+// const seedlingOptions = ['seed1', 'seed2', 'seed3', 'seed4']
+
+// const propaguleOptions = ['prop1', 'prop2', 'prop3', 'prop4']
