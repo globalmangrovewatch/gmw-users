@@ -361,7 +361,7 @@ function SiteInterventionsForm() {
                       <Typography variant='subtitle'>{specie}</Typography>
                     </Box>
                     {mangroveSpeciesUsedChecked.includes(specie) ? (
-                      <InnerCheckboxDiv>
+                      <SubgroupDiv>
                         <Typography>{questions.sourceOfMangroves.question}</Typography>
                         <Box>
                           <Checkbox
@@ -374,7 +374,7 @@ function SiteInterventionsForm() {
                               handleSourceOfSeedlingsOnChange(event, specie, 'seedling')
                             }></Checkbox>
                           <Typography variant='subtitle'>Seedling</Typography>
-                          <InnerCheckboxDiv>
+                          <SubgroupDiv>
                             <Controller
                               name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
                                 specie
@@ -396,7 +396,23 @@ function SiteInterventionsForm() {
                                 </TextField>
                               )}
                             />
-                          </InnerCheckboxDiv>
+                          </SubgroupDiv>
+                          <SubgroupDiv>
+                            <Controller
+                              name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
+                                specie
+                              )}.seed.count`}
+                              control={control}
+                              defaultValue=''
+                              render={({ field }) => (
+                                <TextField
+                                  {...field}
+                                  value={field.value}
+                                  label='Count'
+                                  sx={{ width: '10em', marginTop: '1em' }}></TextField>
+                              )}
+                            />
+                          </SubgroupDiv>
                         </Box>
                         <Box>
                           <Checkbox
@@ -409,7 +425,7 @@ function SiteInterventionsForm() {
                               handleSourceOfSeedlingsOnChange(event, specie, 'propagule')
                             }></Checkbox>
                           <Typography variant='subtitle'>Propagule</Typography>
-                          <InnerCheckboxDiv>
+                          <SubgroupDiv>
                             <Controller
                               name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
                                 specie
@@ -431,9 +447,25 @@ function SiteInterventionsForm() {
                                 </TextField>
                               )}
                             />
-                          </InnerCheckboxDiv>
+                          </SubgroupDiv>
+                          <SubgroupDiv>
+                            <Controller
+                              name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
+                                specie
+                              )}.propagule.count`}
+                              control={control}
+                              defaultValue=''
+                              render={({ field }) => (
+                                <TextField
+                                  {...field}
+                                  value={field.value}
+                                  label='Count'
+                                  sx={{ width: '10em', marginTop: '1em' }}></TextField>
+                              )}
+                            />
+                          </SubgroupDiv>
                         </Box>
-                      </InnerCheckboxDiv>
+                      </SubgroupDiv>
                     ) : null}
                   </Box>
                 </ListItem>
@@ -500,7 +532,7 @@ const InnerFormDiv = styled('div')`
   max-width: 15em;
 `
 
-const InnerCheckboxDiv = styled('div')`
+const SubgroupDiv = styled('div')`
   margin-left: 2.7em;
   margin-top: 0.5em;
 `
