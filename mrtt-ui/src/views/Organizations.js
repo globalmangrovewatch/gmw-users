@@ -1,13 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { ContentWrapper, PaddedSection, TitleAndActionContainer } from '../styles/containers'
 import { ButtonPrimary } from '../styles/buttons'
+import React, { useEffect, useState } from 'react'
+
+import {
+  Card,
+  ContentWrapper,
+  PaddedSection,
+  RowSpaceBetween,
+  TitleAndActionContainer
+} from '../styles/containers'
+import { H2, LinkLooksLikeButtonSecondary, PageTitle } from '../styles/typography'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { UlAlternating } from '../styles/lists'
+import { UlAlternating, UlUndecorated } from '../styles/lists'
 import axios from 'axios'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
-import { PageTitle } from '../styles/typography'
+import USER_ROLES from '../constants/userRoles'
 
 const organizationsUrl = `${process.env.REACT_APP_API_URL}/organizations`
 
@@ -20,8 +28,8 @@ function Organizations() {
       .get(organizationsUrl)
       .then(({ data }) => {
         setIsLoading(false)
-        setYourOrganizations(data.filter((organization) => organization.isCurrentUserMember))
-        setOtherOrganizations(data.filter((organization) => !organization.isCurrentUserMember))
+        setYourOrganizations(data.filter((organization) => organization.role))
+        setOtherOrganizations(data.filter((organization) => !organization.role))
       })
       .catch(() => {
         toast.error(language.error.apiLoad)
@@ -29,11 +37,23 @@ function Organizations() {
   }, [])
 
   const yourOrganizationsList = (
-    <UlAlternating>
-      {yourOrganizations.map((organization) => (
-        <li key={organization.id}>{organization.organization_name}</li>
-      ))}
-    </UlAlternating>
+    <UlUndecorated>
+      {yourOrganizations.map(({ id, organization_name, role }) => {
+        const canManageUsers = role === USER_ROLES.orgAdmin
+        return (
+          <Card as='li' key={id}>
+            <RowSpaceBetween>
+              {organization_name}
+              {canManageUsers ? (
+                <LinkLooksLikeButtonSecondary to='#'>
+                  {language.pages.organizations.manageUsers}
+                </LinkLooksLikeButtonSecondary>
+              ) : null}
+            </RowSpaceBetween>
+          </Card>
+        )
+      })}
+    </UlUndecorated>
   )
 
   const otherOrganizationsList = (
@@ -55,12 +75,12 @@ function Organizations() {
           </ButtonPrimary>
         </TitleAndActionContainer>
         <PaddedSection>
-          <h5>{language.pages.organizations.titleYourOrganizations}</h5>
+          <H2>{language.pages.organizations.titleYourOrganizations}</H2>
           {yourOrganizations.length
             ? yourOrganizationsList
             : language.pages.organizations.noYourOrganizations}
 
-          <h5>{language.pages.organizations.titleOtherOrganizations}</h5>
+          <H2>{language.pages.organizations.titleOtherOrganizations}</H2>
           {otherOrganizations.length
             ? otherOrganizationsList
             : language.pages.organizations.noOtherOrganizations}
