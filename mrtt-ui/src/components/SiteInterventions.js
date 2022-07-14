@@ -64,12 +64,10 @@ function SiteInterventionsForm() {
     mangroveSpeciesUsed: yup.array().of(
       yup.object().shape({
         mangroveSpeciesType: yup.string(),
-        seed: yup
-          .object()
-          .shape({ checked: yup.bool(), source: yup.string(), count: yup.number() }),
+        seed: yup.object().shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() }),
         propagule: yup
           .object()
-          .shape({ checked: yup.bool(), source: yup.string(), count: yup.number() })
+          .shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() })
       })
     ),
     localParticipantTraining: yup.string(),
@@ -165,8 +163,6 @@ function SiteInterventionsForm() {
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
-
-    console.log({ formData })
 
     axios
       .patch(apiAnswersUrl, mapDataForApi('siteInterventions', formData))
