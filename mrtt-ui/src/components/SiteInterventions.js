@@ -166,6 +166,8 @@ function SiteInterventionsForm() {
     setIsSubmitting(true)
     setIsSubmitError(false)
 
+    console.log({ formData })
+
     axios
       .patch(apiAnswersUrl, mapDataForApi('siteInterventions', formData))
       .then(() => {
@@ -372,6 +374,29 @@ function SiteInterventionsForm() {
                               handleSourceOfSeedlingsOnChange(event, specie, 'seedling')
                             }></Checkbox>
                           <Typography variant='subtitle'>Seedling</Typography>
+                          <InnerCheckboxDiv>
+                            <Controller
+                              name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
+                                specie
+                              )}.seed.source`}
+                              control={control}
+                              defaultValue=''
+                              render={({ field }) => (
+                                <TextField
+                                  {...field}
+                                  select
+                                  value={field.value}
+                                  label='Source'
+                                  sx={{ minWidth: '10em' }}>
+                                  {seedlingOptions.map((item, index) => (
+                                    <MenuItem key={index} value={item}>
+                                      {item}
+                                    </MenuItem>
+                                  ))}
+                                </TextField>
+                              )}
+                            />
+                          </InnerCheckboxDiv>
                         </Box>
                         <Box>
                           <Checkbox
@@ -384,6 +409,29 @@ function SiteInterventionsForm() {
                               handleSourceOfSeedlingsOnChange(event, specie, 'propagule')
                             }></Checkbox>
                           <Typography variant='subtitle'>Propagule</Typography>
+                          <InnerCheckboxDiv>
+                            <Controller
+                              name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
+                                specie
+                              )}.propagule.source`}
+                              control={control}
+                              defaultValue=''
+                              render={({ field }) => (
+                                <TextField
+                                  {...field}
+                                  select
+                                  value={field.value}
+                                  label='Source'
+                                  sx={{ minWidth: '10em' }}>
+                                  {propaguleOptions.map((item, index) => (
+                                    <MenuItem key={index} value={item}>
+                                      {item}
+                                    </MenuItem>
+                                  ))}
+                                </TextField>
+                              )}
+                            />
+                          </InnerCheckboxDiv>
                         </Box>
                       </InnerCheckboxDiv>
                     ) : null}
@@ -457,6 +505,6 @@ const InnerCheckboxDiv = styled('div')`
   margin-top: 0.5em;
 `
 
-// const seedlingOptions = ['seed1', 'seed2', 'seed3', 'seed4']
+const seedlingOptions = ['seed1', 'seed2', 'seed3', 'seed4']
 
-// const propaguleOptions = ['prop1', 'prop2', 'prop3', 'prop4']
+const propaguleOptions = ['prop1', 'prop2', 'prop3', 'prop4']
