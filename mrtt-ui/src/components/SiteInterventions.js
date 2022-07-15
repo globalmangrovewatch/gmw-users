@@ -238,6 +238,20 @@ function SiteInterventionsForm() {
     mangroveSpeciesUsedUpdate(item)
   }
 
+  const displayMangroveSpeciesUsed = () => {
+    const optionsUsed = [
+      'Planting',
+      'Broadcast collected propagules onto an incoming tide',
+      'Large scale broadcasting of propagules from the air or boats'
+    ]
+
+    const matchingItems = optionsUsed.filter((item) =>
+      biophysicalInterventionTypesChecked.includes(item)
+    )
+
+    return matchingItems.length ? true : false
+  }
+
   return isLoading ? (
     <LoadingIndicator />
   ) : (
@@ -340,140 +354,143 @@ function SiteInterventionsForm() {
           </List>
           <ErrorText>{errors.biophysicalInterventionsUsed?.message}</ErrorText>
         </FormQuestionDiv>
-        <FormQuestionDiv>
-          <StickyFormLabel>{questions.mangroveSpeciesUsed.question}</StickyFormLabel>
-          <List>
-            {mangroveSpeciesForCountriesSelected.length ? (
-              mangroveSpeciesForCountriesSelected.map((specie, specieSelectedIndex) => (
-                <ListItem key={specieSelectedIndex}>
-                  <Box>
+
+        {displayMangroveSpeciesUsed() ? (
+          <FormQuestionDiv>
+            <StickyFormLabel>{questions.mangroveSpeciesUsed.question}</StickyFormLabel>
+            <List>
+              {mangroveSpeciesForCountriesSelected.length ? (
+                mangroveSpeciesForCountriesSelected.map((specie, specieSelectedIndex) => (
+                  <ListItem key={specieSelectedIndex}>
                     <Box>
-                      <Checkbox
-                        value={specie}
-                        checked={mangroveSpeciesUsedChecked.includes(specie)}
-                        onChange={(event) =>
-                          handleMangroveSpeciesUsedOnChange(event, specie)
-                        }></Checkbox>
-                      <Typography variant='subtitle'>{specie}</Typography>
+                      <Box>
+                        <Checkbox
+                          value={specie}
+                          checked={mangroveSpeciesUsedChecked.includes(specie)}
+                          onChange={(event) =>
+                            handleMangroveSpeciesUsedOnChange(event, specie)
+                          }></Checkbox>
+                        <Typography variant='subtitle'>{specie}</Typography>
+                      </Box>
+                      {mangroveSpeciesUsedChecked.includes(specie) ? (
+                        <SubgroupDiv>
+                          <Typography>{questions.sourceOfMangroves.question}</Typography>
+                          <Box>
+                            <Checkbox
+                              value={specie}
+                              checked={
+                                mangroveSpeciesUsedFields[getMangroveSpeciesUsedIndex(specie)].seed
+                                  .checked
+                              }
+                              onChange={(event) =>
+                                handleSourceOfSeedlingsOnChange(event, specie, 'seedling')
+                              }></Checkbox>
+                            <Typography variant='subtitle'>Seedling</Typography>
+                            <SubgroupDiv>
+                              <Controller
+                                name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
+                                  specie
+                                )}.seed.source`}
+                                control={control}
+                                defaultValue=''
+                                render={({ field }) => (
+                                  <TextField
+                                    {...field}
+                                    select
+                                    value={field.value}
+                                    label='Source'
+                                    sx={{ minWidth: '10em' }}>
+                                    {seedlingOptions.map((item, index) => (
+                                      <MenuItem key={index} value={item}>
+                                        {item}
+                                      </MenuItem>
+                                    ))}
+                                  </TextField>
+                                )}
+                              />
+                            </SubgroupDiv>
+                            <SubgroupDiv>
+                              <Controller
+                                name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
+                                  specie
+                                )}.seed.count`}
+                                control={control}
+                                defaultValue=''
+                                render={({ field }) => (
+                                  <TextField
+                                    {...field}
+                                    value={field.value}
+                                    label='Count'
+                                    sx={{ width: '10em', marginTop: '1em' }}></TextField>
+                                )}
+                              />
+                            </SubgroupDiv>
+                          </Box>
+                          <Box>
+                            <Checkbox
+                              value={specie}
+                              checked={
+                                mangroveSpeciesUsedFields[getMangroveSpeciesUsedIndex(specie)]
+                                  .propagule.checked
+                              }
+                              onChange={(event) =>
+                                handleSourceOfSeedlingsOnChange(event, specie, 'propagule')
+                              }></Checkbox>
+                            <Typography variant='subtitle'>Propagule</Typography>
+                            <SubgroupDiv>
+                              <Controller
+                                name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
+                                  specie
+                                )}.propagule.source`}
+                                control={control}
+                                defaultValue=''
+                                render={({ field }) => (
+                                  <TextField
+                                    {...field}
+                                    select
+                                    value={field.value}
+                                    label='Source'
+                                    sx={{ minWidth: '10em' }}>
+                                    {propaguleOptions.map((item, index) => (
+                                      <MenuItem key={index} value={item}>
+                                        {item}
+                                      </MenuItem>
+                                    ))}
+                                  </TextField>
+                                )}
+                              />
+                            </SubgroupDiv>
+                            <SubgroupDiv>
+                              <Controller
+                                name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
+                                  specie
+                                )}.propagule.count`}
+                                control={control}
+                                defaultValue=''
+                                render={({ field }) => (
+                                  <TextField
+                                    {...field}
+                                    value={field.value}
+                                    label='Count'
+                                    sx={{ width: '10em', marginTop: '1em' }}></TextField>
+                                )}
+                              />
+                            </SubgroupDiv>
+                          </Box>
+                        </SubgroupDiv>
+                      ) : null}
                     </Box>
-                    {mangroveSpeciesUsedChecked.includes(specie) ? (
-                      <SubgroupDiv>
-                        <Typography>{questions.sourceOfMangroves.question}</Typography>
-                        <Box>
-                          <Checkbox
-                            value={specie}
-                            checked={
-                              mangroveSpeciesUsedFields[getMangroveSpeciesUsedIndex(specie)].seed
-                                .checked
-                            }
-                            onChange={(event) =>
-                              handleSourceOfSeedlingsOnChange(event, specie, 'seedling')
-                            }></Checkbox>
-                          <Typography variant='subtitle'>Seedling</Typography>
-                          <SubgroupDiv>
-                            <Controller
-                              name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
-                                specie
-                              )}.seed.source`}
-                              control={control}
-                              defaultValue=''
-                              render={({ field }) => (
-                                <TextField
-                                  {...field}
-                                  select
-                                  value={field.value}
-                                  label='Source'
-                                  sx={{ minWidth: '10em' }}>
-                                  {seedlingOptions.map((item, index) => (
-                                    <MenuItem key={index} value={item}>
-                                      {item}
-                                    </MenuItem>
-                                  ))}
-                                </TextField>
-                              )}
-                            />
-                          </SubgroupDiv>
-                          <SubgroupDiv>
-                            <Controller
-                              name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
-                                specie
-                              )}.seed.count`}
-                              control={control}
-                              defaultValue=''
-                              render={({ field }) => (
-                                <TextField
-                                  {...field}
-                                  value={field.value}
-                                  label='Count'
-                                  sx={{ width: '10em', marginTop: '1em' }}></TextField>
-                              )}
-                            />
-                          </SubgroupDiv>
-                        </Box>
-                        <Box>
-                          <Checkbox
-                            value={specie}
-                            checked={
-                              mangroveSpeciesUsedFields[getMangroveSpeciesUsedIndex(specie)]
-                                .propagule.checked
-                            }
-                            onChange={(event) =>
-                              handleSourceOfSeedlingsOnChange(event, specie, 'propagule')
-                            }></Checkbox>
-                          <Typography variant='subtitle'>Propagule</Typography>
-                          <SubgroupDiv>
-                            <Controller
-                              name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
-                                specie
-                              )}.propagule.source`}
-                              control={control}
-                              defaultValue=''
-                              render={({ field }) => (
-                                <TextField
-                                  {...field}
-                                  select
-                                  value={field.value}
-                                  label='Source'
-                                  sx={{ minWidth: '10em' }}>
-                                  {propaguleOptions.map((item, index) => (
-                                    <MenuItem key={index} value={item}>
-                                      {item}
-                                    </MenuItem>
-                                  ))}
-                                </TextField>
-                              )}
-                            />
-                          </SubgroupDiv>
-                          <SubgroupDiv>
-                            <Controller
-                              name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
-                                specie
-                              )}.propagule.count`}
-                              control={control}
-                              defaultValue=''
-                              render={({ field }) => (
-                                <TextField
-                                  {...field}
-                                  value={field.value}
-                                  label='Count'
-                                  sx={{ width: '10em', marginTop: '1em' }}></TextField>
-                              )}
-                            />
-                          </SubgroupDiv>
-                        </Box>
-                      </SubgroupDiv>
-                    ) : null}
-                  </Box>
-                </ListItem>
-              ))
-            ) : (
-              <ErrorText>
-                No items to display. Please select countries in Site Details and Location (1.2).
-              </ErrorText>
-            )}
-          </List>
-          <ErrorText>{errors.mangroveSpeciesUsed?.message}</ErrorText>
-        </FormQuestionDiv>
+                  </ListItem>
+                ))
+              ) : (
+                <ErrorText>
+                  No items to display. Please select countries in Site Details and Location (1.2).
+                </ErrorText>
+              )}
+            </List>
+            <ErrorText>{errors.mangroveSpeciesUsed?.message}</ErrorText>
+          </FormQuestionDiv>
+        ) : null}
 
         <FormQuestionDiv>
           <FormLabel>{questions.localParticipantTraining.question}</FormLabel>
