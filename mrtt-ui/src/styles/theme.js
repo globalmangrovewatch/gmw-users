@@ -36,7 +36,8 @@ const layout = {
   footerHeight: '6rem',
   navWidth: '18rem',
   mediaQueryDesktop: '599px',
-  maxContentWidth: '96rem'
+  maxContentWidth: '96rem',
+  sectionNavHeight: '5.65rem'
 }
 
 const hoverState = (content) => css`

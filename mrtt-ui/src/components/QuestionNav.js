@@ -1,12 +1,11 @@
-import { RowSpaceBetween } from '../styles/containers'
 import PropTypes from 'prop-types'
 import React from 'react'
 
 import { ArrowBack, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material'
 import { css, styled } from '@mui/system'
 import { ErrorText, LinkLooksLikeButtonSecondary } from '../styles/typography'
-import { Link, useParams } from 'react-router-dom'
 import { Stack } from '@mui/material'
+import { useParams } from 'react-router-dom'
 import ButtonSave from './ButtonSave'
 import language from '../language'
 import SECTION_NAMES from '../constants/sectionNames'
@@ -33,18 +32,6 @@ const getMobileNavButtonSecondaryCss = (props) => css`
         color: ${theme.color.white};
       `)};
 `
-const LinkMobileNav = styled(Link)`
-  ${(props) => getMobileNavButtonSecondaryCss(props)}
-`
-
-const SelectMobileNav = styled('select')`
-  ${(props) => getMobileNavButtonSecondaryCss(props)}
-`
-
-const ButtonMobileNav = styled('button')`
-  ${(props) => getMobileNavButtonSecondaryCss(props)}
-`
-
 const SelectDesktopNav = styled('select')`
   ${(props) => getMobileNavButtonSecondaryCss(props)}
   border-radius: 4px;
@@ -53,25 +40,38 @@ const SelectDesktopNav = styled('select')`
   width: inherit;
 `
 
-const MobileQuestionNavWrapper = styled('div')`
-  display: block;
-  margin-bottom: ${themeMui.spacing(3)};
-  @media (min-width: ${theme.layout.mediaQueryDesktop}) {
+const NavButtonText = styled('span')`
+  font-size: ${theme.typography.smallFontSize};
+  white-space: nowrap;
+  @media (max-width: 1080px) {
     display: none;
   }
 `
-
-const DesktopQuestionNavWrapper = styled('div')`
-  align-items: stretch;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: ${themeMui.spacing(5)};
+const StickyStack = styled(Stack)`
+  position: sticky;
+  top: ${theme.layout.headerHeight};
+  background: white;
+  z-index: 3;
   @media (max-width: ${theme.layout.mediaQueryDesktop}) {
-    display: none;
+    position: static;
   }
-  & div > * {
-    margin-right: ${themeMui.spacing(1)};
+`
+const NavWrapper = styled('div')`
+  display: flex;
+  flex-wrap: no-wrap;
+  justify-content: space-between;
+  gap: ${themeMui.spacing(1)};
+  font-size: ${theme.typography.smallFontSize};
+  padding: ${themeMui.spacing(2)} 0;
+  height: ${theme.layout.sectionNavHeight};
+  @media (max-width: ${theme.layout.mediaQueryDesktop}) {
+    flex-direction: column-reverse;
+    height: auto;
   }
+`
+const NavSubWrapper = styled('div')`
+  display: flex;
+  gap: ${themeMui.spacing(2)};
 `
 
 const QuestionNav = ({ isSaving, isSaveError, onSave, currentSection }) => {
@@ -80,56 +80,27 @@ const QuestionNav = ({ isSaving, isSaveError, onSave, currentSection }) => {
   const currentSectionNameIndex = SECTION_NAMES.indexOf(currentSection)
   const previousSection = SECTION_NAMES[currentSectionNameIndex - 1]
   const nextSection = SECTION_NAMES[currentSectionNameIndex + 1]
-
   return (
-    <Stack>
-      <MobileQuestionNavWrapper>
-        <RowSpaceBetween>
-          <RowSpaceBetween>
-            <LinkMobileNav to={`/sites/${siteId}/overview`}>
-              <Stack>
-                <ArrowBack />
-              </Stack>
-            </LinkMobileNav>
-            <LinkMobileNav
-              to={!previousSection ? '#' : `/sites/${siteId}/form/${previousSection}`}
-              disabled={!previousSection}>
-              <ArrowBackIosNew />
-            </LinkMobileNav>
-            <LinkMobileNav
-              to={!nextSection ? '#' : `/sites/${siteId}/form/${nextSection}`}
-              disabled={!nextSection}>
-              <ArrowForwardIos />
-            </LinkMobileNav>
-          </RowSpaceBetween>
-          <SelectMobileNav
-            id='form-privacy'
-            value={'Placeholder'}
-            label='Placeholder (wip)'
-            onChange={() => {}}>
-            <option value={'Placeholder'}>Placeholder</option>
-            <option value={20}>Other Placeholder</option>
-          </SelectMobileNav>
-          <ButtonSave isSaving={isSaving} onClick={onSave} component={ButtonMobileNav} />
-        </RowSpaceBetween>
-      </MobileQuestionNavWrapper>
-      <DesktopQuestionNavWrapper>
-        <div>
+    <StickyStack>
+      <NavWrapper>
+        <NavSubWrapper>
           <LinkLooksLikeButtonSecondary to={`/sites/${siteId}/overview`}>
-            <ArrowBack /> {language.questionNav.returnToSite}
+            <ArrowBack /> <NavButtonText>{language.questionNav.returnToSite}</NavButtonText>
           </LinkLooksLikeButtonSecondary>
           <LinkLooksLikeButtonSecondary
             to={!previousSection ? '#' : `/sites/${siteId}/form/${previousSection}`}
             disabled={!previousSection}>
             <ArrowBackIosNew />
-            {language.questionNav.previousSection}
+            <NavButtonText>{language.questionNav.previousSection}</NavButtonText>
           </LinkLooksLikeButtonSecondary>
           <LinkLooksLikeButtonSecondary
             to={!nextSection ? '#' : `/sites/${siteId}/form/${nextSection}`}
             disabled={!nextSection}>
-            {language.questionNav.nextSection}
+            <NavButtonText>{language.questionNav.nextSection}</NavButtonText>
             <ArrowForwardIos />
           </LinkLooksLikeButtonSecondary>
+        </NavSubWrapper>
+        <NavSubWrapper>
           <SelectDesktopNav
             id='form-privacy'
             value={'Placeholder'}
@@ -138,11 +109,11 @@ const QuestionNav = ({ isSaving, isSaveError, onSave, currentSection }) => {
             <option value={'Placeholder'}>WIP Value 1</option>
             <option value={20}>WIP Value 2</option>
           </SelectDesktopNav>
-        </div>
-        <ButtonSave isSaving={isSaving} onClick={onSave} />
-      </DesktopQuestionNavWrapper>
+          <ButtonSave isSaving={isSaving} onClick={onSave} />
+        </NavSubWrapper>
+      </NavWrapper>
       {isSaveError && <ErrorText>{language.error.submit}</ErrorText>}
-    </Stack>
+    </StickyStack>
   )
 }
 

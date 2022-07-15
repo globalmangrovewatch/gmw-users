@@ -31,12 +31,15 @@ export const FormQuestionDiv = styled('div')`
 `
 export const StickyFormLabel = styled(FormLabel)`
   position: sticky;
-  top: ${theme.layout.headerHeight};
+  top: calc(${theme.layout.headerHeight} + ${theme.layout.sectionNavHeight});
   background: inherit;
   padding-block: ${themeMui.spacing(3)};
   font-weight: 700;
   z-index: 2;
   border-bottom: solid 1px ${theme.color.primary};
+  @media (max-width: ${theme.layout.mediaQueryDesktop}) {
+    top: ${theme.layout.headerHeight};
+  }
 `
 
 export const Form = styled('form')`
