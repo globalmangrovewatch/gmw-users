@@ -41,6 +41,7 @@ import LoadingIndicator from './LoadingIndicator'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
 import { findDataItem } from '../library/findDataItem'
 import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
+import { propaguleOptions, seedlingOptions } from '../data/siteInterventionOptions'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2a') ?? []
@@ -549,13 +550,3 @@ const SubgroupDiv = styled('div')`
   margin-left: 2.7em;
   margin-top: 0.5em;
 `
-
-const propaguleOptions = ['Collected from mangrove areas and/or riverbank', 'Unknown', 'Other']
-
-const seedlingOptions = [
-  'From a nursery',
-  'Transplanted - no roots and soil',
-  'Transplanted - with roots and soil',
-  'Unknown',
-  'Other'
-]
