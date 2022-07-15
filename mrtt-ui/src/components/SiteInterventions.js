@@ -147,11 +147,12 @@ function SiteInterventionsForm() {
       setMangroveSpeciesForCountriesSelected(uniqueSpecies)
     }
 
-    // set mangrove species list for items selected in 6.2b
-    const mangroveSpeciesUsedResponse = getMangroveSpeciesUsed(serverResponse)
+    const getMangroveSpeciesUsedFrom6_2b = getMangroveSpeciesUsed(serverResponse)
     let mangroveSpeciesList = []
-    if (mangroveSpeciesUsedResponse.length) {
-      mangroveSpeciesList = mangroveSpeciesUsedResponse.map((specie) => specie.mangroveSpeciesType)
+    if (getMangroveSpeciesUsedFrom6_2b.length) {
+      mangroveSpeciesList = getMangroveSpeciesUsedFrom6_2b.map(
+        (specie) => specie.mangroveSpeciesType
+      )
     }
     setMangroveSpeciesUsedChecked(mangroveSpeciesList)
   }, [])
@@ -208,7 +209,7 @@ function SiteInterventionsForm() {
     biophysicalInterventionsFields.find((field) => field.interventionType === intervention)
 
   const handleMangroveSpeciesUsedOnChange = (event, specie) => {
-    const mangroveSpeciesUsedCheckedCopy = mangroveSpeciesUsedChecked
+    const mangroveSpeciesUsedCheckedCopy = [...mangroveSpeciesUsedChecked]
 
     if (event.target.checked) {
       mangroveSpeciesUsedAppend({
@@ -242,7 +243,7 @@ function SiteInterventionsForm() {
     mangroveSpeciesUsedUpdate(item)
   }
 
-  const displayMangroveSpeciesUsed = () => {
+  const isMangroveSpeciesUsedShowing = () => {
     const optionsUsed = [
       'Planting',
       'Broadcast collected propagules onto an incoming tide',
@@ -369,7 +370,7 @@ function SiteInterventionsForm() {
           <ErrorText>{errors.biophysicalInterventionsUsed?.message}</ErrorText>
         </FormQuestionDiv>
 
-        {displayMangroveSpeciesUsed() ? (
+        {isMangroveSpeciesUsedShowing() ? (
           <FormQuestionDiv>
             <StickyFormLabel>{questions.mangroveSpeciesUsed.question}</StickyFormLabel>
             <List>
