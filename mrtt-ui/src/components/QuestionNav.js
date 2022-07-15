@@ -8,18 +8,9 @@ import { Stack } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import ButtonSave from './ButtonSave'
 import language from '../language'
+import SECTION_NAMES from '../constants/sectionNames'
 import theme from '../styles/theme'
 import themeMui from '../styles/themeMui'
-
-const SECTION_NAMES = [
-  'project-details',
-  'site-background',
-  'restoration-aims',
-  'causes-of-decline',
-  'pre-restoration-assessment',
-  'site-interventions',
-  'costs'
-]
 
 const getMobileNavButtonSecondaryCss = (props) => css`
   align-items: center;
