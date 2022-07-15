@@ -1,9 +1,3 @@
-import { useState, useCallback } from 'react'
-import axios from 'axios'
-import { useParams } from 'react-router-dom'
-import { useForm, useFieldArray, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import {
   Box,
   Button,
@@ -16,30 +10,39 @@ import {
   Typography
 } from '@mui/material'
 import { toast } from 'react-toastify'
+import { useForm, useFieldArray, Controller } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
+import { useState, useCallback } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import axios from 'axios'
 
 import {
   Form,
   FormPageHeader,
   FormQuestionDiv,
-  MainFormDiv,
+  StickyFormLabel,
+  SectionFormSubtitle,
   SectionFormTitle,
   SelectedInputSection,
   TabularLabel
 } from '../styles/forms'
-import { questionMapping } from '../data/questionMapping'
-import { preRestorationAssessment as questions } from '../data/questions'
-import { mapDataForApi } from '../library/mapDataForApi'
-import { ButtonSubmit } from '../styles/buttons'
-import { ErrorText, Link } from '../styles/typography'
-import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
-import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
-import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
-import LoadingIndicator from './LoadingIndicator'
-import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
-import language from '../language'
-import TabularInputRow from './TabularInput/TabularInputRow'
-import AddTabularInputRow from './TabularInput/AddTabularInputRow'
+import { ContentWrapper } from '../styles/containers'
+import { ErrorText } from '../styles/typography'
 import { findDataItem } from '../library/findDataItem'
+import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
+import { mapDataForApi } from '../library/mapDataForApi'
+import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
+import { preRestorationAssessment as questions } from '../data/questions'
+import { questionMapping } from '../data/questionMapping'
+import AddTabularInputRow from './TabularInput/AddTabularInputRow'
+import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
+import language from '../language'
+import LoadingIndicator from './LoadingIndicator'
+import QuestionNav from './QuestionNav'
+import TabularInputRow from './TabularInput/TabularInputRow'
+import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
+import useSiteInfo from '../library/useSiteInfo'
 
 const getSiteCountries = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '1.2') ?? []
@@ -51,6 +54,7 @@ const getPhysicalMeasurementsTaken = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '5.3g') ?? []
 
 function PreRestorationAssessmentForm() {
+  const { site_name } = useSiteInfo()
   const validationSchema = yup.object().shape({
     mangrovesPreviouslyOccured: yup.string(),
     mangroveRestorationAttempted: yup.string(),
@@ -58,9 +62,9 @@ function PreRestorationAssessmentForm() {
       is: (val) => val && val === 'Yes',
       then: yup
         .number()
-        .typeError('You must specify a year')
-        .min(1900, 'Year must be higher than 1900')
-        .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
+        .typeError(language.form.error.noYearProvided)
+        .min(1900, language.form.error.yearTooLow)
+        .max(new Date().getFullYear(), language.form.error.yearTooHigh)
     }),
     previousBiophysicalInterventions: multiselectWithOtherValidationNoMinimum,
     whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidationNoMinimum,
@@ -71,9 +75,9 @@ function PreRestorationAssessmentForm() {
       is: (val) => val && val === 'Yes',
       then: yup
         .number()
-        .typeError('You must specify a year')
-        .min(1900, 'Year must be higher than 1900')
-        .max(new Date().getFullYear(), 'Year must less than or equal to the current year')
+        .typeError(language.form.error.noYearProvided)
+        .min(1900, language.form.error.yearTooLow)
+        .max(new Date().getFullYear(), language.form.error.yearTooHigh)
     }),
     naturalRegenerationAtSite: yup.string(),
     mangroveSpeciesPresent: yup.array().of(yup.string()).nullable(),
@@ -248,14 +252,22 @@ function PreRestorationAssessmentForm() {
   return isLoading ? (
     <LoadingIndicator />
   ) : (
-    <MainFormDiv>
+    <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>Pre Restoration Assessment Form</SectionFormTitle>
-        <Link to={-1}>&larr; {language.form.navigateBackToSiteOverview}</Link>
+        <SectionFormTitle>
+          {language.pages.siteQuestionsOverview.formName.preRestorationAssessment}
+        </SectionFormTitle>
+        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
       </FormPageHeader>
-      <Form onSubmit={validateInputs(handleSubmit)}>
+      <QuestionNav
+        isSaving={isSubmitting}
+        isSaveError={isError}
+        onSave={validateInputs(handleSubmit)}
+        currentSection='pre-restoration-assessment'
+      />
+      <Form>
         <FormQuestionDiv>
-          <FormLabel>{questions.mangrovesPreviouslyOccured.question}</FormLabel>
+          <StickyFormLabel>{questions.mangrovesPreviouslyOccured.question}</StickyFormLabel>
           <Controller
             name='mangrovesPreviouslyOccured'
             control={control}
@@ -273,7 +285,7 @@ function PreRestorationAssessmentForm() {
           <ErrorText>{errors.mangrovesPreviouslyOccured?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          <FormLabel>{questions.mangroveRestorationAttempted.question}</FormLabel>
+          <StickyFormLabel>{questions.mangroveRestorationAttempted.question}</StickyFormLabel>
           <Controller
             name='mangroveRestorationAttempted'
             control={control}
@@ -291,43 +303,47 @@ function PreRestorationAssessmentForm() {
           <ErrorText>{errors.mangroveRestorationAttempted?.message}</ErrorText>
         </FormQuestionDiv>
         {mangroveRestorationAttemptedWatcher === 'Yes' ? (
-          <div>
+          <>
             <FormQuestionDiv>
-              <FormLabel>{questions.lastRestorationAttemptYear.question}</FormLabel>
+              <StickyFormLabel>{questions.lastRestorationAttemptYear.question}</StickyFormLabel>
               <Controller
                 name='lastRestorationAttemptYear'
                 control={control}
                 defaultValue={''}
                 render={({ field }) => (
-                  <TextField {...field} value={field.value} label='enter year'></TextField>
+                  <TextField {...field} value={field.value} label='year'></TextField>
                 )}
               />
+              <ErrorText>{errors.lastRestorationAttemptYear?.message}</ErrorText>
             </FormQuestionDiv>
-            <ErrorText>{errors.lastRestorationAttemptYear?.message}</ErrorText>
-            <CheckboxGroupWithLabelAndController
-              fieldName='previousBiophysicalInterventions'
-              reactHookFormInstance={reactHookFormInstance}
-              options={questions.previousBiophysicalInterventions.options}
-              question={questions.previousBiophysicalInterventions.question}
-              shouldAddOtherOptionWithClarification={true}
-            />
-            <ErrorText>
-              {errors.previousBiophysicalInterventions?.selectedValues?.message}
-            </ErrorText>
-            <CheckboxGroupWithLabelAndController
-              fieldName='whyUnsuccessfulRestorationAttempt'
-              reactHookFormInstance={reactHookFormInstance}
-              options={questions.whyUnsuccessfulRestorationAttempt.options}
-              question={questions.whyUnsuccessfulRestorationAttempt.question}
-              shouldAddOtherOptionWithClarification={true}
-            />
-            <ErrorText>
-              {errors.whyUnsuccessfulRestorationAttempt?.selectedValues?.message}
-            </ErrorText>
-          </div>
+            <FormQuestionDiv>
+              <CheckboxGroupWithLabelAndController
+                fieldName='previousBiophysicalInterventions'
+                reactHookFormInstance={reactHookFormInstance}
+                options={questions.previousBiophysicalInterventions.options}
+                question={questions.previousBiophysicalInterventions.question}
+                shouldAddOtherOptionWithClarification={true}
+              />
+              <ErrorText>
+                {errors.previousBiophysicalInterventions?.selectedValues?.message}
+              </ErrorText>
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <CheckboxGroupWithLabelAndController
+                fieldName='whyUnsuccessfulRestorationAttempt'
+                reactHookFormInstance={reactHookFormInstance}
+                options={questions.whyUnsuccessfulRestorationAttempt.options}
+                question={questions.whyUnsuccessfulRestorationAttempt.question}
+                shouldAddOtherOptionWithClarification={true}
+              />
+              <ErrorText>
+                {errors.whyUnsuccessfulRestorationAttempt?.selectedValues?.message}
+              </ErrorText>
+            </FormQuestionDiv>
+          </>
         ) : null}
         <FormQuestionDiv>
-          <FormLabel>{questions.siteAssessmentBeforeProject.question}</FormLabel>
+          <StickyFormLabel>{questions.siteAssessmentBeforeProject.question}</StickyFormLabel>
           <Controller
             name='siteAssessmentBeforeProject'
             control={control}
@@ -345,17 +361,19 @@ function PreRestorationAssessmentForm() {
           <ErrorText>{errors.siteAssessmentBeforeProject?.message}</ErrorText>
         </FormQuestionDiv>
         {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
-          <div>
-            <CheckboxGroupWithLabelAndController
-              fieldName='siteAssessmentType'
-              reactHookFormInstance={reactHookFormInstance}
-              options={questions.siteAssessmentType.options}
-              question={questions.siteAssessmentType.question}
-              shouldAddOtherOptionWithClarification={false}
-            />
-            <ErrorText>{errors.siteAssessmentType?.selectedValues?.message}</ErrorText>
+          <>
             <FormQuestionDiv>
-              <FormLabel>{questions.referenceSite.question}</FormLabel>
+              <CheckboxGroupWithLabelAndController
+                fieldName='siteAssessmentType'
+                reactHookFormInstance={reactHookFormInstance}
+                options={questions.siteAssessmentType.options}
+                question={questions.siteAssessmentType.question}
+                shouldAddOtherOptionWithClarification={false}
+              />
+              <ErrorText>{errors.siteAssessmentType?.selectedValues?.message}</ErrorText>
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.referenceSite.question}</StickyFormLabel>
               <Controller
                 name='referenceSite'
                 control={control}
@@ -373,7 +391,7 @@ function PreRestorationAssessmentForm() {
               <ErrorText>{errors.referenceSite?.message}</ErrorText>
             </FormQuestionDiv>
             <FormQuestionDiv>
-              <FormLabel>{questions.lostMangrovesYear.question}</FormLabel>
+              <StickyFormLabel>{questions.lostMangrovesYear.question}</StickyFormLabel>
               <Controller
                 name='lostMangrovesYear'
                 control={control}
@@ -385,7 +403,7 @@ function PreRestorationAssessmentForm() {
               <ErrorText>{errors.lostMangrovesYear?.message}</ErrorText>
             </FormQuestionDiv>
             <FormQuestionDiv>
-              <FormLabel>{questions.naturalRegenerationAtSite.question}</FormLabel>
+              <StickyFormLabel>{questions.naturalRegenerationAtSite.question}</StickyFormLabel>
               <Controller
                 name='naturalRegenerationAtSite'
                 control={control}
@@ -403,7 +421,7 @@ function PreRestorationAssessmentForm() {
               <ErrorText>{errors.naturalRegenerationAtSite?.message}</ErrorText>
             </FormQuestionDiv>
             <FormQuestionDiv>
-              <FormLabel>{questions.mangroveSpeciesPresent.question}</FormLabel>
+              <StickyFormLabel>{questions.mangroveSpeciesPresent.question}</StickyFormLabel>
               <List>
                 {mangroveSpeciesForCountriesSelected.length ? (
                   mangroveSpeciesForCountriesSelected.map((specie, index) => (
@@ -429,11 +447,11 @@ function PreRestorationAssessmentForm() {
               </List>
               <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
             </FormQuestionDiv>
-          </div>
+          </>
         ) : null}
         {mangroveSpeciesTypesChecked.length > 0 ? (
           <FormQuestionDiv>
-            <FormLabel>{questions.speciesComposition.question}</FormLabel>
+            <StickyFormLabel>{questions.speciesComposition.question}</StickyFormLabel>
             {speciesCompositionWatcher?.map((mangroveSpecie, mangroveSpecieIndex) => {
               return (
                 <SelectedInputSection key={mangroveSpecieIndex}>
@@ -452,7 +470,6 @@ function PreRestorationAssessmentForm() {
             <ErrorText>{errors.speciesComposition?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
-
         {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
           <FormQuestionDiv>
             <TabularLabel>{questions.physicalMeasurementsTaken.question}</TabularLabel>
@@ -480,7 +497,7 @@ function PreRestorationAssessmentForm() {
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>
-          <FormLabel>{questions.pilotTestConducted.question}</FormLabel>
+          <StickyFormLabel>{questions.pilotTestConducted.question}</StickyFormLabel>
           <Controller
             name='pilotTestConducted'
             control={control}
@@ -498,7 +515,7 @@ function PreRestorationAssessmentForm() {
           <ErrorText>{errors.pilotTestConducted?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          <FormLabel>{questions.guidanceForSiteRestoration.question}</FormLabel>
+          <StickyFormLabel>{questions.guidanceForSiteRestoration.question}</StickyFormLabel>
           <Controller
             name='guidanceForSiteRestoration'
             control={control}
@@ -515,12 +532,8 @@ function PreRestorationAssessmentForm() {
           />
           <ErrorText>{errors.guidanceForSiteRestoration?.message}</ErrorText>
         </FormQuestionDiv>
-        <FormQuestionDiv>
-          {isError && <ErrorText>Submit failed, please try again</ErrorText>}
-          <ButtonSubmit isSubmitting={isSubmitting}></ButtonSubmit>
-        </FormQuestionDiv>
       </Form>
-    </MainFormDiv>
+    </ContentWrapper>
   )
 }
 

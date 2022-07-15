@@ -4,7 +4,7 @@ import themeMui from './themeMui'
 import theme from '../styles/theme'
 
 export const FormPageHeader = styled('div')`
-  padding: ${themeMui.spacing(2)};
+  padding: ${themeMui.spacing(2)} 0;
 `
 export const MainFormDiv = styled('div')`
   display: flex;
@@ -13,6 +13,11 @@ export const MainFormDiv = styled('div')`
 
 export const SectionFormTitle = styled('h1')`
   font-weight: 400;
+  margin-bottom: 0;
+`
+
+export const SectionFormSubtitle = styled('h2')`
+  font-weight: 200;
   margin-bottom: 0;
 `
 export const FormQuestionDiv = styled('div')`

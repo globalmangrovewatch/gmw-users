@@ -2,7 +2,7 @@ const error = {
   apiLoad: 'Loading data from the api failed. Please try again.',
   delete: 'Deleting that item failed. Please try again.',
   getItemDoesntExistMessage: (item) => `That ${item} doesnt exist.`,
-  submit: 'Submit failed. Please try again.'
+  submit: 'Saving failed. Please try again.'
 }
 
 const success = {
@@ -16,7 +16,12 @@ const form = {
   checkboxGroupOtherLabel: 'Other',
   navigateBackToSiteOverview: 'Return to site form overview',
   selectLabel: 'Select',
-  requiredIndicator: 'Indicates required field'
+  requiredIndicator: 'Indicates required field',
+  error: {
+    yearTooLow: 'Year must be greater than 1900',
+    noYearProvided: 'You must specifiy a year',
+    yearTooHigh: 'Year must less than or equal to the current year'
+  }
 }
 const multiselectWithOtherFormQuestion = {
   validation: {
@@ -43,7 +48,7 @@ const pages = {
       nameRequired: 'Please enter a name'
     }
   },
-  sites: { title: 'Sites', newSiteButton: 'New Site' },
+  sites: { title: 'Sites', newSiteButton: 'New Site', lastUpdated: 'Last updated' },
   landscapeForm: {
     delete: 'Delete this landscape',
     deletePropmt: {
@@ -111,6 +116,8 @@ const buttons = {
   cancel: 'Cancel',
   deleting: 'Deleting...',
   edit: 'Edit',
+  save: 'Save',
+  saving: 'Saving...',
   submit: 'Submit',
   submitting: 'Submitting...'
 }
@@ -150,6 +157,14 @@ const header = {
   logout: 'Logout'
 }
 
+const questionNav = {
+  returnToSite: 'Return to Site Form Overview',
+  previousSection: 'Previous Section',
+  nextSection: 'Next Section',
+  private: 'Private',
+  public: 'Public'
+}
+
 export default {
   buttons,
   error,
@@ -158,5 +173,6 @@ export default {
   multiselectWithOtherFormQuestion,
   pages,
   projectAreaMap,
+  questionNav,
   success
 }

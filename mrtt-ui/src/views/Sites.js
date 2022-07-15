@@ -39,12 +39,26 @@ function Sites() {
       }
       return 0
     })
-    .map(({ site_name, landscape_name, id }) => (
-      <LinkCard key={id} to={`/sites/${id}/overview`}>
-        <ItemTitle>{site_name}</ItemTitle>
-        <ItemSubTitle>{landscape_name}</ItemSubTitle>
-      </LinkCard>
-    ))
+    .map(({ site_name, landscape_name, id, section_last_updated }) => {
+      const anySectionLastEditedString = new Date(section_last_updated).toLocaleDateString(
+        undefined,
+        {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+        }
+      )
+
+      return (
+        <LinkCard key={id} to={`/sites/${id}/overview`}>
+          <ItemTitle>{site_name}</ItemTitle>
+          <ItemSubTitle>{landscape_name}</ItemSubTitle>
+          <p>
+            {language.pages.sites.lastUpdated}: {anySectionLastEditedString}
+          </p>
+        </LinkCard>
+      )
+    })
 
   return isLoading ? (
     <LoadingIndicator />

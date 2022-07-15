@@ -1,11 +1,3 @@
-import { useState, useCallback } from 'react'
-import axios from 'axios'
-import { useParams } from 'react-router-dom'
-import { Controller, useForm, useFieldArray } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
-import { toast } from 'react-toastify'
-import { styled } from '@mui/material/styles'
 import {
   Box,
   Checkbox,
@@ -18,30 +10,40 @@ import {
   Typography
 } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { Controller, useForm, useFieldArray } from 'react-hook-form'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
+import { styled } from '@mui/material/styles'
+import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
+import { useState, useCallback } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import axios from 'axios'
 
-import { ContentWrapper } from '../styles/containers'
 import {
   Form,
   FormPageHeader,
   FormQuestionDiv,
+  SectionFormSubtitle,
   SectionFormTitle,
   StickyFormLabel
 } from '../styles/forms'
-import { ErrorText, Link } from '../styles/typography'
-import language from '../language'
+import { ContentWrapper } from '../styles/containers'
+import { ErrorText } from '../styles/typography'
+import { findDataItem } from '../library/findDataItem'
+import { mapDataForApi } from '../library/mapDataForApi'
+import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
 import { questionMapping } from '../data/questionMapping'
 import { siteInterventions as questions } from '../data/questions'
-import { mapDataForApi } from '../library/mapDataForApi'
-import { ButtonSubmit } from '../styles/buttons'
-import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
-import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
-import LoadingIndicator from './LoadingIndicator'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
-import { findDataItem } from '../library/findDataItem'
 import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
 import { propaguleOptions, seedlingOptions } from '../data/siteInterventionOptions'
+import language from '../language'
+import LoadingIndicator from './LoadingIndicator'
+import QuestionNav from './QuestionNav'
+import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
+import useSiteInfo from '../library/useSiteInfo'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2a') ?? []
@@ -53,6 +55,7 @@ const getMangroveSpeciesUsed = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2b') ?? []
 
 function SiteInterventionsForm() {
+  const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     whichStakeholdersInvolved: multiselectWithOtherValidationNoMinimum,
     biophysicalInterventionsUsed: yup.array().of(
@@ -258,18 +261,28 @@ function SiteInterventionsForm() {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>Site Interventions</SectionFormTitle>
-        <Link to={`/sites/${siteId}/overview`}>{language.form.navigateBackToSiteOverview}</Link>
+        <SectionFormTitle>
+          {language.pages.siteQuestionsOverview.formName.siteInterventions}
+        </SectionFormTitle>
+        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
       </FormPageHeader>
-      <Form onSubmit={validateInputs(handleSubmit)}>
-        <CheckboxGroupWithLabelAndController
-          fieldName='whichStakeholdersInvolved'
-          reactHookFormInstance={reactHookFormInstance}
-          options={questions.whichStakeholdersInvolved.options}
-          question={questions.whichStakeholdersInvolved.question}
-          shouldAddOtherOptionWithClarification={true}
-        />
-        <ErrorText>{errors.whichStakeholdersInvolved?.selectedValues?.message}</ErrorText>
+      <QuestionNav
+        isSaving={isSubmitting}
+        isSaveError={isSubmitError}
+        onSave={validateInputs(handleSubmit)}
+        currentSection='site-interventions'
+      />
+      <Form>
+        <FormQuestionDiv>
+          <CheckboxGroupWithLabelAndController
+            fieldName='whichStakeholdersInvolved'
+            reactHookFormInstance={reactHookFormInstance}
+            options={questions.whichStakeholdersInvolved.options}
+            question={questions.whichStakeholdersInvolved.question}
+            shouldAddOtherOptionWithClarification={true}
+          />
+          <ErrorText>{errors.whichStakeholdersInvolved?.selectedValues?.message}</ErrorText>
+        </FormQuestionDiv>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.biophysicalInterventionsUsed.question}</StickyFormLabel>
           <List>
@@ -309,7 +322,7 @@ function SiteInterventionsForm() {
                                       label='Intervention start date'
                                       value={field.value}
                                       onChange={(newValue) => {
-                                        field.onChange(newValue)
+                                        field.onChange(newValue?.toISOString())
                                       }}
                                       renderInput={(params) => <TextField {...params} />}
                                     />
@@ -336,7 +349,7 @@ function SiteInterventionsForm() {
                                       label='Intervention end date'
                                       value={field.value}
                                       onChange={(newValue) => {
-                                        field.onChange(newValue)
+                                        field.onChange(newValue?.toISOString())
                                       }}
                                       renderInput={(params) => <TextField {...params} />}
                                     />
@@ -511,8 +524,9 @@ function SiteInterventionsForm() {
           />
           <ErrorText>{errors.localParticipantTraining?.message}</ErrorText>
         </FormQuestionDiv>
+
         {localParticipantTrainingWatcher === 'Yes' ? (
-          <div>
+          <FormQuestionDiv>
             <CheckboxGroupWithLabelAndController
               fieldName='organizationsProvidingTraining'
               reactHookFormInstance={reactHookFormInstance}
@@ -521,18 +535,18 @@ function SiteInterventionsForm() {
               shouldAddOtherOptionWithClarification={true}
             />
             <ErrorText>{errors.organizationsProvidingTraining?.selectedValues?.message}</ErrorText>
-          </div>
+          </FormQuestionDiv>
         ) : null}
-        <CheckboxGroupWithLabelAndController
-          fieldName='otherActivitiesImplemented'
-          reactHookFormInstance={reactHookFormInstance}
-          options={questions.otherActivitiesImplemented.options}
-          question={questions.otherActivitiesImplemented.question}
-          shouldAddOtherOptionWithClarification={true}
-        />
-        <ErrorText>{errors.otherActivitiesImplemented?.selectedValues?.message}</ErrorText>
-        {isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}
-        <ButtonSubmit isSubmitting={isSubmitting} />
+        <FormQuestionDiv>
+          <CheckboxGroupWithLabelAndController
+            fieldName='otherActivitiesImplemented'
+            reactHookFormInstance={reactHookFormInstance}
+            options={questions.otherActivitiesImplemented.options}
+            question={questions.otherActivitiesImplemented.question}
+            shouldAddOtherOptionWithClarification={true}
+          />
+          <ErrorText>{errors.otherActivitiesImplemented?.selectedValues?.message}</ErrorText>
+        </FormQuestionDiv>
       </Form>
     </ContentWrapper>
   )
