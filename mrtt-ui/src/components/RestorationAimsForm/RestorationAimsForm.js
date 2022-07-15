@@ -96,13 +96,13 @@ const RestorationAimsForm = () => {
           {language.pages.siteQuestionsOverview.formName.restorationAims}
         </SectionFormTitle>
         <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
-        <QuestionNav
-          isSaving={isSubmitting}
-          isSaveError={isSubmitError}
-          onSave={validateInputs(handleSubmit)}
-          currentSection='restoration-aims'
-        />
       </FormPageHeader>
+      <QuestionNav
+        isSaving={isSubmitting}
+        isSaveError={isSubmitError}
+        onSave={validateInputs(handleSubmit)}
+        currentSection='restoration-aims'
+      />
       <Form onSubmit={validateInputs(handleSubmit)}>
         <FormQuestionDiv>
           <RestorationAimsCheckboxGroupWithLabel
