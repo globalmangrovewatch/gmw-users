@@ -292,7 +292,7 @@ function SiteInterventionsForm() {
                   <Box>
                     <Box>
                       <Checkbox
-                        valque={biophysicalIntervention}
+                        value={biophysicalIntervention}
                         checked={biophysicalInterventionTypesChecked.includes(
                           biophysicalIntervention
                         )}
