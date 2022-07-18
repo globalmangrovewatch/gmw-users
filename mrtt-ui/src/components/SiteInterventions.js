@@ -37,6 +37,8 @@ import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSele
 import { questionMapping } from '../data/questionMapping'
 import { siteInterventions as questions } from '../data/questions'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
+import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
+import { propaguleOptions, seedlingOptions } from '../data/siteInterventionOptions'
 import language from '../language'
 import LoadingIndicator from './LoadingIndicator'
 import QuestionNav from './QuestionNav'
@@ -45,6 +47,12 @@ import useSiteInfo from '../library/useSiteInfo'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2a') ?? []
+
+const getSiteCountries = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '1.2') ?? []
+
+const getMangroveSpeciesUsed = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '6.2b') ?? []
 
 function SiteInterventionsForm() {
   const { site_name } = useSiteInfo()
@@ -55,6 +63,15 @@ function SiteInterventionsForm() {
         interventionType: yup.string(),
         interventionStartDate: yup.string(),
         interventionEndDate: yup.string()
+      })
+    ),
+    mangroveSpeciesUsed: yup.array().of(
+      yup.object().shape({
+        mangroveSpeciesType: yup.string(),
+        seed: yup.object().shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() }),
+        propagule: yup
+          .object()
+          .shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() })
       })
     ),
     localParticipantTraining: yup.string(),
@@ -84,21 +101,60 @@ function SiteInterventionsForm() {
     remove: biophysicalInterventionsRemove
   } = useFieldArray({ name: 'biophysicalInterventionsUsed', control })
 
+  const {
+    fields: mangroveSpeciesUsedFields,
+    append: mangroveSpeciesUsedAppend,
+    remove: mangroveSpeciesUsedRemove,
+    update: mangroveSpeciesUsedUpdate
+  } = useFieldArray({ name: 'mangroveSpeciesUsed', control })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [biophysicalInterventionTypesChecked, setBiophysicalInterventionTypesChecked] = useState([])
+  const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
+  const [mangroveSpeciesUsedChecked, setMangroveSpeciesUsedChecked] = useState([])
   const localParticipantTrainingWatcher = watchForm('localParticipantTraining')
 
-  const setInitialBiophysicalInterventionTypesFromServerData = useCallback((serverResponse) => {
+  const loadServerData = useCallback((serverResponse) => {
+    // set biophysical interventions
     const biophysicalInterventionsInitialVal = getBiophysicalInterventions(serverResponse)
 
     const initialBiophysicalInterventionsTypesChecked = biophysicalInterventionsInitialVal?.map(
       (intervention) => intervention.interventionType
     )
     setBiophysicalInterventionTypesChecked(initialBiophysicalInterventionsTypesChecked)
+
+    // set countries list for countries selected in 1.2
+    const siteCountriesResponse = getSiteCountries(serverResponse)
+
+    if (siteCountriesResponse.length) {
+      const countriesList = siteCountriesResponse.map(
+        (countryItem) => countryItem.properties.country
+      )
+      const species = []
+      countriesList.forEach((countrySelected) => {
+        mangroveSpeciesPerCountryList.forEach((countryItem) => {
+          if (countryItem.country.name === countrySelected) {
+            species.push(...countryItem.species)
+          }
+        })
+      })
+      const uniqueSpecies = [...new Set(species)]
+
+      setMangroveSpeciesForCountriesSelected(uniqueSpecies)
+    }
+
+    const getMangroveSpeciesUsedFrom6_2b = getMangroveSpeciesUsed(serverResponse)
+    let mangroveSpeciesList = []
+    if (getMangroveSpeciesUsedFrom6_2b.length) {
+      mangroveSpeciesList = getMangroveSpeciesUsedFrom6_2b.map(
+        (specie) => specie.mangroveSpeciesType
+      )
+    }
+    setMangroveSpeciesUsedChecked(mangroveSpeciesList)
   }, [])
 
   useInitializeQuestionMappedForm({
@@ -106,7 +162,7 @@ function SiteInterventionsForm() {
     questionMapping: questionMapping.siteInterventions,
     resetForm,
     setIsLoading,
-    successCallback: setInitialBiophysicalInterventionTypesFromServerData
+    successCallback: loadServerData
   })
 
   const handleSubmit = (formData) => {
@@ -151,6 +207,55 @@ function SiteInterventionsForm() {
 
   const getBiophysicalIntervention = (intervention) =>
     biophysicalInterventionsFields.find((field) => field.interventionType === intervention)
+
+  const handleMangroveSpeciesUsedOnChange = (event, specie) => {
+    const mangroveSpeciesUsedCheckedCopy = [...mangroveSpeciesUsedChecked]
+
+    if (event.target.checked) {
+      mangroveSpeciesUsedAppend({
+        mangroveSpeciesType: specie,
+        seed: { checked: false, source: '', count: 0 },
+        propagule: { checked: false, source: '', count: 0 }
+      })
+      mangroveSpeciesUsedCheckedCopy.push(specie)
+    } else {
+      const fieldIndex = mangroveSpeciesUsedFields.findIndex(
+        (field) => field.mangroveSpeciesType === specie
+      )
+      const typeIndex = mangroveSpeciesUsedCheckedCopy.findIndex((type) => type === specie)
+      mangroveSpeciesUsedCheckedCopy.splice(typeIndex, 1)
+      mangroveSpeciesUsedRemove(fieldIndex)
+    }
+    setMangroveSpeciesUsedChecked(mangroveSpeciesUsedCheckedCopy)
+  }
+  const getMangroveSpeciesUsedIndex = (specie) => {
+    return mangroveSpeciesUsedFields.findIndex((item) => item.mangroveSpeciesType === specie)
+  }
+
+  const handleSourceOfSeedlingsOnChange = (event, specie, seedlingType) => {
+    const index = getMangroveSpeciesUsedIndex(specie)
+    const item = mangroveSpeciesUsedFields[index]
+    if (seedlingType === 'seedling') {
+      event.target.checked ? (item.seed.checked = true) : (item.seed.checked = false)
+    } else if (seedlingType === 'propagule') {
+      event.target.checked ? (item.propagule.checked = true) : (item.propagule.checked = false)
+    }
+    mangroveSpeciesUsedUpdate(item)
+  }
+
+  const isMangroveSpeciesUsedShowing = () => {
+    const optionsUsed = [
+      'Planting',
+      'Broadcast collected propagules onto an incoming tide',
+      'Large scale broadcasting of propagules from the air or boats'
+    ]
+
+    const matchingItems = optionsUsed.filter((item) =>
+      biophysicalInterventionTypesChecked.includes(item)
+    )
+
+    return matchingItems.length ? true : false
+  }
 
   return isLoading ? (
     <LoadingIndicator />
@@ -265,6 +370,143 @@ function SiteInterventionsForm() {
           <ErrorText>{errors.biophysicalInterventionsUsed?.message}</ErrorText>
         </FormQuestionDiv>
 
+        {isMangroveSpeciesUsedShowing() ? (
+          <FormQuestionDiv>
+            <StickyFormLabel>{questions.mangroveSpeciesUsed.question}</StickyFormLabel>
+            <List>
+              {mangroveSpeciesForCountriesSelected.length ? (
+                mangroveSpeciesForCountriesSelected.map((specie, specieSelectedIndex) => (
+                  <ListItem key={specieSelectedIndex}>
+                    <Box>
+                      <Box>
+                        <Checkbox
+                          value={specie}
+                          checked={mangroveSpeciesUsedChecked.includes(specie)}
+                          onChange={(event) =>
+                            handleMangroveSpeciesUsedOnChange(event, specie)
+                          }></Checkbox>
+                        <Typography variant='subtitle'>{specie}</Typography>
+                      </Box>
+                      {mangroveSpeciesUsedChecked.includes(specie) ? (
+                        <SubgroupDiv>
+                          <Typography>{questions.sourceOfMangroves.question}</Typography>
+                          <Box>
+                            <Checkbox
+                              value={specie}
+                              checked={
+                                mangroveSpeciesUsedFields[getMangroveSpeciesUsedIndex(specie)].seed
+                                  .checked
+                              }
+                              onChange={(event) =>
+                                handleSourceOfSeedlingsOnChange(event, specie, 'seedling')
+                              }></Checkbox>
+                            <Typography variant='subtitle'>Seedling</Typography>
+                            <SubgroupDiv>
+                              <Controller
+                                name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
+                                  specie
+                                )}.seed.source`}
+                                control={control}
+                                defaultValue=''
+                                render={({ field }) => (
+                                  <TextField
+                                    {...field}
+                                    select
+                                    value={field.value}
+                                    label='Source'
+                                    sx={{ minWidth: '10em' }}>
+                                    {seedlingOptions.map((item, index) => (
+                                      <MenuItem key={index} value={item}>
+                                        {item}
+                                      </MenuItem>
+                                    ))}
+                                  </TextField>
+                                )}
+                              />
+                            </SubgroupDiv>
+                            <SubgroupDiv>
+                              <Controller
+                                name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
+                                  specie
+                                )}.seed.count`}
+                                control={control}
+                                defaultValue=''
+                                render={({ field }) => (
+                                  <TextField
+                                    {...field}
+                                    value={field.value}
+                                    label='Count'
+                                    sx={{ width: '10em', marginTop: '1em' }}></TextField>
+                                )}
+                              />
+                            </SubgroupDiv>
+                          </Box>
+                          <Box>
+                            <Checkbox
+                              value={specie}
+                              checked={
+                                mangroveSpeciesUsedFields[getMangroveSpeciesUsedIndex(specie)]
+                                  .propagule.checked
+                              }
+                              onChange={(event) =>
+                                handleSourceOfSeedlingsOnChange(event, specie, 'propagule')
+                              }></Checkbox>
+                            <Typography variant='subtitle'>Propagule</Typography>
+                            <SubgroupDiv>
+                              <Controller
+                                name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
+                                  specie
+                                )}.propagule.source`}
+                                control={control}
+                                defaultValue=''
+                                render={({ field }) => (
+                                  <TextField
+                                    {...field}
+                                    select
+                                    value={field.value}
+                                    label='Source'
+                                    sx={{ minWidth: '10em' }}>
+                                    {propaguleOptions.map((item, index) => (
+                                      <MenuItem key={index} value={item}>
+                                        {item}
+                                      </MenuItem>
+                                    ))}
+                                  </TextField>
+                                )}
+                              />
+                            </SubgroupDiv>
+                            <SubgroupDiv>
+                              <Controller
+                                name={`mangroveSpeciesUsed.${getMangroveSpeciesUsedIndex(
+                                  specie
+                                )}.propagule.count`}
+                                control={control}
+                                defaultValue=''
+                                render={({ field }) => (
+                                  <TextField
+                                    {...field}
+                                    value={field.value}
+                                    label='Count'
+                                    sx={{ width: '10em', marginTop: '1em' }}></TextField>
+                                )}
+                              />
+                            </SubgroupDiv>
+                          </Box>
+                        </SubgroupDiv>
+                      ) : null}
+                    </Box>
+                  </ListItem>
+                ))
+              ) : (
+                <ErrorText>
+                  No items to display. Please select countries in Site Details and Location (1.2).
+                </ErrorText>
+              )}
+            </List>
+            <ErrorText>{errors.mangroveSpeciesUsed?.message}</ErrorText>
+          </FormQuestionDiv>
+        ) : null}
+
         <FormQuestionDiv>
           <FormLabel>{questions.localParticipantTraining.question}</FormLabel>
           <Controller
@@ -317,4 +559,9 @@ const InnerFormDiv = styled('div')`
   margin-top: 1em;
   margin-left: 0.75em;
   max-width: 15em;
+`
+
+const SubgroupDiv = styled('div')`
+  margin-left: 2.7em;
+  margin-top: 0.5em;
 `
