@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Checkbox,
   FormLabel,
   List,
@@ -44,6 +45,7 @@ import LoadingIndicator from './LoadingIndicator'
 import QuestionNav from './QuestionNav'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
+import AddTabularInputRow from './TabularInput/AddTabularInputRow'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2a') ?? []
@@ -66,6 +68,14 @@ function SiteInterventionsForm() {
       })
     ),
     mangroveSpeciesUsed: yup.array().of(
+      yup.object().shape({
+        mangroveSpeciesType: yup.string(),
+        count: yup.mixed(),
+        source: yup.string(),
+        purpose: yup.string()
+      })
+    ),
+    mangroveAssociatedSpecies: yup.array().of(
       yup.object().shape({
         mangroveSpeciesType: yup.string(),
         seed: yup.object().shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() }),
@@ -108,6 +118,13 @@ function SiteInterventionsForm() {
     update: mangroveSpeciesUsedUpdate
   } = useFieldArray({ name: 'mangroveSpeciesUsed', control })
 
+  const {
+    fields: mangroveAssociatedSpeciesFields,
+    append: mangroveAssociatedSpeciesAppend,
+    remove: mangroveAssociatedSpeciesRemove,
+    update: mangroveAssociatedSpeciesUpdate
+  } = useFieldArray({ name: 'mangroveAssociatedSpecies', control })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -116,6 +133,7 @@ function SiteInterventionsForm() {
   const [biophysicalInterventionTypesChecked, setBiophysicalInterventionTypesChecked] = useState([])
   const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
   const [mangroveSpeciesUsedChecked, setMangroveSpeciesUsedChecked] = useState([])
+  const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
   const localParticipantTrainingWatcher = watchForm('localParticipantTraining')
 
   const loadServerData = useCallback((serverResponse) => {
@@ -255,6 +273,31 @@ function SiteInterventionsForm() {
     )
 
     return matchingItems.length ? true : false
+  }
+
+  const updateTabularInputDisplay = (boolean) => {
+    return setShowAddTabularInputRow(boolean)
+  }
+
+  const saveMeasurementItem = (measurementType, count, source, purpose) => {
+    mangroveAssociatedSpeciesAppend({
+      measurementType,
+      count,
+      source,
+      purpose
+    })
+  }
+
+  const deleteMeasurementItem = (measurementIndex) => {
+    mangroveAssociatedSpeciesRemove(measurementIndex)
+  }
+
+  const updateMeasurementItem = (measurementIndex, count, source, purpose) => {
+    const currentItem = mangroveAssociatedSpeciesFields[measurementIndex]
+    if (count) currentItem.count = count
+    if (source) currentItem.source = source
+    if (purpose) currentItem.purpose = purpose
+    mangroveAssociatedSpeciesUpdate(measurementIndex, currentItem)
   }
 
   return isLoading ? (
@@ -506,7 +549,19 @@ function SiteInterventionsForm() {
             <ErrorText>{errors.mangroveSpeciesUsed?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
-
+        {isMangroveSpeciesUsedShowing ? (
+          <FormQuestionDiv>
+            <StickyFormLabel>{questions.mangroveAssociatedSpecies.question}</StickyFormLabel>
+            {showAddTabularInputRow ? (
+              <AddTabularInputRow
+                saveMeasurementItem={saveMeasurementItem}
+                updateTabularInputDisplay={updateTabularInputDisplay}></AddTabularInputRow>
+            ) : null}
+            {!showAddTabularInputRow ? (
+              <Button onClick={() => setShowAddTabularInputRow(true)}>+ Add measurement row</Button>
+            ) : null}
+          </FormQuestionDiv>
+        ) : null}
         <FormQuestionDiv>
           <FormLabel>{questions.localParticipantTraining.question}</FormLabel>
           <Controller

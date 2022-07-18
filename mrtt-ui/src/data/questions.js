@@ -367,7 +367,7 @@ const siteInterventions = {
     question: 'What was the source of seeds/propagules or seedlings?'
   },
   mangroveAssociatedSpecies: {
-    question: '6.2d Were mangrove-associated species planted?',
+    question: '6.2c Were mangrove-associated species planted?',
     options: [
       'Species',
       'Number',
