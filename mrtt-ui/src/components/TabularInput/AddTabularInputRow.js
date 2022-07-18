@@ -20,8 +20,8 @@ const AddTabularInputRow = ({ saveMeasurementItem, updateTabularInputDisplay }) 
   }
 
   const handleSave = () => {
-    if (!measurementType.length || !measurementValue.length) {
-      setError('Please fill both fields.')
+    if (!measurementType.length || !measurementValue.length || !measurementUnit.length) {
+      setError('Please fill all fields.')
     } else {
       setMeasurementType(String(measurementType))
       saveMeasurementItem(measurementType, measurementValue, measurementUnit)
