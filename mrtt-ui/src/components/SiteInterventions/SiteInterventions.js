@@ -29,23 +29,23 @@ import {
   SectionFormSubtitle,
   SectionFormTitle,
   StickyFormLabel
-} from '../styles/forms'
-import { ContentWrapper } from '../styles/containers'
-import { ErrorText } from '../styles/typography'
-import { findDataItem } from '../library/findDataItem'
-import { mapDataForApi } from '../library/mapDataForApi'
-import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
-import { questionMapping } from '../data/questionMapping'
-import { siteInterventions as questions } from '../data/questions'
-import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
-import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
-import { propaguleOptions, seedlingOptions } from '../data/siteInterventionOptions'
-import language from '../language'
-import LoadingIndicator from './LoadingIndicator'
-import QuestionNav from './QuestionNav'
-import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
-import useSiteInfo from '../library/useSiteInfo'
-import AddTabularInputRow from './TabularInput/AddTabularInputRow'
+} from '../../styles/forms'
+import { ContentWrapper } from '../../styles/containers'
+import { ErrorText } from '../../styles/typography'
+import { findDataItem } from '../../library/findDataItem'
+import { mapDataForApi } from '../../library/mapDataForApi'
+import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
+import { questionMapping } from '../../data/questionMapping'
+import { siteInterventions as questions } from '../../data/questions'
+import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
+import { mangroveSpeciesPerCountryList } from '../../data/mangroveSpeciesPerCountry'
+import { propaguleOptions, seedlingOptions } from '../../data/siteInterventionOptions'
+import language from '../../language'
+import LoadingIndicator from '../LoadingIndicator'
+import QuestionNav from '../QuestionNav'
+import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import useSiteInfo from '../../library/useSiteInfo'
+import CustomAddTabularInputRow from './CustomAddTabularInputRow'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2a') ?? []
@@ -69,19 +69,19 @@ function SiteInterventionsForm() {
     ),
     mangroveSpeciesUsed: yup.array().of(
       yup.object().shape({
-        mangroveSpeciesType: yup.string(),
-        count: yup.mixed(),
-        source: yup.string(),
-        purpose: yup.string()
-      })
-    ),
-    mangroveAssociatedSpecies: yup.array().of(
-      yup.object().shape({
-        mangroveSpeciesType: yup.string(),
+        type: yup.string(),
         seed: yup.object().shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() }),
         propagule: yup
           .object()
           .shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() })
+      })
+    ),
+    mangroveAssociatedSpecies: yup.array().of(
+      yup.object().shape({
+        mangroveSpeciestype: yup.string(),
+        count: yup.mixed(),
+        source: yup.string(),
+        purpose: yup.string()
       })
     ),
     localParticipantTraining: yup.string(),
@@ -168,9 +168,7 @@ function SiteInterventionsForm() {
     const getMangroveSpeciesUsedFrom6_2b = getMangroveSpeciesUsed(serverResponse)
     let mangroveSpeciesList = []
     if (getMangroveSpeciesUsedFrom6_2b.length) {
-      mangroveSpeciesList = getMangroveSpeciesUsedFrom6_2b.map(
-        (specie) => specie.mangroveSpeciesType
-      )
+      mangroveSpeciesList = getMangroveSpeciesUsedFrom6_2b.map((specie) => specie.type)
     }
     setMangroveSpeciesUsedChecked(mangroveSpeciesList)
   }, [])
@@ -231,15 +229,13 @@ function SiteInterventionsForm() {
 
     if (event.target.checked) {
       mangroveSpeciesUsedAppend({
-        mangroveSpeciesType: specie,
+        type: specie,
         seed: { checked: false, source: '', count: 0 },
         propagule: { checked: false, source: '', count: 0 }
       })
       mangroveSpeciesUsedCheckedCopy.push(specie)
     } else {
-      const fieldIndex = mangroveSpeciesUsedFields.findIndex(
-        (field) => field.mangroveSpeciesType === specie
-      )
+      const fieldIndex = mangroveSpeciesUsedFields.findIndex((field) => field.type === specie)
       const typeIndex = mangroveSpeciesUsedCheckedCopy.findIndex((type) => type === specie)
       mangroveSpeciesUsedCheckedCopy.splice(typeIndex, 1)
       mangroveSpeciesUsedRemove(fieldIndex)
@@ -247,7 +243,7 @@ function SiteInterventionsForm() {
     setMangroveSpeciesUsedChecked(mangroveSpeciesUsedCheckedCopy)
   }
   const getMangroveSpeciesUsedIndex = (specie) => {
-    return mangroveSpeciesUsedFields.findIndex((item) => item.mangroveSpeciesType === specie)
+    return mangroveSpeciesUsedFields.findIndex((item) => item.type === specie)
   }
 
   const handleSourceOfSeedlingsOnChange = (event, specie, seedlingType) => {
@@ -279,9 +275,9 @@ function SiteInterventionsForm() {
     return setShowAddTabularInputRow(boolean)
   }
 
-  const saveMeasurementItem = (measurementType, count, source, purpose) => {
+  const saveMeasurementItem = ({ type, count, source, purpose }) => {
     mangroveAssociatedSpeciesAppend({
-      measurementType,
+      type,
       count,
       source,
       purpose
@@ -555,9 +551,9 @@ function SiteInterventionsForm() {
           <FormQuestionDiv>
             <StickyFormLabel>{questions.mangroveAssociatedSpecies.question}</StickyFormLabel>
             {showAddTabularInputRow ? (
-              <AddTabularInputRow
+              <CustomAddTabularInputRow
                 saveMeasurementItem={saveMeasurementItem}
-                updateTabularInputDisplay={updateTabularInputDisplay}></AddTabularInputRow>
+                updateTabularInputDisplay={updateTabularInputDisplay}></CustomAddTabularInputRow>
             ) : null}
             {!showAddTabularInputRow ? (
               <Button onClick={() => setShowAddTabularInputRow(true)}>+ Add measurement row</Button>
