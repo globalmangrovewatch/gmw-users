@@ -81,7 +81,7 @@ function SiteInterventionsForm() {
         mangroveSpeciestype: yup.string(),
         count: yup.mixed(),
         source: yup.string(),
-        purpose: yup.string()
+        purpose: yup.object().shape({ purpose: yup.string(), other: yup.string() })
       })
     ),
     localParticipantTraining: yup.string(),
