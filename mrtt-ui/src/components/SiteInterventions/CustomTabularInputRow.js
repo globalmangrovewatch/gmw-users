@@ -6,10 +6,14 @@ import { styled } from '@mui/material/styles'
 
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
 
-const HorizontalTabularInputRow = ({
-  label,
+const CustomTabularInputRow = ({
+  type,
+  label1,
+  label2,
+  label3,
   rowValue1,
   rowValue2,
+  rowValue3,
   index,
   deleteMeasurementItem,
   updateMeasurementItem
@@ -18,13 +22,16 @@ const HorizontalTabularInputRow = ({
   const [currentVal1, setCurrentVal1] = useState('')
   const [initialVal2, setInitialVal2] = useState('')
   const [currentVal2, setCurrentVal2] = useState('')
+  const [initialVal3, setInitialVal3] = useState('')
+  const [currentVal3, setCurrentVal3] = useState('')
+
   const handleDelete = () => {
     deleteMeasurementItem(index)
   }
 
   const handleUpdate = () => {
-    if (currentVal1 !== initialVal1 || currentVal2 !== initialVal2) {
-      updateMeasurementItem(index, currentVal1, currentVal2)
+    if (currentVal1 !== initialVal1 || currentVal2 !== initialVal2 || currentVal3 !== initialVal3) {
+      updateMeasurementItem(index, currentVal1, currentVal2, currentVal3)
     }
   }
 
@@ -37,33 +44,47 @@ const HorizontalTabularInputRow = ({
       setCurrentVal2(rowValue2)
       setInitialVal2(rowValue2)
     }
-  }, [rowValue1, rowValue2])
+    if (rowValue3) {
+      setCurrentVal3(rowValue3)
+      setInitialVal3(rowValue3)
+    }
+  }, [rowValue1, rowValue2, rowValue3])
 
   return (
     <TabularInputSection>
-      <TabularLabel>{label}</TabularLabel>
+      <TabularLabel>{type}</TabularLabel>
       <TabularBox>
         <TextField
           value={currentVal1}
-          label='value'
+          label={label1}
           onBlur={handleUpdate}
           onChange={(e) => setCurrentVal1(e.target.value)}></TextField>
         <TextField
           sx={{ maxWidth: '7em', marginLeft: '0.5em' }}
           value={currentVal2}
-          label='unit'
+          label={label2}
           onBlur={handleUpdate}
           onChange={(e) => setCurrentVal2(e.target.value)}></TextField>
+        <TextField
+          sx={{ maxWidth: '7em', marginLeft: '0.5em' }}
+          value={currentVal3}
+          label={label3}
+          onBlur={handleUpdate}
+          onChange={(e) => setCurrentVal3(e.target.value)}></TextField>
         <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
       </TabularBox>
     </TabularInputSection>
   )
 }
 
-HorizontalTabularInputRow.propTypes = {
-  label: PropTypes.string.isRequired,
+CustomTabularInputRow.propTypes = {
+  type: PropTypes.string.isRequired,
+  label1: PropTypes.string.isRequired,
+  label2: PropTypes.string.isRequired,
+  label3: PropTypes.string.isRequired,
   rowValue1: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   rowValue2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  rowValue3: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   deleteMeasurementItem: PropTypes.func.isRequired,
   updateMeasurementItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired
@@ -75,4 +96,4 @@ export const TabularBox = styled('div')`
   cursor: pointer;
 `
 
-export default HorizontalTabularInputRow
+export default CustomTabularInputRow

@@ -8,7 +8,7 @@ import { ErrorText } from '../../styles/typography'
 
 const CustomAddTabularInputRow = ({ saveMeasurementItem, updateTabularInputDisplay }) => {
   const [type, setType] = useState('')
-  const [number, setNumber] = useState(0)
+  const [count, setNumber] = useState(0)
   const [source, setSource] = useState('')
   const [purpose, setPurpose] = useState('')
   const [other, setOther] = useState('')
@@ -24,8 +24,8 @@ const CustomAddTabularInputRow = ({ saveMeasurementItem, updateTabularInputDispl
   }
 
   const handleSave = () => {
-    const measurementItem = { type, number, source, purpose: { purpose, other } }
-    if (!type || !number || !source || !purpose) {
+    const measurementItem = { type, count, source, purpose: { purpose, other } }
+    if (!type || !count || !source || !purpose) {
       setError('Please fill all fields.')
     } else {
       setType(String(type))
@@ -47,8 +47,8 @@ const CustomAddTabularInputRow = ({ saveMeasurementItem, updateTabularInputDispl
         <TabularInputSection>
           <TabularLabel>Number</TabularLabel>
           <TextField
-            value={number}
-            label='number'
+            value={count}
+            label='count'
             onChange={(e) => setNumber(e.target.value)}></TextField>
         </TabularInputSection>
         <TabularInputSection>
@@ -117,7 +117,7 @@ const ButtonsDiv = styled('div')`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1em;
+  margin-top: 1.5em;
 `
 
 const SectionDiv = styled('div')`

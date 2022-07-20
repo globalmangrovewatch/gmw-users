@@ -46,6 +46,7 @@ import QuestionNav from '../QuestionNav'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
 import CustomAddTabularInputRow from './CustomAddTabularInputRow'
+import CustomTabularInputRow from './CustomTabularInputRow'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2a') ?? []
@@ -78,7 +79,7 @@ function SiteInterventionsForm() {
     ),
     mangroveAssociatedSpecies: yup.array().of(
       yup.object().shape({
-        mangroveSpeciestype: yup.string(),
+        type: yup.string(),
         count: yup.mixed(),
         source: yup.string(),
         purpose: yup.object().shape({ purpose: yup.string(), other: yup.string() })
@@ -550,6 +551,27 @@ function SiteInterventionsForm() {
         {isMangroveSpeciesUsedShowing ? (
           <FormQuestionDiv>
             <StickyFormLabel>{questions.mangroveAssociatedSpecies.question}</StickyFormLabel>
+            {mangroveAssociatedSpeciesFields.length > 0
+              ? mangroveAssociatedSpeciesFields.map((measurementItem, measurementItemIndex) => (
+                  <CustomTabularInputRow
+                    key={measurementItemIndex}
+                    type={measurementItem.type}
+                    label1={'Count'}
+                    label2={'Source'}
+                    label3={'Purpose'}
+                    rowValue1={measurementItem.count}
+                    rowValue2={measurementItem.source}
+                    rowValue3={
+                      measurementItem.purpose.purpose !== 'Other'
+                        ? `${measurementItem.purpose.purpose}`
+                        : `${measurementItem.purpose.purpose}: ${measurementItem.purpose.other} `
+                    }
+                    index={measurementItemIndex}
+                    deleteMeasurementItem={deleteMeasurementItem}
+                    updateMeasurementItem={updateMeasurementItem}></CustomTabularInputRow>
+                ))
+              : null}
+            <ErrorText>{errors.mangroveAssociatedSpecies?.message}</ErrorText>
             {showAddTabularInputRow ? (
               <CustomAddTabularInputRow
                 saveMeasurementItem={saveMeasurementItem}

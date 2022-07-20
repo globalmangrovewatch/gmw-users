@@ -80,7 +80,7 @@ const ButtonsDiv = styled('div')`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1em;
+  margin-top: 1.5em;
 `
 
 const SectionDiv = styled('div')`
