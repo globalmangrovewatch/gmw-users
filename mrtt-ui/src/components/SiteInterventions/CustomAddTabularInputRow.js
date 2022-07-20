@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles'
 
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
 import { ErrorText } from '../../styles/typography'
+import { sourceOptions, purposeOptions } from '../../data/siteInterventionOptions'
 
 const CustomAddTabularInputRow = ({ saveMeasurementItem, updateTabularInputDisplay }) => {
   const [type, setType] = useState('')
@@ -123,16 +124,5 @@ const ButtonsDiv = styled('div')`
 const SectionDiv = styled('div')`
   margin-top: 2em;
 `
-
-const sourceOptions = ['Nursery', 'Wild', 'Both']
-
-const purposeOptions = [
-  'Coastal defence',
-  'Source of food',
-  'Products for sale',
-  'Traditional medicines',
-  'Other',
-  'Not applicable'
-]
 
 export default CustomAddTabularInputRow

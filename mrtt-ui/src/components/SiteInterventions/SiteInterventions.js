@@ -578,7 +578,9 @@ function SiteInterventionsForm() {
                 updateTabularInputDisplay={updateTabularInputDisplay}></CustomAddTabularInputRow>
             ) : null}
             {!showAddTabularInputRow ? (
-              <Button onClick={() => setShowAddTabularInputRow(true)}>+ Add measurement row</Button>
+              <Button sx={{ marginTop: '1.5em' }} onClick={() => setShowAddTabularInputRow(true)}>
+                + Add measurement row
+              </Button>
             ) : null}
           </FormQuestionDiv>
         ) : null}

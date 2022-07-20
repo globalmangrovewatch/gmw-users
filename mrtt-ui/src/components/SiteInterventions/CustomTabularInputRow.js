@@ -53,25 +53,23 @@ const CustomTabularInputRow = ({
   return (
     <TabularInputSection>
       <TabularLabel>{type}</TabularLabel>
+      <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
       <TabularBox>
-        <TextField
+        <RowTextField
           value={currentVal1}
           label={label1}
           onBlur={handleUpdate}
-          onChange={(e) => setCurrentVal1(e.target.value)}></TextField>
-        <TextField
-          sx={{ maxWidth: '7em', marginLeft: '0.5em' }}
+          onChange={(e) => setCurrentVal1(e.target.value)}></RowTextField>
+        <RowTextField
           value={currentVal2}
           label={label2}
           onBlur={handleUpdate}
-          onChange={(e) => setCurrentVal2(e.target.value)}></TextField>
-        <TextField
-          sx={{ maxWidth: '7em', marginLeft: '0.5em' }}
+          onChange={(e) => setCurrentVal2(e.target.value)}></RowTextField>
+        <RowTextField
           value={currentVal3}
           label={label3}
           onBlur={handleUpdate}
-          onChange={(e) => setCurrentVal3(e.target.value)}></TextField>
-        <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
+          onChange={(e) => setCurrentVal3(e.target.value)}></RowTextField>
       </TabularBox>
     </TabularInputSection>
   )
@@ -92,8 +90,12 @@ CustomTabularInputRow.propTypes = {
 
 export const TabularBox = styled('div')`
   display: flex;
-  align-items: center;
+  flex-direction: column;
   cursor: pointer;
 `
 
 export default CustomTabularInputRow
+
+const RowTextField = styled(TextField)`
+  margin-top: 1em;
+`
