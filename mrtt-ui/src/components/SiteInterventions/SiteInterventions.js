@@ -285,12 +285,10 @@ function SiteInterventionsForm() {
     })
   }
 
-  // eslint-disable-next-line no-unused-vars
   const deleteMeasurementItem = (measurementIndex) => {
     mangroveAssociatedSpeciesRemove(measurementIndex)
   }
 
-  // eslint-disable-next-line no-unused-vars
   const updateMeasurementItem = (measurementIndex, count, source, purpose) => {
     const currentItem = mangroveAssociatedSpeciesFields[measurementIndex]
     if (count) currentItem.count = count

@@ -68,7 +68,7 @@ const CustomTabularInputRow = ({
     <TabularInputSection>
       <LeftColumnDiv>
         <TabularLabel>{type}</TabularLabel>
-        <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
+        <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em', cursor: 'pointer' }}></Delete>
       </LeftColumnDiv>
       <TabularBox>
         <RowTextField
