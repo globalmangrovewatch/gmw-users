@@ -559,13 +559,11 @@ function SiteInterventionsForm() {
                     label1={'Count'}
                     label2={'Source'}
                     label3={'Purpose'}
+                    label4={'Other purpose'}
                     rowValue1={measurementItem.count}
                     rowValue2={measurementItem.source}
-                    rowValue3={
-                      measurementItem.purpose.purpose !== 'Other'
-                        ? `${measurementItem.purpose.purpose}`
-                        : `${measurementItem.purpose.purpose}: ${measurementItem.purpose.other} `
-                    }
+                    rowValue3={measurementItem.purpose.purpose}
+                    rowValue4={measurementItem.purpose.other}
                     index={measurementItemIndex}
                     deleteMeasurementItem={deleteMeasurementItem}
                     updateMeasurementItem={updateMeasurementItem}></CustomTabularInputRow>
