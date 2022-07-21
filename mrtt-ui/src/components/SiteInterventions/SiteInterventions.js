@@ -258,6 +258,8 @@ function SiteInterventionsForm() {
     mangroveSpeciesUsedUpdate(item)
   }
 
+  console.log({ errors })
+
   const isMangroveSpeciesUsedShowing = () => {
     const optionsUsed = [
       'Planting',
@@ -293,7 +295,7 @@ function SiteInterventionsForm() {
     const currentItem = mangroveAssociatedSpeciesFields[measurementIndex]
     if (count) currentItem.count = count
     if (source) currentItem.source = source
-    if (purpose) currentItem.purpose = purpose
+    if (purpose) currentItem.purpose.purpose = purpose
     mangroveAssociatedSpeciesUpdate(measurementIndex, currentItem)
   }
 
