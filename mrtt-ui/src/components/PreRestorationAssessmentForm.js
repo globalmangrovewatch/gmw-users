@@ -86,7 +86,7 @@ function PreRestorationAssessmentForm() {
       .of(
         yup.object().shape({
           mangroveSpeciesType: yup.mixed(),
-          percentageComposition: yup.array().nullable()
+          percentageComposition: yup.mixed()
         })
       )
       .default([]),
@@ -459,7 +459,7 @@ function PreRestorationAssessmentForm() {
                   <Controller
                     name={`speciesComposition.${mangroveSpecieIndex}.percentageComposition`}
                     control={control}
-                    defaultValue={''}
+                    defaultValue={0}
                     render={({ field }) => (
                       <TextField {...field} sx={{ maxWidth: '10em' }} label='% Number'></TextField>
                     )}
@@ -467,7 +467,6 @@ function PreRestorationAssessmentForm() {
                 </SelectedInputSection>
               )
             })}
-            <ErrorText>{errors.speciesComposition?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
         {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
