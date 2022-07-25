@@ -37,11 +37,13 @@ const CostsForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     supportForActivities: multiselectWithOtherValidationNoMinimum,
-    projectInterventionFunding: yup.string()
+    projectInterventionFunding: yup.string(),
+    nonmonetisedContributions: multiselectWithOtherValidationNoMinimum
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
-      supportForActivities: { selectedValues: [], otherValue: undefined }
+      supportForActivities: { selectedValues: [], otherValue: undefined },
+      nonmonetisedContributions: { selectedValues: [], otherValue: undefined }
     },
     resolver: yupResolver(validationSchema)
   })
@@ -127,6 +129,16 @@ const CostsForm = () => {
             )}
           />
           <ErrorText>{errors.projectInterventionFunding?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <CheckboxGroupWithLabelAndController
+            fieldName='nonmonetisedContributions'
+            reactHookFormInstance={reactHookFormInstance}
+            options={questions.nonmonetisedContributions.options}
+            question={questions.nonmonetisedContributions.question}
+            shouldAddOtherOptionWithClarification={true}
+          />
+          <ErrorText>{errors.nonmonetisedContributions?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
       </Form>
     </ContentWrapper>
