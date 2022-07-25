@@ -4,11 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import {
-  Controller,
-  useForm
-  // useFieldArray
-} from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { MenuItem, TextField } from '@mui/material'
 
 import {
@@ -18,7 +14,6 @@ import {
   SectionFormSubtitle,
   SectionFormTitle,
   StickyFormLabel
-  // StickyFormLabel
 } from '../styles/forms'
 import QuestionNav from './QuestionNav'
 import useSiteInfo from '../library/useSiteInfo'
@@ -52,22 +47,20 @@ const CostsForm = () => {
     handleSubmit: validateInputs,
     formState: { errors },
     reset: resetForm,
-    // watch: watchForm,
     control
   } = reactHookFormInstance
 
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/costs`
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
-    questionMapping: questionMapping.siteInterventions,
+    questionMapping: questionMapping.costs,
     resetForm,
     setIsLoading
-    // successCallback: loadServerData
   })
 
   const handleSubmit = (formData) => {
@@ -75,7 +68,7 @@ const CostsForm = () => {
     setIsSubmitError(false)
 
     axios
-      .patch(apiAnswersUrl, mapDataForApi('siteInterventions', formData))
+      .patch(apiAnswersUrl, mapDataForApi('costs', formData))
       .then(() => {
         setIsSubmitting(false)
         toast.success(language.success.submit)
