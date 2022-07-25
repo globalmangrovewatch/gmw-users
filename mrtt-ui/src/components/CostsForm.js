@@ -5,17 +5,19 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import {
-  //  Controller,
+  Controller,
   useForm
   // useFieldArray
 } from 'react-hook-form'
+import { MenuItem, TextField } from '@mui/material'
 
 import {
   Form,
   FormPageHeader,
   FormQuestionDiv,
   SectionFormSubtitle,
-  SectionFormTitle
+  SectionFormTitle,
+  StickyFormLabel
   // StickyFormLabel
 } from '../styles/forms'
 import QuestionNav from './QuestionNav'
@@ -34,7 +36,8 @@ import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMap
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
-    supportForActivities: multiselectWithOtherValidationNoMinimum
+    supportForActivities: multiselectWithOtherValidationNoMinimum,
+    projectInterventionFunding: yup.string()
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
@@ -46,9 +49,9 @@ const CostsForm = () => {
   const {
     handleSubmit: validateInputs,
     formState: { errors },
-    reset: resetForm
+    reset: resetForm,
     // watch: watchForm,
-    // control
+    control
   } = reactHookFormInstance
 
   const { siteId } = useParams()
@@ -106,6 +109,24 @@ const CostsForm = () => {
             shouldAddOtherOptionWithClarification={false}
           />
           <ErrorText>{errors.supportForActivities?.selectedValues?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.projectInterventionFunding.question}</StickyFormLabel>
+          <Controller
+            name='projectInterventionFunding'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.projectInterventionFunding.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.projectInterventionFunding?.message}</ErrorText>
         </FormQuestionDiv>
       </Form>
     </ContentWrapper>
