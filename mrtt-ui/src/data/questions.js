@@ -435,7 +435,8 @@ const costs = {
       'Fiscal ',
       'Risk management ',
       'Regulatory ',
-      'Unknown'
+      'Unknown',
+      'Other'
     ]
   },
   projectFunderNames: {
