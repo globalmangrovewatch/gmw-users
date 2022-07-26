@@ -258,8 +258,6 @@ function SiteInterventionsForm() {
     mangroveSpeciesUsedUpdate(item)
   }
 
-  console.log({ errors })
-
   const isMangroveSpeciesUsedShowing = () => {
     const optionsUsed = [
       'Planting',
