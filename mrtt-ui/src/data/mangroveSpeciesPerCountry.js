@@ -5,10 +5,10 @@ export const mangroveSpeciesPerCountryList = [
       code: 'AS'
     },
     species: [
-      'Acrostichum.speciosum',
-      'Bruguiera.gymnorhiza',
-      'Pemphis.acidula',
-      'Rhizophora.samoensis'
+      'Acrostichum speciosum',
+      'Bruguiera gymnorhiza',
+      'Pemphis acidula',
+      'Rhizophora samoensis'
     ]
   },
   {
@@ -17,13 +17,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'AO'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -32,13 +32,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'AI'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -47,13 +47,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'AG'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -62,41 +62,41 @@ export const mangroveSpeciesPerCountryList = [
       code: 'AU'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acanthus.ilicifolius',
-      'Acrostichum.aureum',
-      'Acrostichum.speciosum',
-      'Aegialitis.annulata',
-      'Aegiceras.corniculatum',
-      'Avicennia.integra',
-      'Avicennia.marina',
-      'Bruguiera.cylindrica',
-      'Bruguiera.exaristata',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Camptostemon.schultzii',
-      'Ceriops.australis',
-      'Ceriops.tagal',
-      'Cynometra.iripa',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Osbornia.octodonta',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Sonneratia.lanceolata',
-      'Sonneratia.ovata',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acanthus ilicifolius',
+      'Acrostichum aureum',
+      'Acrostichum speciosum',
+      'Aegialitis annulata',
+      'Aegiceras corniculatum',
+      'Avicennia integra',
+      'Avicennia marina',
+      'Bruguiera cylindrica',
+      'Bruguiera exaristata',
+      'Bruguiera gymnorhiza',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Camptostemon schultzii',
+      'Ceriops australis',
+      'Ceriops tagal',
+      'Cynometra iripa',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Osbornia octodonta',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Sonneratia lanceolata',
+      'Sonneratia ovata',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -105,12 +105,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'BS'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -118,7 +118,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Bahrain',
       code: 'BH'
     },
-    species: ['Avicennia.marina']
+    species: ['Avicennia marina']
   },
   {
     country: {
@@ -126,38 +126,38 @@ export const mangroveSpeciesPerCountryList = [
       code: 'BD'
     },
     species: [
-      'Acanthus.ilicifolius',
-      'Acrostichum.aureum',
-      'Acrostichum.speciosum',
-      'Aegialitis.rotundifolia',
-      'Aegiceras.corniculatum',
-      'Aglaia.cucullata',
-      'Avicennia.alba',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Ceriops.decandra',
-      'Ceriops.tagal',
-      'Cynometra.iripa',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Excoecaria.indica',
-      'Heritiera.fomes',
-      'Kandelia.candel',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.apetala',
-      'Sonneratia.caseolaris',
-      'Sonneratia.griffithii',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ilicifolius',
+      'Acrostichum aureum',
+      'Acrostichum speciosum',
+      'Aegialitis rotundifolia',
+      'Aegiceras corniculatum',
+      'Aglaia cucullata',
+      'Avicennia alba',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Ceriops decandra',
+      'Ceriops tagal',
+      'Cynometra iripa',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Excoecaria indica',
+      'Heritiera fomes',
+      'Kandelia candel',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia apetala',
+      'Sonneratia caseolaris',
+      'Sonneratia griffithii',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -166,13 +166,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'BB'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -181,12 +181,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'BZ'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -195,13 +195,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'BJ'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -209,7 +209,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Bermuda',
       code: 'BM'
     },
-    species: ['Avicennia.germinans', 'Rhizophora.mangle']
+    species: ['Avicennia germinans', 'Rhizophora mangle']
   },
   {
     country: {
@@ -217,12 +217,12 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Bonaire, Sint Eustatius and Saba'
     },
     species: [
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -231,14 +231,14 @@ export const mangroveSpeciesPerCountryList = [
       code: 'BR'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -246,7 +246,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'British Indian Ocean Territory',
       code: 'IO'
     },
-    species: ['Lumnitzera.racemosa', 'Pemphis.acidula']
+    species: ['Lumnitzera racemosa', 'Pemphis acidula']
   },
   {
     country: {
@@ -254,33 +254,33 @@ export const mangroveSpeciesPerCountryList = [
       code: 'BN'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Acrostichum.speciosum',
-      'Aegiceras.corniculatum',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Ceriops.tagal',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Sonneratia.ovata',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Acrostichum speciosum',
+      'Aegiceras corniculatum',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Ceriops tagal',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Sonneratia ovata',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -289,35 +289,35 @@ export const mangroveSpeciesPerCountryList = [
       code: 'KH'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acanthus.ilicifolius',
-      'Aegiceras.corniculatum',
-      'Avicennia.alba',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Ceriops.tagal',
-      'Cynometra.iripa',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Kandelia.candel',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Sonneratia.ovata',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acanthus ilicifolius',
+      'Aegiceras corniculatum',
+      'Avicennia alba',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Ceriops tagal',
+      'Cynometra iripa',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Kandelia candel',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Sonneratia ovata',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -326,13 +326,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'CM'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -341,12 +341,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'KY'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -355,29 +355,29 @@ export const mangroveSpeciesPerCountryList = [
       code: 'CN'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acanthus.ilicifolius',
-      'Acrostichum.speciosum',
-      'Aegiceras.corniculatum',
-      'Avicennia.marina',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.sexangula',
-      'Ceriops.tagal',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Kandelia.obovata',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Sonneratia.ovata',
-      'Xylocarpus.granatum'
+      'Acanthus ebracteatus',
+      'Acanthus ilicifolius',
+      'Acrostichum speciosum',
+      'Aegiceras corniculatum',
+      'Avicennia marina',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera sexangula',
+      'Ceriops tagal',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Kandelia obovata',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Sonneratia ovata',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -386,11 +386,11 @@ export const mangroveSpeciesPerCountryList = [
       code: 'CX'
     },
     species: [
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.sexangula',
-      'Cynometra.iripa',
-      'Heritiera.littoralis',
-      'Pemphis.acidula'
+      'Bruguiera gymnorhiza',
+      'Bruguiera sexangula',
+      'Cynometra iripa',
+      'Heritiera littoralis',
+      'Pemphis acidula'
     ]
   },
   {
@@ -398,7 +398,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Cocos (Keeling) Islands',
       code: 'CC'
     },
-    species: ['Pemphis.acidula']
+    species: ['Pemphis acidula']
   },
   {
     country: {
@@ -406,18 +406,18 @@ export const mangroveSpeciesPerCountryList = [
       code: 'CO'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.bicolor',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Mora.oleifera',
-      'Pelliciera.rhizophorae',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa',
-      'Rhizophora.samoensis',
-      'Tabebuia.palustris'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia bicolor',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Mora oleifera',
+      'Pelliciera rhizophorae',
+      'Rhizophora mangle',
+      'Rhizophora racemosa',
+      'Rhizophora samoensis',
+      'Tabebuia palustris'
     ]
   },
   {
@@ -426,15 +426,15 @@ export const mangroveSpeciesPerCountryList = [
       code: 'KM'
     },
     species: [
-      'Acrostichum.aureum',
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Heritiera.littoralis',
-      'Lumnitzera.racemosa',
-      'Rhizophora.mucronata',
-      'Sonneratia.alba',
-      'Xylocarpus.granatum'
+      'Acrostichum aureum',
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Heritiera littoralis',
+      'Lumnitzera racemosa',
+      'Rhizophora mucronata',
+      'Sonneratia alba',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -443,13 +443,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'CG'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -458,13 +458,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'CD'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -472,7 +472,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Cook Islands',
       code: 'CK'
     },
-    species: ['Pemphis.acidula']
+    species: ['Pemphis acidula']
   },
   {
     country: {
@@ -480,18 +480,18 @@ export const mangroveSpeciesPerCountryList = [
       code: 'CR'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.bicolor',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Mora.oleifera',
-      'Pelliciera.rhizophorae',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa',
-      'Rhizophora.samoensis',
-      'Tabebuia.palustris'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia bicolor',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Mora oleifera',
+      'Pelliciera rhizophorae',
+      'Rhizophora mangle',
+      'Rhizophora racemosa',
+      'Rhizophora samoensis',
+      'Tabebuia palustris'
     ]
   },
   {
@@ -500,13 +500,13 @@ export const mangroveSpeciesPerCountryList = [
       name: "C\u00f4te d'Ivoire"
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -515,12 +515,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'CU'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -529,12 +529,12 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Cura\u00e7ao'
     },
     species: [
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -542,7 +542,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Djibouti',
       code: 'DJ'
     },
-    species: ['Avicennia.marina', 'Rhizophora.mucronata']
+    species: ['Avicennia marina', 'Rhizophora mucronata']
   },
   {
     country: {
@@ -550,13 +550,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'DM'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -565,12 +565,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'DO'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -579,15 +579,15 @@ export const mangroveSpeciesPerCountryList = [
       code: 'EC'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Mora.oleifera',
-      'Pelliciera.rhizophorae',
-      'Rhizophora.racemosa',
-      'Rhizophora.samoensis'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Mora oleifera',
+      'Pelliciera rhizophorae',
+      'Rhizophora racemosa',
+      'Rhizophora samoensis'
     ]
   },
   {
@@ -595,7 +595,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Egypt',
       code: 'EG'
     },
-    species: ['Avicennia.marina', 'Rhizophora.mucronata']
+    species: ['Avicennia marina', 'Rhizophora mucronata']
   },
   {
     country: {
@@ -603,12 +603,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'SV'
     },
     species: [
-      'Acrostichum.danaeifolium',
-      'Avicennia.bicolor',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.samoensis'
+      'Acrostichum danaeifolium',
+      'Avicennia bicolor',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora samoensis'
     ]
   },
   {
@@ -617,13 +617,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'GQ'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -631,7 +631,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Eritrea',
       code: 'ER'
     },
-    species: ['Avicennia.marina', 'Rhizophora.mucronata']
+    species: ['Avicennia marina', 'Rhizophora mucronata']
   },
   {
     country: {
@@ -639,14 +639,14 @@ export const mangroveSpeciesPerCountryList = [
       code: 'FJ'
     },
     species: [
-      'Bruguiera.gymnorhiza',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Pemphis.acidula',
-      'Rhizophora.samoensis',
-      'Rhizophora.stylosa',
-      'Xylocarpus.granatum'
+      'Bruguiera gymnorhiza',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Pemphis acidula',
+      'Rhizophora samoensis',
+      'Rhizophora stylosa',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -655,13 +655,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'GF'
     },
     species: [
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -669,7 +669,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'French Polynesia',
       code: 'PF'
     },
-    species: ['Pemphis.acidula']
+    species: ['Pemphis acidula']
   },
   {
     country: {
@@ -677,13 +677,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'GA'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -692,12 +692,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'GM'
     },
     species: [
-      'Acrostichum.aureum',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -706,13 +706,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'GH'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -721,13 +721,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'GD'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -736,13 +736,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'GP'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -751,15 +751,15 @@ export const mangroveSpeciesPerCountryList = [
       code: 'GU'
     },
     species: [
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.stylosa',
-      'Xylocarpus.granatum'
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora stylosa',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -768,12 +768,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'GT'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.bicolor',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Rhizophora.samoensis'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia bicolor',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Rhizophora samoensis'
     ]
   },
   {
@@ -782,13 +782,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'GQ'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -797,13 +797,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'GW'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -812,14 +812,14 @@ export const mangroveSpeciesPerCountryList = [
       code: 'GY'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -828,12 +828,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'HT'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -842,14 +842,14 @@ export const mangroveSpeciesPerCountryList = [
       code: 'HN'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.bicolor',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.samoensis'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia bicolor',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora samoensis'
     ]
   },
   {
@@ -857,7 +857,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Hong Kong',
       code: 'HK'
     },
-    species: ['Acanthus.ilicifolius']
+    species: ['Acanthus ilicifolius']
   },
   {
     country: {
@@ -865,43 +865,43 @@ export const mangroveSpeciesPerCountryList = [
       code: 'IO'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acanthus.ilicifolius',
-      'Acrostichum.aureum',
-      'Acrostichum.speciosum',
-      'Aegialitis.rotundifolia',
-      'Aegiceras.corniculatum',
-      'Aglaia.cucullata',
-      'Avicennia.alba',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Ceriops.decandra',
-      'Ceriops.tagal',
-      'Cynometra.iripa',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Excoecaria.indica',
-      'Heritiera.fomes',
-      'Heritiera.littoralis',
-      'Kandelia.candel',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.apetala',
-      'Sonneratia.caseolaris',
-      'Sonneratia.griffithii',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acanthus ilicifolius',
+      'Acrostichum aureum',
+      'Acrostichum speciosum',
+      'Aegialitis rotundifolia',
+      'Aegiceras corniculatum',
+      'Aglaia cucullata',
+      'Avicennia alba',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Ceriops decandra',
+      'Ceriops tagal',
+      'Cynometra iripa',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Excoecaria indica',
+      'Heritiera fomes',
+      'Heritiera littoralis',
+      'Kandelia candel',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia apetala',
+      'Sonneratia caseolaris',
+      'Sonneratia griffithii',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -910,53 +910,53 @@ export const mangroveSpeciesPerCountryList = [
       code: 'ID'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acanthus.ilicifolius',
-      'Acrostichum.aureum',
-      'Acrostichum.speciosum',
-      'Aegialitis.annulata',
-      'Aegialitis.rotundifolia',
-      'Aegiceras.corniculatum',
-      'Aegiceras.floridum',
-      'Aglaia.cucullata',
-      'Avicennia.alba',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Avicennia.rumphiana',
-      'Bruguiera.cylindrica',
-      'Bruguiera.exaristata',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.hainesii',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Camptostemon.philippinense',
-      'Camptostemon.schultzii',
-      'Ceriops.australis',
-      'Ceriops.tagal',
-      'Cynometra.iripa',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Excoecaria.indica',
-      'Heritiera.globosa',
-      'Heritiera.littoralis',
-      'Kandelia.candel',
-      'Kandelia.obovata',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Osbornia.octodonta',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Sonneratia.griffithii',
-      'Sonneratia.lanceolata',
-      'Sonneratia.ovata',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acanthus ilicifolius',
+      'Acrostichum aureum',
+      'Acrostichum speciosum',
+      'Aegialitis annulata',
+      'Aegialitis rotundifolia',
+      'Aegiceras corniculatum',
+      'Aegiceras floridum',
+      'Aglaia cucullata',
+      'Avicennia alba',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Avicennia rumphiana',
+      'Bruguiera cylindrica',
+      'Bruguiera exaristata',
+      'Bruguiera gymnorhiza',
+      'Bruguiera hainesii',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Camptostemon philippinense',
+      'Camptostemon schultzii',
+      'Ceriops australis',
+      'Ceriops tagal',
+      'Cynometra iripa',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Excoecaria indica',
+      'Heritiera globosa',
+      'Heritiera littoralis',
+      'Kandelia candel',
+      'Kandelia obovata',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Osbornia octodonta',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Sonneratia griffithii',
+      'Sonneratia lanceolata',
+      'Sonneratia ovata',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -964,7 +964,7 @@ export const mangroveSpeciesPerCountryList = [
       code: 'IR',
       name: 'Iran, Islamic Republic of'
     },
-    species: ['Avicennia.marina', 'Rhizophora.mucronata']
+    species: ['Avicennia marina', 'Rhizophora mucronata']
   },
   {
     country: {
@@ -972,12 +972,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'JM'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -986,18 +986,18 @@ export const mangroveSpeciesPerCountryList = [
       code: 'JP'
     },
     species: [
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Kandelia.obovata',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Sonneratia.alba'
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Kandelia obovata',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Sonneratia alba'
     ]
   },
   {
@@ -1006,15 +1006,15 @@ export const mangroveSpeciesPerCountryList = [
       code: 'KE'
     },
     species: [
-      'Acrostichum.aureum',
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Heritiera.littoralis',
-      'Lumnitzera.racemosa',
-      'Rhizophora.mucronata',
-      'Sonneratia.alba',
-      'Xylocarpus.granatum'
+      'Acrostichum aureum',
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Heritiera littoralis',
+      'Lumnitzera racemosa',
+      'Rhizophora mucronata',
+      'Sonneratia alba',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1023,12 +1023,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'KI'
     },
     species: [
-      'Bruguiera.gymnorhiza',
-      'Lumnitzera.littorea',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.stylosa',
-      'Sonneratia.alba'
+      'Bruguiera gymnorhiza',
+      'Lumnitzera littorea',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora stylosa',
+      'Sonneratia alba'
     ]
   },
   {
@@ -1037,13 +1037,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'LR'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -1051,7 +1051,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Macao',
       code: 'MO'
     },
-    species: ['Acanthus.ilicifolius']
+    species: ['Acanthus ilicifolius']
   },
   {
     country: {
@@ -1059,15 +1059,15 @@ export const mangroveSpeciesPerCountryList = [
       code: 'MG'
     },
     species: [
-      'Acrostichum.aureum',
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Heritiera.littoralis',
-      'Lumnitzera.racemosa',
-      'Rhizophora.mucronata',
-      'Sonneratia.alba',
-      'Xylocarpus.granatum'
+      'Acrostichum aureum',
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Heritiera littoralis',
+      'Lumnitzera racemosa',
+      'Rhizophora mucronata',
+      'Sonneratia alba',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1076,46 +1076,46 @@ export const mangroveSpeciesPerCountryList = [
       code: 'MY'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acanthus.ilicifolius',
-      'Acrostichum.aureum',
-      'Acrostichum.speciosum',
-      'Aegiceras.corniculatum',
-      'Aegiceras.floridum',
-      'Aglaia.cucullata',
-      'Avicennia.alba',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Avicennia.rumphiana',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.hainesii',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Ceriops.decandra',
-      'Ceriops.tagal',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Excoecaria.indica',
-      'Heritiera.fomes',
-      'Heritiera.globosa',
-      'Heritiera.littoralis',
-      'Kandelia.candel',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Osbornia.octodonta',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Sonneratia.griffithii',
-      'Sonneratia.ovata',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acanthus ilicifolius',
+      'Acrostichum aureum',
+      'Acrostichum speciosum',
+      'Aegiceras corniculatum',
+      'Aegiceras floridum',
+      'Aglaia cucullata',
+      'Avicennia alba',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Avicennia rumphiana',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera hainesii',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Ceriops decandra',
+      'Ceriops tagal',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Excoecaria indica',
+      'Heritiera fomes',
+      'Heritiera globosa',
+      'Heritiera littoralis',
+      'Kandelia candel',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Osbornia octodonta',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Sonneratia griffithii',
+      'Sonneratia ovata',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -1124,17 +1124,17 @@ export const mangroveSpeciesPerCountryList = [
       code: 'MV'
     },
     species: [
-      'Acrostichum.aureum',
-      'Avicennia.marina',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Excoecaria.agallocha',
-      'Lumnitzera.racemosa',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Sonneratia.caseolaris'
+      'Acrostichum aureum',
+      'Avicennia marina',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Excoecaria agallocha',
+      'Lumnitzera racemosa',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Sonneratia caseolaris'
     ]
   },
   {
@@ -1143,11 +1143,11 @@ export const mangroveSpeciesPerCountryList = [
       code: 'MH'
     },
     species: [
-      'Bruguiera.gymnorhiza',
-      'Lumnitzera.littorea',
-      'Pemphis.acidula',
-      'Rhizophora.stylosa',
-      'Xylocarpus.granatum'
+      'Bruguiera gymnorhiza',
+      'Lumnitzera littorea',
+      'Pemphis acidula',
+      'Rhizophora stylosa',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1156,13 +1156,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'MQ'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -1170,14 +1170,14 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Mauritania',
       code: 'MR'
     },
-    species: ['Avicennia.germinans', 'Conocarpus.erectus', 'Rhizophora.racemosa']
+    species: ['Avicennia germinans', 'Conocarpus erectus', 'Rhizophora racemosa']
   },
   {
     country: {
       name: 'Mauritius',
       code: 'MU'
     },
-    species: ['Bruguiera.gymnorhiza', 'Rhizophora.mucronata']
+    species: ['Bruguiera gymnorhiza', 'Rhizophora mucronata']
   },
   {
     country: {
@@ -1185,15 +1185,15 @@ export const mangroveSpeciesPerCountryList = [
       code: 'YT'
     },
     species: [
-      'Acrostichum.aureum',
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Heritiera.littoralis',
-      'Lumnitzera.racemosa',
-      'Rhizophora.mucronata',
-      'Sonneratia.alba',
-      'Xylocarpus.granatum'
+      'Acrostichum aureum',
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Heritiera littoralis',
+      'Lumnitzera racemosa',
+      'Rhizophora mucronata',
+      'Sonneratia alba',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1202,14 +1202,14 @@ export const mangroveSpeciesPerCountryList = [
       code: 'MX'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.bicolor',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.samoensis'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia bicolor',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora samoensis'
     ]
   },
   {
@@ -1218,22 +1218,22 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Micronesia, Federated States of '
     },
     species: [
-      'Avicennia.alba',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Cynometra.iripa',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Xylocarpus.granatum'
+      'Avicennia alba',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Cynometra iripa',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1242,13 +1242,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'MS'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -1257,16 +1257,16 @@ export const mangroveSpeciesPerCountryList = [
       code: 'MZ'
     },
     species: [
-      'Acrostichum.aureum',
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Heritiera.littoralis',
-      'Lumnitzera.racemosa',
-      'Pemphis.acidula',
-      'Rhizophora.mucronata',
-      'Sonneratia.alba',
-      'Xylocarpus.granatum'
+      'Acrostichum aureum',
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Heritiera littoralis',
+      'Lumnitzera racemosa',
+      'Pemphis acidula',
+      'Rhizophora mucronata',
+      'Sonneratia alba',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1275,42 +1275,42 @@ export const mangroveSpeciesPerCountryList = [
       code: 'MM'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acrostichum.aureum',
-      'Acrostichum.speciosum',
-      'Aegialitis.rotundifolia',
-      'Aegiceras.corniculatum',
-      'Aglaia.cucullata',
-      'Avicennia.alba',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Ceriops.decandra',
-      'Ceriops.tagal',
-      'Cynometra.iripa',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Excoecaria.indica',
-      'Heritiera.fomes',
-      'Heritiera.littoralis',
-      'Kandelia.candel',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.apetala',
-      'Sonneratia.caseolaris',
-      'Sonneratia.griffithii',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acrostichum aureum',
+      'Acrostichum speciosum',
+      'Aegialitis rotundifolia',
+      'Aegiceras corniculatum',
+      'Aglaia cucullata',
+      'Avicennia alba',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Ceriops decandra',
+      'Ceriops tagal',
+      'Cynometra iripa',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Excoecaria indica',
+      'Heritiera fomes',
+      'Heritiera littoralis',
+      'Kandelia candel',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia apetala',
+      'Sonneratia caseolaris',
+      'Sonneratia griffithii',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -1319,10 +1319,10 @@ export const mangroveSpeciesPerCountryList = [
       code: 'NR'
     },
     species: [
-      'Bruguiera.gymnorhiza',
-      'Lumnitzera.littorea',
-      'Rhizophora.apiculata',
-      'Rhizophora.stylosa'
+      'Bruguiera gymnorhiza',
+      'Lumnitzera littorea',
+      'Rhizophora apiculata',
+      'Rhizophora stylosa'
     ]
   },
   {
@@ -1331,23 +1331,23 @@ export const mangroveSpeciesPerCountryList = [
       code: 'NC'
     },
     species: [
-      'Acrostichum.speciosum',
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.samoensis',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Xylocarpus.granatum'
+      'Acrostichum speciosum',
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora samoensis',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1355,7 +1355,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'New Zealand',
       code: 'NZ'
     },
-    species: ['Avicennia.marina']
+    species: ['Avicennia marina']
   },
   {
     country: {
@@ -1363,15 +1363,15 @@ export const mangroveSpeciesPerCountryList = [
       code: 'NI'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.bicolor',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Pelliciera.rhizophorae',
-      'Rhizophora.mangle',
-      'Rhizophora.samoensis'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia bicolor',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Pelliciera rhizophorae',
+      'Rhizophora mangle',
+      'Rhizophora samoensis'
     ]
   },
   {
@@ -1380,13 +1380,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'NG'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -1394,14 +1394,14 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Niue',
       code: 'NU'
     },
-    species: ['Acrostichum.speciosum', 'Excoecaria.agallocha']
+    species: ['Acrostichum speciosum', 'Excoecaria agallocha']
   },
   {
     country: {
       name: 'Norfolk Island',
       code: 'NF'
     },
-    species: ['Excoecaria.agallocha']
+    species: ['Excoecaria agallocha']
   },
   {
     country: {
@@ -1409,15 +1409,15 @@ export const mangroveSpeciesPerCountryList = [
       code: 'MP'
     },
     species: [
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.stylosa',
-      'Xylocarpus.granatum'
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora stylosa',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1425,7 +1425,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Oman',
       code: 'OM'
     },
-    species: ['Avicennia.marina', 'Rhizophora.mucronata']
+    species: ['Avicennia marina', 'Rhizophora mucronata']
   },
   {
     country: {
@@ -1433,11 +1433,11 @@ export const mangroveSpeciesPerCountryList = [
       code: 'PK'
     },
     species: [
-      'Acanthus.ilicifolius',
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Rhizophora.mucronata'
+      'Acanthus ilicifolius',
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Rhizophora mucronata'
     ]
   },
   {
@@ -1446,27 +1446,27 @@ export const mangroveSpeciesPerCountryList = [
       code: 'PW'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acrostichum.aureum',
-      'Acrostichum.speciosum',
-      'Avicennia.alba',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Cynometra.iripa',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Nypa.fruticans',
-      'Osbornia.octodonta',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.ovata',
-      'Xylocarpus.granatum'
+      'Acanthus ebracteatus',
+      'Acrostichum aureum',
+      'Acrostichum speciosum',
+      'Avicennia alba',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Cynometra iripa',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Nypa fruticans',
+      'Osbornia octodonta',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia ovata',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1475,18 +1475,18 @@ export const mangroveSpeciesPerCountryList = [
       code: 'PA'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.bicolor',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Mora.oleifera',
-      'Pelliciera.rhizophorae',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa',
-      'Rhizophora.samoensis',
-      'Tabebuia.palustris'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia bicolor',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Mora oleifera',
+      'Pelliciera rhizophorae',
+      'Rhizophora mangle',
+      'Rhizophora racemosa',
+      'Rhizophora samoensis',
+      'Tabebuia palustris'
     ]
   },
   {
@@ -1495,46 +1495,46 @@ export const mangroveSpeciesPerCountryList = [
       code: 'PG'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acanthus.ilicifolius',
-      'Acrostichum.aureum',
-      'Acrostichum.speciosum',
-      'Aegialitis.annulata',
-      'Aegiceras.corniculatum',
-      'Avicennia.alba',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Avicennia.rumphiana',
-      'Bruguiera.cylindrica',
-      'Bruguiera.exaristata',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.hainesii',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Camptostemon.schultzii',
-      'Ceriops.australis',
-      'Ceriops.tagal',
-      'Cynometra.iripa',
-      'Diospyros.littorea',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Excoecaria.indica',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Osbornia.octodonta',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Sonneratia.lanceolata',
-      'Sonneratia.ovata',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acanthus ilicifolius',
+      'Acrostichum aureum',
+      'Acrostichum speciosum',
+      'Aegialitis annulata',
+      'Aegiceras corniculatum',
+      'Avicennia alba',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Avicennia rumphiana',
+      'Bruguiera cylindrica',
+      'Bruguiera exaristata',
+      'Bruguiera gymnorhiza',
+      'Bruguiera hainesii',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Camptostemon schultzii',
+      'Ceriops australis',
+      'Ceriops tagal',
+      'Cynometra iripa',
+      'Diospyros littorea',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Excoecaria indica',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Osbornia octodonta',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Sonneratia lanceolata',
+      'Sonneratia ovata',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -1543,10 +1543,10 @@ export const mangroveSpeciesPerCountryList = [
       code: 'PE'
     },
     species: [
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.samoensis'
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora samoensis'
     ]
   },
   {
@@ -1555,40 +1555,40 @@ export const mangroveSpeciesPerCountryList = [
       code: 'PH'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acrostichum.aureum',
-      'Aegiceras.corniculatum',
-      'Aegiceras.floridum',
-      'Aglaia.cucullata',
-      'Avicennia.alba',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Avicennia.rumphiana',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Camptostemon.philippinense',
-      'Ceriops.tagal',
-      'Cynometra.iripa',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Kandelia.candel',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Osbornia.octodonta',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Sonneratia.ovata',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acrostichum aureum',
+      'Aegiceras corniculatum',
+      'Aegiceras floridum',
+      'Aglaia cucullata',
+      'Avicennia alba',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Avicennia rumphiana',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Camptostemon philippinense',
+      'Ceriops tagal',
+      'Cynometra iripa',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Kandelia candel',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Osbornia octodonta',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Sonneratia ovata',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -1596,21 +1596,21 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Puerto Rico',
       code: 'PR'
     },
-    species: ['Acrostichum.aureum', 'Rhizophora.mangle']
+    species: ['Acrostichum aureum', 'Rhizophora mangle']
   },
   {
     country: {
       name: 'Qatar',
       code: 'QA'
     },
-    species: ['Avicennia.marina']
+    species: ['Avicennia marina']
   },
   {
     country: {
       code: 'RE',
       name: 'R\u00e9union'
     },
-    species: ['Bruguiera.gymnorhiza', 'Rhizophora.mucronata']
+    species: ['Bruguiera gymnorhiza', 'Rhizophora mucronata']
   },
   {
     country: {
@@ -1618,10 +1618,10 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Saint Barth\u00e9lemy'
     },
     species: [
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -1630,13 +1630,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'KN'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -1645,13 +1645,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'LC'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -1660,13 +1660,13 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Saint Martin (French part)'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -1675,13 +1675,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'VC'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -1689,7 +1689,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'American Samoa',
       code: 'AS'
     },
-    species: ['Acrostichum.speciosum', 'Bruguiera.gymnorhiza', 'Rhizophora.samoensis']
+    species: ['Acrostichum speciosum', 'Bruguiera gymnorhiza', 'Rhizophora samoensis']
   },
   {
     country: {
@@ -1697,11 +1697,11 @@ export const mangroveSpeciesPerCountryList = [
       code: 'ST'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -1709,7 +1709,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Saudi Arabia',
       code: 'SA'
     },
-    species: ['Avicennia.marina', 'Rhizophora.mucronata']
+    species: ['Avicennia marina', 'Rhizophora mucronata']
   },
   {
     country: {
@@ -1717,12 +1717,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'SN'
     },
     species: [
-      'Acrostichum.aureum',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -1731,15 +1731,15 @@ export const mangroveSpeciesPerCountryList = [
       code: 'SC'
     },
     species: [
-      'Acrostichum.aureum',
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Lumnitzera.racemosa',
-      'Pemphis.acidula',
-      'Rhizophora.mucronata',
-      'Sonneratia.alba',
-      'Xylocarpus.granatum'
+      'Acrostichum aureum',
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Lumnitzera racemosa',
+      'Pemphis acidula',
+      'Rhizophora mucronata',
+      'Sonneratia alba',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1748,13 +1748,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'SL'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -1763,37 +1763,37 @@ export const mangroveSpeciesPerCountryList = [
       code: 'SG'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acanthus.ilicifolius',
-      'Acrostichum.aureum',
-      'Acrostichum.speciosum',
-      'Aegiceras.corniculatum',
-      'Avicennia.alba',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.hainesii',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Ceriops.tagal',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Kandelia.candel',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Sonneratia.ovata',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acanthus ilicifolius',
+      'Acrostichum aureum',
+      'Acrostichum speciosum',
+      'Aegiceras corniculatum',
+      'Avicennia alba',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera hainesii',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Ceriops tagal',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Kandelia candel',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Sonneratia ovata',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -1802,11 +1802,11 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Sint Maarten (Dutch part)'
     },
     species: [
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -1815,31 +1815,31 @@ export const mangroveSpeciesPerCountryList = [
       code: 'SB'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acrostichum.speciosum',
-      'Aegiceras.corniculatum',
-      'Avicennia.alba',
-      'Avicennia.marina',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Ceriops.tagal',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Excoecaria.indica',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acrostichum speciosum',
+      'Aegiceras corniculatum',
+      'Avicennia alba',
+      'Avicennia marina',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Ceriops tagal',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Excoecaria indica',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -1848,14 +1848,14 @@ export const mangroveSpeciesPerCountryList = [
       code: 'SO'
     },
     species: [
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Heritiera.littoralis',
-      'Lumnitzera.racemosa',
-      'Rhizophora.mucronata',
-      'Sonneratia.alba',
-      'Xylocarpus.granatum'
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Heritiera littoralis',
+      'Lumnitzera racemosa',
+      'Rhizophora mucronata',
+      'Sonneratia alba',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1864,13 +1864,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'ZA'
     },
     species: [
-      'Acrostichum.aureum',
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Lumnitzera.racemosa',
-      'Rhizophora.mucronata',
-      'Xylocarpus.granatum'
+      'Acrostichum aureum',
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Lumnitzera racemosa',
+      'Rhizophora mucronata',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1879,28 +1879,28 @@ export const mangroveSpeciesPerCountryList = [
       code: 'LK'
     },
     species: [
-      'Acanthus.ilicifolius',
-      'Acrostichum.aureum',
-      'Aegiceras.corniculatum',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.parviflora',
-      'Ceriops.tagal',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Xylocarpus.granatum'
+      'Acanthus ilicifolius',
+      'Acrostichum aureum',
+      'Aegiceras corniculatum',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera parviflora',
+      'Ceriops tagal',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1908,7 +1908,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Sudan',
       code: 'SD'
     },
-    species: ['Avicennia.marina', 'Rhizophora.mucronata']
+    species: ['Avicennia marina', 'Rhizophora mucronata']
   },
   {
     country: {
@@ -1916,13 +1916,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'SR'
     },
     species: [
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -1931,22 +1931,22 @@ export const mangroveSpeciesPerCountryList = [
       code: 'TW'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acanthus.ilicifolius',
-      'Aegiceras.corniculatum',
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Kandelia.obovata',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Sonneratia.alba'
+      'Acanthus ebracteatus',
+      'Acanthus ilicifolius',
+      'Aegiceras corniculatum',
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Kandelia obovata',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Sonneratia alba'
     ]
   },
   {
@@ -1955,16 +1955,16 @@ export const mangroveSpeciesPerCountryList = [
       code: 'TZ'
     },
     species: [
-      'Acrostichum.aureum',
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Ceriops.tagal',
-      'Heritiera.littoralis',
-      'Lumnitzera.racemosa',
-      'Pemphis.acidula',
-      'Rhizophora.mucronata',
-      'Sonneratia.alba',
-      'Xylocarpus.granatum'
+      'Acrostichum aureum',
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Ceriops tagal',
+      'Heritiera littoralis',
+      'Lumnitzera racemosa',
+      'Pemphis acidula',
+      'Rhizophora mucronata',
+      'Sonneratia alba',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -1973,41 +1973,41 @@ export const mangroveSpeciesPerCountryList = [
       code: 'TH'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acrostichum.aureum',
-      'Acrostichum.speciosum',
-      'Aegialitis.rotundifolia',
-      'Aegiceras.corniculatum',
-      'Aglaia.cucullata',
-      'Avicennia.alba',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Ceriops.decandra',
-      'Ceriops.tagal',
-      'Cynometra.iripa',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Heritiera.fomes',
-      'Heritiera.littoralis',
-      'Kandelia.candel',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Sonneratia.griffithii',
-      'Sonneratia.ovata',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acrostichum aureum',
+      'Acrostichum speciosum',
+      'Aegialitis rotundifolia',
+      'Aegiceras corniculatum',
+      'Aglaia cucullata',
+      'Avicennia alba',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Ceriops decandra',
+      'Ceriops tagal',
+      'Cynometra iripa',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Heritiera fomes',
+      'Heritiera littoralis',
+      'Kandelia candel',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Sonneratia griffithii',
+      'Sonneratia ovata',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -2015,7 +2015,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Timor-Leste',
       code: 'TL'
     },
-    species: ['Acanthus.ilicifolius']
+    species: ['Acanthus ilicifolius']
   },
   {
     country: {
@@ -2023,13 +2023,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'TG'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -2037,7 +2037,7 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Tokelau',
       code: 'TK'
     },
-    species: ['Pemphis.acidula']
+    species: ['Pemphis acidula']
   },
   {
     country: {
@@ -2045,14 +2045,14 @@ export const mangroveSpeciesPerCountryList = [
       code: 'TO'
     },
     species: [
-      'Acrostichum.speciosum',
-      'Bruguiera.gymnorhiza',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Rhizophora.samoensis',
-      'Rhizophora.stylosa',
-      'Xylocarpus.granatum'
+      'Acrostichum speciosum',
+      'Bruguiera gymnorhiza',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Rhizophora samoensis',
+      'Rhizophora stylosa',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -2061,14 +2061,14 @@ export const mangroveSpeciesPerCountryList = [
       code: 'TT'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -2077,11 +2077,11 @@ export const mangroveSpeciesPerCountryList = [
       code: 'TC'
     },
     species: [
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -2089,14 +2089,14 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Tuvalu',
       code: 'TV'
     },
-    species: ['Lumnitzera.littorea', 'Pemphis.acidula', 'Rhizophora.stylosa', 'Sonneratia.alba']
+    species: ['Lumnitzera littorea', 'Pemphis acidula', 'Rhizophora stylosa', 'Sonneratia alba']
   },
   {
     country: {
       name: 'United Arab Emirates',
       code: 'AE'
     },
-    species: ['Avicennia.marina', 'Rhizophora.mucronata']
+    species: ['Avicennia marina', 'Rhizophora mucronata']
   },
   {
     country: {
@@ -2104,12 +2104,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'US'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -2118,13 +2118,13 @@ export const mangroveSpeciesPerCountryList = [
       code: 'UM'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Pemphis.acidula',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Pemphis acidula',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -2133,19 +2133,19 @@ export const mangroveSpeciesPerCountryList = [
       code: 'VU'
     },
     species: [
-      'Avicennia.marina',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.parviflora',
-      'Ceriops.tagal',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Lumnitzera.littorea',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Xylocarpus.granatum'
+      'Avicennia marina',
+      'Bruguiera gymnorhiza',
+      'Bruguiera parviflora',
+      'Ceriops tagal',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Lumnitzera littorea',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Xylocarpus granatum'
     ]
   },
   {
@@ -2154,14 +2154,14 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Venezuela, Bolivarian Republic of'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Avicennia.schaueriana',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle',
-      'Rhizophora.racemosa'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Avicennia schaueriana',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle',
+      'Rhizophora racemosa'
     ]
   },
   {
@@ -2170,39 +2170,39 @@ export const mangroveSpeciesPerCountryList = [
       code: 'VN'
     },
     species: [
-      'Acanthus.ebracteatus',
-      'Acanthus.ilicifolius',
-      'Acrostichum.aureum',
-      'Acrostichum.speciosum',
-      'Aegiceras.corniculatum',
-      'Aegiceras.floridum',
-      'Avicennia.alba',
-      'Avicennia.marina',
-      'Avicennia.officinalis',
-      'Bruguiera.cylindrica',
-      'Bruguiera.gymnorhiza',
-      'Bruguiera.parviflora',
-      'Bruguiera.sexangula',
-      'Ceriops.tagal',
-      'Cynometra.iripa',
-      'Dolichandrone.spathacea',
-      'Excoecaria.agallocha',
-      'Heritiera.littoralis',
-      'Kandelia.candel',
-      'Kandelia.obovata',
-      'Lumnitzera.littorea',
-      'Lumnitzera.racemosa',
-      'Nypa.fruticans',
-      'Pemphis.acidula',
-      'Rhizophora.apiculata',
-      'Rhizophora.mucronata',
-      'Rhizophora.stylosa',
-      'Scyphiphora.hydrophylacea',
-      'Sonneratia.alba',
-      'Sonneratia.caseolaris',
-      'Sonneratia.ovata',
-      'Xylocarpus.granatum',
-      'Xylocarpus.moluccensis'
+      'Acanthus ebracteatus',
+      'Acanthus ilicifolius',
+      'Acrostichum aureum',
+      'Acrostichum speciosum',
+      'Aegiceras corniculatum',
+      'Aegiceras floridum',
+      'Avicennia alba',
+      'Avicennia marina',
+      'Avicennia officinalis',
+      'Bruguiera cylindrica',
+      'Bruguiera gymnorhiza',
+      'Bruguiera parviflora',
+      'Bruguiera sexangula',
+      'Ceriops tagal',
+      'Cynometra iripa',
+      'Dolichandrone spathacea',
+      'Excoecaria agallocha',
+      'Heritiera littoralis',
+      'Kandelia candel',
+      'Kandelia obovata',
+      'Lumnitzera littorea',
+      'Lumnitzera racemosa',
+      'Nypa fruticans',
+      'Pemphis acidula',
+      'Rhizophora apiculata',
+      'Rhizophora mucronata',
+      'Rhizophora stylosa',
+      'Scyphiphora hydrophylacea',
+      'Sonneratia alba',
+      'Sonneratia caseolaris',
+      'Sonneratia ovata',
+      'Xylocarpus granatum',
+      'Xylocarpus moluccensis'
     ]
   },
   {
@@ -2211,12 +2211,12 @@ export const mangroveSpeciesPerCountryList = [
       code: 'VG'
     },
     species: [
-      'Acrostichum.aureum',
-      'Acrostichum.danaeifolium',
-      'Avicennia.germinans',
-      'Conocarpus.erectus',
-      'Laguncularia.racemosa',
-      'Rhizophora.mangle'
+      'Acrostichum aureum',
+      'Acrostichum danaeifolium',
+      'Avicennia germinans',
+      'Conocarpus erectus',
+      'Laguncularia racemosa',
+      'Rhizophora mangle'
     ]
   },
   {
@@ -2224,13 +2224,13 @@ export const mangroveSpeciesPerCountryList = [
       name: 'Wallis and Futuna',
       code: 'WF'
     },
-    species: ['Acrostichum.speciosum', 'Bruguiera.gymnorhiza']
+    species: ['Acrostichum speciosum', 'Bruguiera gymnorhiza']
   },
   {
     country: {
       name: 'Yemen',
       code: 'YE'
     },
-    species: ['Avicennia.marina', 'Rhizophora.mucronata']
+    species: ['Avicennia marina', 'Rhizophora mucronata']
   }
 ]
