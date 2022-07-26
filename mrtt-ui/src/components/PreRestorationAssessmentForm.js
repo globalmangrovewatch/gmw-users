@@ -16,6 +16,7 @@ import { useState, useCallback } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
+import { styled } from '@mui/material/styles'
 
 import {
   Form,
@@ -86,7 +87,7 @@ function PreRestorationAssessmentForm() {
       .of(
         yup.object().shape({
           mangroveSpeciesType: yup.mixed(),
-          percentageComposition: yup.array().nullable()
+          percentageComposition: yup.number().typeError('Please enter a number')
         })
       )
       .default([]),
@@ -456,18 +457,28 @@ function PreRestorationAssessmentForm() {
               return (
                 <SelectedInputSection key={mangroveSpecieIndex}>
                   <FormLabel>{mangroveSpecie.mangroveSpeciesType}</FormLabel>
-                  <Controller
-                    name={`speciesComposition.${mangroveSpecieIndex}.percentageComposition`}
-                    control={control}
-                    defaultValue={''}
-                    render={({ field }) => (
-                      <TextField {...field} sx={{ maxWidth: '10em' }} label='% Number'></TextField>
-                    )}
-                  />
+                  <TabularInputRowDiv>
+                    <Controller
+                      name={`speciesComposition.${mangroveSpecieIndex}.percentageComposition`}
+                      control={control}
+                      defaultValue={0}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          sx={{ maxWidth: '10em' }}
+                          label='% Number'></TextField>
+                      )}
+                    />
+                    <ErrorText>
+                      {
+                        errors.speciesComposition?.[mangroveSpecieIndex]?.percentageComposition
+                          ?.message
+                      }
+                    </ErrorText>
+                  </TabularInputRowDiv>
                 </SelectedInputSection>
               )
             })}
-            <ErrorText>{errors.speciesComposition?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
         {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
@@ -538,3 +549,8 @@ function PreRestorationAssessmentForm() {
 }
 
 export default PreRestorationAssessmentForm
+
+const TabularInputRowDiv = styled(FormLabel)`
+  display: flex;
+  flex-direction: column;
+`
