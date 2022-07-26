@@ -145,14 +145,14 @@ function PreRestorationAssessmentForm() {
   const loadServerData = useCallback(
     (serverResponse) => {
       const defaultMeasurementsTaken = [
-        { measurementType: 'Tidal range' },
-        { measurementType: 'Elevation to sea level' },
-        { measurementType: 'Water salinity' },
-        { measurementType: 'Soil pore water salinity' },
+        { measurementType: 'Tidal range (cm)' },
+        { measurementType: 'Elevation to sea level (cm)' },
+        { measurementType: 'Water salinity (ppt)' },
+        { measurementType: 'Soil pore water salinity (ppt)' },
         { measurementType: 'Water PH' },
         { measurementType: 'Soil pore water PH' },
         { measurementType: 'Soil type' },
-        { measurementType: 'Soil organic matter' }
+        { measurementType: 'Soil organic matter (%)' }
       ]
 
       const siteCountriesResponse = getSiteCountries(serverResponse)
