@@ -80,7 +80,7 @@ function PreRestorationAssessmentForm() {
         .max(new Date().getFullYear(), language.form.error.yearTooHigh)
     }),
     naturalRegenerationAtSite: yup.string(),
-    mangroveSpeciesPresent: yup.array().of(yup.string()).nullable(),
+    mangroveSpeciesPresent: yup.array().of(yup.string()),
     speciesComposition: yup
       .array()
       .of(
@@ -138,7 +138,7 @@ function PreRestorationAssessmentForm() {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
+  const [mangroveSpeciesList, setMangroveSpeciesList] = useState([])
   const [mangroveSpeciesTypesChecked, setMangroveSpeciesTypesChecked] = useState([])
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
 
@@ -161,16 +161,33 @@ function PreRestorationAssessmentForm() {
         const countriesList = siteCountriesResponse.map(
           (countryItem) => countryItem.properties.country
         )
-        const species = []
+        // mangroveSpeciesPresent list should display country specific species at the top, with all
+        // species below the country specific list, removing duplicates from the second list
+        const allSpecies = []
+        const countrySelectedSpecies = []
+        let countrySelectedSpeciesWithAllSpecies = []
         countriesList.forEach((countrySelected) => {
           mangroveSpeciesPerCountryList.forEach((countryItem) => {
             if (countryItem.country.name === countrySelected) {
-              species.push(...countryItem.species)
+              countrySelectedSpecies.push(...countryItem.species)
             }
+            allSpecies.push(...countryItem.species)
           })
         })
-        const uniqueSpecies = [...new Set(species)]
-        setMangroveSpeciesForCountriesSelected(uniqueSpecies)
+        const uniqueCountrySelectedSpecies = [...new Set(countrySelectedSpecies)]
+        uniqueCountrySelectedSpecies.sort()
+        const uniqueAllSpecies = [...new Set(allSpecies)]
+        const filteredUniqueAllSpecies = uniqueAllSpecies.filter(
+          (specie) => !uniqueCountrySelectedSpecies.includes(specie)
+        )
+        filteredUniqueAllSpecies.sort()
+
+        countrySelectedSpeciesWithAllSpecies = [
+          ...uniqueCountrySelectedSpecies,
+          ...filteredUniqueAllSpecies
+        ]
+
+        setMangroveSpeciesList(countrySelectedSpeciesWithAllSpecies)
       }
       setMangroveSpeciesTypesChecked(getMangroveSpecies(serverResponse))
 
@@ -422,29 +439,32 @@ function PreRestorationAssessmentForm() {
             </FormQuestionDiv>
             <FormQuestionDiv>
               <StickyFormLabel>{questions.mangroveSpeciesPresent.question}</StickyFormLabel>
-              <List>
-                {mangroveSpeciesForCountriesSelected.length ? (
-                  mangroveSpeciesForCountriesSelected.map((specie, index) => (
-                    <ListItem key={index}>
-                      <Box>
-                        <Box sx={{ fontStyle: 'italic' }}>
-                          <Checkbox
-                            value={specie}
-                            checked={mangroveSpeciesTypesChecked.includes(specie)}
-                            onChange={(event) =>
-                              handleMangroveSpeciesPresentOnChange(event, specie)
-                            }></Checkbox>
-                          <Typography variant='subtitle'>{specie}</Typography>
+              {mangroveSpeciesList.length ? (
+                <List>
+                  {mangroveSpeciesList.length ? (
+                    mangroveSpeciesList.map((specie, index) => (
+                      <ListItem key={index}>
+                        <Box>
+                          <Box sx={{ fontStyle: 'italic' }}>
+                            <Checkbox
+                              value={specie}
+                              checked={mangroveSpeciesTypesChecked.includes(specie)}
+                              onChange={(event) =>
+                                handleMangroveSpeciesPresentOnChange(event, specie)
+                              }></Checkbox>
+                            <Typography variant='subtitle'>{specie}</Typography>
+                          </Box>
                         </Box>
-                      </Box>
-                    </ListItem>
-                  ))
-                ) : (
-                  <ErrorText>
-                    No items to display. Please select countries in Site Details and Location (1.2).
-                  </ErrorText>
-                )}
-              </List>
+                      </ListItem>
+                    ))
+                  ) : (
+                    <ErrorText>
+                      No items to display. Please select countries in Site Details and Location
+                      (1.2).
+                    </ErrorText>
+                  )}
+                </List>
+              ) : null}
               <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
             </FormQuestionDiv>
           </>
