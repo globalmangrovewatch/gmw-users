@@ -427,7 +427,7 @@ function PreRestorationAssessmentForm() {
                   mangroveSpeciesForCountriesSelected.map((specie, index) => (
                     <ListItem key={index}>
                       <Box>
-                        <Box>
+                        <Box sx={{ fontStyle: 'italic' }}>
                           <Checkbox
                             value={specie}
                             checked={mangroveSpeciesTypesChecked.includes(specie)}
