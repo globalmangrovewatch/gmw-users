@@ -2,13 +2,13 @@ import { Edit } from '@mui/icons-material'
 import React from 'react'
 
 import language from '../language'
-import { ButtonSecondary } from '../styles/buttons'
+import { LinkLooksLikeButtonSecondary } from '../styles/typography'
 
 const EditLink = (props) => {
   return (
-    <ButtonSecondary {...props}>
+    <LinkLooksLikeButtonSecondary {...props}>
       <Edit /> {language.buttons.edit}
-    </ButtonSecondary>
+    </LinkLooksLikeButtonSecondary>
   )
 }
 

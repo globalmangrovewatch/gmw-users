@@ -2,7 +2,6 @@ import { Stack } from '@mui/material'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
-import { ButtonPrimary } from '../styles/buttons'
 import {
   Card,
   ContentWrapper,
@@ -11,7 +10,14 @@ import {
   RowSpaceBetween,
   TitleAndActionContainer
 } from '../styles/containers'
-import { H4, ItemTitle, Link, PageTitle, SmallUpperCase } from '../styles/typography'
+import {
+  H4,
+  ItemTitle,
+  Link,
+  LinkLooksLikeButtonPrimary,
+  PageTitle,
+  SmallUpperCase
+} from '../styles/typography'
 import { UlUndecorated } from '../styles/lists'
 import EditLink from '../components/EditLink'
 import language from '../language'
@@ -90,9 +96,9 @@ function Landscapes() {
     <ContentWrapper>
       <TitleAndActionContainer>
         <PageTitle>{language.pages.landscapes.title}</PageTitle>
-        <ButtonPrimary component={Link} to='/landscapes/new'>
+        <LinkLooksLikeButtonPrimary to='/landscapes/new'>
           {language.pages.landscapes.newLandscapeButton}
-        </ButtonPrimary>
+        </LinkLooksLikeButtonPrimary>
       </TitleAndActionContainer>
       <Stack>{landscapesList}</Stack>
     </ContentWrapper>
