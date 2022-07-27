@@ -1,12 +1,12 @@
 const projectDetails = {
   hasProjectEndDate: {
-    question: '1.1a Does the project have an end date?'
+    question: '1.1b Does the project have an end date?'
   },
   projectStartDate: {
-    question: '1.1b'
+    question: '1.1a Project start date'
   },
   projectEndDate: {
-    question: '1.1c'
+    question: '1.1c Project end date'
   },
   countries: {
     question: '1.2 What country/countries is the site located in?'
