@@ -51,5 +51,14 @@ export const questionMapping = {
     localParticipantTraining: '6.3',
     organizationsProvidingTraining: '6.3a',
     otherActivitiesImplemented: '6.4'
+  },
+  costs: {
+    supportForActivities: '7.1',
+    projectInterventionFunding: '7.2',
+    projectFunderNames: '7.3',
+    costOfProjectActivities: '7.4',
+    breakdownOfCost: '7.5',
+    percentageSplitOfActivities: '7.5a',
+    nonmonetisedContributions: '7.6'
   }
 }

@@ -1,5 +1,5 @@
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
+import { FormControlLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { useForm, Controller } from 'react-hook-form'
@@ -177,6 +177,33 @@ function ProjectDetailsForm() {
         currentSection='project-details'
       />
       <Form>
+        {/* Start Date */}
+        <FormQuestionDiv>
+          <StickyFormLabel id='project-start-date-label'>
+            {questions.projectStartDate.question}*
+          </StickyFormLabel>
+          <Controller
+            name='projectStartDate'
+            control={control}
+            defaultValue={new Date()}
+            render={({ field }) => (
+              <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
+                <Stack spacing={3}>
+                  <MobileDatePicker
+                    id='start-date'
+                    label='date'
+                    value={field.value}
+                    onChange={(newValue) => {
+                      field.onChange(newValue?.toISOString())
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </Stack>
+              </LocalizationProvider>
+            )}
+          />
+          <ErrorText>{errors.projectStartDate?.message}</ErrorText>
+        </FormQuestionDiv>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
           <StickyFormLabel id='has-project-end-date-label'>
@@ -197,36 +224,12 @@ function ProjectDetailsForm() {
             )}
           />
         </FormQuestionDiv>
-        {/* Start Date */}
-        <FormQuestionDiv>
-          <FormLabel>Project Duration*</FormLabel>
-          <FormLabel htmlFor='start-date'>{questions.projectStartDate.question}</FormLabel>
-          <Controller
-            name='projectStartDate'
-            control={control}
-            defaultValue={new Date()}
-            render={({ field }) => (
-              <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                <Stack spacing={3}>
-                  <MobileDatePicker
-                    id='start-date'
-                    label='Project start date'
-                    value={field.value}
-                    onChange={(newValue) => {
-                      field.onChange(newValue?.toISOString())
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </Stack>
-              </LocalizationProvider>
-            )}
-          />
-          <ErrorText>{errors.projectStartDate?.message}</ErrorText>
-        </FormQuestionDiv>
         {/* End Date */}
         {showEndDateInput && (
           <FormQuestionDiv>
-            <FormLabel htmlFor='end-date'>{questions.projectEndDate.question}</FormLabel>
+            <StickyFormLabel id='project-end-date-label'>
+              {questions.projectEndDate.question}*
+            </StickyFormLabel>
             <Controller
               name='projectEndDate'
               control={control}
@@ -235,7 +238,7 @@ function ProjectDetailsForm() {
                   <Stack spacing={3}>
                     <MobileDatePicker
                       id='end-date'
-                      label='Project end date'
+                      label='date'
                       value={field.value}
                       onChange={(newValue) => {
                         field.onChange(newValue?.toISOString())

@@ -54,7 +54,7 @@ const pages = {
     delete: 'Delete this landscape',
     deletePropmt: {
       title: 'Delete Landscape',
-      propmtText: 'Are you sure you wan to delete this landscape?',
+      propmtText: 'Are you sure you want to delete this landscape?',
       buttonText: 'Yes, delete this landscape'
     },
     isAssociatedSites:

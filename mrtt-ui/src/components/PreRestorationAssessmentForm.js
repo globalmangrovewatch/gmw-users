@@ -16,6 +16,7 @@ import { useState, useCallback } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
+import { styled } from '@mui/material/styles'
 
 import {
   Form,
@@ -80,13 +81,13 @@ function PreRestorationAssessmentForm() {
         .max(new Date().getFullYear(), language.form.error.yearTooHigh)
     }),
     naturalRegenerationAtSite: yup.string(),
-    mangroveSpeciesPresent: yup.array().of(yup.string()).nullable(),
+    mangroveSpeciesPresent: yup.array().of(yup.string()),
     speciesComposition: yup
       .array()
       .of(
         yup.object().shape({
           mangroveSpeciesType: yup.mixed(),
-          percentageComposition: yup.array().nullable()
+          percentageComposition: yup.number().typeError('Please enter a number')
         })
       )
       .default([]),
@@ -138,21 +139,21 @@ function PreRestorationAssessmentForm() {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
+  const [mangroveSpeciesList, setMangroveSpeciesList] = useState([])
   const [mangroveSpeciesTypesChecked, setMangroveSpeciesTypesChecked] = useState([])
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
 
   const loadServerData = useCallback(
     (serverResponse) => {
       const defaultMeasurementsTaken = [
-        { measurementType: 'Tidal range' },
-        { measurementType: 'Elevation to sea level' },
-        { measurementType: 'Water salinity' },
-        { measurementType: 'Soil pore water salinity' },
+        { measurementType: 'Tidal range (cm)' },
+        { measurementType: 'Elevation to sea level (cm)' },
+        { measurementType: 'Water salinity (ppt)' },
+        { measurementType: 'Soil pore water salinity (ppt)' },
         { measurementType: 'Water PH' },
         { measurementType: 'Soil pore water PH' },
         { measurementType: 'Soil type' },
-        { measurementType: 'Soil organic matter' }
+        { measurementType: 'Soil organic matter (%)' }
       ]
 
       const siteCountriesResponse = getSiteCountries(serverResponse)
@@ -161,16 +162,33 @@ function PreRestorationAssessmentForm() {
         const countriesList = siteCountriesResponse.map(
           (countryItem) => countryItem.properties.country
         )
-        const species = []
+        // mangroveSpeciesPresent list should display country specific species at the top, with all
+        // species below the country specific list, removing duplicates from the second list
+        const allSpecies = []
+        const countrySelectedSpecies = []
+        let countrySelectedSpeciesWithAllSpecies = []
         countriesList.forEach((countrySelected) => {
           mangroveSpeciesPerCountryList.forEach((countryItem) => {
             if (countryItem.country.name === countrySelected) {
-              species.push(...countryItem.species)
+              countrySelectedSpecies.push(...countryItem.species)
             }
+            allSpecies.push(...countryItem.species)
           })
         })
-        const uniqueSpecies = [...new Set(species)]
-        setMangroveSpeciesForCountriesSelected(uniqueSpecies)
+        const uniqueCountrySelectedSpecies = [...new Set(countrySelectedSpecies)]
+        uniqueCountrySelectedSpecies.sort()
+        const uniqueAllSpecies = [...new Set(allSpecies)]
+        const filteredUniqueAllSpecies = uniqueAllSpecies.filter(
+          (specie) => !uniqueCountrySelectedSpecies.includes(specie)
+        )
+        filteredUniqueAllSpecies.sort()
+
+        countrySelectedSpeciesWithAllSpecies = [
+          ...uniqueCountrySelectedSpecies,
+          ...filteredUniqueAllSpecies
+        ]
+
+        setMangroveSpeciesList(countrySelectedSpeciesWithAllSpecies)
       }
       setMangroveSpeciesTypesChecked(getMangroveSpecies(serverResponse))
 
@@ -423,29 +441,32 @@ function PreRestorationAssessmentForm() {
             </FormQuestionDiv>
             <FormQuestionDiv>
               <StickyFormLabel>{questions.mangroveSpeciesPresent.question}</StickyFormLabel>
-              <List>
-                {mangroveSpeciesForCountriesSelected.length ? (
-                  mangroveSpeciesForCountriesSelected.map((specie, index) => (
-                    <ListItem key={index}>
-                      <Box>
+              {mangroveSpeciesList.length ? (
+                <List>
+                  {mangroveSpeciesList.length ? (
+                    mangroveSpeciesList.map((specie, index) => (
+                      <ListItem key={index}>
                         <Box>
-                          <Checkbox
-                            value={specie}
-                            checked={mangroveSpeciesTypesChecked.includes(specie)}
-                            onChange={(event) =>
-                              handleMangroveSpeciesPresentOnChange(event, specie)
-                            }></Checkbox>
-                          <Typography variant='subtitle'>{specie}</Typography>
+                          <Box sx={{ fontStyle: 'italic' }}>
+                            <Checkbox
+                              value={specie}
+                              checked={mangroveSpeciesTypesChecked.includes(specie)}
+                              onChange={(event) =>
+                                handleMangroveSpeciesPresentOnChange(event, specie)
+                              }></Checkbox>
+                            <Typography variant='subtitle'>{specie}</Typography>
+                          </Box>
                         </Box>
-                      </Box>
-                    </ListItem>
-                  ))
-                ) : (
-                  <ErrorText>
-                    No items to display. Please select countries in Site Details and Location (1.2).
-                  </ErrorText>
-                )}
-              </List>
+                      </ListItem>
+                    ))
+                  ) : (
+                    <ErrorText>
+                      No items to display. Please select countries in Site Details and Location
+                      (1.2).
+                    </ErrorText>
+                  )}
+                </List>
+              ) : null}
               <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
             </FormQuestionDiv>
           </>
@@ -457,18 +478,28 @@ function PreRestorationAssessmentForm() {
               return (
                 <SelectedInputSection key={mangroveSpecieIndex}>
                   <FormLabel>{mangroveSpecie.mangroveSpeciesType}</FormLabel>
-                  <Controller
-                    name={`speciesComposition.${mangroveSpecieIndex}.percentageComposition`}
-                    control={control}
-                    defaultValue={''}
-                    render={({ field }) => (
-                      <TextField {...field} sx={{ maxWidth: '10em' }} label='% Number'></TextField>
-                    )}
-                  />
+                  <TabularInputRowDiv>
+                    <Controller
+                      name={`speciesComposition.${mangroveSpecieIndex}.percentageComposition`}
+                      control={control}
+                      defaultValue={0}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          sx={{ maxWidth: '10em' }}
+                          label='% Number'></TextField>
+                      )}
+                    />
+                    <ErrorText>
+                      {
+                        errors.speciesComposition?.[mangroveSpecieIndex]?.percentageComposition
+                          ?.message
+                      }
+                    </ErrorText>
+                  </TabularInputRowDiv>
                 </SelectedInputSection>
               )
             })}
-            <ErrorText>{errors.speciesComposition?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
         {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
@@ -539,3 +570,8 @@ function PreRestorationAssessmentForm() {
 }
 
 export default PreRestorationAssessmentForm
+
+const TabularInputRowDiv = styled(FormLabel)`
+  display: flex;
+  flex-direction: column;
+`
