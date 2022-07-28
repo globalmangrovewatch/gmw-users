@@ -1,24 +1,25 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
-import { Typography } from '@mui/material'
 import Map, {
   NavigationControl,
   FullscreenControl,
   ScaleControl,
   GeolocateControl
 } from 'react-map-gl'
+
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
+import 'mapbox-gl/dist/mapbox-gl.css'
 import { DropzoneArea } from 'react-mui-dropzone'
+import { LngLat } from 'mapbox-gl'
+import { Typography } from '@mui/material'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import GeoPropTypes from 'geojson-prop-types'
+import PropTypes from 'prop-types'
 import turfBbox from '@turf/bbox'
 
+import emptyFeatureCollection from '../data/emptyFeatureCollection'
+import handleFileLoadEvent from '../library/handleFileLoadEvent'
 import language from '../language'
 import MapDrawControl, { drawControlRef } from './MapDrawControl'
 import MapDrawInfo from './MapDrawInfo'
-import emptyFeatureCollection from '../data/emptyFeatureCollection'
-import handleFileLoadEvent from '../library/handleFileLoadEvent'
-
-import 'mapbox-gl/dist/mapbox-gl.css'
-import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
 
@@ -66,10 +67,7 @@ const ProjectAreaMap = ({
     try {
       if (extent) {
         mapRef.current.fitBounds(
-          [
-            [extent[0], extent[1]],
-            [extent[2], extent[3]]
-          ],
+          [new LngLat(extent[0], extent[1]).wrap(), new LngLat(extent[2], extent[3]).wrap()],
           animationProps
         )
       } else {

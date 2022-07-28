@@ -129,13 +129,13 @@
     {
       "bbox": ["12.2066288", "-13.45567608", "31.30572319", "5.386097908"],
       "geometry": { "coordinates": [23.660758, -2.88119], "type": "Point" },
-      "properties": { "country": "The Democratic Republic of the Congo", "mangroves": "1" },
+      "properties": { "country": "Democratic Republic of the Congo", "mangroves": "1" },
       "type": "Feature"
     },
     {
       "bbox": ["11.20085812", "-5.030663968", "18.64999962", "3.703082084"],
       "geometry": { "coordinates": [15.24467, -0.833253], "type": "Point" },
-      "properties": { "country": "Congo", "mangroves": "1" },
+      "properties": { "country": "Republic of Congo", "mangroves": "1" },
       "type": "Feature"
     },
     {
@@ -373,7 +373,7 @@
       "type": "Feature"
     },
     {
-      "bbox": ["-174.543396", "-17.85211372", "176.8486938", "4.699491978"],
+      "bbox": ["-174.543396", "-17.85211372", "-176.8486938", "4.699491978"],
       "geometry": { "coordinates": [-39.197255, 0.564677], "type": "Point" },
       "properties": { "country": "Kiribati", "mangroves": "1" },
       "type": "Feature"
@@ -445,7 +445,7 @@
       "type": "Feature"
     },
     {
-      "bbox": ["92.17250061", "8.824444771", "101.1767807", "28.54326057"],
+      "bbox": ["92.3032344909", "9.93295990645", "101.180005324", "28.335945136"],
       "geometry": { "coordinates": [96.510201, 21.117143], "type": "Point" },
       "properties": { "country": "Myanmar", "mangroves": "1" },
       "type": "Feature"
@@ -529,7 +529,7 @@
       "type": "Feature"
     },
     {
-      "bbox": ["-178.8269501", "-52.62083435", "179.0658264", "-29.23166275"],
+      "bbox": ["178.8269501", "-52.62083435", "179.0658264", "-29.23166275"],
       "geometry": { "coordinates": [171.470881, -41.82592], "type": "Point" },
       "properties": { "country": "New Zealand", "mangroves": "1" },
       "type": "Feature"
@@ -721,9 +721,9 @@
       "type": "Feature"
     },
     {
-      "bbox": ["-179.1505585", "18.9098587", "179.773407", "72.6875"],
+      "bbox": ["-171.791110603", "18.91619", "-66.96466", "71.3577635769"],
       "geometry": { "coordinates": [-112.470837, 45.676259], "type": "Point" },
-      "properties": { "country": "United States", "mangroves": "1" },
+      "properties": { "country": "United States of America", "mangroves": "1" },
       "type": "Feature"
     },
     {
@@ -733,7 +733,7 @@
       "type": "Feature"
     },
     {
-      "bbox": ["-69.63902283", "-22.89612961", "-57.45384979", "-9.669329644"],
+      "bbox": ["-73.3049515449", "0.724452215982", "-59.7582848782", "12.1623070337"],
       "geometry": { "coordinates": [-66.145936, 7.132691], "type": "Point" },
       "properties": { "country": "Bolivarian Republic of Venezuela", "mangroves": "1" },
       "type": "Feature"
