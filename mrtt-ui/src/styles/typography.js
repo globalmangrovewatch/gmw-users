@@ -49,6 +49,12 @@ export const PageTitle = styled('h1')`
   text-transform: uppercase;
   letter-spacing: 2px;
 `
+
+export const PageSubtitle = styled('h2')`
+  font-weight: 200;
+  margin-bottom: 0;
+`
+
 export const ItemSubTitle = styled('p')`
   color: ${theme.color.slub};
   text-transform: uppercase;

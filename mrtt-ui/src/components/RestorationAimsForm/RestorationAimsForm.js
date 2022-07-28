@@ -9,15 +9,9 @@ import {
   multiselectWithOtherValidation,
   multiselectWithOtherValidationNoMinimum
 } from '../../validation/multiSelectWithOther'
-import {
-  Form,
-  FormPageHeader,
-  FormQuestionDiv,
-  SectionFormSubtitle,
-  SectionFormTitle
-} from '../../styles/forms'
+import { Form, FormPageHeader, FormQuestionDiv } from '../../styles/forms'
 import { ContentWrapper } from '../../styles/containers'
-import { ErrorText } from '../../styles/typography'
+import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
 import { restorationAims as questions } from '../../data/questions'
@@ -92,10 +86,8 @@ const RestorationAimsForm = () => {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>
-          {language.pages.siteQuestionsOverview.formName.restorationAims}
-        </SectionFormTitle>
-        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
+        <PageTitle>{language.pages.siteQuestionsOverview.formName.restorationAims}</PageTitle>
+        <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
         isSaving={isSubmitting}

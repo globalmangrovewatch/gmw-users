@@ -7,16 +7,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 
-import {
-  Form,
-  FormPageHeader,
-  FormQuestionDiv,
-  SectionFormSubtitle,
-  SectionFormTitle,
-  StickyFormLabel
-} from '../styles/forms'
+import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
 import { ContentWrapper } from '../styles/containers'
-import { ErrorText } from '../styles/typography'
+import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
 import { questionMapping } from '../data/questionMapping'
@@ -140,10 +133,8 @@ const SiteBackgroundForm = () => {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>
-          {language.pages.siteQuestionsOverview.formName.siteBackground}
-        </SectionFormTitle>
-        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
+        <PageTitle>{language.pages.siteQuestionsOverview.formName.siteBackground}</PageTitle>
+        <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
         isSaving={isSubmitting}

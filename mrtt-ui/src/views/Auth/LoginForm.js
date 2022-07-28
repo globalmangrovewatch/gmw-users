@@ -8,8 +8,8 @@ import axios from 'axios'
 
 import { ButtonCancel, ButtonSubmit } from '../../styles/buttons'
 import { ButtonContainer, PagePadding, RowFlexEnd } from '../../styles/containers'
-import { ErrorText } from '../../styles/typography'
-import { Form, MainFormDiv, SectionFormTitle } from '../../styles/forms'
+import { ErrorText, PageTitle } from '../../styles/typography'
+import { Form, MainFormDiv } from '../../styles/forms'
 import { FormLabel, TextField } from '@mui/material'
 import Button from '@mui/material/Button'
 import language from '../../language'
@@ -81,7 +81,7 @@ const LoginForm = () => {
   const form = (
     <MainFormDiv>
       <PagePadding>
-        <SectionFormTitle>Login</SectionFormTitle>
+        <PageTitle>Login</PageTitle>
         <Form onSubmit={validateInputs(handleSubmit)}>
           <FormLabel htmlFor='email'>Email* </FormLabel>
           <Controller

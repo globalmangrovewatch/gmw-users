@@ -7,14 +7,7 @@ import { toast } from 'react-toastify'
 import { Controller, useForm } from 'react-hook-form'
 import { MenuItem, TextField } from '@mui/material'
 
-import {
-  Form,
-  FormPageHeader,
-  FormQuestionDiv,
-  SectionFormSubtitle,
-  SectionFormTitle,
-  StickyFormLabel
-} from '../styles/forms'
+import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
 import QuestionNav from './QuestionNav'
 import useSiteInfo from '../library/useSiteInfo'
 import language from '../language'
@@ -22,7 +15,7 @@ import { ContentWrapper } from '../styles/containers'
 import { costs as questions } from '../data/questions'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
-import { ErrorText } from '../styles/typography'
+import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { questionMapping } from '../data/questionMapping'
 import LoadingIndicator from './LoadingIndicator'
@@ -85,8 +78,8 @@ const CostsForm = () => {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>{language.pages.siteQuestionsOverview.formName.costs}</SectionFormTitle>
-        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
+        <PageTitle>{language.pages.siteQuestionsOverview.formName.costs}</PageTitle>
+        <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
         isSaving={isSubmitting}

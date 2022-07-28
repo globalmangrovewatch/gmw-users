@@ -12,15 +12,8 @@ import turfConvex from '@turf/convex'
 import turfBbox from '@turf/bbox'
 import turfBboxPolygon from '@turf/bbox-polygon'
 
-import { ErrorText } from '../styles/typography'
-import {
-  StickyFormLabel,
-  FormPageHeader,
-  FormQuestionDiv,
-  SectionFormTitle,
-  Form,
-  SectionFormSubtitle
-} from '../styles/forms'
+import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
+import { StickyFormLabel, FormPageHeader, FormQuestionDiv, Form } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { projectDetails as questions } from '../data/questions'
 import { questionMapping } from '../data/questionMapping'
@@ -165,10 +158,8 @@ function ProjectDetailsForm() {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>
-          {language.pages.siteQuestionsOverview.formName.siteDetails}
-        </SectionFormTitle>
-        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
+        <PageTitle>{language.pages.siteQuestionsOverview.formName.siteDetails}</PageTitle>
+        <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
         isSaving={isSubmitting}
