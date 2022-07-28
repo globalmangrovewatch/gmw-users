@@ -68,23 +68,31 @@ function SiteInterventionsForm() {
         interventionEndDate: yup.string()
       })
     ),
-    mangroveSpeciesUsed: yup.array().of(
-      yup.object().shape({
-        type: yup.string(),
-        seed: yup.object().shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() }),
-        propagule: yup
-          .object()
-          .shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() })
-      })
-    ),
-    mangroveAssociatedSpecies: yup.array().of(
-      yup.object().shape({
-        type: yup.string(),
-        count: yup.mixed(),
-        source: yup.string(),
-        purpose: yup.object().shape({ purpose: yup.string(), other: yup.string() })
-      })
-    ),
+    mangroveSpeciesUsed: yup
+      .array()
+      .of(
+        yup.object().shape({
+          type: yup.string(),
+          seed: yup
+            .object()
+            .shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() }),
+          propagule: yup
+            .object()
+            .shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() })
+        })
+      )
+      .default([]),
+    mangroveAssociatedSpecies: yup
+      .array()
+      .of(
+        yup.object().shape({
+          type: yup.string(),
+          count: yup.mixed(),
+          source: yup.string(),
+          purpose: yup.object().shape({ purpose: yup.string(), other: yup.string() })
+        })
+      )
+      .default([]),
     localParticipantTraining: yup.string(),
     organizationsProvidingTraining: multiselectWithOtherValidationNoMinimum,
     otherActivitiesImplemented: multiselectWithOtherValidationNoMinimum
@@ -185,6 +193,8 @@ function SiteInterventionsForm() {
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
+
+    if (!formData) return
 
     axios
       .patch(apiAnswersUrl, mapDataForApi('siteInterventions', formData))
@@ -289,11 +299,12 @@ function SiteInterventionsForm() {
     mangroveAssociatedSpeciesRemove(measurementIndex)
   }
 
-  const updateMeasurementItem = (measurementIndex, count, source, purpose) => {
+  const updateMeasurementItem = (measurementIndex, count, source, purpose, otherPurpose) => {
     const currentItem = mangroveAssociatedSpeciesFields[measurementIndex]
     if (count) currentItem.count = count
     if (source) currentItem.source = source
     if (purpose) currentItem.purpose.purpose = purpose
+    if (otherPurpose) currentItem.purpose.other = otherPurpose
     mangroveAssociatedSpeciesUpdate(measurementIndex, currentItem)
   }
 

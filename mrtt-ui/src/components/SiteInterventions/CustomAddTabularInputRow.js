@@ -26,6 +26,7 @@ const CustomAddTabularInputRow = ({ saveMeasurementItem, updateTabularInputDispl
 
   const handleSave = () => {
     const measurementItem = { type, count, source, purpose: { purpose, other } }
+
     if (!type || !count || !source || !purpose) {
       setError('Please fill all fields.')
     } else {

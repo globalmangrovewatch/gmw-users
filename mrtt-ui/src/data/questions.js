@@ -114,7 +114,7 @@ const restorationAims = {
     options: ['Primary-aims', 'Co-benefit', 'Neither']
   },
   ecologicalAims: {
-    question: '3 .1 What are the ecological aim(s) of the project activities at the site?',
+    question: '3.1 What are the ecological aim(s) of the project activities at the site?',
     options: [
       'Increase mangrove area',
       'Improve mangrove condition/halt or reduce degradation',
