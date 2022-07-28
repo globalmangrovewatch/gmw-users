@@ -17,3 +17,11 @@ export const TableAlertnatingRows = styled('table')(({ theme: themeMui }) => ({
     padding: themeMui.spacing(1)
   }
 }))
+
+export const TdCenter = styled('td')`
+  text-align: center;
+`
+
+export const ThCenter = styled('th')`
+  text-align: center;
+`

@@ -38,14 +38,14 @@ function Organizations() {
 
   const yourOrganizationsList = (
     <UlUndecorated>
-      {yourOrganizations.map(({ id, organization_name, role }) => {
+      {yourOrganizations.map(({ id: organizationId, organization_name, role }) => {
         const canManageUsers = role === USER_ROLES.orgAdmin
         return (
-          <Card as='li' key={id}>
+          <Card as='li' key={organizationId}>
             <RowSpaceBetween>
               {organization_name}
               {canManageUsers ? (
-                <LinkLooksLikeButtonSecondary to='#'>
+                <LinkLooksLikeButtonSecondary to={`/organizations/${organizationId}/users`}>
                   {language.pages.organizations.manageUsers}
                 </LinkLooksLikeButtonSecondary>
               ) : null}

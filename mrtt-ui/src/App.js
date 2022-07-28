@@ -23,6 +23,7 @@ import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOv
 import Sites from './views/Sites'
 import themeMui from './styles/themeMui'
 import CostsForm from './components/CostsForm'
+import ManageOrganizationUsers from './views/ManageOrganizationUsers'
 
 function App() {
   return (
@@ -43,6 +44,10 @@ function App() {
               <Route
                 path='/organizations/:organizationId/edit'
                 element={<OrganizationForm isNewOrganization={false} />}
+              />
+              <Route
+                path='/organizations/:organizationId/users'
+                element={<ManageOrganizationUsers />}
               />
               <Route
                 path='/organizations/new'

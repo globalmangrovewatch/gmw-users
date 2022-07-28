@@ -89,6 +89,11 @@ const pages = {
       landscapeRequired: 'Please select a landscape'
     }
   },
+  manageOrganizationUsers: {
+    title: 'Users',
+    newUser: 'New User',
+    usersTable: { name: 'Name', admin: 'Admin', user: 'User', remove: 'Remove from Organization' }
+  },
   siteQuestionsOverview: {
     settings: 'Settings',
 
