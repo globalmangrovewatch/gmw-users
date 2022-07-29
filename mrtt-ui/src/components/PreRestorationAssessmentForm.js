@@ -247,10 +247,11 @@ function PreRestorationAssessmentForm() {
     return setShowAddTabularInputRow(boolean)
   }
 
-  const saveMeasurementItem = (measurementType, measurementValue) => {
+  const saveMeasurementItem = (measurementType, measurementValue, measurementUnit) => {
     physicalMeasurementsTakenAppend({
       measurementType,
-      measurementValue
+      measurementValue,
+      measurementUnit
     })
   }
 

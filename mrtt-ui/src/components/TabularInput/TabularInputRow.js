@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles'
 
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
 
-const TabularInputRow = ({
+const HorizontalTabularInputRow = ({
   label,
   rowValue1,
   rowValue2,
@@ -60,7 +60,7 @@ const TabularInputRow = ({
   )
 }
 
-TabularInputRow.propTypes = {
+HorizontalTabularInputRow.propTypes = {
   label: PropTypes.string.isRequired,
   rowValue1: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   rowValue2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -75,4 +75,4 @@ export const TabularBox = styled('div')`
   cursor: pointer;
 `
 
-export default TabularInputRow
+export default HorizontalTabularInputRow

@@ -47,8 +47,7 @@ export const questionMapping = {
     whichStakeholdersInvolved: '6.1',
     biophysicalInterventionsUsed: '6.2a',
     mangroveSpeciesUsed: '6.2b',
-    sourceOfMangroves: '6.2c',
-    mangroveAssociatedSpecies: '6.2d',
+    mangroveAssociatedSpecies: '6.2c',
     localParticipantTraining: '6.3',
     organizationsProvidingTraining: '6.3a',
     otherActivitiesImplemented: '6.4'
