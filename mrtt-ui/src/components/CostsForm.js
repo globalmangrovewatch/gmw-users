@@ -6,6 +6,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Controller, useForm } from 'react-hook-form'
 import { MenuItem, TextField } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
 import {
   Form,
@@ -32,7 +33,10 @@ const CostsForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     supportForActivities: multiselectWithOtherValidationNoMinimum,
-    projectInterventionFunding: yup.string(),
+    projectInterventionFunding: yup.object().shape({
+      fundingType: yup.string(),
+      other: yup.string()
+    }),
     nonmonetisedContributions: multiselectWithOtherValidationNoMinimum
   })
   const reactHookFormInstance = useForm({
@@ -47,7 +51,8 @@ const CostsForm = () => {
     handleSubmit: validateInputs,
     formState: { errors },
     reset: resetForm,
-    control
+    control,
+    watch: watchForm
   } = reactHookFormInstance
 
   const { siteId } = useParams()
@@ -55,6 +60,7 @@ const CostsForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const projectInterventionFundingWatcher = watchForm('projectInterventionFunding')
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
@@ -108,7 +114,7 @@ const CostsForm = () => {
         <FormQuestionDiv>
           <StickyFormLabel>{questions.projectInterventionFunding.question}</StickyFormLabel>
           <Controller
-            name='projectInterventionFunding'
+            name='projectInterventionFunding.fundingType'
             control={control}
             defaultValue=''
             render={({ field }) => (
@@ -121,7 +127,20 @@ const CostsForm = () => {
               </TextField>
             )}
           />
-          <ErrorText>{errors.projectInterventionFunding?.message}</ErrorText>
+          <ErrorText>{errors.projectInterventionFunding?.fundingType?.message}</ErrorText>
+          {projectInterventionFundingWatcher?.fundingType === 'Other' ? (
+            <QuestionSubSection>
+              <Controller
+                name='projectInterventionFunding.other'
+                control={control}
+                defaultValue={''}
+                render={({ field }) => (
+                  <TextField {...field} value={field.value} label='please state other'></TextField>
+                )}
+              />
+              <ErrorText>{errors.projectInterventionFunding?.other?.message}</ErrorText>
+            </QuestionSubSection>
+          ) : null}
         </FormQuestionDiv>
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
@@ -141,3 +160,7 @@ const CostsForm = () => {
 CostsForm.propTypes = {}
 
 export default CostsForm
+
+const QuestionSubSection = styled('div')`
+  margin-top: 1em;
+`
