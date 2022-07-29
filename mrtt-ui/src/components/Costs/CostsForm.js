@@ -15,19 +15,19 @@ import {
   SectionFormSubtitle,
   SectionFormTitle,
   StickyFormLabel
-} from '../styles/forms'
-import QuestionNav from './QuestionNav'
-import useSiteInfo from '../library/useSiteInfo'
-import language from '../language'
-import { ContentWrapper } from '../styles/containers'
-import { costs as questions } from '../data/questions'
-import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
-import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
-import { ErrorText } from '../styles/typography'
-import { mapDataForApi } from '../library/mapDataForApi'
-import { questionMapping } from '../data/questionMapping'
-import LoadingIndicator from './LoadingIndicator'
-import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
+} from '../../styles/forms'
+import QuestionNav from '../QuestionNav'
+import useSiteInfo from '../../library/useSiteInfo'
+import language from '../../language'
+import { ContentWrapper } from '../../styles/containers'
+import { costs as questions } from '../../data/questions'
+import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
+import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
+import { ErrorText } from '../../styles/typography'
+import { mapDataForApi } from '../../library/mapDataForApi'
+import { questionMapping } from '../../data/questionMapping'
+import LoadingIndicator from '../LoadingIndicator'
+import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
@@ -141,6 +141,11 @@ const CostsForm = () => {
               <ErrorText>{errors.projectInterventionFunding?.other?.message}</ErrorText>
             </QuestionSubSection>
           ) : null}
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.projectFunderNames}</StickyFormLabel>
+
+          <ErrorText>{errors.projectFunderNames?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
