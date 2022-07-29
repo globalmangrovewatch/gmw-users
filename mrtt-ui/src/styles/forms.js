@@ -85,3 +85,7 @@ export const SelectedInputSection = styled('div')`
   align-items: center;
   margin-bottom: 1em;
 `
+
+export const QuestionSubSection = styled('div')`
+  margin-top: 1em;
+`

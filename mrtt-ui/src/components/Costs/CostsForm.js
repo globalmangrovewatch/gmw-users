@@ -6,12 +6,12 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Controller, useForm } from 'react-hook-form'
 import { MenuItem, TextField } from '@mui/material'
-import { styled } from '@mui/material/styles'
 
 import {
   Form,
   FormPageHeader,
   FormQuestionDiv,
+  QuestionSubSection,
   SectionFormSubtitle,
   SectionFormTitle,
   StickyFormLabel
@@ -165,7 +165,3 @@ const CostsForm = () => {
 CostsForm.propTypes = {}
 
 export default CostsForm
-
-const QuestionSubSection = styled('div')`
-  margin-top: 1em;
-`
