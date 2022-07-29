@@ -119,11 +119,11 @@ const SiteOverview = () => {
                 </Link>
               </WideTh>
             </tr>
-            <tr>
+            {/* <tr>
               <WideTh>
                 <Link to={`/sites/${siteId}/form/costs`}>{pageLanguage.formName.costs}</Link>
               </WideTh>
-            </tr>
+            </tr> */}
           </tbody>
         </TableAlertnatingRows>
         <StyledSectionHeader>{pageLanguage.formGroupTitle.intervention}</StyledSectionHeader>
