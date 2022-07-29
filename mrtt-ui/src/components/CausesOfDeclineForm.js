@@ -9,7 +9,6 @@ import {
   TextField,
   Typography
 } from '@mui/material'
-import { FormPageHeader, SectionFormSubtitle, StickyFormLabel } from '../styles/forms'
 import { toast } from 'react-toastify'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
@@ -18,11 +17,18 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 
+import {
+  Form,
+  FormPageHeader,
+  FormQuestionDiv,
+  NestedLabel1,
+  NestedLabel2,
+  StickyFormLabel
+} from '../styles/forms'
 import { causesOfDecline } from '../data/questions'
 import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
 import { ContentWrapper } from '../styles/containers'
-import { ErrorText } from '../styles/typography'
-import { Form, FormQuestionDiv, SectionFormTitle, SubTitle, SubTitle2 } from '../styles/forms'
+import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { questionMapping } from '../data/questionMapping'
 import language from '../language'
@@ -268,10 +274,8 @@ function CausesOfDeclineForm() {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>
-          {language.pages.siteQuestionsOverview.formName.causesOfDecline}
-        </SectionFormTitle>
-        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
+        <PageTitle>{language.pages.siteQuestionsOverview.formName.causesOfDecline}</PageTitle>
+        <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
         isSaving={isSubmitting}
@@ -304,7 +308,7 @@ function CausesOfDeclineForm() {
             {causesOfDeclineOptions.map((mainCause, mainCauseIndex) => {
               return (
                 <Box key={mainCauseIndex} sx={{ marginTop: '0.75em', marginBottom: '1.5em' }}>
-                  <SubTitle variant='subtitle1'>{mainCause.label}</SubTitle>
+                  <NestedLabel1>{mainCause.label}</NestedLabel1>
                   {typeof mainCause.children[0] === 'string'
                     ? mainCause.children.map((childOption, childIndex) => (
                         <Box key={childIndex}>
@@ -332,7 +336,7 @@ function CausesOfDeclineForm() {
                           key={subCauseIndex}
                           variant='subtitle2'
                           sx={{ marginLeft: '1em', marginTop: '0.75em' }}>
-                          <SubTitle2 variant='subtitle2'>{subCause.secondaryLabel}</SubTitle2>
+                          <NestedLabel2>{subCause.secondaryLabel}</NestedLabel2>
                           {subCause.secondaryChildren.map(
                             (secondaryChildOption, secondaryChildIndex) => {
                               return (
@@ -372,9 +376,7 @@ function CausesOfDeclineForm() {
             <StickyFormLabel>{causesOfDecline.levelsOfDegredation.question}</StickyFormLabel>
             {causesOfDeclineFields.map((mainCause, mainCauseIndex) => (
               <Box key={mainCauseIndex}>
-                <SubTitle sx={{ marginBottom: '0.5em', marginTop: '1em' }}>
-                  {mainCause.mainCauseLabel}
-                </SubTitle>
+                <NestedLabel1>{mainCause.mainCauseLabel}</NestedLabel1>
                 {mainCause.mainCauseAnswers?.map((answer, answerIndex) => {
                   return (
                     <Box key={answerIndex}>
@@ -413,9 +415,7 @@ function CausesOfDeclineForm() {
                 {mainCause.subCauses?.map((subCause, subCauseIndex) => {
                   return (
                     <Box key={subCauseIndex}>
-                      <SubTitle2 sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
-                        {subCause.subCauseLabel}
-                      </SubTitle2>
+                      <NestedLabel2>{subCause.subCauseLabel}</NestedLabel2>
                       {subCause.subCauseAnswers?.map((subCauseAnswer, subCauseAnswerIndex) => {
                         return (
                           <Box key={subCauseAnswerIndex}>

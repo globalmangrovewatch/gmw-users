@@ -28,13 +28,14 @@ function Sites() {
 
   const sitesList = sites
     .sort((siteA, siteB) => {
-      const siteAName = siteA.site_name?.toLowerCase()
-      const siteBName = siteB.site_name?.toLowerCase()
+      console.log(siteA)
+      const siteALastUpdatedDate = siteA.section_last_updated
+      const siteBLastUpdatedDate = siteB.section_last_updated
 
-      if (siteAName < siteBName) {
+      if (siteALastUpdatedDate > siteBLastUpdatedDate || !siteALastUpdatedDate) {
         return -1
       }
-      if (siteAName < siteBName) {
+      if (siteALastUpdatedDate < siteBLastUpdatedDate) {
         return 1
       }
       return 0
@@ -53,9 +54,11 @@ function Sites() {
         <LinkCard key={id} to={`/sites/${id}/overview`}>
           <ItemTitle>{site_name}</ItemTitle>
           <ItemSubTitle>{landscape_name}</ItemSubTitle>
-          <p>
-            {language.pages.sites.lastUpdated}: {anySectionLastEditedString}
-          </p>
+          {section_last_updated ? (
+            <p>
+              {language.pages.sites.lastUpdated}: {anySectionLastEditedString}
+            </p>
+          ) : null}
         </LinkCard>
       )
     })

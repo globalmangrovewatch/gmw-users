@@ -22,16 +22,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 
-import {
-  Form,
-  FormPageHeader,
-  FormQuestionDiv,
-  SectionFormSubtitle,
-  SectionFormTitle,
-  StickyFormLabel
-} from '../../styles/forms'
+import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
 import { ContentWrapper } from '../../styles/containers'
-import { ErrorText } from '../../styles/typography'
+import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { findDataItem } from '../../library/findDataItem'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
@@ -316,10 +309,8 @@ function SiteInterventionsForm() {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>
-          {language.pages.siteQuestionsOverview.formName.siteInterventions}
-        </SectionFormTitle>
-        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
+        <PageTitle>{language.pages.siteQuestionsOverview.formName.siteInterventions}</PageTitle>
+        <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
         isSaving={isSubmitting}
