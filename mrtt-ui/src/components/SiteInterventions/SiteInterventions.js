@@ -61,13 +61,16 @@ function SiteInterventionsForm() {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     whichStakeholdersInvolved: multiselectWithOtherValidationNoMinimum,
-    biophysicalInterventionsUsed: yup.array().of(
-      yup.object().shape({
-        interventionType: yup.string(),
-        interventionStartDate: yup.string(),
-        interventionEndDate: yup.string()
-      })
-    ),
+    biophysicalInterventionsUsed: yup
+      .array()
+      .of(
+        yup.object().shape({
+          interventionType: yup.string(),
+          interventionStartDate: yup.string(),
+          interventionEndDate: yup.string()
+        })
+      )
+      .default([]),
     mangroveSpeciesUsed: yup
       .array()
       .of(
