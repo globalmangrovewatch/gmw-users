@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Checkbox,
   FormLabel,
   List,
@@ -21,22 +22,24 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 
-import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
-import { ContentWrapper } from '../styles/containers'
-import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
-import { findDataItem } from '../library/findDataItem'
-import { mapDataForApi } from '../library/mapDataForApi'
-import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
-import { questionMapping } from '../data/questionMapping'
-import { siteInterventions as questions } from '../data/questions'
-import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
-import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
-import { propaguleOptions, seedlingOptions } from '../data/siteInterventionOptions'
-import language from '../language'
-import LoadingIndicator from './LoadingIndicator'
-import QuestionNav from './QuestionNav'
-import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
-import useSiteInfo from '../library/useSiteInfo'
+import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
+import { ContentWrapper } from '../../styles/containers'
+import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
+import { findDataItem } from '../../library/findDataItem'
+import { mapDataForApi } from '../../library/mapDataForApi'
+import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
+import { questionMapping } from '../../data/questionMapping'
+import { siteInterventions as questions } from '../../data/questions'
+import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
+import { mangroveSpeciesPerCountryList } from '../../data/mangroveSpeciesPerCountry'
+import { propaguleOptions, seedlingOptions } from '../../data/siteInterventionOptions'
+import language from '../../language'
+import LoadingIndicator from '../LoadingIndicator'
+import QuestionNav from '../QuestionNav'
+import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import useSiteInfo from '../../library/useSiteInfo'
+import CustomAddTabularInputRow from './CustomAddTabularInputRow'
+import CustomTabularInputRow from './CustomTabularInputRow'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2a') ?? []
@@ -51,22 +54,41 @@ function SiteInterventionsForm() {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     whichStakeholdersInvolved: multiselectWithOtherValidationNoMinimum,
-    biophysicalInterventionsUsed: yup.array().of(
-      yup.object().shape({
-        interventionType: yup.string(),
-        interventionStartDate: yup.string(),
-        interventionEndDate: yup.string()
-      })
-    ),
-    mangroveSpeciesUsed: yup.array().of(
-      yup.object().shape({
-        mangroveSpeciesType: yup.string(),
-        seed: yup.object().shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() }),
-        propagule: yup
-          .object()
-          .shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() })
-      })
-    ),
+    biophysicalInterventionsUsed: yup
+      .array()
+      .of(
+        yup.object().shape({
+          interventionType: yup.string(),
+          interventionStartDate: yup.string(),
+          interventionEndDate: yup.string()
+        })
+      )
+      .default([]),
+    mangroveSpeciesUsed: yup
+      .array()
+      .of(
+        yup.object().shape({
+          type: yup.string(),
+          seed: yup
+            .object()
+            .shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() }),
+          propagule: yup
+            .object()
+            .shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() })
+        })
+      )
+      .default([]),
+    mangroveAssociatedSpecies: yup
+      .array()
+      .of(
+        yup.object().shape({
+          type: yup.string(),
+          count: yup.mixed(),
+          source: yup.string(),
+          purpose: yup.object().shape({ purpose: yup.string(), other: yup.string() })
+        })
+      )
+      .default([]),
     localParticipantTraining: yup.string(),
     organizationsProvidingTraining: multiselectWithOtherValidationNoMinimum,
     otherActivitiesImplemented: multiselectWithOtherValidationNoMinimum
@@ -101,6 +123,13 @@ function SiteInterventionsForm() {
     update: mangroveSpeciesUsedUpdate
   } = useFieldArray({ name: 'mangroveSpeciesUsed', control })
 
+  const {
+    fields: mangroveAssociatedSpeciesFields,
+    append: mangroveAssociatedSpeciesAppend,
+    remove: mangroveAssociatedSpeciesRemove,
+    update: mangroveAssociatedSpeciesUpdate
+  } = useFieldArray({ name: 'mangroveAssociatedSpecies', control })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -109,6 +138,7 @@ function SiteInterventionsForm() {
   const [biophysicalInterventionTypesChecked, setBiophysicalInterventionTypesChecked] = useState([])
   const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
   const [mangroveSpeciesUsedChecked, setMangroveSpeciesUsedChecked] = useState([])
+  const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
   const localParticipantTrainingWatcher = watchForm('localParticipantTraining')
 
   const loadServerData = useCallback((serverResponse) => {
@@ -143,9 +173,7 @@ function SiteInterventionsForm() {
     const getMangroveSpeciesUsedFrom6_2b = getMangroveSpeciesUsed(serverResponse)
     let mangroveSpeciesList = []
     if (getMangroveSpeciesUsedFrom6_2b.length) {
-      mangroveSpeciesList = getMangroveSpeciesUsedFrom6_2b.map(
-        (specie) => specie.mangroveSpeciesType
-      )
+      mangroveSpeciesList = getMangroveSpeciesUsedFrom6_2b.map((specie) => specie.type)
     }
     setMangroveSpeciesUsedChecked(mangroveSpeciesList)
   }, [])
@@ -161,6 +189,8 @@ function SiteInterventionsForm() {
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
+
+    if (!formData) return
 
     axios
       .patch(apiAnswersUrl, mapDataForApi('siteInterventions', formData))
@@ -206,15 +236,13 @@ function SiteInterventionsForm() {
 
     if (event.target.checked) {
       mangroveSpeciesUsedAppend({
-        mangroveSpeciesType: specie,
+        type: specie,
         seed: { checked: false, source: '', count: 0 },
         propagule: { checked: false, source: '', count: 0 }
       })
       mangroveSpeciesUsedCheckedCopy.push(specie)
     } else {
-      const fieldIndex = mangroveSpeciesUsedFields.findIndex(
-        (field) => field.mangroveSpeciesType === specie
-      )
+      const fieldIndex = mangroveSpeciesUsedFields.findIndex((field) => field.type === specie)
       const typeIndex = mangroveSpeciesUsedCheckedCopy.findIndex((type) => type === specie)
       mangroveSpeciesUsedCheckedCopy.splice(typeIndex, 1)
       mangroveSpeciesUsedRemove(fieldIndex)
@@ -222,7 +250,7 @@ function SiteInterventionsForm() {
     setMangroveSpeciesUsedChecked(mangroveSpeciesUsedCheckedCopy)
   }
   const getMangroveSpeciesUsedIndex = (specie) => {
-    return mangroveSpeciesUsedFields.findIndex((item) => item.mangroveSpeciesType === specie)
+    return mangroveSpeciesUsedFields.findIndex((item) => item.type === specie)
   }
 
   const handleSourceOfSeedlingsOnChange = (event, specie, seedlingType) => {
@@ -248,6 +276,32 @@ function SiteInterventionsForm() {
     )
 
     return matchingItems.length ? true : false
+  }
+
+  const updateTabularInputDisplay = (boolean) => {
+    return setShowAddTabularInputRow(boolean)
+  }
+
+  const saveMeasurementItem = ({ type, count, source, purpose }) => {
+    mangroveAssociatedSpeciesAppend({
+      type,
+      count,
+      source,
+      purpose
+    })
+  }
+
+  const deleteMeasurementItem = (measurementIndex) => {
+    mangroveAssociatedSpeciesRemove(measurementIndex)
+  }
+
+  const updateMeasurementItem = (measurementIndex, count, source, purpose, otherPurpose) => {
+    const currentItem = mangroveAssociatedSpeciesFields[measurementIndex]
+    if (count) currentItem.count = count
+    if (source) currentItem.source = source
+    if (purpose) currentItem.purpose.purpose = purpose
+    if (otherPurpose) currentItem.purpose.other = otherPurpose
+    mangroveAssociatedSpeciesUpdate(measurementIndex, currentItem)
   }
 
   return isLoading ? (
@@ -497,7 +551,40 @@ function SiteInterventionsForm() {
             <ErrorText>{errors.mangroveSpeciesUsed?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
-
+        {isMangroveSpeciesUsedShowing ? (
+          <FormQuestionDiv>
+            <StickyFormLabel>{questions.mangroveAssociatedSpecies.question}</StickyFormLabel>
+            {mangroveAssociatedSpeciesFields.length > 0
+              ? mangroveAssociatedSpeciesFields.map((measurementItem, measurementItemIndex) => (
+                  <CustomTabularInputRow
+                    key={measurementItemIndex}
+                    type={measurementItem.type}
+                    label1={'Count'}
+                    label2={'Source'}
+                    label3={'Purpose'}
+                    label4={'Other purpose'}
+                    rowValue1={measurementItem.count}
+                    rowValue2={measurementItem.source}
+                    rowValue3={measurementItem.purpose.purpose}
+                    rowValue4={measurementItem.purpose.other}
+                    index={measurementItemIndex}
+                    deleteMeasurementItem={deleteMeasurementItem}
+                    updateMeasurementItem={updateMeasurementItem}></CustomTabularInputRow>
+                ))
+              : null}
+            <ErrorText>{errors.mangroveAssociatedSpecies?.message}</ErrorText>
+            {showAddTabularInputRow ? (
+              <CustomAddTabularInputRow
+                saveMeasurementItem={saveMeasurementItem}
+                updateTabularInputDisplay={updateTabularInputDisplay}></CustomAddTabularInputRow>
+            ) : null}
+            {!showAddTabularInputRow ? (
+              <Button sx={{ marginTop: '1.5em' }} onClick={() => setShowAddTabularInputRow(true)}>
+                + Add measurement row
+              </Button>
+            ) : null}
+          </FormQuestionDiv>
+        ) : null}
         <FormQuestionDiv>
           <FormLabel>{questions.localParticipantTraining.question}</FormLabel>
           <Controller

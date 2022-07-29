@@ -114,7 +114,7 @@ const restorationAims = {
     options: ['Primary-aims', 'Co-benefit', 'Neither']
   },
   ecologicalAims: {
-    question: '3 .1 What are the ecological aim(s) of the project activities at the site?',
+    question: '3.1 What are the ecological aim(s) of the project activities at the site?',
     options: [
       'Increase mangrove area',
       'Improve mangrove condition/halt or reduce degradation',
@@ -367,7 +367,7 @@ const siteInterventions = {
     question: 'What was the source of seeds/propagules or seedlings?'
   },
   mangroveAssociatedSpecies: {
-    question: '6.2d Were mangrove-associated species planted?',
+    question: '6.2c Were mangrove-associated species planted?',
     options: [
       'Species',
       'Number',
