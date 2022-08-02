@@ -6,25 +6,18 @@ import { styled } from '@mui/material/styles'
 
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
 
-const HorizontalTabularInputRow = ({
-  label,
-  rowValue1,
-  rowValue2,
-  index,
-  deleteMeasurementItem,
-  updateMeasurementItem
-}) => {
+const PhysicalMeasurementRow = ({ label, rowValue1, rowValue2, index, deleteItem, updateItem }) => {
   const [initialVal1, setInitialVal1] = useState('')
   const [currentVal1, setCurrentVal1] = useState('')
   const [initialVal2, setInitialVal2] = useState('')
   const [currentVal2, setCurrentVal2] = useState('')
   const handleDelete = () => {
-    deleteMeasurementItem(index)
+    deleteItem(index)
   }
 
   const handleUpdate = () => {
     if (currentVal1 !== initialVal1 || currentVal2 !== initialVal2) {
-      updateMeasurementItem(index, currentVal1, currentVal2)
+      updateItem(index, currentVal1, currentVal2)
     }
   }
 
@@ -60,12 +53,12 @@ const HorizontalTabularInputRow = ({
   )
 }
 
-HorizontalTabularInputRow.propTypes = {
+PhysicalMeasurementRow.propTypes = {
   label: PropTypes.string.isRequired,
   rowValue1: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   rowValue2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  deleteMeasurementItem: PropTypes.func.isRequired,
-  updateMeasurementItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired
 }
 
@@ -75,4 +68,4 @@ export const TabularBox = styled('div')`
   cursor: pointer;
 `
 
-export default HorizontalTabularInputRow
+export default PhysicalMeasurementRow

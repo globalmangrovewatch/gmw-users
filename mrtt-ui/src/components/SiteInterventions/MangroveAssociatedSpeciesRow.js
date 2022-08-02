@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles'
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
 import { purposeOptions, sourceOptions } from '../../data/siteInterventionOptions'
 
-const CustomTabularInputRow = ({
+const MangroveAssociatedSpeciesRow = ({
   type,
   label1,
   label2,
@@ -18,8 +18,8 @@ const CustomTabularInputRow = ({
   rowValue3,
   rowValue4,
   index,
-  deleteMeasurementItem,
-  updateMeasurementItem
+  deleteItem,
+  updateItem
 }) => {
   const [initialVal1, setInitialVal1] = useState('')
   const [currentVal1, setCurrentVal1] = useState('')
@@ -31,7 +31,7 @@ const CustomTabularInputRow = ({
   const [currentVal4, setCurrentVal4] = useState('')
 
   const handleDelete = () => {
-    deleteMeasurementItem(index)
+    deleteItem(index)
   }
 
   const handleUpdate = () => {
@@ -41,7 +41,7 @@ const CustomTabularInputRow = ({
       currentVal3 !== initialVal3 ||
       currentVal4 !== initialVal4
     ) {
-      updateMeasurementItem(index, currentVal1, currentVal2, currentVal3, currentVal4)
+      updateItem(index, currentVal1, currentVal2, currentVal3, currentVal4)
     }
   }
 
@@ -112,7 +112,7 @@ const CustomTabularInputRow = ({
   )
 }
 
-CustomTabularInputRow.propTypes = {
+MangroveAssociatedSpeciesRow.propTypes = {
   type: PropTypes.string.isRequired,
   label1: PropTypes.string.isRequired,
   label2: PropTypes.string.isRequired,
@@ -122,8 +122,8 @@ CustomTabularInputRow.propTypes = {
   rowValue2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   rowValue3: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   rowValue4: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  deleteMeasurementItem: PropTypes.func.isRequired,
-  updateMeasurementItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired
 }
 
@@ -133,7 +133,7 @@ export const TabularBox = styled('div')`
   cursor: pointer;
 `
 
-export default CustomTabularInputRow
+export default MangroveAssociatedSpeciesRow
 
 const RowTextField = styled(TextField)`
   margin-top: 1em;

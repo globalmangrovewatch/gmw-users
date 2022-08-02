@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Box, Button, MenuItem, TextField } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import { Box, MenuItem, TextField } from '@mui/material'
 
-import { TabularInputSection, TabularLabel } from '../../styles/forms'
+import { TabularInputSection, TabularLabel, TabularSectionDiv } from '../../styles/forms'
 import { ErrorText } from '../../styles/typography'
 import { sourceOptions, purposeOptions } from '../../data/siteInterventionOptions'
+import TabularButtons from '../TabularInput/TabularButtons'
 
-const CustomAddTabularInputRow = ({ saveMeasurementItem, updateTabularInputDisplay }) => {
+const AddMangroveAssociatedSpeciesRow = ({ saveItem, updateTabularInputDisplay }) => {
   const [type, setType] = useState('')
   const [count, setNumber] = useState(0)
   const [source, setSource] = useState('')
@@ -15,7 +15,7 @@ const CustomAddTabularInputRow = ({ saveMeasurementItem, updateTabularInputDispl
   const [other, setOther] = useState('')
   const [error, setError] = useState(null)
 
-  const cancelMeasurementItem = () => {
+  const cancelItem = () => {
     setType(null)
     setNumber(null)
     setSource(null)
@@ -25,19 +25,19 @@ const CustomAddTabularInputRow = ({ saveMeasurementItem, updateTabularInputDispl
   }
 
   const handleSave = () => {
-    const measurementItem = { type, count, source, purpose: { purpose, other } }
+    const item = { type, count, source, purpose: { purpose, other } }
 
     if (!type || !count || !source || !purpose) {
       setError('Please fill all fields.')
     } else {
       setType(String(type))
-      saveMeasurementItem(measurementItem)
+      saveItem(item)
       updateTabularInputDisplay(false)
     }
   }
 
   return (
-    <SectionDiv>
+    <TabularSectionDiv>
       <Box sx={{ width: '100%' }}>
         <TabularInputSection>
           <TabularLabel>Species type</TabularLabel>
@@ -93,37 +93,16 @@ const CustomAddTabularInputRow = ({ saveMeasurementItem, updateTabularInputDispl
           </TabularInputSection>
         ) : null}
         {error ? <ErrorText>{error}</ErrorText> : null}
-        <ButtonsDiv>
-          <Button variant='outlined' onClick={handleSave} sx={{ marginRight: '0.5em' }}>
-            Save
-          </Button>
-          <Button
-            variant='outlined'
-            color='error'
-            onClick={cancelMeasurementItem}
-            sx={{ marginLeft: '0.5em' }}>
-            Cancel
-          </Button>
-        </ButtonsDiv>
+
+        <TabularButtons handleSave={handleSave} cancelItem={cancelItem}></TabularButtons>
       </Box>
-    </SectionDiv>
+    </TabularSectionDiv>
   )
 }
 
-CustomAddTabularInputRow.propTypes = {
-  saveMeasurementItem: PropTypes.func.isRequired,
+AddMangroveAssociatedSpeciesRow.propTypes = {
+  saveItem: PropTypes.func.isRequired,
   updateTabularInputDisplay: PropTypes.func.isRequired
 }
 
-const ButtonsDiv = styled('div')`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1.5em;
-`
-
-const SectionDiv = styled('div')`
-  margin-top: 2em;
-`
-
-export default CustomAddTabularInputRow
+export default AddMangroveAssociatedSpeciesRow

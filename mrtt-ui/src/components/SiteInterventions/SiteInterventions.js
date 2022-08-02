@@ -38,8 +38,8 @@ import LoadingIndicator from '../LoadingIndicator'
 import QuestionNav from '../QuestionNav'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
-import CustomAddTabularInputRow from './CustomAddTabularInputRow'
-import CustomTabularInputRow from './CustomTabularInputRow'
+import AddMangroveAssociatedSpeciesRow from './AddMangroveAssociatedSpeciesRow'
+import MangroveAssociatedSpeciesRow from './MangroveAssociatedSpeciesRow'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2a') ?? []
@@ -282,7 +282,7 @@ function SiteInterventionsForm() {
     return setShowAddTabularInputRow(boolean)
   }
 
-  const saveMeasurementItem = ({ type, count, source, purpose }) => {
+  const saveItem = ({ type, count, source, purpose }) => {
     mangroveAssociatedSpeciesAppend({
       type,
       count,
@@ -556,7 +556,7 @@ function SiteInterventionsForm() {
             <StickyFormLabel>{questions.mangroveAssociatedSpecies.question}</StickyFormLabel>
             {mangroveAssociatedSpeciesFields.length > 0
               ? mangroveAssociatedSpeciesFields.map((measurementItem, measurementItemIndex) => (
-                  <CustomTabularInputRow
+                  <MangroveAssociatedSpeciesRow
                     key={measurementItemIndex}
                     type={measurementItem.type}
                     label1={'Count'}
@@ -568,15 +568,17 @@ function SiteInterventionsForm() {
                     rowValue3={measurementItem.purpose.purpose}
                     rowValue4={measurementItem.purpose.other}
                     index={measurementItemIndex}
-                    deleteMeasurementItem={deleteMeasurementItem}
-                    updateMeasurementItem={updateMeasurementItem}></CustomTabularInputRow>
+                    deleteItem={deleteMeasurementItem}
+                    updateItem={updateMeasurementItem}></MangroveAssociatedSpeciesRow>
                 ))
               : null}
             <ErrorText>{errors.mangroveAssociatedSpecies?.message}</ErrorText>
             {showAddTabularInputRow ? (
-              <CustomAddTabularInputRow
-                saveMeasurementItem={saveMeasurementItem}
-                updateTabularInputDisplay={updateTabularInputDisplay}></CustomAddTabularInputRow>
+              <AddMangroveAssociatedSpeciesRow
+                saveItem={saveItem}
+                updateTabularInputDisplay={
+                  updateTabularInputDisplay
+                }></AddMangroveAssociatedSpeciesRow>
             ) : null}
             {!showAddTabularInputRow ? (
               <Button sx={{ marginTop: '1.5em' }} onClick={() => setShowAddTabularInputRow(true)}>

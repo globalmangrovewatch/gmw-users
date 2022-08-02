@@ -80,3 +80,14 @@ export const SelectedInputSection = styled('div')`
 export const QuestionSubSection = styled('div')`
   margin-top: 1em;
 `
+
+export const TabularButtonsDiv = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5em;
+`
+
+export const TabularSectionDiv = styled('div')`
+  margin-top: 2em;
+`
