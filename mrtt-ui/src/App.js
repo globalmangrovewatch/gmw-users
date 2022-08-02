@@ -22,7 +22,7 @@ import SiteForm from './views/SiteForm'
 import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOverview'
 import Sites from './views/Sites'
 import themeMui from './styles/themeMui'
-import CostsForm from './components/CostsForm'
+import CostsForm from './components/Costs/CostsForm'
 import ManageOrganizationUsers from './views/ManageOrganizationUsers'
 
 function App() {
