@@ -13,8 +13,8 @@ import {
   FormQuestionDiv,
   QuestionSubSection,
   SectionFormSubtitle,
-  SectionFormTitle,
-  StickyFormLabel
+  SectionFormTitle
+  // StickyFormLabel
 } from '../../styles/forms'
 import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
@@ -112,7 +112,7 @@ const CostsForm = () => {
           <ErrorText>{errors.supportForActivities?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.projectInterventionFunding.question}</StickyFormLabel>
+          {/* <StickyFormLabel>{questions.projectInterventionFunding.question}</StickyFormLabel> */}
           <Controller
             name='projectInterventionFunding.fundingType'
             control={control}
@@ -143,7 +143,7 @@ const CostsForm = () => {
           ) : null}
         </FormQuestionDiv>
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.projectFunderNames}</StickyFormLabel>
+          {/* <StickyFormLabel>{questions.projectFunderNames}</StickyFormLabel> */}
 
           <ErrorText>{errors.projectFunderNames?.message}</ErrorText>
         </FormQuestionDiv>

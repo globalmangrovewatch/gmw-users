@@ -28,7 +28,6 @@ function Sites() {
 
   const sitesList = sites
     .sort((siteA, siteB) => {
-      console.log(siteA)
       const siteALastUpdatedDate = siteA.section_last_updated
       const siteBLastUpdatedDate = siteB.section_last_updated
 
