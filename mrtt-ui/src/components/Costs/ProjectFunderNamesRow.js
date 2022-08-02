@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { TextField } from '@mui/material'
+import { MenuItem, TextField } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
+import { costs as questions } from '../../data/questions'
 
 const ProjectFunderNamesRow = ({ label, rowValue1, rowValue2, index, deleteItem, updateItem }) => {
   const [initialVal1, setInitialVal1] = useState('')
@@ -37,10 +38,18 @@ const ProjectFunderNamesRow = ({ label, rowValue1, rowValue2, index, deleteItem,
       <TabularLabel>{label}</TabularLabel>
       <TabularBox>
         <TextField
+          select
           value={currentVal1}
           label='type'
           onBlur={handleUpdate}
-          onChange={(e) => setCurrentVal1(e.target.value)}></TextField>
+          sx={{ width: '12.9em' }}
+          onChange={(e) => setCurrentVal1(e.target.value)}>
+          {questions.projectFunderNames.options.map((option, index) => (
+            <MenuItem key={index} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
         <TextField
           sx={{ maxWidth: '7em', marginLeft: '0.5em' }}
           value={currentVal2}
