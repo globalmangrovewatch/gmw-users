@@ -7,32 +7,32 @@ import { styled } from '@mui/material/styles'
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
 import { costs as questions } from '../../data/questions'
 
-const ProjectFunderNamesRow = ({ label, rowValue1, rowValue2, index, deleteItem, updateItem }) => {
-  const [initialVal1, setInitialVal1] = useState('')
-  const [currentVal1, setCurrentVal1] = useState('')
-  const [initialVal2, setInitialVal2] = useState('')
-  const [currentVal2, setCurrentVal2] = useState('')
+const ProjectFunderNamesRow = ({ label, type, percentage, index, deleteItem, updateItem }) => {
+  const [initialType, setInitialType] = useState('')
+  const [currentType, setCurrentType] = useState('')
+  const [initialPercentage, setInitialPercentage] = useState('')
+  const [currentPercentage, setCurrentPercentage] = useState('')
 
   const handleDelete = () => {
     deleteItem(index)
   }
 
   const handleUpdate = () => {
-    if (currentVal1 !== initialVal1 || currentVal2 !== initialVal2) {
-      updateItem(index, currentVal1, currentVal2)
+    if (currentType !== initialType || currentPercentage !== initialPercentage) {
+      updateItem(index, currentType, currentPercentage)
     }
   }
 
   const _setFormValues = useEffect(() => {
-    if (rowValue1) {
-      setCurrentVal1(rowValue1)
-      setInitialVal1(rowValue1)
+    if (type) {
+      setCurrentType(type)
+      setInitialType(type)
     }
-    if (rowValue2) {
-      setCurrentVal2(rowValue2)
-      setInitialVal2(rowValue2)
+    if (percentage) {
+      setCurrentPercentage(percentage)
+      setInitialPercentage(percentage)
     }
-  }, [rowValue1, rowValue2])
+  }, [type, percentage])
 
   return (
     <TabularInputSection>
@@ -40,11 +40,11 @@ const ProjectFunderNamesRow = ({ label, rowValue1, rowValue2, index, deleteItem,
       <TabularBox>
         <TextField
           select
-          value={currentVal1}
+          value={currentType}
           label='type'
           onBlur={handleUpdate}
           sx={{ width: '12.9em' }}
-          onChange={(e) => setCurrentVal1(e.target.value)}>
+          onChange={(e) => setCurrentType(e.target.value)}>
           {questions.projectFunderNames.options.map((option, index) => (
             <MenuItem key={index} value={option}>
               {option}
@@ -53,12 +53,12 @@ const ProjectFunderNamesRow = ({ label, rowValue1, rowValue2, index, deleteItem,
         </TextField>
         <TextField
           sx={{ maxWidth: '7em', marginLeft: '0.5em' }}
-          value={currentVal2}
+          value={currentPercentage}
           required
           label='percentage'
           onBlur={handleUpdate}
           inputProps={{ maxLength: 3 }}
-          onChange={(e) => setCurrentVal2(e.target.value)}></TextField>
+          onChange={(e) => setCurrentPercentage(e.target.value)}></TextField>
         <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
       </TabularBox>
     </TabularInputSection>
@@ -67,8 +67,8 @@ const ProjectFunderNamesRow = ({ label, rowValue1, rowValue2, index, deleteItem,
 
 ProjectFunderNamesRow.propTypes = {
   label: PropTypes.string.isRequired,
-  rowValue1: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  rowValue2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  percentage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   deleteItem: PropTypes.func.isRequired,
   updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired

@@ -6,47 +6,47 @@ import { styled } from '@mui/material/styles'
 
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
 
-const PhysicalMeasurementRow = ({ label, rowValue1, rowValue2, index, deleteItem, updateItem }) => {
-  const [initialVal1, setInitialVal1] = useState('')
-  const [currentVal1, setCurrentVal1] = useState('')
-  const [initialVal2, setInitialVal2] = useState('')
-  const [currentVal2, setCurrentVal2] = useState('')
+const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateItem }) => {
+  const [initialValue, setInitialValue] = useState('')
+  const [currentValue, setCurrentValue] = useState('')
+  const [initialUnit, setInitialUnit] = useState('')
+  const [currentUnit, setCurrentUnit] = useState('')
   const handleDelete = () => {
     deleteItem(index)
   }
 
   const handleUpdate = () => {
-    if (currentVal1 !== initialVal1 || currentVal2 !== initialVal2) {
-      updateItem(index, currentVal1, currentVal2)
+    if (currentValue !== initialValue || currentUnit !== initialUnit) {
+      updateItem(index, currentValue, currentUnit)
     }
   }
 
   const _setFormValues = useEffect(() => {
-    if (rowValue1) {
-      setCurrentVal1(rowValue1)
-      setInitialVal1(rowValue1)
+    if (value) {
+      setCurrentValue(value)
+      setInitialValue(value)
     }
-    if (rowValue2) {
-      setCurrentVal2(rowValue2)
-      setInitialVal2(rowValue2)
+    if (unit) {
+      setCurrentUnit(unit)
+      setInitialUnit(unit)
     }
-  }, [rowValue1, rowValue2])
+  }, [value, unit])
 
   return (
     <TabularInputSection>
       <TabularLabel>{label}</TabularLabel>
       <TabularBox>
         <TextField
-          value={currentVal1}
+          value={currentValue}
           label='value'
           onBlur={handleUpdate}
-          onChange={(e) => setCurrentVal1(e.target.value)}></TextField>
+          onChange={(e) => setCurrentValue(e.target.value)}></TextField>
         <TextField
           sx={{ maxWidth: '7em', marginLeft: '0.5em' }}
-          value={currentVal2}
+          value={currentUnit}
           label='unit'
           onBlur={handleUpdate}
-          onChange={(e) => setCurrentVal2(e.target.value)}></TextField>
+          onChange={(e) => setCurrentUnit(e.target.value)}></TextField>
         <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
       </TabularBox>
     </TabularInputSection>
@@ -55,8 +55,8 @@ const PhysicalMeasurementRow = ({ label, rowValue1, rowValue2, index, deleteItem
 
 PhysicalMeasurementRow.propTypes = {
   label: PropTypes.string.isRequired,
-  rowValue1: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  rowValue2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  unit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   deleteItem: PropTypes.func.isRequired,
   updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired

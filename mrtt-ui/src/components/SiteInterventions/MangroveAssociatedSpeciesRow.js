@@ -9,26 +9,22 @@ import { purposeOptions, sourceOptions } from '../../data/siteInterventionOption
 
 const MangroveAssociatedSpeciesRow = ({
   type,
-  label1,
-  label2,
-  label3,
-  label4,
-  rowValue1,
-  rowValue2,
-  rowValue3,
-  rowValue4,
+  count,
+  source,
+  purpose,
+  other,
   index,
   deleteItem,
   updateItem
 }) => {
-  const [initialVal1, setInitialVal1] = useState('')
-  const [currentVal1, setCurrentVal1] = useState('')
-  const [initialVal2, setInitialVal2] = useState('')
-  const [currentVal2, setCurrentVal2] = useState('')
-  const [initialVal3, setInitialVal3] = useState('')
-  const [currentVal3, setCurrentVal3] = useState('')
-  const [initialVal4, setInitialVal4] = useState('')
-  const [currentVal4, setCurrentVal4] = useState('')
+  const [initialCount, setInitialCount] = useState('')
+  const [currentCount, setCurrentCount] = useState('')
+  const [initialSource, setInitialSource] = useState('')
+  const [currentSource, setCurrentSource] = useState('')
+  const [initialPurpose, setInitialPurpose] = useState('')
+  const [currentPurpose, setCurrentPurpose] = useState('')
+  const [initialOther, setInitialOther] = useState('')
+  const [currentOther, setCurrentOther] = useState('')
 
   const handleDelete = () => {
     deleteItem(index)
@@ -36,33 +32,33 @@ const MangroveAssociatedSpeciesRow = ({
 
   const handleUpdate = () => {
     if (
-      currentVal1 !== initialVal1 ||
-      currentVal2 !== initialVal2 ||
-      currentVal3 !== initialVal3 ||
-      currentVal4 !== initialVal4
+      currentCount !== initialCount ||
+      currentSource !== initialSource ||
+      currentPurpose !== initialPurpose ||
+      currentOther !== initialOther
     ) {
-      updateItem(index, currentVal1, currentVal2, currentVal3, currentVal4)
+      updateItem(index, currentCount, currentSource, currentPurpose, currentOther)
     }
   }
 
   const _setFormValues = useEffect(() => {
-    if (rowValue1) {
-      setCurrentVal1(rowValue1)
-      setInitialVal1(rowValue1)
+    if (count) {
+      setCurrentCount(count)
+      setInitialCount(count)
     }
-    if (rowValue2) {
-      setCurrentVal2(rowValue2)
-      setInitialVal2(rowValue2)
+    if (source) {
+      setCurrentSource(source)
+      setInitialSource(source)
     }
-    if (rowValue3) {
-      setCurrentVal3(rowValue3)
-      setInitialVal3(rowValue3)
+    if (purpose) {
+      setCurrentPurpose(purpose)
+      setInitialPurpose(purpose)
     }
-    if (rowValue4) {
-      setCurrentVal4(rowValue4)
-      setInitialVal4(rowValue4)
+    if (other) {
+      setCurrentOther(other)
+      setInitialOther(other)
     }
-  }, [rowValue1, rowValue2, rowValue3, rowValue4])
+  }, [count, source, purpose, other])
 
   return (
     <TabularInputSection>
@@ -72,16 +68,16 @@ const MangroveAssociatedSpeciesRow = ({
       </LeftColumnDiv>
       <TabularBox>
         <RowTextField
-          value={currentVal1}
-          label={label1}
+          value={currentCount}
+          label={'Count'}
           onBlur={handleUpdate}
-          onChange={(e) => setCurrentVal1(e.target.value)}></RowTextField>
+          onChange={(e) => setCurrentCount(e.target.value)}></RowTextField>
         <RowTextField
           select
-          value={currentVal2}
-          label={label2}
+          value={currentSource}
+          label={'Source'}
           onBlur={handleUpdate}
-          onChange={(e) => setCurrentVal2(e.target.value)}>
+          onChange={(e) => setCurrentSource(e.target.value)}>
           {sourceOptions.map((option, index) => (
             <MenuItem key={index} value={option}>
               {option}
@@ -90,22 +86,22 @@ const MangroveAssociatedSpeciesRow = ({
         </RowTextField>
         <RowTextField
           select
-          value={currentVal3}
-          label={label3}
+          value={currentPurpose}
+          label={'Purpose'}
           onBlur={handleUpdate}
-          onChange={(e) => setCurrentVal3(e.target.value)}>
+          onChange={(e) => setCurrentPurpose(e.target.value)}>
           {purposeOptions.map((option, index) => (
             <MenuItem key={index} value={option}>
               {option}
             </MenuItem>
           ))}
         </RowTextField>
-        {currentVal3 === 'Other' ? (
+        {currentPurpose === 'Other' ? (
           <RowTextField
-            value={currentVal4}
-            label={label4}
+            value={currentOther}
+            label={'Other purpose'}
             onBlur={handleUpdate}
-            onChange={(e) => setCurrentVal4(e.target.value)}></RowTextField>
+            onChange={(e) => setCurrentOther(e.target.value)}></RowTextField>
         ) : null}
       </TabularBox>
     </TabularInputSection>
@@ -114,14 +110,10 @@ const MangroveAssociatedSpeciesRow = ({
 
 MangroveAssociatedSpeciesRow.propTypes = {
   type: PropTypes.string.isRequired,
-  label1: PropTypes.string.isRequired,
-  label2: PropTypes.string.isRequired,
-  label3: PropTypes.string.isRequired,
-  label4: PropTypes.string.isRequired,
-  rowValue1: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  rowValue2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  rowValue3: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  rowValue4: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  source: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  purpose: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  other: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   deleteItem: PropTypes.func.isRequired,
   updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired

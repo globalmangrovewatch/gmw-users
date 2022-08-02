@@ -559,14 +559,10 @@ function SiteInterventionsForm() {
                   <MangroveAssociatedSpeciesRow
                     key={itemIndex}
                     type={item.type}
-                    label1={'Count'}
-                    label2={'Source'}
-                    label3={'Purpose'}
-                    label4={'Other purpose'}
-                    rowValue1={item.count}
-                    rowValue2={item.source}
-                    rowValue3={item.purpose.purpose}
-                    rowValue4={item.purpose.other}
+                    count={item.count}
+                    source={item.source}
+                    purpose={item.purpose.purpose}
+                    other={item.purpose.other}
                     index={itemIndex}
                     deleteItem={deleteMeasurementItem}
                     updateItem={updateMeasurementItem}></MangroveAssociatedSpeciesRow>

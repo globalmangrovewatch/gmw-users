@@ -193,8 +193,8 @@ const CostsForm = () => {
                 <ProjectFunderNamesRow
                   key={itemIndex}
                   label={item.funderName}
-                  rowValue1={item.funderType}
-                  rowValue2={item.percentage}
+                  type={item.funderType}
+                  percentage={item.percentage}
                   index={itemIndex}
                   deleteItem={deleteItem}
                   updateItem={updateItem}></ProjectFunderNamesRow>

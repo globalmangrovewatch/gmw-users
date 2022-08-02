@@ -511,8 +511,8 @@ function PreRestorationAssessmentForm() {
                   <PhysicalMeasurementRow
                     key={measurementItemIndex}
                     label={measurementItem.measurementType}
-                    rowValue1={measurementItem.measurementValue}
-                    rowValue2={measurementItem.measurementUnit}
+                    value={measurementItem.measurementValue}
+                    unit={measurementItem.measurementUnit}
                     index={measurementItemIndex}
                     deleteItem={deleteMeasurementItem}
                     updateItem={updateMeasurementItem}></PhysicalMeasurementRow>
