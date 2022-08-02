@@ -23,13 +23,11 @@ import {
   FormPageHeader,
   FormQuestionDiv,
   StickyFormLabel,
-  SectionFormSubtitle,
-  SectionFormTitle,
   SelectedInputSection,
   TabularLabel
 } from '../styles/forms'
 import { ContentWrapper } from '../styles/containers'
-import { ErrorText } from '../styles/typography'
+import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { findDataItem } from '../library/findDataItem'
 import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
 import { mapDataForApi } from '../library/mapDataForApi'
@@ -249,10 +247,11 @@ function PreRestorationAssessmentForm() {
     return setShowAddTabularInputRow(boolean)
   }
 
-  const saveMeasurementItem = (measurementType, measurementValue) => {
+  const saveMeasurementItem = (measurementType, measurementValue, measurementUnit) => {
     physicalMeasurementsTakenAppend({
       measurementType,
-      measurementValue
+      measurementValue,
+      measurementUnit
     })
   }
 
@@ -272,10 +271,10 @@ function PreRestorationAssessmentForm() {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>
+        <PageTitle>
           {language.pages.siteQuestionsOverview.formName.preRestorationAssessment}
-        </SectionFormTitle>
-        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
+        </PageTitle>
+        <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
         isSaving={isSubmitting}

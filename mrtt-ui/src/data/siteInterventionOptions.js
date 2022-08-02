@@ -11,3 +11,14 @@ export const seedlingOptions = [
   'Unknown',
   'Other'
 ]
+
+export const sourceOptions = ['Nursery', 'Wild', 'Both']
+
+export const purposeOptions = [
+  'Coastal defence',
+  'Source of food',
+  'Products for sale',
+  'Traditional medicines',
+  'Other',
+  'Not applicable'
+]

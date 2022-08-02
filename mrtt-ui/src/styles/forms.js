@@ -11,15 +11,6 @@ export const MainFormDiv = styled('div')`
   flex-direction: column;
 `
 
-export const SectionFormTitle = styled('h1')`
-  font-weight: 400;
-  margin-bottom: 0;
-`
-
-export const SectionFormSubtitle = styled('h2')`
-  font-weight: 200;
-  margin-bottom: 0;
-`
 export const FormQuestionDiv = styled('div')`
   padding: ${themeMui.spacing(3)};
   display: flex;
@@ -55,11 +46,11 @@ export const RequiredIndicator = styled('span')`
   color: ${theme.form.requiredIndicatorColor};
   padding: 0 ${themeMui.spacing(1)};
 `
-export const SubTitle = styled('label')`
+export const NestedLabel1 = styled('label')`
   text-transform: uppercase;
   font-weight: 700;
 `
-export const SubTitle2 = styled('label')`
+export const NestedLabel2 = styled('label')`
   margin-top: 0.75em;
   text-transform: uppercase;
 `

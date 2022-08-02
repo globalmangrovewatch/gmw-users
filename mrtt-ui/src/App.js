@@ -17,12 +17,13 @@ import RestorationAimsForm from './components/RestorationAimsForm/RestorationAim
 import PreRestorationAssessmentForm from './components/PreRestorationAssessmentForm'
 import SignupForm from './views/Auth/SignupForm'
 import SiteBackgroundForm from './components/SiteBackgroundForm'
-import SiteInterventionsForm from './components/SiteInterventions'
+import SiteInterventionsForm from './components/SiteInterventions/SiteInterventions'
 import SiteForm from './views/SiteForm'
 import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOverview'
 import Sites from './views/Sites'
 import themeMui from './styles/themeMui'
 import CostsForm from './components/Costs/CostsForm'
+import ManageOrganizationUsers from './views/ManageOrganizationUsers'
 
 function App() {
   return (
@@ -43,6 +44,10 @@ function App() {
               <Route
                 path='/organizations/:organizationId/edit'
                 element={<OrganizationForm isNewOrganization={false} />}
+              />
+              <Route
+                path='/organizations/:organizationId/users'
+                element={<ManageOrganizationUsers />}
               />
               <Route
                 path='/organizations/new'

@@ -9,20 +9,22 @@ import { ErrorText } from '../../styles/typography'
 const AddTabularInputRow = ({ saveMeasurementItem, updateTabularInputDisplay }) => {
   const [measurementType, setMeasurementType] = useState('')
   const [measurementValue, setMeasurementValue] = useState('')
+  const [measurementUnit, setMeasurementUnit] = useState('')
   const [error, setError] = useState(null)
 
   const cancelMeasurementItem = () => {
     setMeasurementType(null)
     setMeasurementValue(null)
+    setMeasurementUnit(null)
     updateTabularInputDisplay(false)
   }
 
   const handleSave = () => {
-    if (!measurementType.length || !measurementValue.length) {
-      setError('Please fill both fields.')
+    if (!measurementType.length || !measurementValue.length || !measurementUnit.length) {
+      setError('Please fill all fields.')
     } else {
       setMeasurementType(String(measurementType))
-      saveMeasurementItem(measurementType, measurementValue)
+      saveMeasurementItem(measurementType, measurementValue, measurementUnit)
       updateTabularInputDisplay(false)
     }
   }
@@ -38,11 +40,18 @@ const AddTabularInputRow = ({ saveMeasurementItem, updateTabularInputDisplay }) 
             onChange={(e) => setMeasurementType(e.target.value)}></TextField>
         </TabularInputSection>
         <TabularInputSection>
-          <TabularLabel>Measurement value</TabularLabel>
+          <TabularLabel>Value</TabularLabel>
           <TextField
             value={measurementValue}
             label='value'
             onChange={(e) => setMeasurementValue(e.target.value)}></TextField>
+        </TabularInputSection>
+        <TabularInputSection>
+          <TabularLabel>Unit</TabularLabel>
+          <TextField
+            value={measurementUnit}
+            label='unit'
+            onChange={(e) => setMeasurementUnit(e.target.value)}></TextField>
         </TabularInputSection>
         {error ? <ErrorText>{error}</ErrorText> : null}
         <ButtonsDiv>
@@ -71,7 +80,7 @@ const ButtonsDiv = styled('div')`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1em;
+  margin-top: 1.5em;
 `
 
 const SectionDiv = styled('div')`

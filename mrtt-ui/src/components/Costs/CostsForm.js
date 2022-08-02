@@ -12,9 +12,7 @@ import {
   FormPageHeader,
   FormQuestionDiv,
   QuestionSubSection,
-  SectionFormSubtitle,
-  SectionFormTitle
-  // StickyFormLabel
+  StickyFormLabel
 } from '../../styles/forms'
 import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
@@ -23,7 +21,7 @@ import { ContentWrapper } from '../../styles/containers'
 import { costs as questions } from '../../data/questions'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
-import { ErrorText } from '../../styles/typography'
+import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
 import LoadingIndicator from '../LoadingIndicator'
@@ -91,8 +89,8 @@ const CostsForm = () => {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <SectionFormTitle>{language.pages.siteQuestionsOverview.formName.costs}</SectionFormTitle>
-        <SectionFormSubtitle>{site_name}</SectionFormSubtitle>
+        <PageTitle>{language.pages.siteQuestionsOverview.formName.costs}</PageTitle>
+        <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
         isSaving={isSubmitting}
@@ -112,7 +110,7 @@ const CostsForm = () => {
           <ErrorText>{errors.supportForActivities?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          {/* <StickyFormLabel>{questions.projectInterventionFunding.question}</StickyFormLabel> */}
+          <StickyFormLabel>{questions.projectInterventionFunding.question}</StickyFormLabel>
           <Controller
             name='projectInterventionFunding.fundingType'
             control={control}
@@ -143,7 +141,7 @@ const CostsForm = () => {
           ) : null}
         </FormQuestionDiv>
         <FormQuestionDiv>
-          {/* <StickyFormLabel>{questions.projectFunderNames}</StickyFormLabel> */}
+          <StickyFormLabel>{questions.projectFunderNames.question}</StickyFormLabel>
 
           <ErrorText>{errors.projectFunderNames?.message}</ErrorText>
         </FormQuestionDiv>
