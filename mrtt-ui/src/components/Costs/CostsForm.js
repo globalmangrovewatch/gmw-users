@@ -4,8 +4,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Controller, useForm } from 'react-hook-form'
-import { MenuItem, TextField } from '@mui/material'
+import { Controller, useForm, useFieldArray } from 'react-hook-form'
+import { Button, MenuItem, TextField } from '@mui/material'
 
 import {
   Form,
@@ -26,6 +26,7 @@ import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
 import LoadingIndicator from '../LoadingIndicator'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import AddProjectInterventionFundingRow from './AddProjectInterventionFundingRow'
 
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
@@ -53,12 +54,20 @@ const CostsForm = () => {
     watch: watchForm
   } = reactHookFormInstance
 
+  const {
+    // fields: projectInterventionFundingFields,
+    append: projectInterventionFundingAppend
+    // remove: projectInterventionFundingRemove,
+    // update: projectInterventionFundingUpdate
+  } = useFieldArray({ name: 'projectInterventionFunding', control })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const projectInterventionFundingWatcher = watchForm('projectInterventionFunding')
+  const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
@@ -83,6 +92,22 @@ const CostsForm = () => {
         toast.error(language.error.submit)
       })
   }
+
+  const updateTabularInputDisplay = (boolean) => {
+    return setShowAddTabularInputRow(boolean)
+  }
+
+  const saveItem = ({ funderName, funderType, percentage }) => {
+    projectInterventionFundingAppend({
+      funderName,
+      funderType,
+      percentage
+    })
+  }
+
+  // const deleteMeasurementItem = (measurementIndex) => {
+  //   mangroveAssociatedSpeciesRemove(measurementIndex)
+  // }
 
   return isLoading ? (
     <LoadingIndicator />
@@ -144,6 +169,18 @@ const CostsForm = () => {
           <StickyFormLabel>{questions.projectFunderNames.question}</StickyFormLabel>
 
           <ErrorText>{errors.projectFunderNames?.message}</ErrorText>
+          {showAddTabularInputRow ? (
+            <AddProjectInterventionFundingRow
+              saveItem={saveItem}
+              updateTabularInputDisplay={
+                updateTabularInputDisplay
+              }></AddProjectInterventionFundingRow>
+          ) : null}
+          {!showAddTabularInputRow ? (
+            <Button sx={{ marginTop: '1.5em' }} onClick={() => setShowAddTabularInputRow(true)}>
+              + Add measurement row
+            </Button>
+          ) : null}
         </FormQuestionDiv>
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController

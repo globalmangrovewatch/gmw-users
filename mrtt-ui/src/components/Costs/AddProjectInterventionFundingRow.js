@@ -1,30 +1,31 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Box, TextField } from '@mui/material'
+import { Box, MenuItem, TextField } from '@mui/material'
 
 import { TabularInputSection, TabularLabel, TabularSectionDiv } from '../../styles/forms'
 import { ErrorText } from '../../styles/typography'
 import TabularButtons from '../TabularInput/TabularButtons'
+import { costs as questions } from '../../data/questions'
 
-const AddProjectInterventionFundingRow = ({ saveMeasurementItem, updateTabularInputDisplay }) => {
-  const [measurementType, setMeasurementType] = useState('')
-  const [measurementValue, setMeasurementValue] = useState('')
-  const [measurementUnit, setMeasurementUnit] = useState('')
+const AddProjectInterventionFundingRow = ({ saveItem, updateTabularInputDisplay }) => {
+  const [funderName, setFunderName] = useState('')
+  const [funderType, setFunderType] = useState('')
+  const [percentage, setPercentage] = useState('')
   const [error, setError] = useState(null)
 
   const cancelItem = () => {
-    setMeasurementType(null)
-    setMeasurementValue(null)
-    setMeasurementUnit(null)
+    setFunderName(null)
+    setFunderType(null)
+    setPercentage(null)
     updateTabularInputDisplay(false)
   }
 
   const handleSave = () => {
-    if (!measurementType.length || !measurementValue.length || !measurementUnit.length) {
+    if (!funderName.length || !funderType.length || !percentage.length) {
       setError('Please fill all fields.')
     } else {
-      setMeasurementType(String(measurementType))
-      saveMeasurementItem(measurementType, measurementValue, measurementUnit)
+      setFunderName(String(funderName))
+      saveItem(funderName, funderType, percentage)
       updateTabularInputDisplay(false)
     }
   }
@@ -33,25 +34,33 @@ const AddProjectInterventionFundingRow = ({ saveMeasurementItem, updateTabularIn
     <TabularSectionDiv>
       <Box sx={{ width: '100%' }}>
         <TabularInputSection>
-          <TabularLabel>Measurement type</TabularLabel>
+          <TabularLabel>Funder Name</TabularLabel>
           <TextField
-            value={measurementType}
+            value={funderName}
+            label='name'
+            onChange={(e) => setFunderName(e.target.value)}></TextField>
+        </TabularInputSection>
+        <TabularInputSection>
+          <TabularLabel>Funder Type</TabularLabel>
+          <TextField
+            select
+            value={funderType}
             label='type'
-            onChange={(e) => setMeasurementType(e.target.value)}></TextField>
+            sx={{ width: '12.9em' }}
+            onChange={(e) => setFunderType(e.target.value)}>
+            {questions.projectFunderNames.options.map((option, index) => (
+              <MenuItem key={index} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
         </TabularInputSection>
         <TabularInputSection>
-          <TabularLabel>Value</TabularLabel>
+          <TabularLabel>Percentage</TabularLabel>
           <TextField
-            value={measurementValue}
-            label='value'
-            onChange={(e) => setMeasurementValue(e.target.value)}></TextField>
-        </TabularInputSection>
-        <TabularInputSection>
-          <TabularLabel>Unit</TabularLabel>
-          <TextField
-            value={measurementUnit}
-            label='unit'
-            onChange={(e) => setMeasurementUnit(e.target.value)}></TextField>
+            value={percentage}
+            label='%'
+            onChange={(e) => setPercentage(e.target.value)}></TextField>
         </TabularInputSection>
         {error ? <ErrorText>{error}</ErrorText> : null}
         <TabularButtons handleSave={handleSave} cancelItem={cancelItem}></TabularButtons>
@@ -61,7 +70,7 @@ const AddProjectInterventionFundingRow = ({ saveMeasurementItem, updateTabularIn
 }
 
 AddProjectInterventionFundingRow.propTypes = {
-  saveMeasurementItem: PropTypes.func.isRequired,
+  saveItem: PropTypes.func.isRequired,
   updateTabularInputDisplay: PropTypes.func.isRequired
 }
 
