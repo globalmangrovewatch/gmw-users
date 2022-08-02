@@ -125,8 +125,8 @@ const CostsForm = () => {
 
   const updateItem = (index, funderType, percentage) => {
     const currentItem = projectFunderNamesFields[index]
-    if (funderType) currentItem.funderType = funderType
-    if (percentage) currentItem.percentage = percentage
+    currentItem.funderType = funderType
+    currentItem.percentage = percentage
     projectFunderNamesUpdate(index, currentItem)
   }
 

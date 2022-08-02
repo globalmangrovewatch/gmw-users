@@ -12,6 +12,7 @@ const ProjectFunderNamesRow = ({ label, rowValue1, rowValue2, index, deleteItem,
   const [currentVal1, setCurrentVal1] = useState('')
   const [initialVal2, setInitialVal2] = useState('')
   const [currentVal2, setCurrentVal2] = useState('')
+
   const handleDelete = () => {
     deleteItem(index)
   }
@@ -53,8 +54,10 @@ const ProjectFunderNamesRow = ({ label, rowValue1, rowValue2, index, deleteItem,
         <TextField
           sx={{ maxWidth: '7em', marginLeft: '0.5em' }}
           value={currentVal2}
+          required
           label='percentage'
           onBlur={handleUpdate}
+          inputProps={{ maxLength: 3 }}
           onChange={(e) => setCurrentVal2(e.target.value)}></TextField>
         <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
       </TabularBox>
