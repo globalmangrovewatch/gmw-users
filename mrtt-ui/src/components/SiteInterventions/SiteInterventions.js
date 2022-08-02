@@ -555,19 +555,19 @@ function SiteInterventionsForm() {
           <FormQuestionDiv>
             <StickyFormLabel>{questions.mangroveAssociatedSpecies.question}</StickyFormLabel>
             {mangroveAssociatedSpeciesFields.length > 0
-              ? mangroveAssociatedSpeciesFields.map((measurementItem, measurementItemIndex) => (
+              ? mangroveAssociatedSpeciesFields.map((item, itemIndex) => (
                   <MangroveAssociatedSpeciesRow
-                    key={measurementItemIndex}
-                    type={measurementItem.type}
+                    key={itemIndex}
+                    type={item.type}
                     label1={'Count'}
                     label2={'Source'}
                     label3={'Purpose'}
                     label4={'Other purpose'}
-                    rowValue1={measurementItem.count}
-                    rowValue2={measurementItem.source}
-                    rowValue3={measurementItem.purpose.purpose}
-                    rowValue4={measurementItem.purpose.other}
-                    index={measurementItemIndex}
+                    rowValue1={item.count}
+                    rowValue2={item.source}
+                    rowValue3={item.purpose.purpose}
+                    rowValue4={item.purpose.other}
+                    index={itemIndex}
                     deleteItem={deleteMeasurementItem}
                     updateItem={updateMeasurementItem}></MangroveAssociatedSpeciesRow>
                 ))

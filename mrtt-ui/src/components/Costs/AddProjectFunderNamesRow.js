@@ -7,7 +7,7 @@ import { ErrorText } from '../../styles/typography'
 import TabularButtons from '../TabularInput/TabularButtons'
 import { costs as questions } from '../../data/questions'
 
-const AddProjectInterventionFundingRow = ({ saveItem, updateTabularInputDisplay }) => {
+const AddProjectFunderNamesRow = ({ saveItem, updateTabularInputDisplay }) => {
   const [funderName, setFunderName] = useState('')
   const [funderType, setFunderType] = useState('')
   const [percentage, setPercentage] = useState('')
@@ -24,7 +24,6 @@ const AddProjectInterventionFundingRow = ({ saveItem, updateTabularInputDisplay 
     if (!funderName.length || !funderType.length || !percentage.length) {
       setError('Please fill all fields.')
     } else {
-      setFunderName(String(funderName))
       saveItem(funderName, funderType, percentage)
       updateTabularInputDisplay(false)
     }
@@ -69,9 +68,9 @@ const AddProjectInterventionFundingRow = ({ saveItem, updateTabularInputDisplay 
   )
 }
 
-AddProjectInterventionFundingRow.propTypes = {
+AddProjectFunderNamesRow.propTypes = {
   saveItem: PropTypes.func.isRequired,
   updateTabularInputDisplay: PropTypes.func.isRequired
 }
 
-export default AddProjectInterventionFundingRow
+export default AddProjectFunderNamesRow

@@ -26,16 +26,30 @@ import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
 import LoadingIndicator from '../LoadingIndicator'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
-import AddProjectInterventionFundingRow from './AddProjectInterventionFundingRow'
+import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
+import ProjectFunderNamesRow from './ProjectFunderNamesRow'
 
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     supportForActivities: multiselectWithOtherValidationNoMinimum,
-    projectInterventionFunding: yup.object().shape({
-      fundingType: yup.string(),
-      other: yup.string()
-    }),
+    projectInterventionFunding: yup
+      .object()
+      .shape({
+        fundingType: yup.string(),
+        other: yup.string()
+      })
+      .default([]),
+    projectFunderNames: yup
+      .array()
+      .of(
+        yup.object().shape({
+          funderName: yup.string(),
+          funderType: yup.string(),
+          percentage: yup.mixed()
+        })
+      )
+      .default([]),
     nonmonetisedContributions: multiselectWithOtherValidationNoMinimum
   })
   const reactHookFormInstance = useForm({
@@ -55,11 +69,11 @@ const CostsForm = () => {
   } = reactHookFormInstance
 
   const {
-    // fields: projectInterventionFundingFields,
-    append: projectInterventionFundingAppend
-    // remove: projectInterventionFundingRemove,
-    // update: projectInterventionFundingUpdate
-  } = useFieldArray({ name: 'projectInterventionFunding', control })
+    fields: projectFunderNamesFields,
+    append: projectFunderNamesAppend,
+    remove: projectFunderNamesRemove,
+    update: projectFunderNamesUpdate
+  } = useFieldArray({ name: 'projectFunderNames', control })
 
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
@@ -97,17 +111,25 @@ const CostsForm = () => {
     return setShowAddTabularInputRow(boolean)
   }
 
-  const saveItem = ({ funderName, funderType, percentage }) => {
-    projectInterventionFundingAppend({
+  const saveItem = (funderName, funderType, percentage) => {
+    projectFunderNamesAppend({
       funderName,
       funderType,
       percentage
     })
   }
 
-  // const deleteMeasurementItem = (measurementIndex) => {
-  //   mangroveAssociatedSpeciesRemove(measurementIndex)
-  // }
+  const deleteItem = (index) => {
+    projectFunderNamesRemove(index)
+  }
+
+  const updateItem = (index, funderName, funderType, percentage) => {
+    const currentItem = projectFunderNamesFields[index]
+    if (funderName) currentItem.funderName = funderName
+    if (funderType) currentItem.funderType = funderType
+    if (percentage) currentItem.percentage = percentage
+    projectFunderNamesUpdate(index, currentItem)
+  }
 
   return isLoading ? (
     <LoadingIndicator />
@@ -167,14 +189,23 @@ const CostsForm = () => {
         </FormQuestionDiv>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.projectFunderNames.question}</StickyFormLabel>
-
+          {projectFunderNamesFields?.length > 0
+            ? projectFunderNamesFields.map((item, itemIndex) => (
+                <ProjectFunderNamesRow
+                  key={itemIndex}
+                  label={item.funderName}
+                  rowValue1={item.funderType}
+                  rowValue2={item.percentage}
+                  index={itemIndex}
+                  deleteItem={deleteItem}
+                  updateItem={updateItem}></ProjectFunderNamesRow>
+              ))
+            : null}
           <ErrorText>{errors.projectFunderNames?.message}</ErrorText>
           {showAddTabularInputRow ? (
-            <AddProjectInterventionFundingRow
+            <AddProjectFunderNamesRow
               saveItem={saveItem}
-              updateTabularInputDisplay={
-                updateTabularInputDisplay
-              }></AddProjectInterventionFundingRow>
+              updateTabularInputDisplay={updateTabularInputDisplay}></AddProjectFunderNamesRow>
           ) : null}
           {!showAddTabularInputRow ? (
             <Button sx={{ marginTop: '1.5em' }} onClick={() => setShowAddTabularInputRow(true)}>
