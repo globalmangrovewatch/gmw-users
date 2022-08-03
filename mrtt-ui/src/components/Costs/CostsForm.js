@@ -5,7 +5,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
-import { Button, MenuItem, TextField } from '@mui/material'
+import { Box, Button, MenuItem, TextField } from '@mui/material'
 
 import {
   Form,
@@ -28,6 +28,7 @@ import LoadingIndicator from '../LoadingIndicator'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
 import ProjectFunderNamesRow from './ProjectFunderNamesRow'
+import { currencies } from '../../data/currencies'
 
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
@@ -50,6 +51,10 @@ const CostsForm = () => {
         })
       )
       .default([]),
+    costOfProjectActivities: yup.object().shape({
+      amount: yup.number(),
+      currency: yup.string()
+    }),
     nonmonetisedContributions: multiselectWithOtherValidationNoMinimum
   })
   const reactHookFormInstance = useForm({
@@ -188,32 +193,67 @@ const CostsForm = () => {
           ) : null}
         </FormQuestionDiv>
         {supportForActivitiesWatcher?.selectedValues?.includes('Monetary') ? (
-          <FormQuestionDiv>
-            <StickyFormLabel>{questions.projectFunderNames.question}</StickyFormLabel>
-            {projectFunderNamesFields?.length > 0
-              ? projectFunderNamesFields.map((item, itemIndex) => (
-                  <ProjectFunderNamesRow
-                    key={itemIndex}
-                    label={item.funderName}
-                    type={item.funderType}
-                    percentage={item.percentage}
-                    index={itemIndex}
-                    deleteItem={deleteItem}
-                    updateItem={updateItem}></ProjectFunderNamesRow>
-                ))
-              : null}
-            <ErrorText>{errors.projectFunderNames?.message}</ErrorText>
-            {showAddTabularInputRow ? (
-              <AddProjectFunderNamesRow
-                saveItem={saveItem}
-                updateTabularInputDisplay={updateTabularInputDisplay}></AddProjectFunderNamesRow>
-            ) : null}
-            {!showAddTabularInputRow ? (
-              <Button sx={{ marginTop: '1.5em' }} onClick={() => setShowAddTabularInputRow(true)}>
-                + Add measurement row
-              </Button>
-            ) : null}
-          </FormQuestionDiv>
+          <div>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.projectFunderNames.question}</StickyFormLabel>
+              {projectFunderNamesFields?.length > 0
+                ? projectFunderNamesFields.map((item, itemIndex) => (
+                    <ProjectFunderNamesRow
+                      key={itemIndex}
+                      label={item.funderName}
+                      type={item.funderType}
+                      percentage={item.percentage}
+                      index={itemIndex}
+                      deleteItem={deleteItem}
+                      updateItem={updateItem}></ProjectFunderNamesRow>
+                  ))
+                : null}
+              <ErrorText>{errors.projectFunderNames?.message}</ErrorText>
+              {showAddTabularInputRow ? (
+                <AddProjectFunderNamesRow
+                  saveItem={saveItem}
+                  updateTabularInputDisplay={updateTabularInputDisplay}></AddProjectFunderNamesRow>
+              ) : null}
+              {!showAddTabularInputRow ? (
+                <Button sx={{ marginTop: '1.5em' }} onClick={() => setShowAddTabularInputRow(true)}>
+                  + Add measurement row
+                </Button>
+              ) : null}
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.costOfProjectActivities.question}</StickyFormLabel>
+              <Box sx={{ marginTop: '1em' }}>
+                <Controller
+                  name='costOfProjectActivities.cost'
+                  control={control}
+                  defaultValue={0}
+                  render={({ field }) => (
+                    <TextField {...field} value={field.value} label='enter cost'></TextField>
+                  )}
+                />
+                <Controller
+                  name={`costOfProjectActivities.currency`}
+                  control={control}
+                  defaultValue={''}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      select
+                      sx={{ width: '8em', marginLeft: '1em' }}
+                      value={field.value}
+                      label='currency'>
+                      {currencies.map((currency, index) => (
+                        <MenuItem key={index} value={currency.code}>
+                          {currency.code}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                />
+              </Box>
+              <ErrorText>{errors.costOfProjectActivities?.cost?.message}</ErrorText>
+            </FormQuestionDiv>
+          </div>
         ) : null}
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
