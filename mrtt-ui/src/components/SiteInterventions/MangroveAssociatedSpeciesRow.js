@@ -69,13 +69,13 @@ const MangroveAssociatedSpeciesRow = ({
       <TabularBox>
         <RowTextField
           value={currentCount}
-          label={'Count'}
+          label='Count'
           onBlur={handleUpdate}
           onChange={(e) => setCurrentCount(e.target.value)}></RowTextField>
         <RowTextField
           select
           value={currentSource}
-          label={'Source'}
+          label='Source'
           onBlur={handleUpdate}
           onChange={(e) => setCurrentSource(e.target.value)}>
           {sourceOptions.map((option, index) => (
@@ -87,7 +87,7 @@ const MangroveAssociatedSpeciesRow = ({
         <RowTextField
           select
           value={currentPurpose}
-          label={'Purpose'}
+          label='Purpose'
           onBlur={handleUpdate}
           onChange={(e) => setCurrentPurpose(e.target.value)}>
           {purposeOptions.map((option, index) => (
@@ -99,7 +99,7 @@ const MangroveAssociatedSpeciesRow = ({
         {currentPurpose === 'Other' ? (
           <RowTextField
             value={currentOther}
-            label={'Other purpose'}
+            label='Other purpose'
             onBlur={handleUpdate}
             onChange={(e) => setCurrentOther(e.target.value)}></RowTextField>
         ) : null}
