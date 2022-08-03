@@ -81,6 +81,7 @@ const CostsForm = () => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const projectInterventionFundingWatcher = watchForm('projectInterventionFunding')
+  const supportForActivitiesWatcher = watchForm('supportForActivities')
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
 
   useInitializeQuestionMappedForm({
@@ -186,32 +187,34 @@ const CostsForm = () => {
             </QuestionSubSection>
           ) : null}
         </FormQuestionDiv>
-        <FormQuestionDiv>
-          <StickyFormLabel>{questions.projectFunderNames.question}</StickyFormLabel>
-          {projectFunderNamesFields?.length > 0
-            ? projectFunderNamesFields.map((item, itemIndex) => (
-                <ProjectFunderNamesRow
-                  key={itemIndex}
-                  label={item.funderName}
-                  type={item.funderType}
-                  percentage={item.percentage}
-                  index={itemIndex}
-                  deleteItem={deleteItem}
-                  updateItem={updateItem}></ProjectFunderNamesRow>
-              ))
-            : null}
-          <ErrorText>{errors.projectFunderNames?.message}</ErrorText>
-          {showAddTabularInputRow ? (
-            <AddProjectFunderNamesRow
-              saveItem={saveItem}
-              updateTabularInputDisplay={updateTabularInputDisplay}></AddProjectFunderNamesRow>
-          ) : null}
-          {!showAddTabularInputRow ? (
-            <Button sx={{ marginTop: '1.5em' }} onClick={() => setShowAddTabularInputRow(true)}>
-              + Add measurement row
-            </Button>
-          ) : null}
-        </FormQuestionDiv>
+        {supportForActivitiesWatcher?.selectedValues?.includes('Monetary') ? (
+          <FormQuestionDiv>
+            <StickyFormLabel>{questions.projectFunderNames.question}</StickyFormLabel>
+            {projectFunderNamesFields?.length > 0
+              ? projectFunderNamesFields.map((item, itemIndex) => (
+                  <ProjectFunderNamesRow
+                    key={itemIndex}
+                    label={item.funderName}
+                    type={item.funderType}
+                    percentage={item.percentage}
+                    index={itemIndex}
+                    deleteItem={deleteItem}
+                    updateItem={updateItem}></ProjectFunderNamesRow>
+                ))
+              : null}
+            <ErrorText>{errors.projectFunderNames?.message}</ErrorText>
+            {showAddTabularInputRow ? (
+              <AddProjectFunderNamesRow
+                saveItem={saveItem}
+                updateTabularInputDisplay={updateTabularInputDisplay}></AddProjectFunderNamesRow>
+            ) : null}
+            {!showAddTabularInputRow ? (
+              <Button sx={{ marginTop: '1.5em' }} onClick={() => setShowAddTabularInputRow(true)}>
+                + Add measurement row
+              </Button>
+            ) : null}
+          </FormQuestionDiv>
+        ) : null}
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
             fieldName='nonmonetisedContributions'
