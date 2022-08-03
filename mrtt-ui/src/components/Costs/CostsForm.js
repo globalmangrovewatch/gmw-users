@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -29,6 +29,10 @@ import useInitializeQuestionMappedForm from '../../library/useInitializeQuestion
 import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
 import ProjectFunderNamesRow from './ProjectFunderNamesRow'
 import { currencies } from '../../data/currencies'
+import { findDataItem } from '../../library/findDataItem'
+
+const getEndDate = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '1.1b') ?? ''
 
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
@@ -52,7 +56,7 @@ const CostsForm = () => {
       )
       .default([]),
     costOfProjectActivities: yup.object().shape({
-      amount: yup.number(),
+      cost: yup.number().typeError('Please add a number'),
       currency: yup.string()
     }),
     nonmonetisedContributions: multiselectWithOtherValidationNoMinimum
@@ -88,12 +92,20 @@ const CostsForm = () => {
   const projectInterventionFundingWatcher = watchForm('projectInterventionFunding')
   const supportForActivitiesWatcher = watchForm('supportForActivities')
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
+  const [hasEndDate, setHasEndDate] = useState(false)
+
+  const loadServerData = useCallback((serverResponse) => {
+    const endDateResponse = getEndDate(serverResponse)
+
+    if (endDateResponse) setHasEndDate(true)
+  }, [])
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.costs,
     resetForm,
-    setIsLoading
+    setIsLoading,
+    successCallback: loadServerData
   })
 
   const handleSubmit = (formData) => {
@@ -221,7 +233,11 @@ const CostsForm = () => {
               ) : null}
             </FormQuestionDiv>
             <FormQuestionDiv>
-              <StickyFormLabel>{questions.costOfProjectActivities.question}</StickyFormLabel>
+              <StickyFormLabel>
+                {hasEndDate
+                  ? questions.costOfProjectActivities.question
+                  : 'What is the total cost of the project activities at the site to date?'}
+              </StickyFormLabel>
               <Box sx={{ marginTop: '1em' }}>
                 <Controller
                   name='costOfProjectActivities.cost'
@@ -232,7 +248,7 @@ const CostsForm = () => {
                   )}
                 />
                 <Controller
-                  name={`costOfProjectActivities.currency`}
+                  name='costOfProjectActivities.currency'
                   control={control}
                   defaultValue={''}
                   render={({ field }) => (
