@@ -102,3 +102,11 @@ export const VerticalTabularBox = styled('div')`
   flex-direction: column;
   cursor: pointer;
 `
+
+export const VerticalTabularInputSection = styled('div')`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 1em;
+  justify-content: space-between;
+`

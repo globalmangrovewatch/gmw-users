@@ -28,6 +28,7 @@ import LoadingIndicator from '../LoadingIndicator'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
 import ProjectFunderNamesRow from './ProjectFunderNamesRow'
+import BreakdownOfCostRow from './BreakdownOfCostRow'
 import { currencies } from '../../data/currencies'
 import { findDataItem } from '../../library/findDataItem'
 
@@ -63,7 +64,7 @@ const CostsForm = () => {
       .of(
         yup.object().shape({
           costType: yup.string(),
-          cost: yup.number().typeError('Please add a number'),
+          cost: yup.mixed(),
           currency: yup.string()
         })
       )
@@ -184,8 +185,7 @@ const CostsForm = () => {
     projectFunderNamesUpdate(index, currentItem)
   }
 
-  // eslint-disable-next-line no-unused-vars
-  const updateBreakDownOfCostItem = (index, cost, currency) => {
+  const updateBreakdownOfCostItem = (index, cost, currency) => {
     const currentItem = breakdownOfCostFields[index]
     currentItem.cost = cost
     currentItem.currency = currency
@@ -315,6 +315,17 @@ const CostsForm = () => {
             </FormQuestionDiv>
             <FormQuestionDiv>
               <StickyFormLabel>{questions.breakdownOfCost.question}</StickyFormLabel>
+              {breakdownOfCostFields?.length > 0
+                ? breakdownOfCostFields?.map((item, itemIndex) => (
+                    <BreakdownOfCostRow
+                      key={itemIndex}
+                      label={item.costType}
+                      cost={item.cost}
+                      currency={item.currency}
+                      index={itemIndex}
+                      updateItem={updateBreakdownOfCostItem}></BreakdownOfCostRow>
+                  ))
+                : null}
             </FormQuestionDiv>
           </div>
         ) : null}

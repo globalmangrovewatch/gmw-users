@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { TextField } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 
-import { HorizontalTabularBox, TabularInputSection, TabularLabel } from '../../styles/forms'
+import { VerticalTabularBox, TabularInputSection, TabularLabel } from '../../styles/forms'
 
 const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateItem }) => {
   const [initialValue, setInitialValue] = useState('')
@@ -34,20 +34,20 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
   return (
     <TabularInputSection>
       <TabularLabel>{label}</TabularLabel>
-      <HorizontalTabularBox>
+      <VerticalTabularBox>
         <TextField
           value={currentValue}
           label='value'
           onBlur={handleUpdate}
           onChange={(e) => setCurrentValue(e.target.value)}></TextField>
         <TextField
-          sx={{ maxWidth: '7em', marginLeft: '0.5em' }}
+          sx={{ width: '8em', marginLeft: '0.5em' }}
           value={currentUnit}
           label='unit'
           onBlur={handleUpdate}
           onChange={(e) => setCurrentUnit(e.target.value)}></TextField>
         <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
-      </HorizontalTabularBox>
+      </VerticalTabularBox>
     </TabularInputSection>
   )
 }
@@ -55,7 +55,7 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
 PhysicalMeasurementRow.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  unit: PropTypes.string,
+  unit: PropTypes.string.isRequired,
   deleteItem: PropTypes.func.isRequired,
   updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired
