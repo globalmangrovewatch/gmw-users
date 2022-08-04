@@ -91,3 +91,14 @@ export const TabularButtonsDiv = styled('div')`
 export const TabularSectionDiv = styled('div')`
   margin-top: 2em;
 `
+export const HorizontalTabularBox = styled('div')`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`
+
+export const VerticalTabularBox = styled('div')`
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+`

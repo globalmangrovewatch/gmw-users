@@ -4,7 +4,7 @@ import { Box, MenuItem, TextField } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 
-import { TabularInputSection, TabularLabel } from '../../styles/forms'
+import { TabularInputSection, TabularLabel, VerticalTabularBox } from '../../styles/forms'
 import { purposeOptions, sourceOptions } from '../../data/siteInterventionOptions'
 
 const MangroveAssociatedSpeciesRow = ({
@@ -66,7 +66,7 @@ const MangroveAssociatedSpeciesRow = ({
         <TabularLabel>{type}</TabularLabel>
         <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em', cursor: 'pointer' }}></Delete>
       </LeftColumnDiv>
-      <TabularBox>
+      <VerticalTabularBox>
         <RowTextField
           value={currentCount}
           label='Count'
@@ -103,7 +103,7 @@ const MangroveAssociatedSpeciesRow = ({
             onBlur={handleUpdate}
             onChange={(e) => setCurrentOther(e.target.value)}></RowTextField>
         ) : null}
-      </TabularBox>
+      </VerticalTabularBox>
     </TabularInputSection>
   )
 }
@@ -111,19 +111,13 @@ const MangroveAssociatedSpeciesRow = ({
 MangroveAssociatedSpeciesRow.propTypes = {
   type: PropTypes.string.isRequired,
   count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  source: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  purpose: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  other: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  source: PropTypes.string.isRequired,
+  purpose: PropTypes.string.isRequired,
+  other: PropTypes.string.isRequired,
   deleteItem: PropTypes.func.isRequired,
   updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired
 }
-
-export const TabularBox = styled('div')`
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-`
 
 export default MangroveAssociatedSpeciesRow
 

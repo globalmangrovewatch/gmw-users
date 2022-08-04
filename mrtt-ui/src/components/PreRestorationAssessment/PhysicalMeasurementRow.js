@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { TextField } from '@mui/material'
 import { Delete } from '@mui/icons-material'
-import { styled } from '@mui/material/styles'
 
-import { TabularInputSection, TabularLabel } from '../../styles/forms'
+import { HorizontalTabularBox, TabularInputSection, TabularLabel } from '../../styles/forms'
 
 const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateItem }) => {
   const [initialValue, setInitialValue] = useState('')
@@ -35,7 +34,7 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
   return (
     <TabularInputSection>
       <TabularLabel>{label}</TabularLabel>
-      <TabularBox>
+      <HorizontalTabularBox>
         <TextField
           value={currentValue}
           label='value'
@@ -48,7 +47,7 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
           onBlur={handleUpdate}
           onChange={(e) => setCurrentUnit(e.target.value)}></TextField>
         <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
-      </TabularBox>
+      </HorizontalTabularBox>
     </TabularInputSection>
   )
 }
@@ -56,16 +55,10 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
 PhysicalMeasurementRow.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  unit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  unit: PropTypes.string,
   deleteItem: PropTypes.func.isRequired,
   updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired
 }
-
-export const TabularBox = styled('div')`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-`
 
 export default PhysicalMeasurementRow
