@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { TextField } from '@mui/material'
 
 import { TabularBox, TabularInputSection, TabularLabel } from '../../styles/forms'
-const CostOfProjectActivitiesRow = ({ label, cost, currency, index, updateItem }) => {
+const BreakdownOfCostRow = ({ label, cost, currency, index, updateItem }) => {
   const [initialCost, setInitialCost] = useState('')
   const [currentCost, setCurrentCost] = useState('')
   const [initialCurrency, setInitialCurrency] = useState('')
@@ -51,7 +51,7 @@ const CostOfProjectActivitiesRow = ({ label, cost, currency, index, updateItem }
   )
 }
 
-CostOfProjectActivitiesRow.propTypes = {
+BreakdownOfCostRow.propTypes = {
   label: PropTypes.string.isRequired,
   costType: PropTypes.string.isRequired,
   cost: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -60,4 +60,4 @@ CostOfProjectActivitiesRow.propTypes = {
   index: PropTypes.number.isRequired
 }
 
-export default CostOfProjectActivitiesRow
+export default BreakdownOfCostRow

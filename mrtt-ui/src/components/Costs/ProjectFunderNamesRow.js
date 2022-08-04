@@ -67,7 +67,7 @@ const ProjectFunderNamesRow = ({ label, type, percentage, index, deleteItem, upd
 
 ProjectFunderNamesRow.propTypes = {
   label: PropTypes.string.isRequired,
-  type: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  type: PropTypes.string.isRequired,
   percentage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   deleteItem: PropTypes.func.isRequired,
   updateItem: PropTypes.func.isRequired,

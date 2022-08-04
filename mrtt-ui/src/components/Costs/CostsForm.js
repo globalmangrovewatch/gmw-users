@@ -55,6 +55,17 @@ const CostsForm = () => {
         })
       )
       .default([]),
+    breakdownOfCost: yup
+      .array()
+      .of(
+        yup.object().shape({
+          costType: yup.string(),
+          cost: yup.number().typeError('Please add a number'),
+          currency: yup.string
+        })
+      )
+      .default([])
+      .nullable(),
     costOfProjectActivities: yup.object().shape({
       cost: yup.number().typeError('Please add a number'),
       currency: yup.string()
@@ -100,6 +111,8 @@ const CostsForm = () => {
     if (endDateResponse) setHasEndDate(true)
   }, [])
 
+  console.log({ errors })
+
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.costs,
@@ -111,6 +124,7 @@ const CostsForm = () => {
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
+    console.log({ formData })
 
     axios
       .patch(apiAnswersUrl, mapDataForApi('costs', formData))
@@ -129,7 +143,7 @@ const CostsForm = () => {
     return setShowAddTabularInputRow(boolean)
   }
 
-  const saveItem = (funderName, funderType, percentage) => {
+  const saveProjectFunderNamesItem = (funderName, funderType, percentage) => {
     projectFunderNamesAppend({
       funderName,
       funderType,
@@ -137,11 +151,11 @@ const CostsForm = () => {
     })
   }
 
-  const deleteItem = (index) => {
+  const deleteProjectFunderNamesItem = (index) => {
     projectFunderNamesRemove(index)
   }
 
-  const updateItem = (index, funderType, percentage) => {
+  const updateProjectFunderNamesItem = (index, funderType, percentage) => {
     const currentItem = projectFunderNamesFields[index]
     currentItem.funderType = funderType
     currentItem.percentage = percentage
@@ -216,14 +230,14 @@ const CostsForm = () => {
                       type={item.funderType}
                       percentage={item.percentage}
                       index={itemIndex}
-                      deleteItem={deleteItem}
-                      updateItem={updateItem}></ProjectFunderNamesRow>
+                      deleteItem={deleteProjectFunderNamesItem}
+                      updateItem={updateProjectFunderNamesItem}></ProjectFunderNamesRow>
                   ))
                 : null}
               <ErrorText>{errors.projectFunderNames?.message}</ErrorText>
               {showAddTabularInputRow ? (
                 <AddProjectFunderNamesRow
-                  saveItem={saveItem}
+                  saveItem={saveProjectFunderNamesItem}
                   updateTabularInputDisplay={updateTabularInputDisplay}></AddProjectFunderNamesRow>
               ) : null}
               {!showAddTabularInputRow ? (
@@ -236,7 +250,7 @@ const CostsForm = () => {
               <StickyFormLabel>
                 {hasEndDate
                   ? questions.costOfProjectActivities.question
-                  : 'What is the total cost of the project activities at the site to date?'}
+                  : '7.4 What is the total cost of the project activities at the site to date?'}
               </StickyFormLabel>
               <Box sx={{ marginTop: '1em' }}>
                 <Controller
@@ -268,6 +282,9 @@ const CostsForm = () => {
                 />
               </Box>
               <ErrorText>{errors.costOfProjectActivities?.cost?.message}</ErrorText>
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.breakdownOfCost.question}</StickyFormLabel>
             </FormQuestionDiv>
           </div>
         ) : null}
