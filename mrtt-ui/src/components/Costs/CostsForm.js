@@ -34,6 +34,9 @@ import { findDataItem } from '../../library/findDataItem'
 const getEndDate = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '1.1b') ?? ''
 
+const getBreakdownOfCost = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '7.5') ?? []
+
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
@@ -61,11 +64,10 @@ const CostsForm = () => {
         yup.object().shape({
           costType: yup.string(),
           cost: yup.number().typeError('Please add a number'),
-          currency: yup.string
+          currency: yup.string()
         })
       )
-      .default([])
-      .nullable(),
+      .default([]),
     costOfProjectActivities: yup.object().shape({
       cost: yup.number().typeError('Please add a number'),
       currency: yup.string()
@@ -95,6 +97,12 @@ const CostsForm = () => {
     update: projectFunderNamesUpdate
   } = useFieldArray({ name: 'projectFunderNames', control })
 
+  const {
+    fields: breakdownOfCostFields,
+    update: breakdownOfCostUpdate,
+    replace: breakdownOfCostReplace
+  } = useFieldArray({ name: 'breakdownOfCost', control })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -105,13 +113,28 @@ const CostsForm = () => {
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
   const [hasEndDate, setHasEndDate] = useState(false)
 
-  const loadServerData = useCallback((serverResponse) => {
-    const endDateResponse = getEndDate(serverResponse)
+  const loadServerData = useCallback(
+    (serverResponse) => {
+      const endDateResponse = getEndDate(serverResponse)
+      if (endDateResponse) setHasEndDate(true)
 
-    if (endDateResponse) setHasEndDate(true)
-  }, [])
+      const defaultProjectActivities = [
+        { costType: 'Project planning & management' },
+        { costType: 'Biophysical interventions' },
+        { costType: 'Community activities' },
+        { costType: 'Site maintenance' },
+        { costType: 'Monitoring' },
+        { costType: 'Other costs' }
+      ]
 
-  console.log({ errors })
+      const breakdownOfCostInitialVal = getBreakdownOfCost(serverResponse)
+
+      if (breakdownOfCostInitialVal.length === 0) {
+        breakdownOfCostReplace(defaultProjectActivities)
+      }
+    },
+    [breakdownOfCostReplace]
+  )
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
@@ -124,7 +147,6 @@ const CostsForm = () => {
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
-    console.log({ formData })
 
     axios
       .patch(apiAnswersUrl, mapDataForApi('costs', formData))
@@ -160,6 +182,14 @@ const CostsForm = () => {
     currentItem.funderType = funderType
     currentItem.percentage = percentage
     projectFunderNamesUpdate(index, currentItem)
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  const updateBreakDownOfCostItem = (index, cost, currency) => {
+    const currentItem = breakdownOfCostFields[index]
+    currentItem.cost = cost
+    currentItem.currency = currency
+    breakdownOfCostUpdate(index, currentItem)
   }
 
   return isLoading ? (
