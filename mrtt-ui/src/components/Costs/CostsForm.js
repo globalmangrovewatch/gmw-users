@@ -38,6 +38,12 @@ const getEndDate = (registrationAnswersFromServer) =>
 const getBreakdownOfCost = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '7.5') ?? []
 
+const getBiophysicalInterventions = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '6.2a') ?? []
+
+const getOtherActivitiesImplemented = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '6.4') ?? []
+
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
@@ -113,6 +119,8 @@ const CostsForm = () => {
   const supportForActivitiesWatcher = watchForm('supportForActivities')
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
   const [hasEndDate, setHasEndDate] = useState(false)
+  // eslint-disable-next-line no-unused-vars
+  const [interventions, setInterventions] = useState([])
 
   const loadServerData = useCallback(
     (serverResponse) => {
@@ -133,6 +141,33 @@ const CostsForm = () => {
       if (breakdownOfCostInitialVal.length === 0) {
         breakdownOfCostReplace(defaultProjectActivities)
       }
+
+      const biophysicalInterventionsInitialVal = getBiophysicalInterventions(serverResponse)
+      const otherActivitiesImplementedInitialVal = getOtherActivitiesImplemented(serverResponse)
+
+      let interventionTypes = []
+      let otherInterventionActivities = []
+      let combinedInterventions = []
+
+      if (biophysicalInterventionsInitialVal.length) {
+        interventionTypes = biophysicalInterventionsInitialVal.map((item) => item.interventionType)
+      }
+
+      if (otherActivitiesImplementedInitialVal.selectedValues.length) {
+        otherInterventionActivities = otherActivitiesImplementedInitialVal.selectedValues
+      }
+      if (
+        otherActivitiesImplementedInitialVal.isOtherChecked === true &&
+        otherActivitiesImplementedInitialVal.otherValue.length
+      ) {
+        otherInterventionActivities.push(otherActivitiesImplementedInitialVal.otherValue)
+      }
+      combinedInterventions = interventionTypes.concat(otherInterventionActivities)
+
+      const filteredCombinedInterventions = combinedInterventions.filter((item) => item !== 'None')
+
+      console.log(filteredCombinedInterventions)
+      setInterventions(filteredCombinedInterventions)
     },
     [breakdownOfCostReplace]
   )
@@ -326,6 +361,9 @@ const CostsForm = () => {
                       updateItem={updateBreakdownOfCostItem}></BreakdownOfCostRow>
                   ))
                 : null}
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.percentageSplitOfActivities.question}</StickyFormLabel>
             </FormQuestionDiv>
           </div>
         ) : null}
