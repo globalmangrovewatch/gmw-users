@@ -80,3 +80,33 @@ export const SelectedInputSection = styled('div')`
 export const QuestionSubSection = styled('div')`
   margin-top: 1em;
 `
+
+export const TabularButtonsDiv = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5em;
+`
+
+export const TabularSectionDiv = styled('div')`
+  margin-top: 2em;
+`
+export const HorizontalTabularBox = styled('div')`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`
+
+export const VerticalTabularBox = styled('div')`
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+`
+
+export const VerticalTabularInputSection = styled('div')`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 1em;
+  justify-content: space-between;
+`

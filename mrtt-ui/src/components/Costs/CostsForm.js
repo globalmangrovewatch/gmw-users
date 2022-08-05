@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Controller, useForm } from 'react-hook-form'
-import { MenuItem, TextField } from '@mui/material'
+import { Controller, useForm, useFieldArray } from 'react-hook-form'
+import { Box, Button, MenuItem, TextField } from '@mui/material'
 
 import {
   Form,
@@ -26,14 +26,52 @@ import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
 import LoadingIndicator from '../LoadingIndicator'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
+import ProjectFunderNamesRow from './ProjectFunderNamesRow'
+import BreakdownOfCostRow from './BreakdownOfCostRow'
+import { currencies } from '../../data/currencies'
+import { findDataItem } from '../../library/findDataItem'
+
+const getEndDate = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '1.1b') ?? ''
+
+const getBreakdownOfCost = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '7.5') ?? []
 
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     supportForActivities: multiselectWithOtherValidationNoMinimum,
-    projectInterventionFunding: yup.object().shape({
-      fundingType: yup.string(),
-      other: yup.string()
+    projectInterventionFunding: yup
+      .object()
+      .shape({
+        fundingType: yup.string(),
+        other: yup.string()
+      })
+      .default([]),
+    projectFunderNames: yup
+      .array()
+      .of(
+        yup.object().shape({
+          funderName: yup.string(),
+          funderType: yup.string(),
+          percentage: yup.mixed()
+        })
+      )
+      .default([]),
+    breakdownOfCost: yup
+      .array()
+      .of(
+        yup.object().shape({
+          costType: yup.string(),
+          cost: yup.mixed(),
+          currency: yup.string()
+        })
+      )
+      .default([]),
+    costOfProjectActivities: yup.object().shape({
+      cost: yup.number().typeError('Please add a number'),
+      currency: yup.string()
     }),
     nonmonetisedContributions: multiselectWithOtherValidationNoMinimum
   })
@@ -53,18 +91,58 @@ const CostsForm = () => {
     watch: watchForm
   } = reactHookFormInstance
 
+  const {
+    fields: projectFunderNamesFields,
+    append: projectFunderNamesAppend,
+    remove: projectFunderNamesRemove,
+    update: projectFunderNamesUpdate
+  } = useFieldArray({ name: 'projectFunderNames', control })
+
+  const {
+    fields: breakdownOfCostFields,
+    update: breakdownOfCostUpdate,
+    replace: breakdownOfCostReplace
+  } = useFieldArray({ name: 'breakdownOfCost', control })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const projectInterventionFundingWatcher = watchForm('projectInterventionFunding')
+  const supportForActivitiesWatcher = watchForm('supportForActivities')
+  const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
+  const [hasEndDate, setHasEndDate] = useState(false)
+
+  const loadServerData = useCallback(
+    (serverResponse) => {
+      const endDateResponse = getEndDate(serverResponse)
+      if (endDateResponse) setHasEndDate(true)
+
+      const defaultProjectActivities = [
+        { costType: 'Project planning & management' },
+        { costType: 'Biophysical interventions' },
+        { costType: 'Community activities' },
+        { costType: 'Site maintenance' },
+        { costType: 'Monitoring' },
+        { costType: 'Other costs' }
+      ]
+
+      const breakdownOfCostInitialVal = getBreakdownOfCost(serverResponse)
+
+      if (breakdownOfCostInitialVal.length === 0) {
+        breakdownOfCostReplace(defaultProjectActivities)
+      }
+    },
+    [breakdownOfCostReplace]
+  )
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.costs,
     resetForm,
-    setIsLoading
+    setIsLoading,
+    successCallback: loadServerData
   })
 
   const handleSubmit = (formData) => {
@@ -82,6 +160,36 @@ const CostsForm = () => {
         setIsSubmitError(true)
         toast.error(language.error.submit)
       })
+  }
+
+  const updateTabularInputDisplay = (boolean) => {
+    return setShowAddTabularInputRow(boolean)
+  }
+
+  const saveProjectFunderNamesItem = (funderName, funderType, percentage) => {
+    projectFunderNamesAppend({
+      funderName,
+      funderType,
+      percentage
+    })
+  }
+
+  const deleteProjectFunderNamesItem = (index) => {
+    projectFunderNamesRemove(index)
+  }
+
+  const updateProjectFunderNamesItem = (index, funderType, percentage) => {
+    const currentItem = projectFunderNamesFields[index]
+    currentItem.funderType = funderType
+    currentItem.percentage = percentage
+    projectFunderNamesUpdate(index, currentItem)
+  }
+
+  const updateBreakdownOfCostItem = (index, cost, currency) => {
+    const currentItem = breakdownOfCostFields[index]
+    currentItem.cost = cost
+    currentItem.currency = currency
+    breakdownOfCostUpdate(index, currentItem)
   }
 
   return isLoading ? (
@@ -140,11 +248,87 @@ const CostsForm = () => {
             </QuestionSubSection>
           ) : null}
         </FormQuestionDiv>
-        <FormQuestionDiv>
-          <StickyFormLabel>{questions.projectFunderNames.question}</StickyFormLabel>
-
-          <ErrorText>{errors.projectFunderNames?.message}</ErrorText>
-        </FormQuestionDiv>
+        {supportForActivitiesWatcher?.selectedValues?.includes('Monetary') ? (
+          <div>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.projectFunderNames.question}</StickyFormLabel>
+              {projectFunderNamesFields?.length > 0
+                ? projectFunderNamesFields.map((item, itemIndex) => (
+                    <ProjectFunderNamesRow
+                      key={itemIndex}
+                      label={item.funderName}
+                      type={item.funderType}
+                      percentage={item.percentage}
+                      index={itemIndex}
+                      deleteItem={deleteProjectFunderNamesItem}
+                      updateItem={updateProjectFunderNamesItem}></ProjectFunderNamesRow>
+                  ))
+                : null}
+              <ErrorText>{errors.projectFunderNames?.message}</ErrorText>
+              {showAddTabularInputRow ? (
+                <AddProjectFunderNamesRow
+                  saveItem={saveProjectFunderNamesItem}
+                  updateTabularInputDisplay={updateTabularInputDisplay}></AddProjectFunderNamesRow>
+              ) : null}
+              {!showAddTabularInputRow ? (
+                <Button sx={{ marginTop: '1.5em' }} onClick={() => setShowAddTabularInputRow(true)}>
+                  + Add measurement row
+                </Button>
+              ) : null}
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <StickyFormLabel>
+                {hasEndDate
+                  ? questions.costOfProjectActivities.question
+                  : '7.4 What is the total cost of the project activities at the site to date?'}
+              </StickyFormLabel>
+              <Box sx={{ marginTop: '1em' }}>
+                <Controller
+                  name='costOfProjectActivities.cost'
+                  control={control}
+                  defaultValue={0}
+                  render={({ field }) => (
+                    <TextField {...field} value={field.value} label='enter cost'></TextField>
+                  )}
+                />
+                <Controller
+                  name='costOfProjectActivities.currency'
+                  control={control}
+                  defaultValue={''}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      select
+                      sx={{ width: '8em', marginLeft: '1em' }}
+                      value={field.value}
+                      label='currency'>
+                      {currencies.map((currency, index) => (
+                        <MenuItem key={index} value={currency.code}>
+                          {currency.code}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                />
+              </Box>
+              <ErrorText>{errors.costOfProjectActivities?.cost?.message}</ErrorText>
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.breakdownOfCost.question}</StickyFormLabel>
+              {breakdownOfCostFields?.length > 0
+                ? breakdownOfCostFields?.map((item, itemIndex) => (
+                    <BreakdownOfCostRow
+                      key={itemIndex}
+                      label={item.costType}
+                      cost={item.cost}
+                      currency={item.currency}
+                      index={itemIndex}
+                      updateItem={updateBreakdownOfCostItem}></BreakdownOfCostRow>
+                  ))
+                : null}
+            </FormQuestionDiv>
+          </div>
+        ) : null}
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
             fieldName='nonmonetisedContributions'

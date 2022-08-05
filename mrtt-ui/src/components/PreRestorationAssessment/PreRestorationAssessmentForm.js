@@ -25,23 +25,23 @@ import {
   StickyFormLabel,
   SelectedInputSection,
   TabularLabel
-} from '../styles/forms'
-import { ContentWrapper } from '../styles/containers'
-import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
-import { findDataItem } from '../library/findDataItem'
-import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
-import { mapDataForApi } from '../library/mapDataForApi'
-import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
-import { preRestorationAssessment as questions } from '../data/questions'
-import { questionMapping } from '../data/questionMapping'
-import AddTabularInputRow from './TabularInput/AddTabularInputRow'
-import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
-import language from '../language'
-import LoadingIndicator from './LoadingIndicator'
-import QuestionNav from './QuestionNav'
-import TabularInputRow from './TabularInput/TabularInputRow'
-import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
-import useSiteInfo from '../library/useSiteInfo'
+} from '../../styles/forms'
+import { ContentWrapper } from '../../styles/containers'
+import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
+import { findDataItem } from '../../library/findDataItem'
+import { mangroveSpeciesPerCountryList } from '../../data/mangroveSpeciesPerCountry'
+import { mapDataForApi } from '../../library/mapDataForApi'
+import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
+import { preRestorationAssessment as questions } from '../../data/questions'
+import { questionMapping } from '../../data/questionMapping'
+import AddPhysicalMeasurementRow from './AddPhysicalMeasurementRow'
+import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
+import language from '../../language'
+import LoadingIndicator from '../LoadingIndicator'
+import QuestionNav from '../QuestionNav'
+import PhysicalMeasurementRow from './PhysicalMeasurementRow'
+import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import useSiteInfo from '../../library/useSiteInfo'
 
 const getSiteCountries = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '1.2') ?? []
@@ -79,7 +79,7 @@ function PreRestorationAssessmentForm() {
         .max(new Date().getFullYear(), language.form.error.yearTooHigh)
     }),
     naturalRegenerationAtSite: yup.string(),
-    mangroveSpeciesPresent: yup.array().of(yup.string()),
+    mangroveSpeciesPresent: yup.array().of(yup.string()).default([]).nullable(),
     speciesComposition: yup
       .array()
       .of(
@@ -89,13 +89,16 @@ function PreRestorationAssessmentForm() {
         })
       )
       .default([]),
-    physicalMeasurementsTaken: yup.array().of(
-      yup.object().shape({
-        measurementType: yup.string(),
-        measurementValue: yup.mixed(),
-        measurementUnit: yup.string()
-      })
-    ),
+    physicalMeasurementsTaken: yup
+      .array()
+      .of(
+        yup.object().shape({
+          measurementType: yup.string(),
+          measurementValue: yup.mixed(),
+          measurementUnit: yup.string()
+        })
+      )
+      .default([]),
     pilotTestConducted: yup.string(),
     guidanceForSiteRestoration: yup.string()
   })
@@ -505,21 +508,21 @@ function PreRestorationAssessmentForm() {
             <TabularLabel>{questions.physicalMeasurementsTaken.question}</TabularLabel>
             {physicalMeasurementsTakenFields.length > 0
               ? physicalMeasurementsTakenFields.map((measurementItem, measurementItemIndex) => (
-                  <TabularInputRow
+                  <PhysicalMeasurementRow
                     key={measurementItemIndex}
                     label={measurementItem.measurementType}
-                    rowValue1={measurementItem.measurementValue}
-                    rowValue2={measurementItem.measurementUnit}
+                    value={measurementItem.measurementValue}
+                    unit={measurementItem.measurementUnit}
                     index={measurementItemIndex}
-                    deleteMeasurementItem={deleteMeasurementItem}
-                    updateMeasurementItem={updateMeasurementItem}></TabularInputRow>
+                    deleteItem={deleteMeasurementItem}
+                    updateItem={updateMeasurementItem}></PhysicalMeasurementRow>
                 ))
               : null}
             <ErrorText>{errors.physicalMeasurementsTaken?.message}</ErrorText>
             {showAddTabularInputRow ? (
-              <AddTabularInputRow
-                saveMeasurementItem={saveMeasurementItem}
-                updateTabularInputDisplay={updateTabularInputDisplay}></AddTabularInputRow>
+              <AddPhysicalMeasurementRow
+                saveItem={saveMeasurementItem}
+                updateTabularInputDisplay={updateTabularInputDisplay}></AddPhysicalMeasurementRow>
             ) : null}
             {!showAddTabularInputRow ? (
               <Button onClick={() => setShowAddTabularInputRow(true)}>+ Add measurement row</Button>
