@@ -5,7 +5,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
-import { Box, Button, MenuItem, TextField } from '@mui/material'
+import { Box, Button, MenuItem, TextField, Typography } from '@mui/material'
 
 import {
   Form,
@@ -79,6 +79,15 @@ const CostsForm = () => {
       cost: yup.mixed(),
       currency: yup.string()
     }),
+    percentageSplitOfActivities: yup
+      .array()
+      .of(
+        yup.object().shape({
+          intervention: yup.string(),
+          percentage: yup.mixed().nullable()
+        })
+      )
+      .default([]),
     nonmonetisedContributions: multiselectWithOtherValidationNoMinimum
   })
   const reactHookFormInstance = useForm({
@@ -110,6 +119,9 @@ const CostsForm = () => {
     replace: breakdownOfCostReplace
   } = useFieldArray({ name: 'breakdownOfCost', control })
 
+  const { fields: percentageSplitOfActivitiesFields, replace: percentageSplitOfActivitiesReplace } =
+    useFieldArray({ name: 'percentageSplitOfActivities', control })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -119,8 +131,6 @@ const CostsForm = () => {
   const supportForActivitiesWatcher = watchForm('supportForActivities')
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
   const [hasEndDate, setHasEndDate] = useState(false)
-  // eslint-disable-next-line no-unused-vars
-  const [interventions, setInterventions] = useState([])
 
   const loadServerData = useCallback(
     (serverResponse) => {
@@ -166,10 +176,14 @@ const CostsForm = () => {
 
       const filteredCombinedInterventions = combinedInterventions.filter((item) => item !== 'None')
 
-      console.log(filteredCombinedInterventions)
-      setInterventions(filteredCombinedInterventions)
+      let preppedSplitOfActivitiesFields = []
+
+      filteredCombinedInterventions.forEach((item) =>
+        preppedSplitOfActivitiesFields.push({ intervention: item, percentage: null })
+      )
+      percentageSplitOfActivitiesReplace(preppedSplitOfActivitiesFields)
     },
-    [breakdownOfCostReplace]
+    [breakdownOfCostReplace, percentageSplitOfActivitiesReplace]
   )
 
   useInitializeQuestionMappedForm({
@@ -364,6 +378,15 @@ const CostsForm = () => {
             </FormQuestionDiv>
             <FormQuestionDiv>
               <StickyFormLabel>{questions.percentageSplitOfActivities.question}</StickyFormLabel>
+              {percentageSplitOfActivitiesFields?.length > 0 ? (
+                percentageSplitOfActivitiesFields?.map((item, itemIndex) => (
+                  <Box key={itemIndex} sx={{ marginTop: '1em' }}>
+                    <Typography>{item.intervention}</Typography>
+                  </Box>
+                ))
+              ) : (
+                <ErrorText>{`No interventions selected in 6.2a & 6.4`}</ErrorText>
+              )}
             </FormQuestionDiv>
           </div>
         ) : null}
