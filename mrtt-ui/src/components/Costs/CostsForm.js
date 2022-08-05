@@ -329,16 +329,18 @@ const CostsForm = () => {
             </FormQuestionDiv>
           </div>
         ) : null}
-        <FormQuestionDiv>
-          <CheckboxGroupWithLabelAndController
-            fieldName='nonmonetisedContributions'
-            reactHookFormInstance={reactHookFormInstance}
-            options={questions.nonmonetisedContributions.options}
-            question={questions.nonmonetisedContributions.question}
-            shouldAddOtherOptionWithClarification={true}
-          />
-          <ErrorText>{errors.nonmonetisedContributions?.selectedValues?.message}</ErrorText>
-        </FormQuestionDiv>
+        {supportForActivitiesWatcher?.selectedValues?.includes('Voluntary/Non-monetary') ? (
+          <FormQuestionDiv>
+            <CheckboxGroupWithLabelAndController
+              fieldName='nonmonetisedContributions'
+              reactHookFormInstance={reactHookFormInstance}
+              options={questions.nonmonetisedContributions.options}
+              question={questions.nonmonetisedContributions.question}
+              shouldAddOtherOptionWithClarification={true}
+            />
+            <ErrorText>{errors.nonmonetisedContributions?.selectedValues?.message}</ErrorText>
+          </FormQuestionDiv>
+        ) : null}
       </Form>
     </ContentWrapper>
   )
