@@ -29,6 +29,7 @@ import useInitializeQuestionMappedForm from '../../library/useInitializeQuestion
 import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
 import ProjectFunderNamesRow from './ProjectFunderNamesRow'
 import BreakdownOfCostRow from './BreakdownOfCostRow'
+import PercentageSplitOfActivitiesRow from './PercentageSplitOfActivitiesRow'
 import { currencies } from '../../data/currencies'
 import { findDataItem } from '../../library/findDataItem'
 
@@ -37,6 +38,15 @@ const getEndDate = (registrationAnswersFromServer) =>
 
 const getBreakdownOfCost = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '7.5') ?? []
+
+const getBiophysicalInterventions = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '6.2a') ?? []
+
+const getOtherActivitiesImplemented = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '6.4') ?? []
+
+const getPercentageSplitOfActivities = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '7.5a') ?? []
 
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
@@ -70,9 +80,18 @@ const CostsForm = () => {
       )
       .default([]),
     costOfProjectActivities: yup.object().shape({
-      cost: yup.number().typeError('Please add a number'),
+      cost: yup.mixed(),
       currency: yup.string()
     }),
+    percentageSplitOfActivities: yup
+      .array()
+      .of(
+        yup.object().shape({
+          intervention: yup.string(),
+          percentage: yup.mixed().nullable()
+        })
+      )
+      .default([]),
     nonmonetisedContributions: multiselectWithOtherValidationNoMinimum
   })
   const reactHookFormInstance = useForm({
@@ -104,6 +123,12 @@ const CostsForm = () => {
     replace: breakdownOfCostReplace
   } = useFieldArray({ name: 'breakdownOfCost', control })
 
+  const {
+    fields: percentageSplitOfActivitiesFields,
+    replace: percentageSplitOfActivitiesReplace,
+    update: percentageSplitOfActivitiesUpdate
+  } = useFieldArray({ name: 'percentageSplitOfActivities', control })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -133,8 +158,46 @@ const CostsForm = () => {
       if (breakdownOfCostInitialVal.length === 0) {
         breakdownOfCostReplace(defaultProjectActivities)
       }
+
+      const biophysicalInterventionsInitialVal = getBiophysicalInterventions(serverResponse)
+      const otherActivitiesImplementedInitialVal = getOtherActivitiesImplemented(serverResponse)
+      const percentageSplitOfActivitiesInitialVal = getPercentageSplitOfActivities(serverResponse)
+
+      if (percentageSplitOfActivitiesInitialVal.length === 0) {
+        let interventionTypes = []
+        let otherInterventionActivities = []
+        let combinedInterventions = []
+
+        if (biophysicalInterventionsInitialVal.length) {
+          interventionTypes = biophysicalInterventionsInitialVal.map(
+            (item) => item.interventionType
+          )
+        }
+
+        if (otherActivitiesImplementedInitialVal.selectedValues.length) {
+          otherInterventionActivities = otherActivitiesImplementedInitialVal.selectedValues
+        }
+        if (
+          otherActivitiesImplementedInitialVal.isOtherChecked === true &&
+          otherActivitiesImplementedInitialVal.otherValue.length
+        ) {
+          otherInterventionActivities.push(otherActivitiesImplementedInitialVal.otherValue)
+        }
+        combinedInterventions = interventionTypes.concat(otherInterventionActivities)
+
+        const filteredCombinedInterventions = combinedInterventions.filter(
+          (item) => item !== 'None'
+        )
+
+        let preppedSplitOfActivitiesFields = []
+
+        filteredCombinedInterventions.forEach((item) =>
+          preppedSplitOfActivitiesFields.push({ intervention: item })
+        )
+        percentageSplitOfActivitiesReplace(preppedSplitOfActivitiesFields)
+      }
     },
-    [breakdownOfCostReplace]
+    [breakdownOfCostReplace, percentageSplitOfActivitiesReplace]
   )
 
   useInitializeQuestionMappedForm({
@@ -190,6 +253,13 @@ const CostsForm = () => {
     currentItem.cost = cost
     currentItem.currency = currency
     breakdownOfCostUpdate(index, currentItem)
+  }
+
+  const updatePercentageSplitOfActivities = (index, percentage) => {
+    const currentItem = percentageSplitOfActivitiesFields[index]
+    currentItem.percentage = percentage
+    console.log({ currentItem })
+    percentageSplitOfActivitiesUpdate(index, currentItem)
   }
 
   return isLoading ? (
@@ -327,18 +397,35 @@ const CostsForm = () => {
                   ))
                 : null}
             </FormQuestionDiv>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.percentageSplitOfActivities.question}</StickyFormLabel>
+              {percentageSplitOfActivitiesFields?.length > 0 ? (
+                percentageSplitOfActivitiesFields?.map((item, itemIndex) => (
+                  <PercentageSplitOfActivitiesRow
+                    key={itemIndex}
+                    label={item.intervention}
+                    percentage={item.percentage}
+                    index={itemIndex}
+                    updateItem={updatePercentageSplitOfActivities}></PercentageSplitOfActivitiesRow>
+                ))
+              ) : (
+                <ErrorText>{`No interventions selected in 6.2a & 6.4`}</ErrorText>
+              )}
+            </FormQuestionDiv>
           </div>
         ) : null}
-        <FormQuestionDiv>
-          <CheckboxGroupWithLabelAndController
-            fieldName='nonmonetisedContributions'
-            reactHookFormInstance={reactHookFormInstance}
-            options={questions.nonmonetisedContributions.options}
-            question={questions.nonmonetisedContributions.question}
-            shouldAddOtherOptionWithClarification={true}
-          />
-          <ErrorText>{errors.nonmonetisedContributions?.selectedValues?.message}</ErrorText>
-        </FormQuestionDiv>
+        {supportForActivitiesWatcher?.selectedValues?.includes('Voluntary/Non-monetary') ? (
+          <FormQuestionDiv>
+            <CheckboxGroupWithLabelAndController
+              fieldName='nonmonetisedContributions'
+              reactHookFormInstance={reactHookFormInstance}
+              options={questions.nonmonetisedContributions.options}
+              question={questions.nonmonetisedContributions.question}
+              shouldAddOtherOptionWithClarification={true}
+            />
+            <ErrorText>{errors.nonmonetisedContributions?.selectedValues?.message}</ErrorText>
+          </FormQuestionDiv>
+        ) : null}
       </Form>
     </ContentWrapper>
   )
@@ -347,3 +434,11 @@ const CostsForm = () => {
 CostsForm.propTypes = {}
 
 export default CostsForm
+
+// const SubSection = styled('div')`
+//   display: flex;
+//   flex-direction: row;
+//   margin-top: 1em;
+//   align-items: center;
+//   justify-content: space-between;
+// `
