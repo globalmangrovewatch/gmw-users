@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react'
+// import { TextField } from '@mui/material'
 import PropTypes from 'prop-types'
-import { TextField } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 
-import { VerticalTabularBox, TabularInputSection, TabularLabel } from '../../styles/forms'
+import {
+  LeftColumnDiv,
+  RowTextField,
+  TabularLabel,
+  VerticalTabularBox,
+  VerticalTabularInputSection
+} from '../../styles/forms'
 
 const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateItem }) => {
   const [initialValue, setInitialValue] = useState('')
@@ -32,30 +38,33 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
   }, [value, unit])
 
   return (
-    <TabularInputSection>
-      <TabularLabel>{label}</TabularLabel>
+    <VerticalTabularInputSection>
       <VerticalTabularBox>
-        <TextField
-          value={currentValue}
-          label='value'
-          onBlur={handleUpdate}
-          onChange={(e) => setCurrentValue(e.target.value)}></TextField>
-        <TextField
-          sx={{ width: '8em', marginLeft: '0.5em' }}
-          value={currentUnit}
-          label='unit'
-          onBlur={handleUpdate}
-          onChange={(e) => setCurrentUnit(e.target.value)}></TextField>
-        <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
+        <LeftColumnDiv>
+          <TabularLabel>{label}</TabularLabel>
+          <Delete onClick={handleDelete}></Delete>
+        </LeftColumnDiv>
+        <VerticalTabularBox>
+          <RowTextField
+            value={currentValue}
+            label='value'
+            onBlur={handleUpdate}
+            onChange={(e) => setCurrentValue(e.target.value)}></RowTextField>
+          <RowTextField
+            value={currentUnit}
+            label='unit'
+            onBlur={handleUpdate}
+            onChange={(e) => setCurrentUnit(e.target.value)}></RowTextField>
+        </VerticalTabularBox>
       </VerticalTabularBox>
-    </TabularInputSection>
+    </VerticalTabularInputSection>
   )
 }
 
 PhysicalMeasurementRow.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  unit: PropTypes.string.isRequired,
+  unit: PropTypes.string,
   deleteItem: PropTypes.func.isRequired,
   updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired

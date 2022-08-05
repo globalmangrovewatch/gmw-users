@@ -1,4 +1,4 @@
-import { FormLabel } from '@mui/material'
+import { Box, FormLabel, TextField } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import themeMui from './themeMui'
 import theme from '../styles/theme'
@@ -101,12 +101,22 @@ export const VerticalTabularBox = styled('div')`
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  margin-top: '1em';
 `
 
 export const VerticalTabularInputSection = styled('div')`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  margin-top: 1em;
+  margin-top: 2em;
   justify-content: space-between;
+`
+export const RowTextField = styled(TextField)`
+  margin-bottom: 1em;
+  max-width: 12em;
+`
+
+export const LeftColumnDiv = styled(Box)`
+  display: flex;
+  margin-bottom: 1em;
 `

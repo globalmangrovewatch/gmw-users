@@ -5,7 +5,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
-import { Box, Button, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, Button, MenuItem, TextField } from '@mui/material'
 
 import {
   Form,
@@ -29,6 +29,7 @@ import useInitializeQuestionMappedForm from '../../library/useInitializeQuestion
 import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
 import ProjectFunderNamesRow from './ProjectFunderNamesRow'
 import BreakdownOfCostRow from './BreakdownOfCostRow'
+import PercentageSplitOfActivitiesRow from './PercentageSplitOfActivitiesRow'
 import { currencies } from '../../data/currencies'
 import { findDataItem } from '../../library/findDataItem'
 
@@ -43,6 +44,9 @@ const getBiophysicalInterventions = (registrationAnswersFromServer) =>
 
 const getOtherActivitiesImplemented = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.4') ?? []
+
+const getPercentageSplitOfActivities = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '7.5a') ?? []
 
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
@@ -119,8 +123,11 @@ const CostsForm = () => {
     replace: breakdownOfCostReplace
   } = useFieldArray({ name: 'breakdownOfCost', control })
 
-  const { fields: percentageSplitOfActivitiesFields, replace: percentageSplitOfActivitiesReplace } =
-    useFieldArray({ name: 'percentageSplitOfActivities', control })
+  const {
+    fields: percentageSplitOfActivitiesFields,
+    replace: percentageSplitOfActivitiesReplace,
+    update: percentageSplitOfActivitiesUpdate
+  } = useFieldArray({ name: 'percentageSplitOfActivities', control })
 
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
@@ -154,34 +161,41 @@ const CostsForm = () => {
 
       const biophysicalInterventionsInitialVal = getBiophysicalInterventions(serverResponse)
       const otherActivitiesImplementedInitialVal = getOtherActivitiesImplemented(serverResponse)
+      const percentageSplitOfActivitiesInitialVal = getPercentageSplitOfActivities(serverResponse)
 
-      let interventionTypes = []
-      let otherInterventionActivities = []
-      let combinedInterventions = []
+      if (percentageSplitOfActivitiesInitialVal.length === 0) {
+        let interventionTypes = []
+        let otherInterventionActivities = []
+        let combinedInterventions = []
 
-      if (biophysicalInterventionsInitialVal.length) {
-        interventionTypes = biophysicalInterventionsInitialVal.map((item) => item.interventionType)
+        if (biophysicalInterventionsInitialVal.length) {
+          interventionTypes = biophysicalInterventionsInitialVal.map(
+            (item) => item.interventionType
+          )
+        }
+
+        if (otherActivitiesImplementedInitialVal.selectedValues.length) {
+          otherInterventionActivities = otherActivitiesImplementedInitialVal.selectedValues
+        }
+        if (
+          otherActivitiesImplementedInitialVal.isOtherChecked === true &&
+          otherActivitiesImplementedInitialVal.otherValue.length
+        ) {
+          otherInterventionActivities.push(otherActivitiesImplementedInitialVal.otherValue)
+        }
+        combinedInterventions = interventionTypes.concat(otherInterventionActivities)
+
+        const filteredCombinedInterventions = combinedInterventions.filter(
+          (item) => item !== 'None'
+        )
+
+        let preppedSplitOfActivitiesFields = []
+
+        filteredCombinedInterventions.forEach((item) =>
+          preppedSplitOfActivitiesFields.push({ intervention: item })
+        )
+        percentageSplitOfActivitiesReplace(preppedSplitOfActivitiesFields)
       }
-
-      if (otherActivitiesImplementedInitialVal.selectedValues.length) {
-        otherInterventionActivities = otherActivitiesImplementedInitialVal.selectedValues
-      }
-      if (
-        otherActivitiesImplementedInitialVal.isOtherChecked === true &&
-        otherActivitiesImplementedInitialVal.otherValue.length
-      ) {
-        otherInterventionActivities.push(otherActivitiesImplementedInitialVal.otherValue)
-      }
-      combinedInterventions = interventionTypes.concat(otherInterventionActivities)
-
-      const filteredCombinedInterventions = combinedInterventions.filter((item) => item !== 'None')
-
-      let preppedSplitOfActivitiesFields = []
-
-      filteredCombinedInterventions.forEach((item) =>
-        preppedSplitOfActivitiesFields.push({ intervention: item, percentage: null })
-      )
-      percentageSplitOfActivitiesReplace(preppedSplitOfActivitiesFields)
     },
     [breakdownOfCostReplace, percentageSplitOfActivitiesReplace]
   )
@@ -239,6 +253,13 @@ const CostsForm = () => {
     currentItem.cost = cost
     currentItem.currency = currency
     breakdownOfCostUpdate(index, currentItem)
+  }
+
+  const updatePercentageSplitOfActivities = (index, percentage) => {
+    const currentItem = percentageSplitOfActivitiesFields[index]
+    currentItem.percentage = percentage
+    console.log({ currentItem })
+    percentageSplitOfActivitiesUpdate(index, currentItem)
   }
 
   return isLoading ? (
@@ -380,9 +401,12 @@ const CostsForm = () => {
               <StickyFormLabel>{questions.percentageSplitOfActivities.question}</StickyFormLabel>
               {percentageSplitOfActivitiesFields?.length > 0 ? (
                 percentageSplitOfActivitiesFields?.map((item, itemIndex) => (
-                  <Box key={itemIndex} sx={{ marginTop: '1em' }}>
-                    <Typography>{item.intervention}</Typography>
-                  </Box>
+                  <PercentageSplitOfActivitiesRow
+                    key={itemIndex}
+                    label={item.intervention}
+                    percentage={item.percentage}
+                    index={itemIndex}
+                    updateItem={updatePercentageSplitOfActivities}></PercentageSplitOfActivitiesRow>
                 ))
               ) : (
                 <ErrorText>{`No interventions selected in 6.2a & 6.4`}</ErrorText>
@@ -410,3 +434,11 @@ const CostsForm = () => {
 CostsForm.propTypes = {}
 
 export default CostsForm
+
+// const SubSection = styled('div')`
+//   display: flex;
+//   flex-direction: row;
+//   margin-top: 1em;
+//   align-items: center;
+//   justify-content: space-between;
+// `

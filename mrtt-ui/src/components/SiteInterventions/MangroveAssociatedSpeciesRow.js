@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Box, MenuItem, TextField } from '@mui/material'
+import { MenuItem } from '@mui/material'
 import { Delete } from '@mui/icons-material'
-import { styled } from '@mui/material/styles'
 
-import { TabularInputSection, TabularLabel, VerticalTabularBox } from '../../styles/forms'
+import {
+  LeftColumnDiv,
+  RowTextField,
+  TabularInputSection,
+  TabularLabel,
+  VerticalTabularBox
+} from '../../styles/forms'
 import { purposeOptions, sourceOptions } from '../../data/siteInterventionOptions'
 
 const MangroveAssociatedSpeciesRow = ({
@@ -120,11 +125,3 @@ MangroveAssociatedSpeciesRow.propTypes = {
 }
 
 export default MangroveAssociatedSpeciesRow
-
-const RowTextField = styled(TextField)`
-  margin-top: 1em;
-`
-
-const LeftColumnDiv = styled(Box)`
-  display: flex;
-`
