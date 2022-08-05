@@ -70,7 +70,7 @@ const CostsForm = () => {
       )
       .default([]),
     costOfProjectActivities: yup.object().shape({
-      cost: yup.number().typeError('Please add a number'),
+      cost: yup.mixed(),
       currency: yup.string()
     }),
     nonmonetisedContributions: multiselectWithOtherValidationNoMinimum
