@@ -61,6 +61,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
       Promise.all(serverDataPromises)
         .then(([{ data: organizationsData }, landscapeResponse]) => {
           if (!isNewLandscape && landscapeId && landscapeResponse) {
+            setIsLoading(true)
             const {
               landscape_name,
               organizations: selectedOrganizations,
