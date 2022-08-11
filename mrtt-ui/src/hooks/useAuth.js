@@ -1,13 +1,14 @@
 import { createContext, useContext, useMemo } from 'react'
 import { useLocalStorage } from './useLocalStorage'
 import PropTypes from 'prop-types'
-import { isExpired } from 'react-jwt'
+import { decodeToken, isExpired } from 'react-jwt'
 import { useState } from 'react'
 
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useLocalStorage('token', null)
+  const [currentUser] = useState(decodeToken(token)?.meta)
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return !isExpired(token)
   })
@@ -21,12 +22,13 @@ export const AuthProvider = ({ children }) => {
       setIsLoggedIn(false)
     }
     return {
-      token,
+      currentUser,
       isLoggedIn,
       login,
-      logout
+      logout,
+      token
     }
-  }, [token, isLoggedIn, setToken, setIsLoggedIn])
+  }, [token, isLoggedIn, setToken, setIsLoggedIn, currentUser])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
