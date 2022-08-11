@@ -1,12 +1,7 @@
 import React from 'react'
 import { CircularProgress } from '@mui/material'
-import { styled } from '@mui/system'
 
-const LoadingWrapper = styled('div')`
-  display: grid;
-  height: 100vh;
-  place-items: center;
-`
+import { LoadingWrapper } from '../styles/containers'
 
 const LoadingIndicator = () => {
   return (

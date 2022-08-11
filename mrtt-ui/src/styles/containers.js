@@ -75,17 +75,24 @@ const QuestionWrapper = styled('div')`
   max-width: ${theme.layout.maxContentWidth};
 `
 
+const LoadingWrapper = styled('div')`
+  display: grid;
+  height: 100vh;
+  place-items: center;
+`
+
 export {
   ButtonContainer,
   Card,
-  LinkCard,
   ContentWrapper,
-  TitleAndActionContainer,
+  LinkCard,
+  LoadingWrapper,
   PaddedPageTopSection,
   PaddedSection,
   PagePadding,
+  QuestionWrapper,
   RowCenterCenter,
   RowFlexEnd,
   RowSpaceBetween,
-  QuestionWrapper
+  TitleAndActionContainer
 }
