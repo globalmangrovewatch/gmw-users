@@ -43,6 +43,7 @@ const OrganizationForm = ({ isNewOrganization }) => {
   useEffect(
     function loadApiData() {
       if (!isNewOrganization && organizationId) {
+        setIsLoading(true)
         axios
           .get(organizationUrl)
           .then(({ data }) => {
