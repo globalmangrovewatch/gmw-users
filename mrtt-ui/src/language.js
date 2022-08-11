@@ -90,9 +90,22 @@ const pages = {
     }
   },
   manageOrganizationUsers: {
-    title: 'Users',
+    delete: 'Delete this user',
+    deletePropmt: {
+      title: 'Delete Organization User',
+      getPromptText: ({ userName, organizationName }) =>
+        `Are you sure you want to delete ${userName} from ${organizationName}?`,
+      buttonText: 'Yes, delete this user'
+    },
     newUser: 'New User',
-    usersTable: { name: 'Name', admin: 'Admin', user: 'User', remove: 'Remove from Organization' }
+    title: 'Users',
+    usersTable: {
+      name: 'Name',
+      email: 'Email',
+      admin: 'Admin',
+      user: 'User',
+      remove: 'Remove from Organization'
+    }
   },
   siteQuestionsOverview: {
     settings: 'Settings',
