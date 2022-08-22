@@ -258,7 +258,6 @@ const CostsForm = () => {
   const updatePercentageSplitOfActivities = (index, percentage) => {
     const currentItem = percentageSplitOfActivitiesFields[index]
     currentItem.percentage = percentage
-    console.log({ currentItem })
     percentageSplitOfActivitiesUpdate(index, currentItem)
   }
 
