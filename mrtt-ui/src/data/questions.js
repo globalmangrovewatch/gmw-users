@@ -442,8 +442,6 @@ const costs = {
   projectFunderNames: {
     question: '7.3 What funders provided monetary support? ',
     options: [
-      'Funder name',
-      'Funder type',
       'Members of local community',
       'Indigenous peoples',
       'Landowners/customary area owners',
