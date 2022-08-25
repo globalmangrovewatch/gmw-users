@@ -1,16 +1,21 @@
-import PropTypes from 'prop-types'
-import React from 'react'
-
 import { ArrowBack, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material'
 import { css, styled } from '@mui/system'
-import { ErrorText, LinkLooksLikeButtonSecondary } from '../styles/typography'
 import { Stack } from '@mui/material'
+import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
+import axios from 'axios'
+import PropTypes from 'prop-types'
+import React, { useEffect, useState } from 'react'
+
+import { ErrorText, LinkLooksLikeButtonSecondary } from '../styles/typography'
 import ButtonSave from './ButtonSave'
 import language from '../language'
+import LoadingIndicatorOverlay from './LoadingIndicatorOverlay'
 import SECTION_NAMES from '../constants/sectionNames'
 import theme from '../styles/theme'
 import themeMui from '../styles/themeMui'
+
+const componentLanguage = language.questionNav
 
 const getMobileNavButtonSecondaryCss = (props) => css`
   align-items: center;
@@ -32,7 +37,7 @@ const getMobileNavButtonSecondaryCss = (props) => css`
         color: ${theme.color.white};
       `)};
 `
-const SelectDesktopNav = styled('select')`
+const PrivacySelect = styled('select')`
   ${(props) => getMobileNavButtonSecondaryCss(props)}
   border-radius: 4px;
   height: 100%;
@@ -74,54 +79,107 @@ const NavSubWrapper = styled('div')`
   gap: ${themeMui.spacing(2)};
 `
 
-const QuestionNav = ({ isSaving, isSaveError, onSave, currentSection }) => {
+const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection }) => {
+  const [isPrivacySaveError, setIsPrivacySaveError] = useState(false)
+  const [isPrivacySaving, setIsPrivacySaving] = useState(false)
+  const [sectionPrivacy, setSectionPrivacy] = useState()
+  const [siteFromApi, setSiteFromApi] = useState()
   const { siteId } = useParams()
-
   const currentSectionNameIndex = SECTION_NAMES.indexOf(currentSection)
-  const previousSection = SECTION_NAMES[currentSectionNameIndex - 1]
   const nextSection = SECTION_NAMES[currentSectionNameIndex + 1]
+  const previousSection = SECTION_NAMES[currentSectionNameIndex - 1]
+  const sectionIdForApi = currentSectionNameIndex + 1
+  const siteUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}`
+
+  useEffect(
+    function getSiteInfoToUseWithAPutRequestToUpdateSitePrivacySincePatchDoesntWork() {
+      // A tech debt ticket has been created to have the api accept a patch for section privacy,
+      // instead of the front end having to do a PUT with all the site info.
+      // https://github.com/globalmangrovewatch/gmw-users/issues/260
+      axios.get(siteUrl).then(({ data }) => {
+        setSiteFromApi(data)
+        setSectionPrivacy(data.section_data_visibility[sectionIdForApi])
+      })
+    },
+    [siteUrl, sectionIdForApi]
+  )
+
+  const handleOnPrivacyChange = (event) => {
+    setIsPrivacySaveError(false)
+    setIsPrivacySaving(true)
+    if (siteFromApi) {
+      const siteWithUpdatedSectionPrivacy = {
+        ...siteFromApi,
+        section_data_visibility: {
+          ...siteFromApi.section_data_visibility,
+          [sectionIdForApi]: event.target.value
+        }
+      }
+      axios
+        .put(siteUrl, siteWithUpdatedSectionPrivacy)
+        .then(() => {
+          setIsPrivacySaving(false)
+          toast.success(componentLanguage.privacySavingSuccess)
+        })
+        .catch(() => {
+          setIsPrivacySaveError(true)
+          setIsPrivacySaving(false)
+          setSectionPrivacy(siteFromApi.section_data_visibility[sectionIdForApi])
+        })
+    } else {
+      setIsPrivacySaveError(true)
+      setIsPrivacySaving(false)
+    }
+  }
+
   return (
-    <StickyStack>
-      <NavWrapper>
-        <NavSubWrapper>
-          <LinkLooksLikeButtonSecondary to={`/sites/${siteId}/overview`}>
-            <ArrowBack /> <NavButtonText>{language.questionNav.returnToSite}</NavButtonText>
-          </LinkLooksLikeButtonSecondary>
-          <LinkLooksLikeButtonSecondary
-            to={!previousSection ? '#' : `/sites/${siteId}/form/${previousSection}`}
-            disabled={!previousSection}>
-            <ArrowBackIosNew />
-            <NavButtonText>{language.questionNav.previousSection}</NavButtonText>
-          </LinkLooksLikeButtonSecondary>
-          <LinkLooksLikeButtonSecondary
-            to={!nextSection ? '#' : `/sites/${siteId}/form/${nextSection}`}
-            disabled={!nextSection}>
-            <NavButtonText>{language.questionNav.nextSection}</NavButtonText>
-            <ArrowForwardIos />
-          </LinkLooksLikeButtonSecondary>
-        </NavSubWrapper>
-        <NavSubWrapper>
-          <SelectDesktopNav
-            id='form-privacy'
-            value={'Placeholder'}
-            label='Placeholder (wip)'
-            onChange={() => {}}>
-            <option value={'Placeholder'}>WIP Value 1</option>
-            <option value={20}>WIP Value 2</option>
-          </SelectDesktopNav>
-          <ButtonSave isSaving={isSaving} onClick={onSave} />
-        </NavSubWrapper>
-      </NavWrapper>
-      {isSaveError && <ErrorText>{language.error.submit}</ErrorText>}
-    </StickyStack>
+    <>
+      <LoadingIndicatorOverlay isVisible={isPrivacySaving} />
+      <StickyStack>
+        <NavWrapper>
+          <NavSubWrapper>
+            <LinkLooksLikeButtonSecondary to={`/sites/${siteId}/overview`}>
+              <ArrowBack /> <NavButtonText>{componentLanguage.returnToSite}</NavButtonText>
+            </LinkLooksLikeButtonSecondary>
+            <LinkLooksLikeButtonSecondary
+              to={!previousSection ? '#' : `/sites/${siteId}/form/${previousSection}`}
+              disabled={!previousSection}>
+              <ArrowBackIosNew />
+              <NavButtonText>{componentLanguage.previousSection}</NavButtonText>
+            </LinkLooksLikeButtonSecondary>
+            <LinkLooksLikeButtonSecondary
+              to={!nextSection ? '#' : `/sites/${siteId}/form/${nextSection}`}
+              disabled={!nextSection}>
+              <NavButtonText>{componentLanguage.nextSection}</NavButtonText>
+              <ArrowForwardIos />
+            </LinkLooksLikeButtonSecondary>
+          </NavSubWrapper>
+          <NavSubWrapper>
+            <PrivacySelect
+              id='form-privacy'
+              value={sectionPrivacy}
+              onChange={handleOnPrivacyChange}>
+              <option value={undefined} disabled selected>
+                {componentLanguage.privacySelectUndefined}
+              </option>
+              <option value={'private'}>{componentLanguage.private}</option>
+              <option value={'public'}>{componentLanguage.public}</option>
+            </PrivacySelect>
+            <ButtonSave isSaving={isFormSaving} onClick={onFormSave} />
+          </NavSubWrapper>
+        </NavWrapper>
+        {isFormSaveError ? <ErrorText>{language.error.submit}</ErrorText> : null}
+        {isPrivacySaveError ? <ErrorText>{componentLanguage.privacySaveError}</ErrorText> : null}
+      </StickyStack>
+    </>
   )
 }
 
 QuestionNav.propTypes = {
   currentSection: PropTypes.string.isRequired,
-  isSaving: PropTypes.bool.isRequired,
-  isSaveError: PropTypes.bool.isRequired,
-  onSave: PropTypes.func.isRequired
+  isFormSaving: PropTypes.bool.isRequired,
+  isFormSaveError: PropTypes.bool.isRequired,
+  onFormSave: PropTypes.func.isRequired
 }
 
 export default QuestionNav

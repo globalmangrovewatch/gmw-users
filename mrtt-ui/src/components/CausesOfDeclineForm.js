@@ -278,9 +278,9 @@ function CausesOfDeclineForm() {
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
-        isSaving={isSubmitting}
-        isSaveError={isError}
-        onSave={handleSubmit(onSubmit)}
+        isFormSaving={isSubmitting}
+        isFormSaveError={isError}
+        onFormSave={handleSubmit(onSubmit)}
         currentSection='causes-of-decline'
       />
       <Form>

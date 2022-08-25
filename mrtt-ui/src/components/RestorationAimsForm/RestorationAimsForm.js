@@ -90,9 +90,9 @@ const RestorationAimsForm = () => {
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
-        isSaving={isSubmitting}
-        isSaveError={isSubmitError}
-        onSave={validateInputs(handleSubmit)}
+        isFormSaving={isSubmitting}
+        isFormSaveError={isSubmitError}
+        onFormSave={validateInputs(handleSubmit)}
         currentSection='restoration-aims'
       />
       <Form onSubmit={validateInputs(handleSubmit)}>

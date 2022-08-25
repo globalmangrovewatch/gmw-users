@@ -195,11 +195,14 @@ const header = {
 }
 
 const questionNav = {
-  returnToSite: 'Return to Site Form Overview',
-  previousSection: 'Previous Section',
   nextSection: 'Next Section',
+  previousSection: 'Previous Section',
+  privacySaveError: "Saving this section's privacy failed. Please try again.",
+  privacySavingSuccess: success.getEditThingSuccessMessage("This section's privacy"),
+  privacySelectUndefined: 'Select Privacy',
   private: 'Private',
-  public: 'Public'
+  public: 'Public',
+  returnToSite: 'Return to Site Form Overview'
 }
 
 export default {

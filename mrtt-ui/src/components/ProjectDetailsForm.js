@@ -162,9 +162,9 @@ function ProjectDetailsForm() {
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
-        isSaving={isSubmitting}
-        isSaveError={isError}
-        onSave={validateInputs(handleSubmit)}
+        isFormSaving={isSubmitting}
+        isFormSaveError={isError}
+        onFormSave={validateInputs(handleSubmit)}
         currentSection='project-details'
       />
       <Form>
