@@ -18,7 +18,9 @@ export const H4 = styled('h4')`
   margin: ${themeMui.spacing(1)} 0;
 `
 
-export const Link = (props) => <LinkMui component={LinkReactRouter} {...props} />
+export const Link = (props) => (
+  <LinkMui sx={{ display: 'inline-flex' }} component={LinkReactRouter} {...props} />
+)
 
 export const LinkLooksLikeButtonPrimary = (props) => (
   <ButtonPrimary component={LinkReactRouter} {...props} />

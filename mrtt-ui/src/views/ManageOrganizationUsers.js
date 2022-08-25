@@ -3,17 +3,17 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonPrimary, ButtonSecondary } from '../styles/buttons'
+import { ButtonSecondary } from '../styles/buttons'
 import { ContentWrapper, TitleAndActionContainer } from '../styles/containers'
-import { PageSubtitle, PageTitle } from '../styles/typography'
+import { LinkLooksLikeButtonPrimary, PageSubtitle, PageTitle } from '../styles/typography'
 import { TableAlertnatingRows, TdCenter, ThCenter } from '../styles/table'
 import { toast } from 'react-toastify'
 import { useAuth } from '../hooks/useAuth'
+import ConfirmPrompt from '../components/ConfirmPrompt/ConfirmPrompt'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
 import LoadingIndicatorOverlay from '../components/LoadingIndicatorOverlay'
 import USER_ROLES from '../constants/userRoles'
-import ConfirmPrompt from '../components/ConfirmPrompt/ConfirmPrompt'
 
 const pageLanguage = language.pages.manageOrganizationUsers
 
@@ -114,13 +114,11 @@ const ManageOrganizationUsers = () => {
     <LoadingIndicator />
   ) : (
     <>
-      {isDeleteConfirmPromptOpen.toString()}
-      {JSON.stringify(userToDelete)}
       <LoadingIndicatorOverlay isVisible={isSubmitting} />
       <ContentWrapper>
         <TitleAndActionContainer>
           <PageTitle>{pageLanguage.title} (Work in Progress!)</PageTitle>
-          <ButtonPrimary>{pageLanguage.newUser}</ButtonPrimary>
+          <LinkLooksLikeButtonPrimary to={'new'}>{pageLanguage.newUser}</LinkLooksLikeButtonPrimary>
         </TitleAndActionContainer>
 
         <PageSubtitle>{organizationName}</PageSubtitle>
