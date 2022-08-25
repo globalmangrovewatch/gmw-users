@@ -24,6 +24,7 @@ import Sites from './views/Sites'
 import themeMui from './styles/themeMui'
 import CostsForm from './components/Costs/CostsForm'
 import ManageOrganizationUsers from './views/ManageOrganizationUsers'
+import NewOrganizationUser from './views/NewOrganizationUser'
 
 function App() {
   return (
@@ -48,6 +49,10 @@ function App() {
               <Route
                 path='/organizations/:organizationId/users'
                 element={<ManageOrganizationUsers />}
+              />
+              <Route
+                path='/organizations/:organizationId/users/new'
+                element={<NewOrganizationUser />}
               />
               <Route
                 path='/organizations/new'

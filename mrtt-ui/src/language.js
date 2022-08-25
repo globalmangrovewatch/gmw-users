@@ -107,6 +107,24 @@ const pages = {
       remove: 'Remove from Organization'
     }
   },
+  newOrganizationUser: {
+    backToUsers: 'Back to users',
+    description: (
+      <>
+        If the new user is already a member, they will be added to this organization. If the user is
+        not a member, they will be added automatically after they register at{' '}
+        <a href='#'>PLACEHOLDER</a>
+      </>
+    ),
+    email: "New user's email address",
+    getTitle: (organization) => `New User for ${organization}`,
+    getUserAdded: ({ userName, organizationName }) =>
+      `The user, ${userName}, has been added to ${organizationName}`,
+    getUserDoesntExist: (userName) => `The user, ${userName}, does not exist.`,
+    orgAdmin: 'Admin',
+    orgUser: 'User',
+    role: 'Role'
+  },
   siteQuestionsOverview: {
     settings: 'Settings',
 
