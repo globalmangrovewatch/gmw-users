@@ -82,7 +82,7 @@ const ManagementStatusAndEffectivenessForm = () => {
         isSaving={isSubmitting}
         isSaveError={isSubmitError}
         onSave={validateInputs(handleSubmit)}
-        currentSection='managementStatusAndEffectiveness'
+        currentSection='management-status-and-effectiveness'
       />
       <Form>
         <FormQuestionDiv>
