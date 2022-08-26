@@ -60,5 +60,21 @@ export const questionMapping = {
     breakdownOfCost: '7.5',
     percentageSplitOfActivities: '7.5a',
     nonmonetisedContributions: '7.6'
+  },
+  managementStatusAndEffectiveness: {
+    dateOfAssessment: '8.1',
+    stakeholderManagement: '8.2',
+    stakeholderInfluence: '8.3',
+    managementStatusChanges: '8.4',
+    currentManagementStatus: '8.4a',
+    managementLaws: '8.4b',
+    nameOfFormalManagementArea: '8.4c',
+    projectStatusChange: '8.5',
+    currentProtectionStatus: '8.5a',
+    financeForCiteManagement: '8.6',
+    sufficientFunds: '8.7',
+    resourcesToEnforceRegulations: '8.8',
+    equitableSharingOfSiteBenefits: '8.9',
+    climageChangeAdaptation: '8.10'
   }
 }

@@ -124,6 +124,13 @@ const SiteOverview = () => {
                 <Link to={`/sites/${siteId}/form/costs`}>{pageLanguage.formName.costs}</Link>
               </WideTh>
             </tr>
+            <tr>
+              <WideTh>
+                <Link to={`/sites/${siteId}/form/management-status-and-effectiveness`}>
+                  {pageLanguage.formName.managementStatusAndEffectiveness}
+                </Link>
+              </WideTh>
+            </tr>
           </tbody>
         </TableAlertnatingRows>
         <StyledSectionHeader>{pageLanguage.formGroupTitle.intervention}</StyledSectionHeader>
