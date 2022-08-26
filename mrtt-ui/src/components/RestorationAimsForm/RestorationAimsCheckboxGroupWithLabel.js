@@ -61,6 +61,7 @@ const RestorationAimsCheckboxGroupWithLabel = ({
               {...field}
               onChange={handleAimChangeAndResetStakeholdersIfAppropriate}
               options={optionsValueLabels}
+              optionsExcludedFromShowingSelectedMarkup={['Unknown', 'None']}
               aria-labelledby={id}
               shouldAddOtherOptionWithClarification={true}
               shouldReturnEvent={true}

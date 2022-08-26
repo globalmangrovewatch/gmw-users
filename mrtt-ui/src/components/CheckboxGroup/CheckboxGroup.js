@@ -28,13 +28,14 @@ const CheckboxGroup = forwardRef(
   (
     {
       id,
-      onBlur,
+      onBlur = () => {},
       onChange,
       options,
-      shouldAddOtherOptionWithClarification,
-      value,
-      SelectedMarkup,
-      shouldReturnEvent
+      optionsExcludedFromShowingSelectedMarkup = [],
+      shouldAddOtherOptionWithClarification = false,
+      value = [],
+      SelectedMarkup = undefined,
+      shouldReturnEvent = false
     },
     ref
   ) => {
@@ -97,6 +98,11 @@ const CheckboxGroup = forwardRef(
     const nonOtherCheckboxInputs = options.map((option) => {
       const isChecked = nonOtherSelectedValues.includes(option.value)
       const optionId = makeValidClassName(`${id}-${option.value}`)
+      const isInExcludeFromSelectedMarkupList = optionsExcludedFromShowingSelectedMarkup.includes(
+        option.value
+      )
+      const isSelectedMarkupShowing =
+        isChecked && SelectedMarkup && !isInExcludeFromSelectedMarkupList
 
       return (
         <Stack key={option.value}>
@@ -114,7 +120,7 @@ const CheckboxGroup = forwardRef(
             }
             label={option.label}
           />
-          {isChecked && SelectedMarkup ? (
+          {isSelectedMarkupShowing ? (
             <SelectedMarkup optionId={optionId} optionValue={option.value} />
           ) : null}
         </Stack>
@@ -168,6 +174,7 @@ CheckboxGroup.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   ).isRequired,
+  optionsExcludedFromShowingSelectedMarkup: PropTypes.arrayOf(PropTypes.string),
   SelectedMarkup: PropTypes.oneOfType([PropTypes.node, PropTypes.any]), // we're doing partial application so this component can supply the selectedMarkup the optionId. Proptype complains about it being a function.
   shouldAddOtherOptionWithClarification: PropTypes.bool,
   shouldReturnEvent: PropTypes.bool,
@@ -176,14 +183,6 @@ CheckboxGroup.propTypes = {
     otherValue: PropTypes.string,
     isOtherChecked: PropTypes.bool
   })
-}
-
-CheckboxGroup.defaultProps = {
-  onBlur: () => {},
-  value: [],
-  SelectedMarkup: undefined,
-  shouldAddOtherOptionWithClarification: false,
-  shouldReturnEvent: false
 }
 
 export default CheckboxGroup
