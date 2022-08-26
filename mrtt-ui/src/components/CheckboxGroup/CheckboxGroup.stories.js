@@ -50,3 +50,29 @@ export const WithNestedMarkupForSelected = () => (
     SelectedMarkup={() => <>Youve selected ME</>}
   />
 )
+
+export const WithNestedMarkupForSelectedIncludingExceptionsThatWontShowNestedMarkup = () => (
+  <CheckboxGroup
+    options={[
+      { label: 'Show nested when selected 1', value: 'Show nested when selected 1' },
+      { label: 'Show nested when selected 2', value: 'Show nested when selected 2' },
+      { label: 'Dont show nested when selected 1', value: 'Dont show nested when selected 1' },
+      { label: 'Dont show nested when selected 2', value: 'Dont show nested when selected 2' }
+    ]}
+    value={{
+      selectedValues: [
+        'Show nested when selected 1',
+        'Show nested when selected 2',
+        'Dont show nested when selected 1',
+        'Dont show nested when selected 2'
+      ]
+    }}
+    onChange={action('onChange')}
+    id='cuddlyKittens'
+    SelectedMarkup={() => <>Youve selected ME</>}
+    optionsExcludedFromShowingSelectedMarkup={[
+      'Dont show nested when selected 1',
+      'Dont show nested when selected 2'
+    ]}
+  />
+)
