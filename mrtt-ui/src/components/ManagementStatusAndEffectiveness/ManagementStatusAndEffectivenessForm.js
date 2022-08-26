@@ -8,11 +8,13 @@ import { Controller, useForm } from 'react-hook-form'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
-import { Stack, TextField } from '@mui/material'
+import { MenuItem, Stack, TextField } from '@mui/material'
 
 import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
 import { ContentWrapper } from '../../styles/containers'
 import { managementStatusAndEffectiveness as questions } from '../../data/questions'
+import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
+import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import LoadingIndicator from '../LoadingIndicator'
 import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
@@ -24,9 +26,18 @@ import { questionMapping } from '../../data/questionMapping'
 
 const ManagementStatusAndEffectivenessForm = () => {
   const { site_name } = useSiteInfo()
-  const validationSchema = yup.object({ dateOfAssessment: yup.string() })
+  const validationSchema = yup.object({
+    dateOfAssessment: yup.string(),
+    stakeholderManagement: multiselectWithOtherValidationNoMinimum,
+    stakeholderInfluence: yup.string(),
+    managementStatusChanges: yup.string(),
+    currentManagementStatus: yup.string(),
+    managementLaws: yup.string()
+  })
   const reactHookFormInstance = useForm({
-    defaultValues: {},
+    defaultValues: {
+      stakeholderManagement: { selectedValues: [], otherValue: undefined }
+    },
     resolver: yupResolver(validationSchema)
   })
 
@@ -48,7 +59,6 @@ const ManagementStatusAndEffectivenessForm = () => {
     questionMapping: questionMapping.managementStatusAndEffectiveness,
     resetForm,
     setIsLoading
-    // successCallback: loadServerData
   })
 
   const handleSubmit = (formData) => {
@@ -108,6 +118,87 @@ const ManagementStatusAndEffectivenessForm = () => {
             )}
           />
           <ErrorText>{errors.dateOfAssessment?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <CheckboxGroupWithLabelAndController
+            fieldName='stakeholderManagement'
+            reactHookFormInstance={reactHookFormInstance}
+            options={questions.stakeholderManagement.options}
+            question={questions.stakeholderManagement.question}
+            shouldAddOtherOptionWithClarification={true}
+          />
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.stakeholderInfluence.question}</StickyFormLabel>
+          <Controller
+            name='stakeholderInfluence'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.stakeholderInfluence.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.stakeholderInfluence?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.managementStatusChanges.question}</StickyFormLabel>
+          <Controller
+            name='managementStatusChanges'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.managementStatusChanges.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.managementStatusChanges?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.currentManagementStatus.question}</StickyFormLabel>
+          <Controller
+            name='currentManagementStatus'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.currentManagementStatus.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.currentManagementStatus?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.managementLaws.question}</StickyFormLabel>
+          <Controller
+            name='managementLaws'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.managementLaws.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.managementLaws?.message}</ErrorText>
         </FormQuestionDiv>
       </Form>
     </ContentWrapper>

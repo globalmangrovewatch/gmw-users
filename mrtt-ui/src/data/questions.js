@@ -548,7 +548,7 @@ const managementStatusAndEffectiveness = {
     ]
   },
   managementLaws: {
-    quesiton:
+    question:
       '8.4b Are management activities at the site recognized in statutory or customary laws?',
     options: [
       'Yes - statutory ',
