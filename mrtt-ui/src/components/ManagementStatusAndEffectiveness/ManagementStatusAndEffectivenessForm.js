@@ -32,7 +32,10 @@ const ManagementStatusAndEffectivenessForm = () => {
     stakeholderInfluence: yup.string(),
     managementStatusChanges: yup.string(),
     currentManagementStatus: yup.string(),
-    managementLaws: yup.string()
+    managementLaws: yup.string(),
+    nameOfFormalManagementArea: yup.string(),
+    projectStatusChange: yup.string(),
+    currentProtectionStatus: yup.string()
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
@@ -45,7 +48,8 @@ const ManagementStatusAndEffectivenessForm = () => {
     handleSubmit: validateInputs,
     formState: { errors },
     reset: resetForm,
-    control
+    control,
+    watch: watchForm
   } = reactHookFormInstance
 
   const { siteId } = useParams()
@@ -53,6 +57,8 @@ const ManagementStatusAndEffectivenessForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const managementStatusChangesWatcher = watchForm('managementStatusChanges')
+  const projectStatusChangeWatcher = watchForm('projectStatusChange')
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
@@ -164,15 +170,66 @@ const ManagementStatusAndEffectivenessForm = () => {
           />
           <ErrorText>{errors.managementStatusChanges?.message}</ErrorText>
         </FormQuestionDiv>
+        {managementStatusChangesWatcher === 'Yes' ? (
+          <div>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.currentManagementStatus.question}</StickyFormLabel>
+              <Controller
+                name='currentManagementStatus'
+                control={control}
+                defaultValue=''
+                render={({ field }) => (
+                  <TextField {...field} select value={field.value} label='select'>
+                    {questions.currentManagementStatus.options.map((item, index) => (
+                      <MenuItem key={index} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+              <ErrorText>{errors.currentManagementStatus?.message}</ErrorText>
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.managementLaws.question}</StickyFormLabel>
+              <Controller
+                name='managementLaws'
+                control={control}
+                defaultValue=''
+                render={({ field }) => (
+                  <TextField {...field} select value={field.value} label='select'>
+                    {questions.managementLaws.options.map((item, index) => (
+                      <MenuItem key={index} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+              <ErrorText>{errors.managementLaws?.message}</ErrorText>
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.nameOfFormalManagementArea.question}</StickyFormLabel>
+              <Controller
+                name='nameOfFormalManagementArea'
+                control={control}
+                defaultValue={''}
+                render={({ field }) => (
+                  <TextField {...field} value={field.value} label='enter name'></TextField>
+                )}
+              />
+            </FormQuestionDiv>
+          </div>
+        ) : null}
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.currentManagementStatus.question}</StickyFormLabel>
+          <StickyFormLabel>{questions.projectStatusChange.question}</StickyFormLabel>
           <Controller
-            name='currentManagementStatus'
+            name='projectStatusChange'
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label='select'>
-                {questions.currentManagementStatus.options.map((item, index) => (
+                {questions.projectStatusChange.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -180,26 +237,28 @@ const ManagementStatusAndEffectivenessForm = () => {
               </TextField>
             )}
           />
-          <ErrorText>{errors.currentManagementStatus?.message}</ErrorText>
+          <ErrorText>{errors.projectStatusChange?.message}</ErrorText>
         </FormQuestionDiv>
-        <FormQuestionDiv>
-          <StickyFormLabel>{questions.managementLaws.question}</StickyFormLabel>
-          <Controller
-            name='managementLaws'
-            control={control}
-            defaultValue=''
-            render={({ field }) => (
-              <TextField {...field} select value={field.value} label='select'>
-                {questions.managementLaws.options.map((item, index) => (
-                  <MenuItem key={index} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
-          />
-          <ErrorText>{errors.managementLaws?.message}</ErrorText>
-        </FormQuestionDiv>
+        {projectStatusChangeWatcher === 'Yes' ? (
+          <FormQuestionDiv>
+            <StickyFormLabel>{questions.currentProtectionStatus.question}</StickyFormLabel>
+            <Controller
+              name='currentProtectionStatus'
+              control={control}
+              defaultValue=''
+              render={({ field }) => (
+                <TextField {...field} select value={field.value} label='select'>
+                  {questions.currentProtectionStatus.options.map((item, index) => (
+                    <MenuItem key={index} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+            <ErrorText>{errors.currentProtectionStatus?.message}</ErrorText>
+          </FormQuestionDiv>
+        ) : null}
       </Form>
     </ContentWrapper>
   )
