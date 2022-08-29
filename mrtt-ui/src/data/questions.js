@@ -579,7 +579,8 @@ const managementStatusAndEffectiveness = {
       'Fiscal ',
       'Risk management ',
       'Regulatory ',
-      'Unknown'
+      'Unknown',
+      'Other'
     ]
   },
   sufficientFunds: {

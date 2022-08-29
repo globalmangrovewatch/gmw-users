@@ -8,7 +8,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
-import { MenuItem, Stack, TextField } from '@mui/material'
+import { Box, MenuItem, Stack, TextField } from '@mui/material'
 
 import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
 import { ContentWrapper } from '../../styles/containers'
@@ -35,7 +35,12 @@ const ManagementStatusAndEffectivenessForm = () => {
     managementLaws: yup.string(),
     nameOfFormalManagementArea: yup.string(),
     projectStatusChange: yup.string(),
-    currentProtectionStatus: yup.string()
+    currentProtectionStatus: yup.string(),
+    financeForCiteManagement: yup.string(),
+    sufficientFunds: yup.string(),
+    resourcesToEnforceRegulations: yup.string(),
+    equitableSharingOfSiteBenefits: yup.string(),
+    climageChangeAdaptation: yup.string()
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
@@ -59,6 +64,7 @@ const ManagementStatusAndEffectivenessForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const managementStatusChangesWatcher = watchForm('managementStatusChanges')
   const projectStatusChangeWatcher = watchForm('projectStatusChange')
+  const financeForCiteManagementWatcher = watchForm('financeForCiteManagement')
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
@@ -259,6 +265,108 @@ const ManagementStatusAndEffectivenessForm = () => {
             <ErrorText>{errors.currentProtectionStatus?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.financeForCiteManagement.question}</StickyFormLabel>
+          <Controller
+            name='financeForCiteManagement'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.financeForCiteManagement.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.financeForCiteManagement?.message}</ErrorText>
+          {financeForCiteManagementWatcher === 'Other' ? (
+            <Box sx={{ marginTop: '1em' }}>
+              <Controller
+                name='nameOfFormalManagementArea'
+                control={control}
+                defaultValue={''}
+                render={({ field }) => (
+                  <TextField {...field} value={field.value} label='enter name'></TextField>
+                )}
+              />
+            </Box>
+          ) : null}
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.sufficientFunds.question}</StickyFormLabel>
+          <Controller
+            name='sufficientFunds'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.sufficientFunds.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.sufficientFunds?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.sufficientFunds.question}</StickyFormLabel>
+          <Controller
+            name='resourcesToEnforceRegulations'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.resourcesToEnforceRegulations.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.resourcesToEnforceRegulations?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.equitableSharingOfSiteBenefits.question}</StickyFormLabel>
+          <Controller
+            name='equitableSharingOfSiteBenefits'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.equitableSharingOfSiteBenefits.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.equitableSharingOfSiteBenefits?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.climageChangeAdaptation.question}</StickyFormLabel>
+          <Controller
+            name='climageChangeAdaptation'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.climageChangeAdaptation.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.climageChangeAdaptation?.message}</ErrorText>
+        </FormQuestionDiv>
       </Form>
     </ContentWrapper>
   )
