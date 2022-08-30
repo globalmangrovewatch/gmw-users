@@ -112,7 +112,7 @@ const ManagementStatusAndEffectivenessForm = () => {
           <Controller
             name='dateOfAssessment'
             control={control}
-            defaultValue={new Date()}
+            defaultValue={''}
             render={({ field }) => (
               <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                 <Stack spacing={3}>
