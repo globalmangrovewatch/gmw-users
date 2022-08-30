@@ -399,8 +399,7 @@ const siteInterventions = {
       'Industry/Private sector',
       'Academic institute or research facility',
       'Ecotourists',
-      'Unknown',
-      'Other'
+      'Unknown'
     ]
   },
   otherActivitiesImplemented: {
