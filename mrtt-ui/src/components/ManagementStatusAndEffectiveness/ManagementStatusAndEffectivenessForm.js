@@ -23,6 +23,7 @@ import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import language from '../../language'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
+import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 
 const ManagementStatusAndEffectivenessForm = () => {
   const { site_name } = useSiteInfo()
@@ -101,11 +102,13 @@ const ManagementStatusAndEffectivenessForm = () => {
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
-        isSaving={isSubmitting}
-        isSaveError={isSubmitError}
-        onSave={validateInputs(handleSubmit)}
+        isFormSaving={isSubmitting}
+        isFormSaveError={isSubmitError}
+        onFormSave={validateInputs(handleSubmit)}
         currentSection='management-status-and-effectiveness'
       />
+      <FormValidationMessageIfErrors formErrors={errors} />
+
       <Form>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.dateOfAssessment.question}</StickyFormLabel>

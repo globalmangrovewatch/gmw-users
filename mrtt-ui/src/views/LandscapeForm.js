@@ -8,15 +8,16 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonContainer, PaddedSection, RowFlexEnd, ContentWrapper } from '../styles/containers'
 import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
+import { ButtonContainer, PaddedSection, RowFlexEnd, ContentWrapper } from '../styles/containers'
 import { ErrorText, PageTitle } from '../styles/typography'
-import { Form, RequiredIndicator } from '../styles/forms'
+import { Form } from '../styles/forms'
 import ButtonSecondaryWithLoader from '../components/ButtonSecondaryWithLoader'
 import ConfirmPrompt from '../components/ConfirmPrompt/ConfirmPrompt'
 import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
+import RequiredIndicator from '../components/RequiredIndicator'
 import SubmitErrorWithExtraErrorContent from '../components/SubmitErrorWithExtraErrorContent'
 
 const validationSchema = yup.object({
@@ -178,7 +179,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
         <Form onSubmit={validateInputs(handleSubmit)}>
           <FormLabel htmlFor='name'>
             {language.pages.landscapeForm.labelName}
-            <RequiredIndicator>*</RequiredIndicator>{' '}
+            <RequiredIndicator />
           </FormLabel>
           <Controller
             name='landscape_name'
@@ -188,7 +189,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
           <ErrorText>{errors?.landscape_name?.message}</ErrorText>
           <FormLabel htmlFor='organizations'>
             {language.pages.landscapeForm.labelOrganizations}
-            <RequiredIndicator>*</RequiredIndicator>
+            <RequiredIndicator />
           </FormLabel>
           <Controller
             name='selectedOrganizations'

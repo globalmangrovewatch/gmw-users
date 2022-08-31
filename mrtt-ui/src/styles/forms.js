@@ -38,13 +38,10 @@ export const Form = styled('form')`
   flex-direction: column;
   padding-bottom: ${theme.layout.footerHeight};
   gap: ${themeMui.spacing(3)};
+  margin-top: ${themeMui.spacing(2)};
   @media (min-width: ${theme.layout.mediaQueryDesktop}) {
     padding-bottom: 0;
   }
-`
-export const RequiredIndicator = styled('span')`
-  color: ${theme.form.requiredIndicatorColor};
-  padding: 0 ${themeMui.spacing(1)};
 `
 export const NestedLabel1 = styled('label')`
   text-transform: uppercase;

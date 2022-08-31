@@ -8,13 +8,14 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
 import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
+import { ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
 import { ErrorText, PageTitle } from '../styles/typography'
-import { Form, RequiredIndicator } from '../styles/forms'
+import { Form } from '../styles/forms'
 import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
+import RequiredIndicator from '../components/RequiredIndicator'
 import SubmitErrorWithExtraErrorContent from '../components/SubmitErrorWithExtraErrorContent'
 
 const validationSchema = yup.object({
@@ -124,7 +125,7 @@ const OrganizationForm = ({ isNewOrganization }) => {
         <Form onSubmit={validateInputs(handleSubmit)}>
           <FormLabel htmlFor='name'>
             {language.pages.organizationForm.labelName}
-            <RequiredIndicator>*</RequiredIndicator>{' '}
+            <RequiredIndicator />
           </FormLabel>
           <Controller
             name='organization_name'

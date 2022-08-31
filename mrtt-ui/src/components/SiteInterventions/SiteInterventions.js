@@ -25,24 +25,25 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 
-import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
 import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { findDataItem } from '../../library/findDataItem'
+import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
+import { mangroveSpeciesPerCountryList } from '../../data/mangroveSpeciesPerCountry'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
+import { propaguleOptions, seedlingOptions } from '../../data/siteInterventionOptions'
 import { questionMapping } from '../../data/questionMapping'
 import { siteInterventions as questions } from '../../data/questions'
+import AddMangroveAssociatedSpeciesRow from './AddMangroveAssociatedSpeciesRow'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import { mangroveSpeciesPerCountryList } from '../../data/mangroveSpeciesPerCountry'
-import { propaguleOptions, seedlingOptions } from '../../data/siteInterventionOptions'
+import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
+import MangroveAssociatedSpeciesRow from './MangroveAssociatedSpeciesRow'
 import QuestionNav from '../QuestionNav'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
-import AddMangroveAssociatedSpeciesRow from './AddMangroveAssociatedSpeciesRow'
-import MangroveAssociatedSpeciesRow from './MangroveAssociatedSpeciesRow'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2a') ?? []
@@ -325,6 +326,8 @@ function SiteInterventionsForm() {
         onFormSave={validateInputs(handleSubmit)}
         currentSection='site-interventions'
       />
+      <FormValidationMessageIfErrors formErrors={errors} />
+
       <Form>
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController

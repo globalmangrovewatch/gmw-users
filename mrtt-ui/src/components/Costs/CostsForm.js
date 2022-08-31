@@ -32,6 +32,7 @@ import BreakdownOfCostRow from './BreakdownOfCostRow'
 import PercentageSplitOfActivitiesRow from './PercentageSplitOfActivitiesRow'
 import { currencies } from '../../data/currencies'
 import { findDataItem } from '../../library/findDataItem'
+import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 
 const getEndDate = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '1.1b') ?? ''
@@ -275,6 +276,7 @@ const CostsForm = () => {
         onFormSave={validateInputs(handleSubmit)}
         currentSection='costs'
       />
+      <FormValidationMessageIfErrors formErrors={errors} />
       <Form>
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
