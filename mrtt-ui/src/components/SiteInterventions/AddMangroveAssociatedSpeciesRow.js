@@ -40,7 +40,7 @@ const AddMangroveAssociatedSpeciesRow = ({ saveItem, updateTabularInputDisplay }
     <TabularSectionDiv>
       <Box sx={{ width: '100%' }}>
         <TabularInputSection>
-          <TabularLabel>Species type</TabularLabel>
+          <TabularLabel>Species name</TabularLabel>
           <TextField
             value={type}
             label='type'
@@ -50,7 +50,7 @@ const AddMangroveAssociatedSpeciesRow = ({ saveItem, updateTabularInputDisplay }
           <TabularLabel>Number</TabularLabel>
           <TextField
             value={count}
-            label='count'
+            label='number'
             onChange={(e) => setNumber(e.target.value)}></TextField>
         </TabularInputSection>
         <TabularInputSection>
