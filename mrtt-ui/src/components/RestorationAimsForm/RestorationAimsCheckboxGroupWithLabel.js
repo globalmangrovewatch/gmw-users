@@ -6,6 +6,7 @@ import React from 'react'
 import CheckboxGroup from '../CheckboxGroup/CheckboxGroup'
 import getOptionsValuesAndLabels from '../../library/getOptionsValuesAndLabels'
 import StakeholderBenefitsInputs, { stakeholdersPropType } from './StakeholderBenefitsInputs'
+import RequiredIndicator from '../RequiredIndicator'
 
 const RestorationAimsCheckboxGroupWithLabel = ({
   fieldName,
@@ -50,7 +51,7 @@ const RestorationAimsCheckboxGroupWithLabel = ({
     <>
       <StickyFormLabel id={id}>
         {question}
-        {showAsterisk ? <>*</> : null}
+        {showAsterisk ? <RequiredIndicator /> : null}
       </StickyFormLabel>
       <Controller
         name={fieldName}

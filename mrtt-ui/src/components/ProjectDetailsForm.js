@@ -12,21 +12,23 @@ import turfConvex from '@turf/convex'
 import turfBbox from '@turf/bbox'
 import turfBboxPolygon from '@turf/bbox-polygon'
 
+import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
-import { StickyFormLabel, FormPageHeader, FormQuestionDiv, Form } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { projectDetails as questions } from '../data/questions'
 import { questionMapping } from '../data/questionMapping'
+import { StickyFormLabel, FormPageHeader, FormQuestionDiv, Form } from '../styles/forms'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import emptyFeatureCollection from '../data/emptyFeatureCollection'
+import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '../language'
 import LoadingIndicator from './LoadingIndicator'
 import mangroveCountries from '../data/mangrove_countries.json'
 import ProjectAreaMap from './ProjectAreaMap'
-import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
-import { ContentWrapper } from '../styles/containers'
 import QuestionNav from './QuestionNav'
+import RequiredIndicator from './RequiredIndicator'
+import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
 
 const sortCountries = (a, b) => {
@@ -167,11 +169,13 @@ function ProjectDetailsForm() {
         onFormSave={validateInputs(handleSubmit)}
         currentSection='project-details'
       />
+      <FormValidationMessageIfErrors formErrors={errors} />
       <Form>
         {/* Start Date */}
         <FormQuestionDiv>
           <StickyFormLabel id='project-start-date-label'>
-            {questions.projectStartDate.question}*
+            {questions.projectStartDate.question}
+            <RequiredIndicator />
           </StickyFormLabel>
           <Controller
             name='projectStartDate'
@@ -198,7 +202,8 @@ function ProjectDetailsForm() {
         {/* Has project end date radio group */}
         <FormQuestionDiv>
           <StickyFormLabel id='has-project-end-date-label'>
-            {questions.hasProjectEndDate.question}*
+            {questions.hasProjectEndDate.question}
+            <RequiredIndicator />
           </StickyFormLabel>
           <Controller
             name='hasProjectEndDate'
@@ -219,7 +224,8 @@ function ProjectDetailsForm() {
         {showEndDateInput && (
           <FormQuestionDiv>
             <StickyFormLabel id='project-end-date-label'>
-              {questions.projectEndDate.question}*
+              {questions.projectEndDate.question}
+              <RequiredIndicator />
             </StickyFormLabel>
             <Controller
               name='projectEndDate'
@@ -245,7 +251,9 @@ function ProjectDetailsForm() {
         )}
         {/* Countries selector */}
         <FormQuestionDiv>
-          <StickyFormLabel htmlFor='countries'>{questions.countries.question}*</StickyFormLabel>
+          <StickyFormLabel htmlFor='countries'>
+            {questions.countries.question} <RequiredIndicator />
+          </StickyFormLabel>
           <Controller
             name='countries'
             control={control}
@@ -271,7 +279,9 @@ function ProjectDetailsForm() {
         </FormQuestionDiv>
         {/* Draw or upload site area */}
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.siteArea.question}*</StickyFormLabel>
+          <StickyFormLabel>
+            {questions.siteArea.question} <RequiredIndicator />
+          </StickyFormLabel>
           <Controller
             name='siteArea'
             control={control}

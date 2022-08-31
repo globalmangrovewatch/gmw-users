@@ -21,8 +21,13 @@ const form = {
     yearTooLow: 'Year must be greater than 1900',
     noYearProvided: 'You must specifiy a year',
     yearTooHigh: 'Year must less than or equal to the current year'
+  },
+  validationAlert: {
+    title: 'The form was not saved',
+    description: 'Please check the form below for validation errors'
   }
 }
+
 const multiselectWithOtherFormQuestion = {
   validation: {
     selectAtleastOneItem: 'Please select at least one item.',

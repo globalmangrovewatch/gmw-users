@@ -7,17 +7,19 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 
-import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
 import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
+import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
 import { questionMapping } from '../data/questionMapping'
 import { siteBackground } from '../data/questions'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
+import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '../language'
 import LoadingIndicator from './LoadingIndicator'
 import QuestionNav from './QuestionNav'
+import RequiredIndicator from './RequiredIndicator'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
 
@@ -142,10 +144,14 @@ const SiteBackgroundForm = () => {
         onFormSave={validateInputs(handleSubmit)}
         currentSection='site-background'
       />
+      <FormValidationMessageIfErrors formErrors={errors} />
+
       {/* Select Stakeholders */}
       <Form>
         <FormQuestionDiv>
-          <StickyFormLabel>{siteBackground.stakeholders.question}</StickyFormLabel>
+          <StickyFormLabel>
+            {siteBackground.stakeholders.question} <RequiredIndicator />
+          </StickyFormLabel>
           <List>
             {siteBackground.stakeholders.options.map((stakeholder, index) => (
               <ListItem key={index}>
@@ -239,7 +245,12 @@ const SiteBackgroundForm = () => {
             fieldName='protectionStatus'
             reactHookFormInstance={reactHookFormInstance}
             options={siteBackground.protectionStatus.options}
-            question={siteBackground.protectionStatus.question}
+            question={
+              <>
+                {siteBackground.protectionStatus.question}
+                <RequiredIndicator />
+              </>
+            }
             shouldAddOtherOptionWithClarification={true}
           />
           <ErrorText>{errors.protectionStatus?.selectedValues?.message}</ErrorText>
@@ -271,7 +282,12 @@ const SiteBackgroundForm = () => {
             fieldName='governmentArrangement'
             reactHookFormInstance={reactHookFormInstance}
             options={siteBackground.governmentArrangement.options}
-            question={siteBackground.governmentArrangement.question}
+            question={
+              <>
+                {siteBackground.governmentArrangement.question}
+                <RequiredIndicator />
+              </>
+            }
             shouldAddOtherOptionWithClarification={true}
           />
           <ErrorText>{errors.governmentArrangement?.selectedValues?.message}</ErrorText>
@@ -282,7 +298,12 @@ const SiteBackgroundForm = () => {
             fieldName='landTenure'
             reactHookFormInstance={reactHookFormInstance}
             options={siteBackground.landTenure.options}
-            question={siteBackground.landTenure.question}
+            question={
+              <>
+                {siteBackground.landTenure.question}
+                <RequiredIndicator />
+              </>
+            }
             shouldAddOtherOptionWithClarification={true}
           />
           <ErrorText>{errors.landTenure?.selectedValues?.message}</ErrorText>

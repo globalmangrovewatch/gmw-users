@@ -10,10 +10,11 @@ import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
 import { ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
 import { Controller, useForm } from 'react-hook-form'
 import { ErrorText, Link, PageTitle } from '../styles/typography'
-import { Form, RequiredIndicator } from '../styles/forms'
+import { Form } from '../styles/forms'
 import { FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
+import RequiredIndicator from '../components/RequiredIndicator'
 
 const pageLanguage = language.pages.newOrganizationUser
 
@@ -92,7 +93,7 @@ const NewOrganizationUser = () => {
       <Form onSubmit={validateInputs(handleSubmit)}>
         <FormLabel htmlFor='email'>
           {pageLanguage.email}
-          <RequiredIndicator>*</RequiredIndicator>
+          <RequiredIndicator />
         </FormLabel>
         <Controller
           name='email'
@@ -102,7 +103,7 @@ const NewOrganizationUser = () => {
         <ErrorText>{errors?.email?.message}</ErrorText>
         <FormLabel id={'role-label'}>
           {pageLanguage.role}
-          <RequiredIndicator>*</RequiredIndicator>
+          <RequiredIndicator />
         </FormLabel>
         <Controller
           name='role'

@@ -9,13 +9,14 @@ import {
   multiselectWithOtherValidation,
   multiselectWithOtherValidationNoMinimum
 } from '../../validation/multiSelectWithOther'
-import { Form, FormPageHeader, FormQuestionDiv } from '../../styles/forms'
 import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
+import { Form, FormPageHeader, FormQuestionDiv } from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
 import { restorationAims as questions } from '../../data/questions'
 import { toast } from 'react-toastify'
+import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
 import QuestionNav from '../QuestionNav'
@@ -95,6 +96,7 @@ const RestorationAimsForm = () => {
         onFormSave={validateInputs(handleSubmit)}
         currentSection='restoration-aims'
       />
+      <FormValidationMessageIfErrors formErrors={errors} />
       <Form onSubmit={validateInputs(handleSubmit)}>
         <FormQuestionDiv>
           <RestorationAimsCheckboxGroupWithLabel

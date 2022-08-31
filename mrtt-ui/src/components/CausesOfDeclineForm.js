@@ -31,9 +31,11 @@ import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { questionMapping } from '../data/questionMapping'
+import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '../language'
 import LoadingIndicator from './LoadingIndicator'
 import QuestionNav from './QuestionNav'
+import RequiredIndicator from './RequiredIndicator'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
 
@@ -283,6 +285,7 @@ function CausesOfDeclineForm() {
         onFormSave={handleSubmit(onSubmit)}
         currentSection='causes-of-decline'
       />
+      <FormValidationMessageIfErrors formErrors={errors} />
       <Form>
         <FormQuestionDiv>
           <StickyFormLabel>{causesOfDecline.lossKnown.question}</StickyFormLabel>
@@ -304,7 +307,9 @@ function CausesOfDeclineForm() {
         </FormQuestionDiv>
         {lossKnownWatcher === 'true' ? (
           <FormQuestionDiv>
-            <StickyFormLabel>{causesOfDecline.causesOfDecline.question}</StickyFormLabel>
+            <StickyFormLabel>
+              {causesOfDecline.causesOfDecline.question} <RequiredIndicator />
+            </StickyFormLabel>
             {causesOfDeclineOptions.map((mainCause, mainCauseIndex) => {
               return (
                 <Box key={mainCauseIndex} sx={{ marginTop: '0.75em', marginBottom: '1.5em' }}>

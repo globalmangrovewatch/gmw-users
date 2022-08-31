@@ -8,13 +8,14 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 
 import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
-import { QuestionWrapper, ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
 import { ErrorText, PageTitle } from '../styles/typography'
-import { Form, RequiredIndicator } from '../styles/forms'
+import { Form } from '../styles/forms'
 import { FormLabel, MenuItem, Select, TextField } from '@mui/material'
+import { QuestionWrapper, ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
 import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
+import RequiredIndicator from '../components/RequiredIndicator'
 
 const validationSchema = yup.object({
   site_name: yup.string().required(language.pages.siteform.validation.nameRequired),
@@ -128,9 +129,7 @@ const SiteForm = ({ isNewSite }) => {
         <QuestionWrapper>
           <FormLabel htmlFor='name'>
             {language.pages.siteform.labelName}
-            <RequiredIndicator aria-label={language.form.requiredIndicator}>
-              *
-            </RequiredIndicator>{' '}
+            <RequiredIndicator />
           </FormLabel>
           <Controller
             name='site_name'
@@ -143,9 +142,7 @@ const SiteForm = ({ isNewSite }) => {
         <QuestionWrapper>
           <FormLabel htmlFor='landscape'>
             {language.pages.siteform.labelLandscape}
-            <RequiredIndicator aria-label={language.form.requiredIndicator}>
-              *
-            </RequiredIndicator>{' '}
+            <RequiredIndicator />
           </FormLabel>
           <Controller
             name='landscape_id'
