@@ -98,7 +98,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection
       // https://github.com/globalmangrovewatch/gmw-users/issues/260
       axios.get(siteUrl).then(({ data }) => {
         setSiteFromApi(data)
-        setSectionPrivacy(data.section_data_visibility[sectionIdForApi])
+        setSectionPrivacy(data.section_data_visibility?.[sectionIdForApi])
       })
     },
     [siteUrl, sectionIdForApi]
@@ -157,9 +157,10 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection
           <NavSubWrapper>
             <PrivacySelect
               id='form-privacy'
+              defaultValue={''}
               value={sectionPrivacy}
               onChange={handleOnPrivacyChange}>
-              <option value={undefined} disabled selected>
+              <option value={''} disabled>
                 {componentLanguage.privacySelectUndefined}
               </option>
               <option value={'private'}>{componentLanguage.private}</option>
