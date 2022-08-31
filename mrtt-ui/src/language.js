@@ -141,7 +141,7 @@ const pages = {
       preRestorationAssessment: 'Pre-Restoration Assessment',
       siteInterventions: 'Site Interventions',
       costs: 'Costs',
-      managementStatus: 'Management Status and Effectiveness',
+      managementStatusAndEffectiveness: 'Management Status and Effectiveness',
       socioeconomicGovernanceStatusOutcomes: 'Socioeconomic and Governance Status and Outcomes',
       ecologicalStatusOutcomes: 'Ecological Status and Outcomes'
     },

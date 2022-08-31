@@ -7,7 +7,8 @@ const SECTION_NAMES = [
   'causes-of-decline',
   'pre-restoration-assessment',
   'site-interventions',
-  'costs'
+  'costs',
+  'management-status-and-effectiveness'
 ]
 
 Object.freeze(SECTION_NAMES)

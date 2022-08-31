@@ -433,11 +433,3 @@ const CostsForm = () => {
 CostsForm.propTypes = {}
 
 export default CostsForm
-
-// const SubSection = styled('div')`
-//   display: flex;
-//   flex-direction: row;
-//   margin-top: 1em;
-//   align-items: center;
-//   justify-content: space-between;
-// `

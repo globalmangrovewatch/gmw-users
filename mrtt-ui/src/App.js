@@ -23,6 +23,7 @@ import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOv
 import Sites from './views/Sites'
 import themeMui from './styles/themeMui'
 import CostsForm from './components/Costs/CostsForm'
+import ManagementStatusAndEffectivenessForm from './components/ManagementStatusAndEffectiveness/ManagementStatusAndEffectivenessForm'
 import ManageOrganizationUsers from './views/ManageOrganizationUsers'
 import NewOrganizationUser from './views/NewOrganizationUser'
 
@@ -73,6 +74,10 @@ function App() {
                 element={<CausesOfDeclineForm />}
               />
               <Route path='/sites/:siteId/form/costs' element={<CostsForm />} />
+              <Route
+                path='/sites/:siteId/form/management-status-and-effectiveness'
+                element={<ManagementStatusAndEffectivenessForm />}
+              />
               <Route path='/sites/:siteId/form/project-details/' element={<ProjectDetailsForm />} />
               <Route
                 path='/sites/:siteId/form/restoration-aims'
