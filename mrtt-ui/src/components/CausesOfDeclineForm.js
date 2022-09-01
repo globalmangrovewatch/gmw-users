@@ -134,8 +134,6 @@ function CausesOfDeclineForm() {
     successCallback: setInitialCausesOfDeclineTypesFromServerData
   })
 
-  console.log({ errors })
-
   // big function with many different cases for Q4.2 due to the nesting involved in this question type
   const handleCausesOfDeclineOnChange = ({
     event,
