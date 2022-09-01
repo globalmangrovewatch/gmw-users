@@ -2,10 +2,13 @@ import {
   Box,
   Button,
   Checkbox,
+  Chip,
   FormLabel,
   List,
   ListItem,
+  ListItemText,
   MenuItem,
+  Select,
   Stack,
   TextField,
   Typography
@@ -69,12 +72,16 @@ function SiteInterventionsForm() {
       .of(
         yup.object().shape({
           type: yup.string(),
-          seed: yup
-            .object()
-            .shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() }),
-          propagule: yup
-            .object()
-            .shape({ checked: yup.bool(), source: yup.string(), count: yup.mixed() })
+          seed: yup.object().shape({
+            checked: yup.bool(),
+            source: yup.array().of(yup.string()),
+            count: yup.mixed()
+          }),
+          propagule: yup.object().shape({
+            checked: yup.bool(),
+            source: yup.array().of(yup.string()),
+            count: yup.mixed()
+          })
         })
       )
       .default([]),
@@ -237,8 +244,8 @@ function SiteInterventionsForm() {
     if (event.target.checked) {
       mangroveSpeciesUsedAppend({
         type: specie,
-        seed: { checked: false, source: '', count: 0 },
-        propagule: { checked: false, source: '', count: 0 }
+        seed: { checked: false, source: [], count: 0 },
+        propagule: { checked: false, source: [], count: 0 }
       })
       mangroveSpeciesUsedCheckedCopy.push(specie)
     } else {
@@ -452,20 +459,27 @@ function SiteInterventionsForm() {
                                   specie
                                 )}.seed.source`}
                                 control={control}
-                                defaultValue=''
+                                defaultValue={[]}
                                 render={({ field }) => (
-                                  <TextField
+                                  <Select
                                     {...field}
-                                    select
+                                    multiple
                                     value={field.value}
                                     label='Source'
+                                    renderValue={(selected) => (
+                                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                        {selected.map((value) => (
+                                          <Chip key={value} label={value} />
+                                        ))}
+                                      </Box>
+                                    )}
                                     sx={{ minWidth: '10em' }}>
                                     {seedlingOptions.map((item, index) => (
                                       <MenuItem key={index} value={item}>
                                         {item}
                                       </MenuItem>
                                     ))}
-                                  </TextField>
+                                  </Select>
                                 )}
                               />
                             </SubgroupDiv>
@@ -503,20 +517,27 @@ function SiteInterventionsForm() {
                                   specie
                                 )}.propagule.source`}
                                 control={control}
-                                defaultValue=''
+                                defaultValue={[]}
                                 render={({ field }) => (
-                                  <TextField
+                                  <Select
                                     {...field}
-                                    select
+                                    multiple
                                     value={field.value}
                                     label='Source'
+                                    renderValue={(selected) => (
+                                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                        {selected.map((value) => (
+                                          <Chip key={value} label={value} />
+                                        ))}
+                                      </Box>
+                                    )}
                                     sx={{ minWidth: '10em' }}>
                                     {propaguleOptions.map((item, index) => (
                                       <MenuItem key={index} value={item}>
-                                        {item}
+                                        <ListItemText>{item}</ListItemText>
                                       </MenuItem>
                                     ))}
-                                  </TextField>
+                                  </Select>
                                 )}
                               />
                             </SubgroupDiv>
