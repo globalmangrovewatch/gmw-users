@@ -65,7 +65,6 @@ function CausesOfDeclineForm() {
           )
         })
       )
-      .min(1)
       .required('Select at least one cause of decline')
       .default([])
   })
@@ -134,6 +133,8 @@ function CausesOfDeclineForm() {
     setIsLoading,
     successCallback: setInitialCausesOfDeclineTypesFromServerData
   })
+
+  console.log({ errors })
 
   // big function with many different cases for Q4.2 due to the nesting involved in this question type
   const handleCausesOfDeclineOnChange = ({
