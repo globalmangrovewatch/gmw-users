@@ -67,8 +67,6 @@ function CausesOfDeclineForm() {
           )
         })
       )
-      .min(1)
-      .required('Select at least one cause of decline')
       .default([])
   })
 
