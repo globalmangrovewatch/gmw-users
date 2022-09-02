@@ -288,6 +288,9 @@ function SiteInterventionsForm() {
   const getBiophysicalIntervention = (intervention) =>
     biophysicalInterventionsFields.find((field) => field.interventionType === intervention)
 
+  const getWhichStakeholderInvolved = (stakeholder) =>
+    whichStakeholdersInvolvedFields.find((field) => field.stakeholder === stakeholder)
+
   const handleMangroveSpeciesUsedOnChange = (event, specie) => {
     const mangroveSpeciesUsedCheckedCopy = [...mangroveSpeciesUsedChecked]
 
@@ -392,6 +395,35 @@ function SiteInterventionsForm() {
                         handleWhichStakeholdersInvolvedOnChange(event, stakeholder)
                       }></Checkbox>
                     <Typography variant='subtitle'>{stakeholder}</Typography>
+                  </Box>
+                  <Box>
+                    {getWhichStakeholderInvolved(stakeholder) && (
+                      <Box>
+                        <InnerFormDiv>
+                          <Controller
+                            name={`whichStakeholdersInvolved.${whichStakeholdersInvolvedFields.findIndex(
+                              (field) => field.stakeholder === stakeholder
+                            )}.stakeholderType`}
+                            control={control}
+                            defaultValue=''
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                select
+                                value={field.value}
+                                label='select'
+                                sx={{ width: '10em' }}>
+                                {['Paid', 'Voluntary'].map((item, index) => (
+                                  <MenuItem key={index} value={item}>
+                                    {item}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
+                            )}
+                          />
+                        </InnerFormDiv>
+                      </Box>
+                    )}
                   </Box>
                 </Box>
               </ListItem>
