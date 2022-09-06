@@ -300,55 +300,57 @@ function SiteInterventionsForm() {
           />
           <ErrorText>{errors.biophysicalInterventionsUsed?.message}</ErrorText>
         </FormQuestionDiv>
-        <FormQuestionDiv>
-          <StickyFormLabel>{questions.biophysicalInterventionDuration.question}</StickyFormLabel>
-          <Box>
-            <InnerFormDiv>
-              <Controller
-                name={`biophysicalInterventionDuration.startDate`}
-                control={control}
-                defaultValue={new Date()}
-                render={({ field }) => (
-                  <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                    <Stack spacing={3}>
-                      <MobileDatePicker
-                        id='start-date'
-                        label='Intervention start date'
-                        value={field.value}
-                        onChange={(newValue) => {
-                          field.onChange(newValue?.toISOString())
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </Stack>
-                  </LocalizationProvider>
-                )}
-              />
-            </InnerFormDiv>
-            <InnerFormDiv>
-              <Controller
-                name={`biophysicalInterventionDuration.endDate`}
-                control={control}
-                defaultValue={new Date()}
-                render={({ field }) => (
-                  <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                    <Stack spacing={3}>
-                      <MobileDatePicker
-                        id='end-date'
-                        label='Intervention end date'
-                        value={field.value}
-                        onChange={(newValue) => {
-                          field.onChange(newValue?.toISOString())
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </Stack>
-                  </LocalizationProvider>
-                )}
-              />
-            </InnerFormDiv>
-          </Box>
-        </FormQuestionDiv>
+        {!biophysicalInterventionsUsedWatcher?.selectedValues?.includes('None') ? (
+          <FormQuestionDiv>
+            <StickyFormLabel>{questions.biophysicalInterventionDuration.question}</StickyFormLabel>
+            <Box>
+              <InnerFormDiv>
+                <Controller
+                  name={`biophysicalInterventionDuration.startDate`}
+                  control={control}
+                  defaultValue={new Date()}
+                  render={({ field }) => (
+                    <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
+                      <Stack spacing={3}>
+                        <MobileDatePicker
+                          id='start-date'
+                          label='Intervention start date'
+                          value={field.value}
+                          onChange={(newValue) => {
+                            field.onChange(newValue?.toISOString())
+                          }}
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </Stack>
+                    </LocalizationProvider>
+                  )}
+                />
+              </InnerFormDiv>
+              <InnerFormDiv>
+                <Controller
+                  name={`biophysicalInterventionDuration.endDate`}
+                  control={control}
+                  defaultValue={new Date()}
+                  render={({ field }) => (
+                    <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
+                      <Stack spacing={3}>
+                        <MobileDatePicker
+                          id='end-date'
+                          label='Intervention end date'
+                          value={field.value}
+                          onChange={(newValue) => {
+                            field.onChange(newValue?.toISOString())
+                          }}
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </Stack>
+                    </LocalizationProvider>
+                  )}
+                />
+              </InnerFormDiv>
+            </Box>
+          </FormQuestionDiv>
+        ) : null}
 
         {isMangroveSpeciesUsedShowing() ? (
           <FormQuestionDiv>
