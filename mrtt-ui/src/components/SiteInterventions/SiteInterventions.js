@@ -45,9 +45,6 @@ import QuestionNav from '../QuestionNav'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
 
-const getBiophysicalInterventions = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '6.2a') ?? []
-
 const getSiteCountries = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '1.2') ?? []
 
@@ -58,16 +55,10 @@ function SiteInterventionsForm() {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     whichStakeholdersInvolved: multiselectWithOtherValidationNoMinimum,
-    biophysicalInterventionsUsed: yup
-      .array()
-      .of(
-        yup.object().shape({
-          interventionType: yup.string(),
-          interventionStartDate: yup.string(),
-          interventionEndDate: yup.string()
-        })
-      )
-      .default([]),
+    biophysicalInterventionsUsed: multiselectWithOtherValidationNoMinimum,
+    biophysicalInterventionDuration: yup
+      .object()
+      .shape({ startDate: yup.string(), endDate: yup.string() }),
     mangroveSpeciesUsed: yup
       .array()
       .of(
@@ -119,12 +110,6 @@ function SiteInterventionsForm() {
   } = reactHookFormInstance
 
   const {
-    fields: biophysicalInterventionsFields,
-    append: biophysicalInterventionsAppend,
-    remove: biophysicalInterventionsRemove
-  } = useFieldArray({ name: 'biophysicalInterventionsUsed', control })
-
-  const {
     fields: mangroveSpeciesUsedFields,
     append: mangroveSpeciesUsedAppend,
     remove: mangroveSpeciesUsedRemove,
@@ -143,21 +128,13 @@ function SiteInterventionsForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [biophysicalInterventionTypesChecked, setBiophysicalInterventionTypesChecked] = useState([])
   const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
   const [mangroveSpeciesUsedChecked, setMangroveSpeciesUsedChecked] = useState([])
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
   const localParticipantTrainingWatcher = watchForm('localParticipantTraining')
+  const biophysicalInterventionsUsedWatcher = watchForm('biophysicalInterventionsUsed')
 
   const loadServerData = useCallback((serverResponse) => {
-    // set biophysical interventions
-    const biophysicalInterventionsInitialVal = getBiophysicalInterventions(serverResponse)
-
-    const initialBiophysicalInterventionsTypesChecked = biophysicalInterventionsInitialVal?.map(
-      (intervention) => intervention.interventionType
-    )
-    setBiophysicalInterventionTypesChecked(initialBiophysicalInterventionsTypesChecked)
-
     // set countries list for countries selected in 1.2
     const siteCountriesResponse = getSiteCountries(serverResponse)
 
@@ -213,32 +190,6 @@ function SiteInterventionsForm() {
       })
   }
 
-  const handleBiophysicalInterventionsOnChange = (event, intervention) => {
-    const biophysicalInterventionTypesCheckedCopy = [...biophysicalInterventionTypesChecked]
-
-    if (event.target.checked) {
-      biophysicalInterventionsAppend({
-        interventionType: intervention,
-        interventionStartDate: '',
-        interventionEndDate: ''
-      })
-      biophysicalInterventionTypesCheckedCopy.push(intervention)
-    } else {
-      const fieldIndex = biophysicalInterventionsFields.findIndex(
-        (field) => field.interventionType === intervention
-      )
-      const typeIndex = biophysicalInterventionTypesCheckedCopy.findIndex(
-        (type) => type === intervention
-      )
-      biophysicalInterventionTypesCheckedCopy.splice(typeIndex, 1)
-      biophysicalInterventionsRemove(fieldIndex)
-    }
-    setBiophysicalInterventionTypesChecked(biophysicalInterventionTypesCheckedCopy)
-  }
-
-  const getBiophysicalIntervention = (intervention) =>
-    biophysicalInterventionsFields.find((field) => field.interventionType === intervention)
-
   const handleMangroveSpeciesUsedOnChange = (event, specie) => {
     const mangroveSpeciesUsedCheckedCopy = [...mangroveSpeciesUsedChecked]
 
@@ -280,7 +231,7 @@ function SiteInterventionsForm() {
     ]
 
     const matchingItems = optionsUsed.filter((item) =>
-      biophysicalInterventionTypesChecked.includes(item)
+      biophysicalInterventionsUsedWatcher?.selectedValues?.includes(item)
     )
 
     return matchingItems.length ? true : false
@@ -340,89 +291,63 @@ function SiteInterventionsForm() {
           <ErrorText>{errors.whichStakeholdersInvolved?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.biophysicalInterventionsUsed.question}</StickyFormLabel>
-          <List>
-            {questions.biophysicalInterventionsUsed.options.map(
-              (biophysicalIntervention, index) => (
-                <ListItem key={index}>
-                  <Box>
-                    <Box>
-                      <Checkbox
-                        value={biophysicalIntervention}
-                        checked={biophysicalInterventionTypesChecked.includes(
-                          biophysicalIntervention
-                        )}
-                        onChange={(event) =>
-                          handleBiophysicalInterventionsOnChange(event, biophysicalIntervention)
-                        }></Checkbox>
-                      <Typography variant='subtitle'>{biophysicalIntervention}</Typography>
-                    </Box>
-                    <Box>
-                      {getBiophysicalIntervention(biophysicalIntervention) && (
-                        <Box>
-                          <InnerFormDiv>
-                            <Controller
-                              name={`biophysicalInterventionsUsed.${biophysicalInterventionsFields.findIndex(
-                                (field) => field.interventionType === biophysicalIntervention
-                              )}.interventionStartDate`}
-                              control={control}
-                              defaultValue={new Date()}
-                              render={({ field }) => (
-                                <LocalizationProvider
-                                  dateAdapter={AdapterDateFns}
-                                  {...field}
-                                  ref={null}>
-                                  <Stack spacing={3}>
-                                    <MobileDatePicker
-                                      id='start-date'
-                                      label='Intervention start date'
-                                      value={field.value}
-                                      onChange={(newValue) => {
-                                        field.onChange(newValue?.toISOString())
-                                      }}
-                                      renderInput={(params) => <TextField {...params} />}
-                                    />
-                                  </Stack>
-                                </LocalizationProvider>
-                              )}
-                            />
-                          </InnerFormDiv>
-                          <InnerFormDiv>
-                            <Controller
-                              name={`biophysicalInterventionsUsed.${biophysicalInterventionsFields.findIndex(
-                                (field) => field.interventionType === biophysicalIntervention
-                              )}.interventionEndDate`}
-                              control={control}
-                              defaultValue={new Date()}
-                              render={({ field }) => (
-                                <LocalizationProvider
-                                  dateAdapter={AdapterDateFns}
-                                  {...field}
-                                  ref={null}>
-                                  <Stack spacing={3}>
-                                    <MobileDatePicker
-                                      id='end-date'
-                                      label='Intervention end date'
-                                      value={field.value}
-                                      onChange={(newValue) => {
-                                        field.onChange(newValue?.toISOString())
-                                      }}
-                                      renderInput={(params) => <TextField {...params} />}
-                                    />
-                                  </Stack>
-                                </LocalizationProvider>
-                              )}
-                            />
-                          </InnerFormDiv>
-                        </Box>
-                      )}
-                    </Box>
-                  </Box>
-                </ListItem>
-              )
-            )}
-          </List>
+          <CheckboxGroupWithLabelAndController
+            fieldName='biophysicalInterventionsUsed'
+            reactHookFormInstance={reactHookFormInstance}
+            options={questions.biophysicalInterventionsUsed.options}
+            question={questions.biophysicalInterventionsUsed.question}
+            shouldAddOtherOptionWithClarification={true}
+          />
           <ErrorText>{errors.biophysicalInterventionsUsed?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.biophysicalInterventionDuration.question}</StickyFormLabel>
+          <Box>
+            <InnerFormDiv>
+              <Controller
+                name={`biophysicalInterventionDuration.startDate`}
+                control={control}
+                defaultValue={new Date()}
+                render={({ field }) => (
+                  <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
+                    <Stack spacing={3}>
+                      <MobileDatePicker
+                        id='start-date'
+                        label='Intervention start date'
+                        value={field.value}
+                        onChange={(newValue) => {
+                          field.onChange(newValue?.toISOString())
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </Stack>
+                  </LocalizationProvider>
+                )}
+              />
+            </InnerFormDiv>
+            <InnerFormDiv>
+              <Controller
+                name={`biophysicalInterventionDuration.endDate`}
+                control={control}
+                defaultValue={new Date()}
+                render={({ field }) => (
+                  <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
+                    <Stack spacing={3}>
+                      <MobileDatePicker
+                        id='end-date'
+                        label='Intervention end date'
+                        value={field.value}
+                        onChange={(newValue) => {
+                          field.onChange(newValue?.toISOString())
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </Stack>
+                  </LocalizationProvider>
+                )}
+              />
+            </InnerFormDiv>
+          </Box>
         </FormQuestionDiv>
 
         {isMangroveSpeciesUsedShowing() ? (
