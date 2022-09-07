@@ -48,6 +48,9 @@ import useSiteInfo from '../../library/useSiteInfo'
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2a') ?? []
 
+const getWhichStakeholdersInvolved = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '6.1') ?? []
+
 const getSiteCountries = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '1.2') ?? []
 
@@ -57,7 +60,15 @@ const getMangroveSpeciesUsed = (registrationAnswersFromServer) =>
 function SiteInterventionsForm() {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
-    whichStakeholdersInvolved: multiselectWithOtherValidationNoMinimum,
+    whichStakeholdersInvolved: yup
+      .array()
+      .of(
+        yup.object().shape({
+          stakeholder: yup.string(),
+          stakeholderType: yup.string()
+        })
+      )
+      .default([]),
     biophysicalInterventionsUsed: yup
       .array()
       .of(
@@ -138,6 +149,12 @@ function SiteInterventionsForm() {
     update: mangroveAssociatedSpeciesUpdate
   } = useFieldArray({ name: 'mangroveAssociatedSpecies', control })
 
+  const {
+    fields: whichStakeholdersInvolvedFields,
+    append: whichStakeholdersInvolvedAppend,
+    remove: whichStakeholdersInvolvedRemove
+  } = useFieldArray({ name: 'whichStakeholdersInvolved', control })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -146,6 +163,8 @@ function SiteInterventionsForm() {
   const [biophysicalInterventionTypesChecked, setBiophysicalInterventionTypesChecked] = useState([])
   const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
   const [mangroveSpeciesUsedChecked, setMangroveSpeciesUsedChecked] = useState([])
+  const [whichStakeholdersInvolvedTypesChecked, setWhichStakeholdersInvolvedTypesChecked] =
+    useState([])
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
   const localParticipantTrainingWatcher = watchForm('localParticipantTraining')
 
@@ -157,6 +176,14 @@ function SiteInterventionsForm() {
       (intervention) => intervention.interventionType
     )
     setBiophysicalInterventionTypesChecked(initialBiophysicalInterventionsTypesChecked)
+
+    // set whichStakeholdersInvolved
+    const whichStakeholdersInvolvedInitialVal = getWhichStakeholdersInvolved(serverResponse)
+
+    const initialWhichStakeholdersInvolvedTypesChecked = whichStakeholdersInvolvedInitialVal?.map(
+      (stakeholder) => stakeholder.stakeholder
+    )
+    setWhichStakeholdersInvolvedTypesChecked(initialWhichStakeholdersInvolvedTypesChecked)
 
     // set countries list for countries selected in 1.2
     const siteCountriesResponse = getSiteCountries(serverResponse)
@@ -236,8 +263,33 @@ function SiteInterventionsForm() {
     setBiophysicalInterventionTypesChecked(biophysicalInterventionTypesCheckedCopy)
   }
 
+  const handleWhichStakeholdersInvolvedOnChange = (event, stakeholder) => {
+    const whichStakeholdersInvolvedTypesCheckedCopy = [...whichStakeholdersInvolvedTypesChecked]
+
+    if (event.target.checked) {
+      whichStakeholdersInvolvedAppend({
+        stakeholder: stakeholder,
+        stakeholderType: ''
+      })
+      whichStakeholdersInvolvedTypesCheckedCopy.push(stakeholder)
+    } else {
+      const fieldIndex = whichStakeholdersInvolvedFields.findIndex(
+        (field) => field.stakeholder === stakeholder
+      )
+      const typeIndex = whichStakeholdersInvolvedTypesCheckedCopy.findIndex(
+        (type) => type === stakeholder
+      )
+      whichStakeholdersInvolvedTypesCheckedCopy.splice(typeIndex, 1)
+      whichStakeholdersInvolvedRemove(fieldIndex)
+    }
+    setWhichStakeholdersInvolvedTypesChecked(whichStakeholdersInvolvedTypesCheckedCopy)
+  }
+
   const getBiophysicalIntervention = (intervention) =>
     biophysicalInterventionsFields.find((field) => field.interventionType === intervention)
+
+  const getWhichStakeholderInvolved = (stakeholder) =>
+    whichStakeholdersInvolvedFields.find((field) => field.stakeholder === stakeholder)
 
   const handleMangroveSpeciesUsedOnChange = (event, specie) => {
     const mangroveSpeciesUsedCheckedCopy = [...mangroveSpeciesUsedChecked]
@@ -330,13 +382,53 @@ function SiteInterventionsForm() {
 
       <Form>
         <FormQuestionDiv>
-          <CheckboxGroupWithLabelAndController
-            fieldName='whichStakeholdersInvolved'
-            reactHookFormInstance={reactHookFormInstance}
-            options={questions.whichStakeholdersInvolved.options}
-            question={questions.whichStakeholdersInvolved.question}
-            shouldAddOtherOptionWithClarification={true}
-          />
+          <StickyFormLabel>{questions.whichStakeholdersInvolved.question}</StickyFormLabel>
+          <List>
+            {questions.whichStakeholdersInvolved.options.map((stakeholder, index) => (
+              <ListItem key={index}>
+                <Box>
+                  <Box>
+                    <Checkbox
+                      value={stakeholder}
+                      checked={whichStakeholdersInvolvedTypesChecked.includes(stakeholder)}
+                      onChange={(event) =>
+                        handleWhichStakeholdersInvolvedOnChange(event, stakeholder)
+                      }></Checkbox>
+                    <Typography variant='subtitle'>{stakeholder}</Typography>
+                  </Box>
+                  <Box>
+                    {getWhichStakeholderInvolved(stakeholder) && (
+                      <Box>
+                        <InnerFormDiv>
+                          <Controller
+                            name={`whichStakeholdersInvolved.${whichStakeholdersInvolvedFields.findIndex(
+                              (field) => field.stakeholder === stakeholder
+                            )}.stakeholderType`}
+                            control={control}
+                            defaultValue=''
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                select
+                                value={field.value}
+                                label='select'
+                                sx={{ width: '10em' }}>
+                                {['Paid', 'Voluntary'].map((item, index) => (
+                                  <MenuItem key={index} value={item}>
+                                    {item}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
+                            )}
+                          />
+                        </InnerFormDiv>
+                      </Box>
+                    )}
+                  </Box>
+                </Box>
+              </ListItem>
+            ))}
+          </List>
           <ErrorText>{errors.whichStakeholdersInvolved?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
