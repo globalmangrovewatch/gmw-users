@@ -75,6 +75,6 @@ export const questionMapping = {
     sufficientFunds: '8.7',
     resourcesToEnforceRegulations: '8.8',
     equitableSharingOfSiteBenefits: '8.9',
-    climageChangeAdaptation: '8.10'
+    climateChangeAdaptation: '8.10'
   }
 }

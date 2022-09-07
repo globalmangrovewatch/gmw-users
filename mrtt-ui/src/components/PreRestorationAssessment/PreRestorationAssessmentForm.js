@@ -59,7 +59,7 @@ function PreRestorationAssessmentForm() {
   const validationSchema = yup.object().shape({
     mangrovesPreviouslyOccured: yup.string(),
     mangroveRestorationAttempted: yup.string(),
-    lastRestorationAttemptYear: yup.mixed().when(' mangroveRestorationAttempted', {
+    lastRestorationAttemptYear: yup.mixed().when('mangroveRestorationAttempted', {
       is: (val) => val && val === 'Yes',
       then: yup
         .number()
