@@ -69,7 +69,7 @@ function SiteInterventionsForm() {
     biophysicalInterventionsUsed: multiselectWithOtherValidationNoMinimum,
     biophysicalInterventionDuration: yup
       .object()
-      .shape({ startDate: yup.string(), endDate: yup.string() }),
+      .shape({ startDate: yup.string().nullable(), endDate: yup.string().nullable() }),
     mangroveSpeciesUsed: yup
       .array()
       .of(
@@ -400,7 +400,7 @@ function SiteInterventionsForm() {
                 <Controller
                   name={`biophysicalInterventionDuration.startDate`}
                   control={control}
-                  defaultValue={new Date()}
+                  defaultValue={null}
                   render={({ field }) => (
                     <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                       <Stack spacing={3}>
@@ -422,7 +422,7 @@ function SiteInterventionsForm() {
                 <Controller
                   name={`biophysicalInterventionDuration.endDate`}
                   control={control}
-                  defaultValue={new Date()}
+                  defaultValue={null}
                   render={({ field }) => (
                     <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                       <Stack spacing={3}>
