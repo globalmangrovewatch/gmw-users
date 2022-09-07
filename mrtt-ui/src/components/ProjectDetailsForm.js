@@ -180,7 +180,7 @@ function ProjectDetailsForm() {
           <Controller
             name='projectStartDate'
             control={control}
-            defaultValue={new Date()}
+            defaultValue={new Date().toISOString()}
             render={({ field }) => (
               <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                 <Stack spacing={3}>
