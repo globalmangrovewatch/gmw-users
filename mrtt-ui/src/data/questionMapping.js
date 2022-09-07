@@ -1,7 +1,7 @@
 export const questionMapping = {
   projectDetails: {
-    hasProjectEndDate: '1.1a',
-    projectStartDate: '1.1b',
+    projectStartDate: '1.1a',
+    hasProjectEndDate: '1.1b',
     projectEndDate: '1.1c',
     countries: '1.2',
     siteArea: '1.3'
@@ -45,7 +45,8 @@ export const questionMapping = {
   },
   siteInterventions: {
     whichStakeholdersInvolved: '6.1',
-    biophysicalInterventionsUsed: '6.2a',
+    biophysicalInterventionsUsed: '6.2',
+    biophysicalInterventionDuration: '6.2a',
     mangroveSpeciesUsed: '6.2b',
     mangroveAssociatedSpecies: '6.2c',
     localParticipantTraining: '6.3',
@@ -75,6 +76,6 @@ export const questionMapping = {
     sufficientFunds: '8.7',
     resourcesToEnforceRegulations: '8.8',
     equitableSharingOfSiteBenefits: '8.9',
-    climageChangeAdaptation: '8.10'
+    climateChangeAdaptation: '8.10'
   }
 }
