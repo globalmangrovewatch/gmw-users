@@ -334,7 +334,7 @@ const siteInterventions = {
     ]
   },
   biophysicalInterventionsUsed: {
-    question: '6.2a What biophysical interventions were used to restore/rehabilitate the site?',
+    question: '6.2 What biophysical interventions were used to restore/rehabilitate the site?',
     options: [
       'Restore hydrology - excavate channels',
       'Restore hydrology - remove or breach aquaculture pond walls',

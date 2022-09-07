@@ -41,7 +41,7 @@ const ManagementStatusAndEffectivenessForm = () => {
     sufficientFunds: yup.string(),
     resourcesToEnforceRegulations: yup.string(),
     equitableSharingOfSiteBenefits: yup.string(),
-    climageChangeAdaptation: yup.string()
+    climateChangeAdaptation: yup.string()
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
@@ -353,14 +353,14 @@ const ManagementStatusAndEffectivenessForm = () => {
           <ErrorText>{errors.equitableSharingOfSiteBenefits?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.climageChangeAdaptation.question}</StickyFormLabel>
+          <StickyFormLabel>{questions.climateChangeAdaptation.question}</StickyFormLabel>
           <Controller
-            name='climageChangeAdaptation'
+            name='climateChangeAdaptation'
             control={control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label='select'>
-                {questions.climageChangeAdaptation.options.map((item, index) => (
+                {questions.climateChangeAdaptation.options.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -368,7 +368,7 @@ const ManagementStatusAndEffectivenessForm = () => {
               </TextField>
             )}
           />
-          <ErrorText>{errors.climageChangeAdaptation?.message}</ErrorText>
+          <ErrorText>{errors.climateChangeAdaptation?.message}</ErrorText>
         </FormQuestionDiv>
       </Form>
     </ContentWrapper>
