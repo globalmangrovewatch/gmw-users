@@ -77,5 +77,15 @@ export const questionMapping = {
     resourcesToEnforceRegulations: '8.8',
     equitableSharingOfSiteBenefits: '8.9',
     climateChangeAdaptation: '8.10'
+  },
+  socioeconomicAndGovernanceStatusAndOutcomes: {
+    dateOfOutcomesAssessment: '9.1',
+    changeInGovernance: '9.2',
+    currentGovenance: '9.2a',
+    changeInTenureArrangement: '9.3',
+    currentLandOwnership: '9.3a',
+    rightsToLandInLaw: '9.3b',
+    socioeconomicOutcomes: '9.4',
+    achievementOfSocioeconomicAims: '9.5'
   }
 }
