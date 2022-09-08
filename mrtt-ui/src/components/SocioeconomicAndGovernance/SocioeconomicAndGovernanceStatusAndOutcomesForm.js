@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -7,7 +8,9 @@ import { toast } from 'react-toastify'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
+// eslint-disable-next-line no-unused-vars
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
+// eslint-disable-next-line no-unused-vars
 import { Box, Button, MenuItem, Stack, TextField } from '@mui/material'
 
 import {
@@ -29,7 +32,7 @@ import LoadingIndicator from '../LoadingIndicator'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 
-const SocioeconomicAndGovernanceStatusAndOutcomes = () => {
+const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({ dateOfOutcomesAssessment: yup.string().nullable() })
   const reactHookFormInstance = useForm({
@@ -41,8 +44,8 @@ const SocioeconomicAndGovernanceStatusAndOutcomes = () => {
     handleSubmit: validateInputs,
     formState: { errors },
     reset: resetForm,
-    control,
-    watch: watchForm
+    control
+    // watch: watchForm
   } = reactHookFormInstance
 
   const { siteId } = useParams()
@@ -122,4 +125,4 @@ const SocioeconomicAndGovernanceStatusAndOutcomes = () => {
   )
 }
 
-export default SocioeconomicAndGovernanceStatusAndOutcomes
+export default SocioeconomicAndGovernanceStatusAndOutcomesForm
