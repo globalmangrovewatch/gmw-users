@@ -34,7 +34,10 @@ import useInitializeQuestionMappedForm from '../../library/useInitializeQuestion
 
 const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
-  const validationSchema = yup.object({ dateOfOutcomesAssessment: yup.string().nullable() })
+  const validationSchema = yup.object({
+    dateOfOutcomesAssessment: yup.string().nullable(),
+    changeInGovernance: yup.string()
+  })
   const reactHookFormInstance = useForm({
     defaultValues: {},
     resolver: yupResolver(validationSchema)
@@ -119,6 +122,24 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
             )}
           />
           <ErrorText>{errors.dateOfOutcomesAssessment?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.changeInGovernance.question}</StickyFormLabel>
+          <Controller
+            name='changeInGovernance'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.changeInGovernance.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.changeInGovernance?.message}</ErrorText>
         </FormQuestionDiv>
       </Form>
     </ContentWrapper>

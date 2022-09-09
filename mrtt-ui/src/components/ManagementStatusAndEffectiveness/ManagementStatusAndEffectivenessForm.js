@@ -317,7 +317,7 @@ const ManagementStatusAndEffectivenessForm = () => {
           <ErrorText>{errors.sufficientFunds?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.sufficientFunds.question}</StickyFormLabel>
+          <StickyFormLabel>{questions.resourcesToEnforceRegulations.question}</StickyFormLabel>
           <Controller
             name='resourcesToEnforceRegulations'
             control={control}
