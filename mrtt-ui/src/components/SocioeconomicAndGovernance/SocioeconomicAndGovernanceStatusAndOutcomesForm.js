@@ -40,10 +40,16 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     dateOfOutcomesAssessment: yup.string().nullable(),
     changeInGovernance: yup.string(),
     currentGovenance: multiselectWithOtherValidationNoMinimum,
-    changeInTenureArrangement: yup.string()
+    changeInTenureArrangement: yup.string(),
+    currentLandOwnership: multiselectWithOtherValidationNoMinimum,
+    rightsToLandInLaw: yup.string(),
+    achievementOfSocioeconomicAims: yup.string()
   })
   const reactHookFormInstance = useForm({
-    defaultValues: {},
+    defaultValues: {
+      currentGovenance: { selectedValues: [], otherValue: undefined },
+      currentLandOwnership: { selectedValues: [], otherValue: undefined }
+    },
     resolver: yupResolver(validationSchema)
   })
 
@@ -178,17 +184,55 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           <ErrorText>{errors.changeInTenureArrangement?.message}</ErrorText>
         </FormQuestionDiv>
         {changeInTenureArrangementWatcher === 'Yes' ? (
-          <FormQuestionDiv>
-            <CheckboxGroupWithLabelAndController
-              fieldName='currentLandOwnership'
-              reactHookFormInstance={reactHookFormInstance}
-              options={questions.currentLandOwnership.options}
-              question={questions.currentLandOwnership.question}
-              shouldAddOtherOptionWithClarification={true}
-            />
-            <ErrorText>{errors.currentLandOwnership?.selectedValues?.message}</ErrorText>
-          </FormQuestionDiv>
+          <div>
+            <FormQuestionDiv>
+              <CheckboxGroupWithLabelAndController
+                fieldName='currentLandOwnership'
+                reactHookFormInstance={reactHookFormInstance}
+                options={questions.currentLandOwnership.options}
+                question={questions.currentLandOwnership.question}
+                shouldAddOtherOptionWithClarification={true}
+              />
+              <ErrorText>{errors.currentLandOwnership?.selectedValues?.message}</ErrorText>
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.rightsToLandInLaw.question}</StickyFormLabel>
+              <Controller
+                name='rightsToLandInLaw'
+                control={control}
+                defaultValue=''
+                render={({ field }) => (
+                  <TextField {...field} select value={field.value} label='select'>
+                    {questions.rightsToLandInLaw.options.map((item, index) => (
+                      <MenuItem key={index} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+              <ErrorText>{errors.rightsToLandInLaw?.message}</ErrorText>
+            </FormQuestionDiv>
+          </div>
         ) : null}
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.achievementOfSocioeconomicAims.question}</StickyFormLabel>
+          <Controller
+            name='achievementOfSocioeconomicAims'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.achievementOfSocioeconomicAims.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.achievementOfSocioeconomicAims?.message}</ErrorText>
+        </FormQuestionDiv>
       </Form>
     </ContentWrapper>
   )
