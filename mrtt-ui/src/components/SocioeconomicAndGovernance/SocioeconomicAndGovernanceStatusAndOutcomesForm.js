@@ -89,7 +89,9 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   ) : (
     <ContentWrapper>
       <FormPageHeader>
-        <PageTitle>{language.pages.siteQuestionsOverview.formName.siteInterventions}</PageTitle>
+        <PageTitle>
+          {language.pages.siteQuestionsOverview.formName.socioeconomicGovernanceStatusOutcomes}
+        </PageTitle>
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
