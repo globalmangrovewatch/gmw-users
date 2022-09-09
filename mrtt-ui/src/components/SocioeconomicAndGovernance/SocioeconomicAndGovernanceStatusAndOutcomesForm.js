@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -8,18 +7,10 @@ import { toast } from 'react-toastify'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
-// eslint-disable-next-line no-unused-vars
-import { Controller, useForm, useFieldArray } from 'react-hook-form'
-// eslint-disable-next-line no-unused-vars
-import { Box, Button, MenuItem, Stack, TextField } from '@mui/material'
+import { Controller, useForm } from 'react-hook-form'
+import { MenuItem, Stack, TextField } from '@mui/material'
 
-import {
-  Form,
-  FormPageHeader,
-  FormQuestionDiv,
-  //   QuestionSubSection,
-  StickyFormLabel
-} from '../../styles/forms'
+import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
 import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
 import language from '../../language'
@@ -74,7 +65,6 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     questionMapping: questionMapping.socioeconomicAndGovernanceStatusAndOutcomes,
     resetForm,
     setIsLoading
-    // successCallback: loadServerData
   })
 
   const handleSubmit = (formData) => {
