@@ -41,16 +41,20 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
     }
   }, [value, unit])
 
+  const handleDeleteClick = () => {
+    setIsDeleteConfirmPromptOpen(true)
+  }
+
   return (
     <VerticalTabularInputSection>
       <VerticalTabularBox>
         <LeftColumnDiv>
           <TabularLabel>{label}</TabularLabel>
-          <Delete onClick={handleDelete}></Delete>
+          <Delete onClick={handleDeleteClick}></Delete>
           <ConfirmPrompt
             isOpen={isDeleteConfirmPromptOpen}
             setIsOpen={setIsDeleteConfirmPromptOpen}
-            title={`${language.form.tabularDeletePrompt.title}${TabularLabel}`}
+            title={`${language.form.tabularDeletePrompt.title}${label}`}
             promptText={language.form.tabularDeletePrompt.promptText}
             confirmButtonText={language.form.tabularDeletePrompt.buttonText}
             onConfirm={handleDelete}
