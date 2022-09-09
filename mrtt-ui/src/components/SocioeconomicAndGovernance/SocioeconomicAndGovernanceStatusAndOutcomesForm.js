@@ -31,12 +31,16 @@ import { socioeconomicGovernanceStatusOutcomes as questions } from '../../data/q
 import LoadingIndicator from '../LoadingIndicator'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
+import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 
 const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     dateOfOutcomesAssessment: yup.string().nullable(),
-    changeInGovernance: yup.string()
+    changeInGovernance: yup.string(),
+    currentGovenance: multiselectWithOtherValidationNoMinimum,
+    changeInTenureArrangement: yup.string()
   })
   const reactHookFormInstance = useForm({
     defaultValues: {},
@@ -47,8 +51,8 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     handleSubmit: validateInputs,
     formState: { errors },
     reset: resetForm,
-    control
-    // watch: watchForm
+    control,
+    watch: watchForm
   } = reactHookFormInstance
 
   const { siteId } = useParams()
@@ -56,6 +60,8 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const changeInGovernanceWatcher = watchForm('changeInGovernance')
+  const changeInTenureArrangementWatcher = watchForm('changeInTenureArrangement')
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
@@ -141,6 +147,48 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           />
           <ErrorText>{errors.changeInGovernance?.message}</ErrorText>
         </FormQuestionDiv>
+        {changeInGovernanceWatcher === 'Yes' ? (
+          <FormQuestionDiv>
+            <CheckboxGroupWithLabelAndController
+              fieldName='currentGovenance'
+              reactHookFormInstance={reactHookFormInstance}
+              options={questions.currentGovenance.options}
+              question={questions.currentGovenance.question}
+              shouldAddOtherOptionWithClarification={false}
+            />
+            <ErrorText>{errors.currentGovenance?.selectedValues?.message}</ErrorText>
+          </FormQuestionDiv>
+        ) : null}
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.changeInTenureArrangement.question}</StickyFormLabel>
+          <Controller
+            name='changeInTenureArrangement'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.changeInTenureArrangement.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.changeInTenureArrangement?.message}</ErrorText>
+        </FormQuestionDiv>
+        {changeInTenureArrangementWatcher === 'Yes' ? (
+          <FormQuestionDiv>
+            <CheckboxGroupWithLabelAndController
+              fieldName='currentLandOwnership'
+              reactHookFormInstance={reactHookFormInstance}
+              options={questions.currentLandOwnership.options}
+              question={questions.currentLandOwnership.question}
+              shouldAddOtherOptionWithClarification={true}
+            />
+            <ErrorText>{errors.currentLandOwnership?.selectedValues?.message}</ErrorText>
+          </FormQuestionDiv>
+        ) : null}
       </Form>
     </ContentWrapper>
   )
