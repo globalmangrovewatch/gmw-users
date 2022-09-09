@@ -94,7 +94,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
         isFormSaving={isSubmitting}
         isFormSaveError={isSubmitError}
         onFormSave={validateInputs(handleSubmit)}
-        currentSection='site-interventions'
+        currentSection='socioeconomic-and-governance-status'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
 
