@@ -6,15 +6,19 @@ import { styled } from '@mui/material/styles'
 
 import { TabularInputSection, TabularLabel } from '../../styles/forms'
 import { costs as questions } from '../../data/questions'
+import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
+import language from '../../language'
 
 const ProjectFunderNamesRow = ({ label, type, percentage, index, deleteItem, updateItem }) => {
   const [initialType, setInitialType] = useState('')
   const [currentType, setCurrentType] = useState('')
   const [initialPercentage, setInitialPercentage] = useState('')
   const [currentPercentage, setCurrentPercentage] = useState('')
+  const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
 
   const handleDelete = () => {
     deleteItem(index)
+    setIsDeleteConfirmPromptOpen(false)
   }
 
   const handleUpdate = () => {
@@ -33,6 +37,10 @@ const ProjectFunderNamesRow = ({ label, type, percentage, index, deleteItem, upd
       setInitialPercentage(percentage)
     }
   }, [type, percentage])
+
+  const handleDeleteClick = () => {
+    setIsDeleteConfirmPromptOpen(true)
+  }
 
   return (
     <TabularInputSection>
@@ -59,7 +67,15 @@ const ProjectFunderNamesRow = ({ label, type, percentage, index, deleteItem, upd
           onBlur={handleUpdate}
           inputProps={{ maxLength: 3 }}
           onChange={(e) => setCurrentPercentage(e.target.value)}></TextField>
-        <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em' }}></Delete>
+        <Delete onClick={handleDeleteClick} sx={{ marginLeft: '0.5em' }}></Delete>
+        <ConfirmPrompt
+          isOpen={isDeleteConfirmPromptOpen}
+          setIsOpen={setIsDeleteConfirmPromptOpen}
+          title={`${language.form.tabularDeletePrompt.title}${type}`}
+          promptText={language.form.tabularDeletePrompt.promptText}
+          confirmButtonText={language.form.tabularDeletePrompt.buttonText}
+          onConfirm={handleDelete}
+        />
       </TabularBox>
     </TabularInputSection>
   )

@@ -241,9 +241,9 @@ const LandscapeForm = ({ isNewLandscape }) => {
       <ConfirmPrompt
         isOpen={isDeleteConfirmPromptOpen}
         setIsOpen={setIsDeleteConfirmPromptOpen}
-        title={language.pages.landscapeForm.deletePropmt.title}
-        promptText={language.pages.landscapeForm.deletePropmt.propmtText}
-        confirmButtonText={language.pages.landscapeForm.deletePropmt.buttonText}
+        title={language.pages.landscapeForm.deletePrompt.title}
+        promptText={language.pages.landscapeForm.deletePrompt.promptText}
+        confirmButtonText={language.pages.landscapeForm.deletePrompt.buttonText}
         onConfirm={handleDeleteConfirm}
       />
     </>

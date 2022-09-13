@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { MenuItem } from '@mui/material'
 import { Delete } from '@mui/icons-material'
+import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
+import language from '../../language'
 
 import {
   LeftColumnDiv,
@@ -30,9 +32,11 @@ const MangroveAssociatedSpeciesRow = ({
   const [currentPurpose, setCurrentPurpose] = useState('')
   const [initialOther, setInitialOther] = useState('')
   const [currentOther, setCurrentOther] = useState('')
+  const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
 
   const handleDelete = () => {
     deleteItem(index)
+    setIsDeleteConfirmPromptOpen(false)
   }
 
   const handleUpdate = () => {
@@ -65,11 +69,25 @@ const MangroveAssociatedSpeciesRow = ({
     }
   }, [count, source, purpose, other])
 
+  const handleDeleteClick = () => {
+    setIsDeleteConfirmPromptOpen(true)
+  }
+
   return (
     <TabularInputSection>
       <LeftColumnDiv>
         <TabularLabel>{type}</TabularLabel>
-        <Delete onClick={handleDelete} sx={{ marginLeft: '0.5em', cursor: 'pointer' }}></Delete>
+        <Delete
+          onClick={handleDeleteClick}
+          sx={{ marginLeft: '0.5em', cursor: 'pointer' }}></Delete>
+        <ConfirmPrompt
+          isOpen={isDeleteConfirmPromptOpen}
+          setIsOpen={setIsDeleteConfirmPromptOpen}
+          title={`${language.form.tabularDeletePrompt.title}${type}`}
+          promptText={language.form.tabularDeletePrompt.promptText}
+          confirmButtonText={language.form.tabularDeletePrompt.buttonText}
+          onConfirm={handleDelete}
+        />
       </LeftColumnDiv>
       <VerticalTabularBox>
         <RowTextField

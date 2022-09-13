@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
-// import { TextField } from '@mui/material'
 import PropTypes from 'prop-types'
 import { Delete } from '@mui/icons-material'
+
+import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
+import language from '../../language'
 
 import {
   LeftColumnDiv,
@@ -16,8 +18,10 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
   const [currentValue, setCurrentValue] = useState('')
   const [initialUnit, setInitialUnit] = useState('')
   const [currentUnit, setCurrentUnit] = useState('')
+  const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
   const handleDelete = () => {
     deleteItem(index)
+    setIsDeleteConfirmPromptOpen(false)
   }
 
   const handleUpdate = () => {
@@ -37,12 +41,24 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
     }
   }, [value, unit])
 
+  const handleDeleteClick = () => {
+    setIsDeleteConfirmPromptOpen(true)
+  }
+
   return (
     <VerticalTabularInputSection>
       <VerticalTabularBox>
         <LeftColumnDiv>
           <TabularLabel>{label}</TabularLabel>
-          <Delete onClick={handleDelete}></Delete>
+          <Delete onClick={handleDeleteClick}></Delete>
+          <ConfirmPrompt
+            isOpen={isDeleteConfirmPromptOpen}
+            setIsOpen={setIsDeleteConfirmPromptOpen}
+            title={`${language.form.tabularDeletePrompt.title}${label}`}
+            promptText={language.form.tabularDeletePrompt.promptText}
+            confirmButtonText={language.form.tabularDeletePrompt.buttonText}
+            onConfirm={handleDelete}
+          />
         </LeftColumnDiv>
         <VerticalTabularBox>
           <RowTextField

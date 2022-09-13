@@ -25,6 +25,11 @@ const form = {
   validationAlert: {
     title: 'The form was not saved',
     description: 'Please check the form below for validation errors'
+  },
+  tabularDeletePrompt: {
+    title: 'Delete Row: ',
+    promptText: 'Are you sure you want to delete this row?',
+    buttonText: 'Yes, delete this row'
   }
 }
 
@@ -57,9 +62,9 @@ const pages = {
   sites: { title: 'Sites', newSiteButton: 'New Site', lastUpdated: 'Last updated' },
   landscapeForm: {
     delete: 'Delete this landscape',
-    deletePropmt: {
+    deletePrompt: {
       title: 'Delete Landscape',
-      propmtText: 'Are you sure you want to delete this landscape?',
+      promptText: 'Are you sure you want to delete this landscape?',
       buttonText: 'Yes, delete this landscape'
     },
     isAssociatedSites:
@@ -96,7 +101,7 @@ const pages = {
   },
   manageOrganizationUsers: {
     delete: 'Delete this user',
-    deletePropmt: {
+    deletePrompt: {
       title: 'Delete Organization User',
       getPromptText: ({ userName, organizationName }) =>
         `Are you sure you want to delete ${userName} from ${organizationName}?`,

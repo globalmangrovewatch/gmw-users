@@ -177,12 +177,12 @@ const ManageOrganizationUsers = () => {
       <ConfirmPrompt
         isOpen={isDeleteConfirmPromptOpen}
         setIsOpen={clearUserToDelete}
-        title={pageLanguage.deletePropmt.title}
-        promptText={pageLanguage.deletePropmt.getPromptText({
+        title={pageLanguage.deletePrompt.title}
+        promptText={pageLanguage.deletePrompt.getPromptText({
           userName: userToDelete,
           organizationName
         })}
-        confirmButtonText={pageLanguage.deletePropmt.buttonText}
+        confirmButtonText={pageLanguage.deletePrompt.buttonText}
         onConfirm={handleDeleteConfirm}
       />
     </>
