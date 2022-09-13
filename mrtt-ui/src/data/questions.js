@@ -616,7 +616,7 @@ const managementStatusAndEffectiveness = {
       'Unknown'
     ]
   },
-  climageChangeAdaptation: {
+  climateChangeAdaptation: {
     question: '8.10 Is the site consciously managed to adapt to climate change?',
     options: [
       'There have been no efforts or plans to consider adaptation to climate change management',

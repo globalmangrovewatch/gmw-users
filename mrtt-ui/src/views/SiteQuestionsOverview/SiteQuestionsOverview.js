@@ -131,6 +131,13 @@ const SiteOverview = () => {
                 </Link>
               </WideTh>
             </tr>
+            <tr>
+              <WideTh>
+                <Link to={`/sites/${siteId}/form/socioeconomic-and-governance-status`}>
+                  {pageLanguage.formName.socioeconomicGovernanceStatusOutcomes}
+                </Link>
+              </WideTh>
+            </tr>
           </tbody>
         </TableAlertnatingRows>
         <StyledSectionHeader>{pageLanguage.formGroupTitle.intervention}</StyledSectionHeader>
