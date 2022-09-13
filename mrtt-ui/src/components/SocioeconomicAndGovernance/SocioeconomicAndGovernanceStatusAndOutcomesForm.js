@@ -38,8 +38,8 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
-      currentGovenance: { selectedValues: [], otherValue: undefined },
-      currentLandOwnership: { selectedValues: [], otherValue: undefined }
+      currentGovenance: { selectedValues: [] },
+      currentLandOwnership: { selectedValues: [] }
     },
     resolver: yupResolver(validationSchema)
   })
