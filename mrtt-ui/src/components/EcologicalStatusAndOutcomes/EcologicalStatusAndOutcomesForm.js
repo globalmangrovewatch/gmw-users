@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -8,7 +8,6 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { Controller, useForm } from 'react-hook-form'
-// eslint-disable-next-line no-unused-vars
 import { MenuItem, Stack, TextField } from '@mui/material'
 
 import {
@@ -31,6 +30,10 @@ import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
+import { findDataItem } from '../../library/findDataItem'
+
+const getBiophysicalInterventions = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '6.2') ?? []
 
 const EcologicalStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
@@ -40,11 +43,15 @@ const EcologicalStatusAndOutcomesForm = () => {
     ecologicalMonitoringStakeholders: multiselectWithOtherValidationNoMinimum,
     mangroveAreaIncrease: yup.string(),
     mangroveConditionImprovement: yup.string(),
-    naturalRegenerationOnSite: yup.string()
+    naturalRegenerationOnSite: yup.string(),
+    percentageSurvival: yup.mixed(),
+    causeOfLowSurvival: multiselectWithOtherValidationNoMinimum,
+    achievementOfEcologicalAims: yup.string()
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
-      ecologicalMonitoringStakeholders: { selectedValues: [], otherValue: undefined }
+      ecologicalMonitoringStakeholders: { selectedValues: [] },
+      causeOfLowSurvival: { selectedValues: [] }
     },
     resolver: yupResolver(validationSchema)
   })
@@ -54,7 +61,6 @@ const EcologicalStatusAndOutcomesForm = () => {
     formState: { errors },
     reset: resetForm,
     control
-    // watch: watchForm
   } = reactHookFormInstance
 
   const { siteId } = useParams()
@@ -62,12 +68,20 @@ const EcologicalStatusAndOutcomesForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [biophysicalInterventions, setBiophysicalInterventions] = useState([])
+
+  const loadServerData = useCallback((serverResponse) => {
+    const biophysicalInterventionsInitialVal = getBiophysicalInterventions(serverResponse)
+
+    setBiophysicalInterventions(biophysicalInterventionsInitialVal.selectedValues)
+  }, [])
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.ecologicalStatusAndOutcomes,
     resetForm,
-    setIsLoading
+    setIsLoading,
+    successCallback: loadServerData
   })
 
   const handleSubmit = (formData) => {
@@ -217,6 +231,51 @@ const EcologicalStatusAndOutcomesForm = () => {
             )}
           />
           <ErrorText>{errors.naturalRegenerationOnSite?.message}</ErrorText>
+        </FormQuestionDiv>
+        {biophysicalInterventions?.length > 0 && biophysicalInterventions.includes('Planting') ? (
+          <div>
+            <FormQuestionDiv>
+              <StickyFormLabel>{questions.percentageSurvival.question}</StickyFormLabel>
+              <Controller
+                name='percentageSurvival'
+                control={control}
+                defaultValue=''
+                render={({ field }) => (
+                  <TextField {...field} value={field.value} label='Percentage'></TextField>
+                )}
+              />
+              <ErrorText>{errors.percentageSurvival?.message}</ErrorText>
+            </FormQuestionDiv>
+            <FormQuestionDiv>
+              <CheckboxGroupWithLabelAndController
+                fieldName='causeOfLowSurvival'
+                reactHookFormInstance={reactHookFormInstance}
+                options={questions.causeOfLowSurvival.options}
+                question={questions.causeOfLowSurvival.question}
+                shouldAddOtherOptionWithClarification={true}
+              />
+              <ErrorText>{errors.causeOfLowSurvival?.selectedValues?.message}</ErrorText>
+            </FormQuestionDiv>
+          </div>
+        ) : null}
+        {/* TABULAR INPUT GROUP SECTION 10.7 */}
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.achievementOfEcologicalAims.question}</StickyFormLabel>
+          <Controller
+            name='achievementOfEcologicalAims'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.achievementOfEcologicalAims.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.achievementOfEcologicalAims?.message}</ErrorText>
         </FormQuestionDiv>
       </Form>
     </ContentWrapper>
