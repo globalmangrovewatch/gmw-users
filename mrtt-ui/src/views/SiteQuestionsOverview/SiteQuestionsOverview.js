@@ -138,6 +138,13 @@ const SiteOverview = () => {
                 </Link>
               </WideTh>
             </tr>
+            <tr>
+              <WideTh>
+                <Link to={`/sites/${siteId}/form/ecological-status-and-outcomes`}>
+                  {pageLanguage.formName.ecologicalStatusOutcomes}
+                </Link>
+              </WideTh>
+            </tr>
           </tbody>
         </TableAlertnatingRows>
         <StyledSectionHeader>{pageLanguage.formGroupTitle.intervention}</StyledSectionHeader>
