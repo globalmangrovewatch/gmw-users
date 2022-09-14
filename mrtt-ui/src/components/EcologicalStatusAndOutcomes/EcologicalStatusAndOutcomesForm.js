@@ -29,19 +29,22 @@ import { ecologicalStatusOutcomes as questions } from '../../data/questions'
 import LoadingIndicator from '../LoadingIndicator'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
-// import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-// import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
+import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
+import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 
 const EcologicalStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     monitoringStartDate: yup.string().nullable(),
-    monitoringEndDate: yup.string().nullable()
+    monitoringEndDate: yup.string().nullable(),
+    ecologicalMonitoringStakeholders: multiselectWithOtherValidationNoMinimum,
+    mangroveAreaIncrease: yup.string(),
+    mangroveConditionImprovement: yup.string(),
+    naturalRegenerationOnSite: yup.string()
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
-      //   currentGovenance: { selectedValues: [] },
-      //   currentLandOwnership: { selectedValues: [] }
+      ecologicalMonitoringStakeholders: { selectedValues: [], otherValue: undefined }
     },
     resolver: yupResolver(validationSchema)
   })
@@ -149,6 +152,71 @@ const EcologicalStatusAndOutcomesForm = () => {
             />
             <ErrorText>{errors.monitoringEndDate?.message}</ErrorText>
           </QuestionSubSection>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <CheckboxGroupWithLabelAndController
+            fieldName='ecologicalMonitoringStakeholders'
+            reactHookFormInstance={reactHookFormInstance}
+            options={questions.ecologicalMonitoringStakeholders.options}
+            question={questions.ecologicalMonitoringStakeholders.question}
+            shouldAddOtherOptionWithClarification={true}
+          />
+          <ErrorText>{errors.ecologicalMonitoringStakeholders?.selectedValues?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.mangroveAreaIncrease.question}</StickyFormLabel>
+          <Controller
+            name='mangroveAreaIncrease'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.mangroveAreaIncrease.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.mangroveAreaIncrease?.message}</ErrorText>
+        </FormQuestionDiv>
+        {/* TABULAR INPUT GROUP SECTION 10.3A */}
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.mangroveConditionImprovement.question}</StickyFormLabel>
+          <Controller
+            name='mangroveConditionImprovement'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.mangroveConditionImprovement.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.mangroveConditionImprovement?.message}</ErrorText>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.naturalRegenerationOnSite.question}</StickyFormLabel>
+          <Controller
+            name='naturalRegenerationOnSite'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.naturalRegenerationOnSite.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.naturalRegenerationOnSite?.message}</ErrorText>
         </FormQuestionDiv>
       </Form>
     </ContentWrapper>

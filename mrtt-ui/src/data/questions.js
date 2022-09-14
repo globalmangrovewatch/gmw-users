@@ -730,7 +730,7 @@ const ecologicalStatusOutcomes = {
     options: ['Yes', 'No', 'Unknown']
   },
   naturalRegenerationOnSite: {
-    quesiton: '10.5 Is natural regeneration apparent, with mangroves establishing at the site?',
+    question: '10.5 Is natural regeneration apparent, with mangroves establishing at the site?',
     options: ['No', 'Mangroves have established', 'Mangroves have established and grown']
   },
   percentageSurvival: {
