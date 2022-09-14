@@ -117,7 +117,8 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection
       }
       axios
         .put(siteUrl, siteWithUpdatedSectionPrivacy)
-        .then(() => {
+        .then((response) => {
+          setSectionPrivacy(response.data.section_data_visibility[sectionIdForApi])
           setIsPrivacySaving(false)
           toast.success(componentLanguage.privacySavingSuccess)
         })
@@ -163,8 +164,8 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection
               <option value={''} disabled>
                 {componentLanguage.privacySelectUndefined}
               </option>
-              <option value={'private'}>{componentLanguage.private}</option>
-              <option value={'public'}>{componentLanguage.public}</option>
+              <option value={'private'}>{language.sectionPrivacy.private}</option>
+              <option value={'public'}>{language.sectionPrivacy.public}</option>
             </PrivacySelect>
             <ButtonSave isSaving={isFormSaving} onClick={onFormSave} />
           </NavSubWrapper>

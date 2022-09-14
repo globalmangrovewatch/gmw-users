@@ -19,10 +19,11 @@ import RequiredIndicator from '../components/RequiredIndicator'
 
 const validationSchema = yup.object({
   site_name: yup.string().required(language.pages.siteform.validation.nameRequired),
-  landscape_id: yup.string().required(language.pages.siteform.validation.landscapeRequired)
+  landscape_id: yup.string().required(language.pages.siteform.validation.landscapeRequired),
+  defaultSectionPrivacy: yup.string() // skipping requiring this since input hidden for when isNewSite = false / its a select with an initial value / time constraints
 })
 
-const formDefaultValues = { site_name: '', landscape_id: '' }
+const formDefaultValues = { site_name: '', landscape_id: '', defaultSectionPrivacy: 'public' }
 
 const SiteForm = ({ isNewSite }) => {
   const [doesItemExist, setDoesItemExist] = useState(true)
@@ -75,9 +76,25 @@ const SiteForm = ({ isNewSite }) => {
     [siteId, resetForm, sitesUrl, isNewSite, landscapesUrl, siteUrl]
   )
 
-  const postNewSite = (formData) => {
+  const postNewSite = ({ site_name, landscape_id, defaultSectionPrivacy }) => {
+    const siteDataToSubmit = {
+      site_name,
+      landscape_id,
+      section_data_visibility: {
+        1: defaultSectionPrivacy,
+        2: defaultSectionPrivacy,
+        3: defaultSectionPrivacy,
+        4: defaultSectionPrivacy,
+        5: defaultSectionPrivacy,
+        6: defaultSectionPrivacy,
+        7: defaultSectionPrivacy,
+        8: defaultSectionPrivacy,
+        9: defaultSectionPrivacy,
+        10: defaultSectionPrivacy
+      }
+    }
     axios
-      .post(sitesUrl, formData)
+      .post(sitesUrl, siteDataToSubmit)
       .then(({ data: { site_name } }) => {
         setIsSubmitting(false)
         toast.success(language.success.getCreateThingSuccessMessage(site_name))
@@ -160,6 +177,30 @@ const SiteForm = ({ isNewSite }) => {
           />
           <ErrorText>{errors?.landscape_id?.message}</ErrorText>
         </QuestionWrapper>
+        {isNewSite ? (
+          <QuestionWrapper>
+            <FormLabel htmlFor='defaultSectionPrivacy'>
+              {language.pages.siteform.labelDefaultSectionPrivacy}
+              <RequiredIndicator />
+            </FormLabel>
+            <Controller
+              name='defaultSectionPrivacy'
+              required='true'
+              control={formControl}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  id='defaultSectionPrivacy'
+                  label={language.pages.siteform.labelDefaultSectionPrivacy}>
+                  <MenuItem value='private'>{language.sectionPrivacy.private}</MenuItem>
+                  <MenuItem value='public'>{language.sectionPrivacy.public}</MenuItem>
+                </Select>
+              )}
+            />
+            <ErrorText>{errors?.landscape_id?.message}</ErrorText>
+          </QuestionWrapper>
+        ) : null}
+
         <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
         <ButtonContainer>
           <ButtonCancel onClick={handleCancelClick} />

@@ -93,6 +93,7 @@ const pages = {
     titleNewSite: 'Create a site',
     labelName: 'Site Name',
     labelLandscape: 'Landscape',
+    labelDefaultSectionPrivacy: 'Default Data Privacy',
     site: 'site',
     validation: {
       nameRequired: 'Please enter a name',
@@ -210,9 +211,12 @@ const questionNav = {
   privacySaveError: "Saving this section's privacy failed. Please try again.",
   privacySavingSuccess: success.getEditThingSuccessMessage("This section's privacy"),
   privacySelectUndefined: 'Select Privacy',
-  private: 'Private',
-  public: 'Public',
   returnToSite: 'Return to Site Form Overview'
+}
+
+const sectionPrivacy = {
+  private: 'Private',
+  public: 'Public'
 }
 
 export default {
@@ -224,5 +228,6 @@ export default {
   pages,
   projectAreaMap,
   questionNav,
+  sectionPrivacy,
   success
 }
