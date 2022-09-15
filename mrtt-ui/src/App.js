@@ -25,6 +25,7 @@ import themeMui from './styles/themeMui'
 import CostsForm from './components/Costs/CostsForm'
 import ManagementStatusAndEffectivenessForm from './components/ManagementStatusAndEffectiveness/ManagementStatusAndEffectivenessForm'
 import SocioeconomicAndGovernanceStatusAndOutcomesForm from './components/SocioeconomicAndGovernance/SocioeconomicAndGovernanceStatusAndOutcomesForm'
+import EcologicalStatusAndOutcomesForm from './components/EcologicalStatusAndOutcomes/EcologicalStatusAndOutcomesForm'
 import ManageOrganizationUsers from './views/ManageOrganizationUsers'
 import NewOrganizationUser from './views/NewOrganizationUser'
 
@@ -82,6 +83,10 @@ function App() {
               <Route
                 path='/sites/:siteId/form/socioeconomic-and-governance-status'
                 element={<SocioeconomicAndGovernanceStatusAndOutcomesForm />}
+              />
+              <Route
+                path='/sites/:siteId/form/ecological-status-and-outcomes'
+                element={<EcologicalStatusAndOutcomesForm />}
               />
               <Route path='/sites/:siteId/form/project-details/' element={<ProjectDetailsForm />} />
               <Route

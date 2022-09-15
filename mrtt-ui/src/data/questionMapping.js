@@ -87,5 +87,19 @@ export const questionMapping = {
     rightsToLandInLaw: '9.3b',
     socioeconomicOutcomes: '9.4',
     achievementOfSocioeconomicAims: '9.5'
+  },
+  ecologicalStatusAndOutcomes: {
+    dateOfEcologicalMonitoring: '10.1',
+    monitoringStartDate: '10.1a',
+    monitoringEndDate: '10.1b',
+    ecologicalMonitoringStakeholders: '10.2',
+    mangroveAreaIncrease: '10.3',
+    mangroveAreaBeforeAfter: '10.3a',
+    mangroveConditionImprovement: '10.4',
+    naturalRegenerationOnSite: '10.5',
+    percentageSurvival: '10.6',
+    causeOfLowSurvival: '10.6a',
+    mangroveEcologicalOutcomes: '10.7',
+    achievementOfEcologicalAims: '10.8'
   }
 }
