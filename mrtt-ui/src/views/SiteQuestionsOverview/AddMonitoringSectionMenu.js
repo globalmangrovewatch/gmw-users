@@ -3,8 +3,12 @@ import { Menu, MenuItem, Stack } from '@mui/material'
 import { ButtonPrimary } from '../../styles/buttons'
 import language from '../../language'
 import { ArrowDropDown } from '@mui/icons-material'
+import { Link } from '../../styles/typography'
+import PropTypes from 'prop-types'
 
-const AddMonitoringSectionMenu = () => {
+const pageLanguage = language.pages.siteQuestionsOverview
+
+const AddMonitoringSectionMenu = ({ siteId }) => {
   const [menuAnchorElement, setMenuAnchorElement] = React.useState(null)
   const isMenuOpen = Boolean(menuAnchorElement)
   const handleMenuButtonClick = (event) => {
@@ -33,18 +37,26 @@ const AddMonitoringSectionMenu = () => {
         MenuListProps={{
           'aria-labelledby': 'add-monitoring-section-button'
         }}>
-        <MenuItem>{language.pages.siteQuestionsOverview.formName.managementStatus}</MenuItem>
         <MenuItem>
-          {language.pages.siteQuestionsOverview.formName.socioeconomicGovernanceStatusOutcomes}
+          <Link to={`/sites/${siteId}/form/management-status-and-effectiveness`}>
+            {pageLanguage.formName.managementStatusAndEffectiveness}
+          </Link>
         </MenuItem>
         <MenuItem>
-          {language.pages.siteQuestionsOverview.formName.ecologicalStatusOutcomes}
+          <Link to={`/sites/${siteId}/form/socioeconomic-and-governance-status`}>
+            {pageLanguage.formName.socioeconomicGovernanceStatusOutcomes}
+          </Link>
+        </MenuItem>
+        <MenuItem>
+          <Link to={`/sites/${siteId}/form/ecological-status-and-outcomes`}>
+            {pageLanguage.formName.ecologicalStatusOutcomes}
+          </Link>
         </MenuItem>
       </Menu>
     </Stack>
   )
 }
 
-AddMonitoringSectionMenu.propTypes = {}
+AddMonitoringSectionMenu.propTypes = { siteId: PropTypes.string.isRequired }
 
 export default AddMonitoringSectionMenu
