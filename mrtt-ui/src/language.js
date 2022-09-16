@@ -16,22 +16,23 @@ const success = {
 const form = {
   checkboxGroupOtherInputPlaceholder: 'If other, please state.',
   checkboxGroupOtherLabel: 'Other',
-  navigateBackToSiteOverview: 'Return to site form overview',
-  selectLabel: 'Select',
-  requiredIndicator: 'Indicates required field',
   error: {
     yearTooLow: 'Year must be greater than 1900',
     noYearProvided: 'You must specifiy a year',
     yearTooHigh: 'Year must less than or equal to the current year'
   },
-  validationAlert: {
-    title: 'The form was not saved',
-    description: 'Please check the form below for validation errors'
-  },
+  navigateBackToSiteOverview: 'Return to site form overview',
+  required: 'This is a required field',
+  requiredIndicator: 'Indicates required field',
+  selectLabel: 'Select',
   tabularDeletePrompt: {
     title: 'Delete Row: ',
     promptText: 'Are you sure you want to delete this row?',
     buttonText: 'Yes, delete this row'
+  },
+  validationAlert: {
+    title: 'The form was not saved',
+    description: 'Please check the form below for validation errors'
   }
 }
 

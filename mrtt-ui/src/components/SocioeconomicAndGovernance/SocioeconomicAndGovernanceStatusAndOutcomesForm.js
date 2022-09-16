@@ -41,6 +41,7 @@ import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiS
 import { socioIndicators } from '../../data/socio_indicator'
 import { findDataItem } from '../../library/findDataItem'
 import SocioeconomicOutcomesRow from './socioeconomicOutcomesRow'
+import MONITORING_FORM_TYPES from '../../constants/monitoringFormTypes'
 
 const getSocioeconomicOutcomes = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '9.4') ?? []
@@ -51,7 +52,7 @@ const getSocioeconomicAims = (registrationAnswersFromServer) =>
 const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
-    dateOfOutcomesAssessment: yup.string().nullable(),
+    dateOfOutcomesAssessment: yup.string().nullable().required(language.form.required),
     changeInGovernance: yup.string(),
     currentGovenance: multiselectWithOtherValidationNoMinimum,
     changeInTenureArrangement: yup.string(),
@@ -101,7 +102,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   } = useFieldArray({ name: 'socioeconomicOutcomes', control })
 
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -128,7 +129,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   )
 
   useInitializeQuestionMappedForm({
-    apiUrl: apiAnswersUrl,
+    apiUrl: monitoringFormsUrl,
     questionMapping: questionMapping.socioeconomicAndGovernanceStatusAndOutcomes,
     resetForm,
     setIsLoading,
@@ -139,8 +140,13 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     setIsSubmitting(true)
     setIsSubmitError(false)
 
+    const payload = {
+      form_type: MONITORING_FORM_TYPES.socioeconomicGovernanceStatusAndOutcomes,
+      answers: mapDataForApi('socioeconomicAndGovernanceStatusAndOutcomes', formData)
+    }
+
     axios
-      .patch(apiAnswersUrl, mapDataForApi('socioeconomicAndGovernanceStatusAndOutcomes', formData))
+      .post(monitoringFormsUrl, payload)
       .then(() => {
         setIsSubmitting(false)
         toast.success(language.success.submit)

@@ -24,11 +24,12 @@ import language from '../../language'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
+import MONITORING_FORM_TYPES from '../../constants/monitoringFormTypes'
 
 const ManagementStatusAndEffectivenessForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
-    dateOfAssessment: yup.string(),
+    dateOfAssessment: yup.string().required(language.form.required),
     stakeholderManagement: multiselectWithOtherValidationNoMinimum,
     stakeholderInfluence: yup.string(),
     managementStatusChanges: yup.string(),
@@ -59,7 +60,7 @@ const ManagementStatusAndEffectivenessForm = () => {
   } = reactHookFormInstance
 
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -68,7 +69,7 @@ const ManagementStatusAndEffectivenessForm = () => {
   const financeForCiteManagementWatcher = watchForm('financeForCiteManagement')
 
   useInitializeQuestionMappedForm({
-    apiUrl: apiAnswersUrl,
+    apiUrl: monitoringFormsUrl,
     questionMapping: questionMapping.managementStatusAndEffectiveness,
     resetForm,
     setIsLoading
@@ -78,8 +79,13 @@ const ManagementStatusAndEffectivenessForm = () => {
     setIsSubmitting(true)
     setIsSubmitError(false)
 
+    const payload = {
+      form_type: MONITORING_FORM_TYPES.managementStatusAndEffectiveness,
+      answers: mapDataForApi('managementStatusAndEffectiveness', formData)
+    }
+
     axios
-      .patch(apiAnswersUrl, mapDataForApi('managementStatusAndEffectiveness', formData))
+      .post(monitoringFormsUrl, payload)
       .then(() => {
         setIsSubmitting(false)
         toast.success(language.success.submit)
