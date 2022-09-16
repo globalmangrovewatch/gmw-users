@@ -101,6 +101,7 @@ function App() {
 
             <Route path='/auth/signup' element={<SignupForm />} />
             <Route path='/auth/login' element={<LoginForm />} />
+            <Route path='/auth/login/newUser' element={<LoginForm isUserNew={true} />} />
           </Routes>
         </GlobalLayout>
       </Router>
