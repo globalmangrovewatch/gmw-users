@@ -31,6 +31,7 @@ import useInitializeQuestionMappedForm from '../../library/useInitializeQuestion
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { findDataItem } from '../../library/findDataItem'
+import MONITORING_FORM_TYPES from '../../constants/monitoringFormTypes'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2') ?? []
@@ -38,7 +39,7 @@ const getBiophysicalInterventions = (registrationAnswersFromServer) =>
 const EcologicalStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
-    monitoringStartDate: yup.string().nullable(),
+    monitoringStartDate: yup.string().nullable().required(language.form.required),
     monitoringEndDate: yup.string().nullable(),
     ecologicalMonitoringStakeholders: multiselectWithOtherValidationNoMinimum,
     mangroveAreaIncrease: yup.string(),
@@ -64,7 +65,7 @@ const EcologicalStatusAndOutcomesForm = () => {
   } = reactHookFormInstance
 
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -77,7 +78,7 @@ const EcologicalStatusAndOutcomesForm = () => {
   }, [])
 
   useInitializeQuestionMappedForm({
-    apiUrl: apiAnswersUrl,
+    apiUrl: monitoringFormsUrl,
     questionMapping: questionMapping.ecologicalStatusAndOutcomes,
     resetForm,
     setIsLoading,
@@ -88,8 +89,13 @@ const EcologicalStatusAndOutcomesForm = () => {
     setIsSubmitting(true)
     setIsSubmitError(false)
 
+    const payload = {
+      form_type: MONITORING_FORM_TYPES.ecologicalStatusAndOutcomes,
+      answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
+    }
+
     axios
-      .patch(apiAnswersUrl, mapDataForApi('ecologicalStatusAndOutcomes', formData))
+      .post(monitoringFormsUrl, payload)
       .then(() => {
         setIsSubmitting(false)
         toast.success(language.success.submit)
