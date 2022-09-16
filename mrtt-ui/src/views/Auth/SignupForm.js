@@ -44,7 +44,7 @@ const SignupForm = () => {
       .then(() => {
         setIsSubmitting(false)
         toast.success(language.success.signup)
-        navigate('/auth/login')
+        navigate('/auth/login/newUser')
       })
       .catch(() => {
         setIsSubmitting(false)
