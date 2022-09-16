@@ -8,9 +8,15 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { Controller, useForm } from 'react-hook-form'
-import { MenuItem, Stack, TextField } from '@mui/material'
+import { Box, MenuItem, Stack, TextField } from '@mui/material'
 
-import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
+import {
+  Form,
+  FormPageHeader,
+  FormQuestionDiv,
+  NestedLabel1,
+  StickyFormLabel
+} from '../../styles/forms'
 import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
 import language from '../../language'
@@ -24,6 +30,7 @@ import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
+import { socioIndicators } from '../../data/socio_indicator'
 
 const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
@@ -207,6 +214,14 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
             </FormQuestionDiv>
           </div>
         ) : null}
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.socioeconomicOutcomes.question}</StickyFormLabel>
+          {socioIndicators.map((indicator, indicatorIndex) => (
+            <Box key={indicatorIndex}>
+              <NestedLabel1>{`${indicator.label}: ${indicator.secondaryLabel}`}</NestedLabel1>
+            </Box>
+          ))}
+        </FormQuestionDiv>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.achievementOfSocioeconomicAims.question}</StickyFormLabel>
           <Controller
