@@ -41,15 +41,15 @@ const SignupForm = () => {
   const signUp = (formData) => {
     axios
       .post(authUrl, { user: formData })
-      .then(({ data }) => {
+      .then(() => {
         setIsSubmitting(false)
-        toast.success(data.message)
+        toast.success(language.success.signup)
         navigate('/auth/login')
       })
-      .catch((error) => {
+      .catch(() => {
         setIsSubmitting(false)
         setIsSubmitError(true)
-        toast.error(error.response.data.error)
+        toast.error(language.error.generic)
       })
   }
 
