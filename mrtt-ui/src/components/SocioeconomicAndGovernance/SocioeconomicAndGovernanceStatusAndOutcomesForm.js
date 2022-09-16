@@ -8,7 +8,15 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { Controller, useForm } from 'react-hook-form'
-import { Box, MenuItem, Stack, TextField } from '@mui/material'
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  ListItem,
+  MenuItem,
+  Stack,
+  TextField
+} from '@mui/material'
 
 import {
   Form,
@@ -89,6 +97,10 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
         setIsSubmitError(true)
         toast.error(language.error.submit)
       })
+  }
+
+  const handleSocioIndicatorsOnChange = (event) => {
+    console.log(event)
   }
 
   return isLoading ? (
@@ -219,6 +231,23 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           {socioIndicators.map((indicator, indicatorIndex) => (
             <Box key={indicatorIndex}>
               <NestedLabel1>{`${indicator.label}: ${indicator.secondaryLabel}`}</NestedLabel1>
+              {indicator.children.map((child, childIndex) => (
+                <ListItem key={childIndex}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value={child}
+                        checked={true}
+                        onChange={(event) =>
+                          handleSocioIndicatorsOnChange({
+                            event
+                          })
+                        }></Checkbox>
+                    }
+                    label={<>{child} </>}
+                  />
+                </ListItem>
+              ))}
             </Box>
           ))}
         </FormQuestionDiv>
