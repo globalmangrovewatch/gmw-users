@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, MenuItem, Stack } from '@mui/material'
+import { Menu, MenuItem, Stack, styled } from '@mui/material'
 import { ButtonPrimary } from '../../styles/buttons'
 import language from '../../language'
 import { ArrowDropDown } from '@mui/icons-material'
@@ -7,6 +7,10 @@ import { Link } from '../../styles/typography'
 import PropTypes from 'prop-types'
 
 const pageLanguage = language.pages.siteQuestionsOverview
+
+const StackWithMarginBottom = styled(Stack)`
+  margin-bottom: 1em;
+`
 
 const AddMonitoringSectionMenu = ({ siteId }) => {
   const [menuAnchorElement, setMenuAnchorElement] = React.useState(null)
@@ -19,7 +23,7 @@ const AddMonitoringSectionMenu = ({ siteId }) => {
   }
 
   return (
-    <Stack>
+    <StackWithMarginBottom>
       <ButtonPrimary
         id='add-monitoring-section-button'
         aria-controls={isMenuOpen ? 'add-monitoring-section-menu' : undefined}
@@ -53,7 +57,7 @@ const AddMonitoringSectionMenu = ({ siteId }) => {
           </Link>
         </MenuItem>
       </Menu>
-    </Stack>
+    </StackWithMarginBottom>
   )
 }
 

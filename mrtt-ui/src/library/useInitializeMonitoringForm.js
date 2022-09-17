@@ -7,10 +7,11 @@ import language from '../language'
 
 const useInitializeMonitoringForm = ({
   apiUrl,
+  formType,
+  isEditMode = false,
   questionMapping,
   resetForm,
-  setIsLoading,
-  isEditMode = false
+  setIsLoading
 }) => {
   useEffect(
     function initializeFormWithApiData() {
@@ -18,10 +19,16 @@ const useInitializeMonitoringForm = ({
         setIsLoading(true)
         axios
           .get(apiUrl)
-          .then((response) => {
+          .then(({ data }) => {
+            const formTypeInResponse = data.form_type
+            if (formType !== formTypeInResponse) {
+              throw new Error(
+                'Monitoring data is being accessed with the wrong form component for the form type'
+              )
+            }
             setIsLoading(false)
             const initialValuesForForm = formatApiAnswersForForm({
-              apiAnswers: response.data.answers,
+              apiAnswers: data.answers,
               questionMapping
             })
             resetForm(initialValuesForForm)
@@ -32,7 +39,7 @@ const useInitializeMonitoringForm = ({
           })
       }
     },
-    [apiUrl, isEditMode, questionMapping, resetForm, setIsLoading]
+    [apiUrl, isEditMode, questionMapping, resetForm, setIsLoading, formType]
   )
 }
 
