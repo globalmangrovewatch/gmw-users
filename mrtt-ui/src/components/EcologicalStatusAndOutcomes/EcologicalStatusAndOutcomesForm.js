@@ -31,10 +31,11 @@ import useInitializeMonitoringForm from '../../library/useInitializeMonitoringFo
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { findDataItem } from '../../library/findDataItem'
-import MONITORING_FORM_TYPES from '../../constants/monitoringFormTypes'
+import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2') ?? []
+const formType = MONITORING_FORM_CONSTANTS.ecologicalStatusAndOutcomes.payloadType
 
 const EcologicalStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
@@ -105,10 +106,11 @@ const EcologicalStatusAndOutcomesForm = () => {
 
   useInitializeMonitoringForm({
     apiUrl: monitoringFormSingularUrl,
+    formType,
+    isEditMode,
     questionMapping: questionMapping.ecologicalStatusAndOutcomes,
     resetForm,
-    setIsLoading: setIsMainFormDataLoading,
-    isEditMode
+    setIsLoading: setIsMainFormDataLoading
   })
 
   const createNewMonitoringForm = (payload) => {
@@ -145,7 +147,7 @@ const EcologicalStatusAndOutcomesForm = () => {
     setIsSubmitError(false)
 
     const payload = {
-      form_type: MONITORING_FORM_TYPES.ecologicalStatusAndOutcomes,
+      form_type: formType,
       answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
     }
 

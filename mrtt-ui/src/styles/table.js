@@ -25,3 +25,6 @@ export const TdCenter = styled('td')`
 export const ThCenter = styled('th')`
   text-align: center;
 `
+export const WideTh = styled('th')`
+  width: 100%;
+`
