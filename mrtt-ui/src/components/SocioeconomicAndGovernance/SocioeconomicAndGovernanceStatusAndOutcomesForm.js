@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useFieldArray } from 'react-hook-form'
 import {
   Box,
   Checkbox,
@@ -67,6 +67,13 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     watch: watchForm
   } = reactHookFormInstance
 
+  const {
+    fields: socioEconomicFields,
+    append: socioEconomicAppend
+    // remove: socioEconomicRemove,
+    // update: socioEconomicUpdate
+  } = useFieldArray({ name: 'socioEconomic', control })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -99,8 +106,20 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
       })
   }
 
-  const handleSocioIndicatorsOnChange = (event) => {
-    console.log(event)
+  const findSocioEconomicFieldsIndex = (indicator) =>
+    socioEconomicFields.findIndex((socioIndicator) => socioIndicator.child === indicator)
+
+  const handleSocioIndicatorsOnChange = ({ event, indicator, childSocioIndicator }) => {
+    const indicatorIndex = findSocioEconomicFieldsIndex(childSocioIndicator)
+
+    // case: checked, socioChildIndicator does not exist in fields array
+    if (event.target.checked && indicatorIndex === -1) {
+      socioEconomicAppend({
+        mainLabel: indicator.label,
+        secondaryLabel: indicator.secondaryLabel,
+        child: childSocioIndicator
+      })
+    }
   }
 
   return isLoading ? (
@@ -231,20 +250,22 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           {socioIndicators.map((indicator, indicatorIndex) => (
             <Box key={indicatorIndex}>
               <NestedLabel1>{`${indicator.label}: ${indicator.secondaryLabel}`}</NestedLabel1>
-              {indicator.children.map((child, childIndex) => (
+              {indicator.children.map((childSocioIndicator, childIndex) => (
                 <ListItem key={childIndex}>
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={child}
-                        checked={true}
+                        value={childSocioIndicator}
+                        checked={findSocioEconomicFieldsIndex(childSocioIndicator) !== -1}
                         onChange={(event) =>
                           handleSocioIndicatorsOnChange({
-                            event
+                            event,
+                            indicator,
+                            childSocioIndicator
                           })
                         }></Checkbox>
                     }
-                    label={<>{child} </>}
+                    label={childSocioIndicator}
                   />
                 </ListItem>
               ))}
