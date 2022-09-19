@@ -69,8 +69,8 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
 
   const {
     fields: socioEconomicFields,
-    append: socioEconomicAppend
-    // remove: socioEconomicRemove,
+    append: socioEconomicAppend,
+    remove: socioEconomicRemove
     // update: socioEconomicUpdate
   } = useFieldArray({ name: 'socioEconomic', control })
 
@@ -119,6 +119,10 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
         secondaryLabel: indicator.secondaryLabel,
         child: childSocioIndicator
       })
+    }
+    // case: unchecked, socioChildIndicator exists in fields array
+    else if (!event.target.checked && indicatorIndex !== -1) {
+      socioEconomicRemove(indicatorIndex)
     }
   }
 
