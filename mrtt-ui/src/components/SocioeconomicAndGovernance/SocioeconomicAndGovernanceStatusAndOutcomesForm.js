@@ -41,7 +41,7 @@ import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiS
 import { socioIndicators } from '../../data/socio_indicator'
 import { findDataItem } from '../../library/findDataItem'
 
-const getSocioEconomic = (registrationAnswersFromServer) =>
+const getSocioEconomicOutcomes = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '9.4') ?? []
 
 const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
@@ -53,7 +53,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     changeInTenureArrangement: yup.string(),
     currentLandOwnership: multiselectWithOtherValidationNoMinimum,
     rightsToLandInLaw: yup.string(),
-    socioEconomicOutcomes: yup
+    socioeconomicOutcomes: yup
       .array()
       .of(
         yup.object().shape({
@@ -82,12 +82,12 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   } = reactHookFormInstance
 
   const {
-    fields: socioEconomicOutcomesFields,
-    append: socioEconomicOutcomesAppend,
-    remove: socioEconomicOutcomesRemove,
-    replace: socioEconomicOutcomesReplace
-    // update: socioEconomicOutcomesUpdate
-  } = useFieldArray({ name: 'socioEconomicOutcomes', control })
+    fields: socioeconomicOutcomesFields,
+    append: socioeconomicOutcomesAppend,
+    remove: socioeconomicOutcomesRemove,
+    replace: socioeconomicOutcomesReplace
+    // update: socioeconomicOutcomesUpdate
+  } = useFieldArray({ name: 'socioeconomicOutcomes', control })
 
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
@@ -96,15 +96,16 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const changeInGovernanceWatcher = watchForm('changeInGovernance')
   const changeInTenureArrangementWatcher = watchForm('changeInTenureArrangement')
+  const socioeconomicOutcomesWatcher = watchForm('socioeconomicOutcomes')
 
   const loadServerData = useCallback(
     (serverResponse) => {
-      const socioEconomicInitialVal = getSocioEconomic(serverResponse)
-      if (socioEconomicInitialVal.length > 0) {
-        socioEconomicOutcomesReplace(socioEconomicInitialVal)
+      const socioeconomicInitialVal = getSocioEconomicOutcomes(serverResponse)
+      if (socioeconomicInitialVal.length > 0) {
+        socioeconomicOutcomesReplace(socioeconomicInitialVal)
       }
     },
-    [socioEconomicOutcomesReplace]
+    [socioeconomicOutcomesReplace]
   )
 
   useInitializeQuestionMappedForm({
@@ -132,20 +133,20 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
       })
   }
 
-  const findSocioEconomicFieldsIndex = (indicator) =>
-    socioEconomicOutcomesFields.findIndex((socioIndicator) => socioIndicator.child === indicator)
+  const getSocioEconomicFieldsIndex = (indicator) =>
+    socioeconomicOutcomesFields.findIndex((socioIndicator) => socioIndicator.child === indicator)
 
   const handleSocioIndicatorsOnChange = ({ event, indicator, childSocioIndicator }) => {
-    const indicatorIndex = findSocioEconomicFieldsIndex(childSocioIndicator)
+    const indicatorIndex = getSocioEconomicFieldsIndex(childSocioIndicator)
 
     if (event.target.checked) {
-      socioEconomicOutcomesAppend({
+      socioeconomicOutcomesAppend({
         mainLabel: indicator.label,
         secondaryLabel: indicator.secondaryLabel,
         child: childSocioIndicator
       })
     } else if (!event.target.checked) {
-      socioEconomicOutcomesRemove(indicatorIndex)
+      socioeconomicOutcomesRemove(indicatorIndex)
     }
   }
 
@@ -283,7 +284,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
                     control={
                       <Checkbox
                         value={childSocioIndicator}
-                        checked={findSocioEconomicFieldsIndex(childSocioIndicator) !== -1}
+                        checked={getSocioEconomicFieldsIndex(childSocioIndicator) !== -1}
                         onChange={(event) =>
                           handleSocioIndicatorsOnChange({
                             event,
@@ -299,6 +300,13 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
             </Box>
           ))}
         </FormQuestionDiv>
+        {socioeconomicOutcomesWatcher.length > 0 ? (
+          <FormQuestionDiv>
+            <StickyFormLabel>
+              {questions.socioeconomicOutcomesAdditionalData.question}
+            </StickyFormLabel>
+          </FormQuestionDiv>
+        ) : null}
         <FormQuestionDiv>
           <StickyFormLabel>{questions.achievementOfSocioeconomicAims.question}</StickyFormLabel>
           <Controller

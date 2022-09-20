@@ -674,6 +674,9 @@ const socioeconomicGovernanceStatusOutcomes = {
   socioeconomicOutcomes: {
     question: '9.4 What were the socioeconomic outcomes of the project activities at the site?'
   },
+  socioeconomicOutcomesAdditionalData: {
+    question: '9.4a Please fill the measurement data for the selected socioeconomic outcomes.'
+  },
   achievementOfSocioeconomicAims: {
     question: '9.5 To what extent do you feel the socio-economic aims have been achieved?',
     options: [

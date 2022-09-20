@@ -85,7 +85,7 @@ export const questionMapping = {
     changeInTenureArrangement: '9.3',
     currentLandOwnership: '9.3a',
     rightsToLandInLaw: '9.3b',
-    socioEconomicOutcomes: '9.4',
+    socioeconomicOutcomes: '9.4',
     achievementOfSocioeconomicAims: '9.5'
   },
   ecologicalStatusAndOutcomes: {
