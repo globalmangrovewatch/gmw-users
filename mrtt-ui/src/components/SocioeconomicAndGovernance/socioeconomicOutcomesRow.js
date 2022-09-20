@@ -87,7 +87,7 @@ const SocioeconomicOutcomesRow = ({
 
 SocioeconomicOutcomesRow.propTypes = {
   outcome: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   deleteItem: PropTypes.func.isRequired,
   updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired

@@ -60,7 +60,14 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
         yup.object().shape({
           mainLabel: yup.string(),
           secondaryLabel: yup.string(),
-          child: yup.string()
+          child: yup.string(),
+          type: yup.string(),
+          trend: yup.string(),
+          linkedAim: yup.string(),
+          measurement: yup.string(),
+          unit: yup.string(),
+          comparison: yup.string(),
+          value: yup.mixed()
         })
       )
       .default([]),
@@ -86,8 +93,8 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     fields: socioeconomicOutcomesFields,
     append: socioeconomicOutcomesAppend,
     remove: socioeconomicOutcomesRemove,
-    replace: socioeconomicOutcomesReplace
-    // update: socioeconomicOutcomesUpdate
+    replace: socioeconomicOutcomesReplace,
+    update: socioeconomicOutcomesUpdate
   } = useFieldArray({ name: 'socioeconomicOutcomes', control })
 
   const { siteId } = useParams()
@@ -144,11 +151,24 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
       socioeconomicOutcomesAppend({
         mainLabel: indicator.label,
         secondaryLabel: indicator.secondaryLabel,
-        child: childSocioIndicator
+        child: childSocioIndicator,
+        type: null,
+        trend: null,
+        linkedAim: null,
+        measurement: null,
+        unit: null,
+        comparison: null,
+        value: null
       })
     } else if (!event.target.checked) {
       socioeconomicOutcomesRemove(indicatorIndex)
     }
+  }
+
+  const updateSocioeconomicOutcome = ({ index, type }) => {
+    const currentItem = socioeconomicOutcomesFields[index]
+    currentItem.type = type
+    socioeconomicOutcomesUpdate(index, currentItem)
   }
 
   return isLoading ? (
@@ -312,7 +332,8 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
                     key={index}
                     index={index}
                     outcome={item.child}
-                    type={item.type}></SocioeconomicOutcomesRow>
+                    type={item.type}
+                    updateItem={updateSocioeconomicOutcome}></SocioeconomicOutcomesRow>
                 ))
               : null}
           </FormQuestionDiv>
