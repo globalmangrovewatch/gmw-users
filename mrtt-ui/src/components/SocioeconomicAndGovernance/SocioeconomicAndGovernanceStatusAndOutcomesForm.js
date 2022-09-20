@@ -40,6 +40,7 @@ import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndCon
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { socioIndicators } from '../../data/socio_indicator'
 import { findDataItem } from '../../library/findDataItem'
+import SocioeconomicOutcomesRow from './socioeconomicOutcomesRow'
 
 const getSocioEconomicOutcomes = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '9.4') ?? []
@@ -300,11 +301,20 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
             </Box>
           ))}
         </FormQuestionDiv>
-        {socioeconomicOutcomesWatcher.length > 0 ? (
+        {socioeconomicOutcomesWatcher?.length > 0 ? (
           <FormQuestionDiv>
             <StickyFormLabel>
               {questions.socioeconomicOutcomesAdditionalData.question}
             </StickyFormLabel>
+            {socioeconomicOutcomesFields?.length > 0
+              ? socioeconomicOutcomesFields?.map((item, index) => (
+                  <SocioeconomicOutcomesRow
+                    key={index}
+                    index={index}
+                    outcome={item.child}
+                    type={item.type}></SocioeconomicOutcomesRow>
+                ))
+              : null}
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>
