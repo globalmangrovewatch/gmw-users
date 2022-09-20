@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -39,6 +39,10 @@ import useInitializeQuestionMappedForm from '../../library/useInitializeQuestion
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { socioIndicators } from '../../data/socio_indicator'
+import { findDataItem } from '../../library/findDataItem'
+
+const getSocioEconomic = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '9.4') ?? []
 
 const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
@@ -49,6 +53,16 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     changeInTenureArrangement: yup.string(),
     currentLandOwnership: multiselectWithOtherValidationNoMinimum,
     rightsToLandInLaw: yup.string(),
+    socioEconomicOutcomes: yup
+      .array()
+      .of(
+        yup.object().shape({
+          mainLabel: yup.string(),
+          secondaryLabel: yup.string(),
+          child: yup.string()
+        })
+      )
+      .default([]),
     achievementOfSocioeconomicAims: yup.string()
   })
   const reactHookFormInstance = useForm({
@@ -68,11 +82,12 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   } = reactHookFormInstance
 
   const {
-    fields: socioEconomicFields,
-    append: socioEconomicAppend,
-    remove: socioEconomicRemove
-    // update: socioEconomicUpdate
-  } = useFieldArray({ name: 'socioEconomic', control })
+    fields: socioEconomicOutcomesFields,
+    append: socioEconomicOutcomesAppend,
+    remove: socioEconomicOutcomesRemove,
+    replace: socioEconomicOutcomesReplace
+    // update: socioEconomicOutcomesUpdate
+  } = useFieldArray({ name: 'socioEconomicOutcomes', control })
 
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
@@ -82,11 +97,22 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const changeInGovernanceWatcher = watchForm('changeInGovernance')
   const changeInTenureArrangementWatcher = watchForm('changeInTenureArrangement')
 
+  const loadServerData = useCallback(
+    (serverResponse) => {
+      const socioEconomicInitialVal = getSocioEconomic(serverResponse)
+      if (socioEconomicInitialVal.length > 0) {
+        socioEconomicOutcomesReplace(socioEconomicInitialVal)
+      }
+    },
+    [socioEconomicOutcomesReplace]
+  )
+
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.socioeconomicAndGovernanceStatusAndOutcomes,
     resetForm,
-    setIsLoading
+    setIsLoading,
+    successCallback: loadServerData
   })
 
   const handleSubmit = (formData) => {
@@ -107,22 +133,19 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   }
 
   const findSocioEconomicFieldsIndex = (indicator) =>
-    socioEconomicFields.findIndex((socioIndicator) => socioIndicator.child === indicator)
+    socioEconomicOutcomesFields.findIndex((socioIndicator) => socioIndicator.child === indicator)
 
   const handleSocioIndicatorsOnChange = ({ event, indicator, childSocioIndicator }) => {
     const indicatorIndex = findSocioEconomicFieldsIndex(childSocioIndicator)
 
-    // case: checked, socioChildIndicator does not exist in fields array
-    if (event.target.checked && indicatorIndex === -1) {
-      socioEconomicAppend({
+    if (event.target.checked) {
+      socioEconomicOutcomesAppend({
         mainLabel: indicator.label,
         secondaryLabel: indicator.secondaryLabel,
         child: childSocioIndicator
       })
-    }
-    // case: unchecked, socioChildIndicator exists in fields array
-    else if (!event.target.checked && indicatorIndex !== -1) {
-      socioEconomicRemove(indicatorIndex)
+    } else if (!event.target.checked) {
+      socioEconomicOutcomesRemove(indicatorIndex)
     }
   }
 
