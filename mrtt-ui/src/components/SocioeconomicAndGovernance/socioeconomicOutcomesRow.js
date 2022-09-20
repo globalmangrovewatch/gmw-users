@@ -27,7 +27,8 @@ const SocioeconomicOutcomesRow = ({
 
   const handleUpdate = () => {
     if (currentType !== initialType) {
-      updateItem(index, currentType)
+      console.log({ currentType })
+      updateItem({ index, currentType })
     }
   }
 
@@ -88,7 +89,7 @@ const SocioeconomicOutcomesRow = ({
 SocioeconomicOutcomesRow.propTypes = {
   outcome: PropTypes.string.isRequired,
   type: PropTypes.string,
-  deleteItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func,
   updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired
 }

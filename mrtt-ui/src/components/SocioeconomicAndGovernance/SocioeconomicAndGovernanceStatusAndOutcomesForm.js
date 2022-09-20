@@ -152,22 +152,38 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
         mainLabel: indicator.label,
         secondaryLabel: indicator.secondaryLabel,
         child: childSocioIndicator,
-        type: null,
-        trend: null,
-        linkedAim: null,
-        measurement: null,
-        unit: null,
-        comparison: null,
-        value: null
+        type: '',
+        trend: '',
+        linkedAim: '',
+        measurement: '',
+        unit: '',
+        comparison: '',
+        value: ''
       })
     } else if (!event.target.checked) {
       socioeconomicOutcomesRemove(indicatorIndex)
     }
   }
 
-  const updateSocioeconomicOutcome = ({ index, type }) => {
+  const updateSocioeconomicOutcome = ({
+    index,
+    currentType,
+    trend,
+    linkedAim,
+    measurement,
+    unit,
+    comparison,
+    value
+  }) => {
     const currentItem = socioeconomicOutcomesFields[index]
-    currentItem.type = type
+    console.log({ currentType, index })
+    currentItem.type = currentType
+    currentItem.trend = trend
+    currentItem.linkedAim = linkedAim
+    currentItem.measurement = measurement
+    currentItem.unit = unit
+    currentItem.comparison = comparison
+    currentItem.value = value
     socioeconomicOutcomesUpdate(index, currentItem)
   }
 
