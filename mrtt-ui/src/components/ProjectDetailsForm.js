@@ -97,7 +97,7 @@ function ProjectDetailsForm() {
   } = useForm(formOptions)
   const { errors } = formState
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   let watchHasProjectEndDate = watch('hasProjectEndDate', false)
   /* showEndDateInput is a hack because MUI follows native html and casts values to strings.
    The api casts them to boolean so we support both */

@@ -34,7 +34,7 @@ const RestorationAimsForm = () => {
   const [stakeholders, setStakeholders] = useState([])
   const { site_name } = useSiteInfo()
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const validationSchema = yup.object({
     ecologicalAims: multiselectWithOtherValidation,
     socioEconomicAims: multiselectWithOtherValidation,
