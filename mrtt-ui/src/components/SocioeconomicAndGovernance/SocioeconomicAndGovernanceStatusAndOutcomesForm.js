@@ -350,6 +350,12 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
                     index={index}
                     outcome={item.child}
                     type={item.type}
+                    trend={item.trend}
+                    linkedAim={item.linkedAim}
+                    measurement={item.measurement}
+                    unit={item.unit}
+                    comparison={item.comparison}
+                    value={item.value}
                     updateItem={updateSocioeconomicOutcome}></SocioeconomicOutcomesRow>
                 ))
               : null}

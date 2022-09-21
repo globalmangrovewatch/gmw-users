@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Box, MenuItem, TextField } from '@mui/material'
-// import { Delete } from '@mui/icons-material'
-// import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
-// import language from '../../language'
 
 import { TabularSectionDiv, TabularLabel, TabularInputSection } from '../../styles/forms'
 import {
@@ -21,7 +18,6 @@ const SocioeconomicOutcomesRow = ({
   comparison,
   value,
   index,
-  // deleteItem,
   updateItem
 }) => {
   const [initialType, setInitialType] = useState('')
@@ -41,13 +37,6 @@ const SocioeconomicOutcomesRow = ({
 
   const [initialValue, setInitialValue] = useState('')
   const [currentValue, setCurrentValue] = useState('')
-
-  // const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
-
-  // const handleDelete = () => {
-  //   deleteItem(index)
-  //   setIsDeleteConfirmPromptOpen(false)
-  // }
 
   const handleUpdate = () => {
     if (currentType !== initialType) {
@@ -97,26 +86,11 @@ const SocioeconomicOutcomesRow = ({
     }
   }, [comparison, measurement, trend, type, unit, value])
 
-  // const handleDeleteClick = () => {
-  //   setIsDeleteConfirmPromptOpen(true)
-  // }
-
   return (
     <TabularSectionDiv>
       <Box sx={{ width: '100%' }}>
         <TabularInputSection>
           <TabularLabel>{outcome}</TabularLabel>
-          {/* <Delete
-          onClick={handleDeleteClick}
-          sx={{ marginLeft: '0.5em', cursor: 'pointer' }}></Delete>
-        <ConfirmPrompt
-          isOpen={isDeleteConfirmPromptOpen}
-          setIsOpen={setIsDeleteConfirmPromptOpen}
-          title={`${language.form.tabularDeletePrompt.title}${type}`}
-          promptText={language.form.tabularDeletePrompt.promptText}
-          confirmButtonText={language.form.tabularDeletePrompt.buttonText}
-          onConfirm={handleDelete}
-        /> */}
         </TabularInputSection>
         <TabularInputSection>
           <TabularLabel>Type</TabularLabel>
@@ -202,6 +176,7 @@ SocioeconomicOutcomesRow.propTypes = {
   outcome: PropTypes.string.isRequired,
   type: PropTypes.string,
   trend: PropTypes.string,
+  linkedAim: PropTypes.string,
   measurement: PropTypes.string,
   unit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   comparison: PropTypes.string,
