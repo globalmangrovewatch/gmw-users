@@ -42,8 +42,11 @@ import { socioIndicators } from '../../data/socio_indicator'
 import { findDataItem } from '../../library/findDataItem'
 import SocioeconomicOutcomesRow from './socioeconomicOutcomesRow'
 
-const getSocioEconomicOutcomes = (registrationAnswersFromServer) =>
+const getSocioeconomicOutcomes = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '9.4') ?? []
+
+const getSocioeconomicAims = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '3.2') ?? []
 
 const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
@@ -105,12 +108,20 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const changeInGovernanceWatcher = watchForm('changeInGovernance')
   const changeInTenureArrangementWatcher = watchForm('changeInTenureArrangement')
   const socioeconomicOutcomesWatcher = watchForm('socioeconomicOutcomes')
-
+  const [socioeconomicAims, setSocioeconomicAims] = useState([])
   const loadServerData = useCallback(
     (serverResponse) => {
-      const socioeconomicInitialVal = getSocioEconomicOutcomes(serverResponse)
+      const socioeconomicInitialVal = getSocioeconomicOutcomes(serverResponse)
       if (socioeconomicInitialVal.length > 0) {
         socioeconomicOutcomesReplace(socioeconomicInitialVal)
+      }
+      const socioeconomicAimsInitialVal = getSocioeconomicAims(serverResponse)
+      if (socioeconomicAimsInitialVal.selectedValues.length > 0) {
+        const socioeconomicAimsFlattened = socioeconomicAimsInitialVal.selectedValues
+        if (socioeconomicAimsInitialVal.otherValue) {
+          socioeconomicAimsFlattened.push(socioeconomicAimsInitialVal.otherValue)
+        }
+        setSocioeconomicAims(socioeconomicAimsFlattened)
       }
     },
     [socioeconomicOutcomesReplace]
@@ -168,22 +179,22 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const updateSocioeconomicOutcome = ({
     index,
     currentType,
-    trend,
-    linkedAim,
-    measurement,
-    unit,
-    comparison,
-    value
+    currentTrend,
+    currentLinkedAim,
+    currentMeasurement,
+    currentUnit,
+    currentComparison,
+    currentValue
   }) => {
     const currentItem = socioeconomicOutcomesFields[index]
 
-    currentItem.type = currentType
-    currentItem.trend = trend
-    currentItem.linkedAim = linkedAim
-    currentItem.measurement = measurement
-    currentItem.unit = unit
-    currentItem.comparison = comparison
-    currentItem.value = value
+    if (currentType) currentItem.type = currentType
+    if (currentTrend) currentItem.trend = currentTrend
+    if (currentLinkedAim) currentItem.linkedAim = currentLinkedAim
+    if (currentMeasurement) currentItem.measurement = currentMeasurement
+    if (currentUnit) currentItem.unit = currentUnit
+    if (currentComparison) currentItem.comparison = currentComparison
+    if (currentValue) currentItem.value = currentValue
 
     socioeconomicOutcomesUpdate(index, currentItem)
   }
@@ -356,6 +367,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
                     unit={item.unit}
                     comparison={item.comparison}
                     value={item.value}
+                    selectedAims={socioeconomicAims}
                     updateItem={updateSocioeconomicOutcome}></SocioeconomicOutcomesRow>
                 ))
               : null}
