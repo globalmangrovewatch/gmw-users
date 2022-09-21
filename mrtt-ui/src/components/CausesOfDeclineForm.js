@@ -89,7 +89,7 @@ function CausesOfDeclineForm() {
   const [causesOfDeclineTypesChecked, causesOfDeclisetCausesOfDeclineTypesCheckedneTypesChecked] =
     useState([])
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_answers`
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
 
   const setInitialCausesOfDeclineTypesFromServerData = useCallback((serverResponse) => {
     // get answers for 4.2 if they exist
