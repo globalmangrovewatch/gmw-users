@@ -6,20 +6,41 @@ import { Box, MenuItem, TextField } from '@mui/material'
 // import language from '../../language'
 
 import { TabularSectionDiv, TabularLabel, TabularInputSection } from '../../styles/forms'
-import { trendOptions, typeOptions } from '../../data/socioeconomicOutcomesOptions'
+import {
+  comparisonOptions,
+  trendOptions,
+  typeOptions
+} from '../../data/socioeconomicOutcomesOptions'
 
 const SocioeconomicOutcomesRow = ({
   outcome,
   type,
   trend,
+  measurement,
+  unit,
+  comparison,
+  value,
   index,
   // deleteItem,
   updateItem
 }) => {
   const [initialType, setInitialType] = useState('')
   const [currentType, setCurrentType] = useState('')
+
   const [initialTrend, setInitialTrend] = useState('')
   const [currentTrend, setCurrentTrend] = useState('')
+
+  const [initialMeasurement, setInitialMeasurement] = useState('')
+  const [currentMeasurement, setCurrentMeasurement] = useState('')
+
+  const [initialUnit, setInitialUnit] = useState('')
+  const [currentUnit, setCurrentUnit] = useState('')
+
+  const [initialComparison, setInitialComparison] = useState('')
+  const [currentComparison, setCurrentComparison] = useState('')
+
+  const [initialValue, setInitialValue] = useState('')
+  const [currentValue, setCurrentValue] = useState('')
 
   // const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
 
@@ -35,6 +56,18 @@ const SocioeconomicOutcomesRow = ({
     if (currentTrend !== initialTrend) {
       updateItem({ index, currentTrend })
     }
+    if (currentMeasurement !== initialMeasurement) {
+      updateItem({ index, currentMeasurement })
+    }
+    if (currentUnit !== initialUnit) {
+      updateItem({ index, currentUnit })
+    }
+    if (currentComparison !== initialComparison) {
+      updateItem({ index, currentComparison })
+    }
+    if (currentValue !== initialValue) {
+      updateItem({ index, currentValue })
+    }
   }
 
   const _setFormValues = useEffect(() => {
@@ -46,7 +79,23 @@ const SocioeconomicOutcomesRow = ({
       setCurrentTrend(trend)
       setInitialTrend(trend)
     }
-  }, [trend, type])
+    if (measurement) {
+      setCurrentMeasurement(measurement)
+      setInitialMeasurement(measurement)
+    }
+    if (unit) {
+      setCurrentUnit(unit)
+      setInitialUnit(unit)
+    }
+    if (comparison) {
+      setCurrentComparison(comparison)
+      setInitialComparison(comparison)
+    }
+    if (value) {
+      setCurrentValue(value)
+      setInitialValue(value)
+    }
+  }, [comparison, measurement, trend, type, unit, value])
 
   // const handleDeleteClick = () => {
   //   setIsDeleteConfirmPromptOpen(true)
@@ -103,6 +152,47 @@ const SocioeconomicOutcomesRow = ({
             </TextField>
           </TabularInputSection>
         ) : null}
+        {currentType === 'Quantitative' ? (
+          <div>
+            <TabularInputSection>
+              <TabularLabel>Measurement</TabularLabel>
+              <TextField
+                value={currentMeasurement}
+                label='Measurement'
+                onChange={(e) => setCurrentMeasurement(e.target.value)}></TextField>
+            </TabularInputSection>
+            <TabularInputSection>
+              <TabularLabel>Unit</TabularLabel>
+              <TextField
+                value={currentUnit}
+                label='unit'
+                onChange={(e) => setCurrentUnit(e.target.value)}></TextField>
+            </TabularInputSection>
+            <TabularInputSection>
+              <TabularLabel>Comparison</TabularLabel>
+              <TextField
+                select
+                sx={{ width: '12.9em' }}
+                value={currentComparison}
+                label='Comparison'
+                onBlur={handleUpdate}
+                onChange={(e) => setCurrentComparison(e.target.value)}>
+                {comparisonOptions.map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </TabularInputSection>
+            <TabularInputSection>
+              <TabularLabel>Value</TabularLabel>
+              <TextField
+                value={currentValue}
+                label='Value'
+                onChange={(e) => setCurrentValue(e.target.value)}></TextField>
+            </TabularInputSection>
+          </div>
+        ) : null}
       </Box>
     </TabularSectionDiv>
   )
@@ -112,6 +202,10 @@ SocioeconomicOutcomesRow.propTypes = {
   outcome: PropTypes.string.isRequired,
   type: PropTypes.string,
   trend: PropTypes.string,
+  measurement: PropTypes.string,
+  unit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  comparison: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   deleteItem: PropTypes.func,
   updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired
