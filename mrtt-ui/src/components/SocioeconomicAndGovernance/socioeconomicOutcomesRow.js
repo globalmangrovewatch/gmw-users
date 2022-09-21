@@ -6,17 +6,20 @@ import { Box, MenuItem, TextField } from '@mui/material'
 // import language from '../../language'
 
 import { TabularSectionDiv, TabularLabel, TabularInputSection } from '../../styles/forms'
-import { typeOptions } from '../../data/socioeconomicOutcomesOptions'
+import { trendOptions, typeOptions } from '../../data/socioeconomicOutcomesOptions'
 
 const SocioeconomicOutcomesRow = ({
   outcome,
   type,
+  trend,
   index,
   // deleteItem,
   updateItem
 }) => {
   const [initialType, setInitialType] = useState('')
   const [currentType, setCurrentType] = useState('')
+  const [initialTrend, setInitialTrend] = useState('')
+  const [currentTrend, setCurrentTrend] = useState('')
 
   // const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
 
@@ -27,8 +30,10 @@ const SocioeconomicOutcomesRow = ({
 
   const handleUpdate = () => {
     if (currentType !== initialType) {
-      console.log({ currentType })
       updateItem({ index, currentType })
+    }
+    if (currentTrend !== initialTrend) {
+      updateItem({ index, currentTrend })
     }
   }
 
@@ -37,7 +42,11 @@ const SocioeconomicOutcomesRow = ({
       setCurrentType(type)
       setInitialType(type)
     }
-  }, [type])
+    if (trend) {
+      setCurrentTrend(trend)
+      setInitialTrend(trend)
+    }
+  }, [trend, type])
 
   // const handleDeleteClick = () => {
   //   setIsDeleteConfirmPromptOpen(true)
@@ -75,12 +84,25 @@ const SocioeconomicOutcomesRow = ({
               </MenuItem>
             ))}
           </TextField>
-          {/* <RowTextField
-          value={currentType}
-          label='Type'
-          onBlur={handleUpdate}
-          onChange={(e) => setCurrentType(e.target.value)}></RowTextField> */}
         </TabularInputSection>
+        {currentType === 'Observed' ? (
+          <TabularInputSection>
+            <TabularLabel>Trend</TabularLabel>
+            <TextField
+              select
+              sx={{ width: '12.9em' }}
+              value={currentTrend}
+              label='Trend'
+              onBlur={handleUpdate}
+              onChange={(e) => setCurrentTrend(e.target.value)}>
+              {trendOptions.map((option, index) => (
+                <MenuItem key={index} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+          </TabularInputSection>
+        ) : null}
       </Box>
     </TabularSectionDiv>
   )
@@ -89,6 +111,7 @@ const SocioeconomicOutcomesRow = ({
 SocioeconomicOutcomesRow.propTypes = {
   outcome: PropTypes.string.isRequired,
   type: PropTypes.string,
+  trend: PropTypes.string,
   deleteItem: PropTypes.func,
   updateItem: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired

@@ -176,7 +176,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     value
   }) => {
     const currentItem = socioeconomicOutcomesFields[index]
-    console.log({ currentType, index })
+
     currentItem.type = currentType
     currentItem.trend = trend
     currentItem.linkedAim = linkedAim
@@ -184,6 +184,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     currentItem.unit = unit
     currentItem.comparison = comparison
     currentItem.value = value
+
     socioeconomicOutcomesUpdate(index, currentItem)
   }
 
