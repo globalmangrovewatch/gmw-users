@@ -8,6 +8,7 @@ import {
   trendOptions,
   typeOptions
 } from '../../data/socioeconomicOutcomesOptions'
+import { ErrorText } from '../../styles/typography'
 
 const SocioeconomicOutcomesRow = ({
   outcome,
@@ -181,19 +182,23 @@ const SocioeconomicOutcomesRow = ({
         ) : null}
         <TabularInputSection>
           <TabularLabel>Link outcome to aim</TabularLabel>
-          <TextField
-            select
-            sx={{ width: '12.9em' }}
-            value={currentLinkedAim}
-            label='Aims'
-            onBlur={handleUpdate}
-            onChange={(e) => setCurrentLinkedAim(e.target.value)}>
-            {selectedAims.map((option, index) => (
-              <MenuItem key={index} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </TextField>
+          {selectedAims.length > 0 ? (
+            <TextField
+              select
+              sx={{ width: '12.9em' }}
+              value={currentLinkedAim}
+              label='Aims'
+              onBlur={handleUpdate}
+              onChange={(e) => setCurrentLinkedAim(e.target.value)}>
+              {selectedAims.map((option, index) => (
+                <MenuItem key={index} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+          ) : (
+            <ErrorText>Please select aims in 3.2</ErrorText>
+          )}
         </TabularInputSection>
       </Box>
     </TabularSectionDiv>
