@@ -4,9 +4,9 @@ import { Box, MenuItem, TextField } from '@mui/material'
 
 import { TabularSectionDiv, TabularLabel, TabularInputSection } from '../../styles/forms'
 import {
-  comparisonOptions,
-  trendOptions,
-  typeOptions
+  ComparisonOptions,
+  TrendOptions,
+  TypeOptions
 } from '../../data/socioeconomicOutcomesOptions'
 import { ErrorText } from '../../styles/typography'
 
@@ -114,7 +114,7 @@ const SocioeconomicOutcomesRow = ({
             label='Type'
             onBlur={handleUpdate}
             onChange={(e) => setCurrentType(e.target.value)}>
-            {typeOptions.map((option, index) => (
+            {TypeOptions.map((option, index) => (
               <MenuItem key={index} value={option}>
                 {option}
               </MenuItem>
@@ -131,7 +131,7 @@ const SocioeconomicOutcomesRow = ({
               label='Trend'
               onBlur={handleUpdate}
               onChange={(e) => setCurrentTrend(e.target.value)}>
-              {trendOptions.map((option, index) => (
+              {TrendOptions.map((option, index) => (
                 <MenuItem key={index} value={option}>
                   {option}
                 </MenuItem>
@@ -164,7 +164,7 @@ const SocioeconomicOutcomesRow = ({
                 label='Comparison'
                 onBlur={handleUpdate}
                 onChange={(e) => setCurrentComparison(e.target.value)}>
-                {comparisonOptions.map((option, index) => (
+                {ComparisonOptions.map((option, index) => (
                   <MenuItem key={index} value={option}>
                     {option}
                   </MenuItem>

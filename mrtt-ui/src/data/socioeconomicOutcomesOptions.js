@@ -1,8 +1,8 @@
-export const typeOptions = ['Observed', 'Quantitative']
+export const TypeOptions = ['Observed', 'Quantitative']
 
-export const trendOptions = ['Positive', 'Stable', 'Negative']
+export const TrendOptions = ['Positive', 'Stable', 'Negative']
 
-export const comparisonOptions = [
+export const ComparisonOptions = [
   'None',
   'Before Measurement',
   'Comparison Site',
