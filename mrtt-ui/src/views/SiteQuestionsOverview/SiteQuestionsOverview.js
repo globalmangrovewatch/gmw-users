@@ -112,6 +112,11 @@ const SiteOverview = () => {
                 </Link>
               </WideTh>
             </tr>
+          </tbody>
+        </TableAlertnatingRows>
+        <StyledSectionHeader>{pageLanguage.formGroupTitle.intervention}</StyledSectionHeader>
+        <TableAlertnatingRows>
+          <tbody>
             <tr>
               <WideTh>
                 <Link to={`/sites/${siteId}/form/site-interventions`}>
@@ -124,42 +129,10 @@ const SiteOverview = () => {
                 <Link to={`/sites/${siteId}/form/costs`}>{pageLanguage.formName.costs}</Link>
               </WideTh>
             </tr>
-            <tr>
-              <WideTh>
-                <Link to={`/sites/${siteId}/form/management-status-and-effectiveness`}>
-                  {pageLanguage.formName.managementStatusAndEffectiveness}
-                </Link>
-              </WideTh>
-            </tr>
-            <tr>
-              <WideTh>
-                <Link to={`/sites/${siteId}/form/socioeconomic-and-governance-status`}>
-                  {pageLanguage.formName.socioeconomicGovernanceStatusOutcomes}
-                </Link>
-              </WideTh>
-            </tr>
-            <tr>
-              <WideTh>
-                <Link to={`/sites/${siteId}/form/ecological-status-and-outcomes`}>
-                  {pageLanguage.formName.ecologicalStatusOutcomes}
-                </Link>
-              </WideTh>
-            </tr>
-          </tbody>
-        </TableAlertnatingRows>
-        <StyledSectionHeader>{pageLanguage.formGroupTitle.intervention}</StyledSectionHeader>
-        <TableAlertnatingRows>
-          <tbody>
-            <tr>
-              <WideTh>{pageLanguage.formName.siteInterventions}</WideTh>
-            </tr>
-            <tr>
-              <WideTh>{pageLanguage.formName.costs}</WideTh>
-            </tr>
           </tbody>
         </TableAlertnatingRows>
         <StyledSectionHeader>{pageLanguage.formGroupTitle.monitoring}</StyledSectionHeader>
-        <AddMonitoringSectionMenu />
+        <AddMonitoringSectionMenu siteId={siteId} />
       </ContentWrapper>
     </>
   )

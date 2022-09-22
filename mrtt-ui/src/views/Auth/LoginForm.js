@@ -1,16 +1,17 @@
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
+import PropTypes from 'prop-types'
 
+import { Alert, FormLabel, TextField } from '@mui/material'
 import { ButtonCancel, ButtonSubmit } from '../../styles/buttons'
 import { ButtonContainer, PagePadding, RowFlexEnd } from '../../styles/containers'
 import { ErrorText, PageTitle } from '../../styles/typography'
 import { Form, MainFormDiv } from '../../styles/forms'
-import { FormLabel, TextField } from '@mui/material'
 import Button from '@mui/material/Button'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
@@ -24,7 +25,7 @@ const validationSchema = yup.object({
 
 const formDefaultValues = { email: '', password: '' }
 
-const LoginForm = () => {
+const LoginForm = ({ isUserNew }) => {
   const [isLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -82,6 +83,11 @@ const LoginForm = () => {
     <MainFormDiv>
       <PagePadding>
         <PageTitle>Login</PageTitle>
+        {isUserNew ? (
+          <Alert variant='outlined' severity='success'>
+            {language.success.signup}
+          </Alert>
+        ) : null}
         <Form onSubmit={validateInputs(handleSubmit)}>
           <FormLabel htmlFor='email'>Email* </FormLabel>
           <Controller
@@ -112,6 +118,14 @@ const LoginForm = () => {
   )
 
   return isLoading ? <LoadingIndicator /> : form
+}
+
+LoginForm.propTypes = {
+  isUserNew: PropTypes.bool
+}
+
+LoginForm.defaultValues = {
+  isUserNew: false
 }
 
 export default LoginForm

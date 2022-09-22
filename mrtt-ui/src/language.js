@@ -2,14 +2,16 @@ const error = {
   apiLoad: 'Loading data from the api failed. Please try again.',
   delete: 'Deleting that item failed. Please try again.',
   getItemDoesntExistMessage: (item) => `That ${item} doesnt exist.`,
+  generic: 'Something went wrong. Please try again.',
   submit: 'Saving failed. Please try again.'
 }
 
 const success = {
-  submit: 'The data has been saved.',
-  getEditThingSuccessMessage: (thing) => `${thing} has been edited.`,
   getCreateThingSuccessMessage: (thing) => `${thing}, has been created.`,
-  getDeleteThingSuccessMessage: (thing) => `${thing} has been deleted.`
+  getDeleteThingSuccessMessage: (thing) => `${thing} has been deleted.`,
+  getEditThingSuccessMessage: (thing) => `${thing} has been edited.`,
+  signup: 'Please check your email for verification instructions.',
+  submit: 'The data has been saved.'
 }
 const form = {
   checkboxGroupOtherInputPlaceholder: 'If other, please state.',
