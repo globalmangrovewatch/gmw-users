@@ -41,6 +41,12 @@ const EcologicalStatusAndOutcomesForm = () => {
     monitoringStartDate: yup.string().nullable(),
     monitoringEndDate: yup.string().nullable(),
     ecologicalMonitoringStakeholders: multiselectWithOtherValidationNoMinimum,
+    preAndPostRestorationActivities: yup.object().shape({
+      areaPreRestoration: yup.string(),
+      unitPre: yup.mixed(),
+      areaPostIntervention: yup.string(),
+      unitPost: yup.mixed()
+    }),
     mangroveAreaIncrease: yup.string(),
     mangroveConditionImprovement: yup.string(),
     naturalRegenerationOnSite: yup.string(),
@@ -195,7 +201,53 @@ const EcologicalStatusAndOutcomesForm = () => {
           />
           <ErrorText>{errors.mangroveAreaIncrease?.message}</ErrorText>
         </FormQuestionDiv>
-        {/* TABULAR INPUT GROUP SECTION 10.3A */}
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.preAndPostRestorationActivities.question}</StickyFormLabel>
+          <Controller
+            name='preAndPostRestorationActivities.areaPreRestoration'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} value={field.value} label='Area pre-intervention'></TextField>
+            )}
+          />
+          <Controller
+            name='preAndPostRestorationActivities.unitPre'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField
+                {...field}
+                value={field.value}
+                sx={{ marginTop: '1em' }}
+                label='Unit (eg: m², km², hectares)'></TextField>
+            )}
+          />
+          <Controller
+            name='preAndPostRestorationActivities.areaPostIntervention'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField
+                {...field}
+                sx={{ marginTop: '1em' }}
+                value={field.value}
+                label='Area post-intervention'></TextField>
+            )}
+          />
+          <Controller
+            name='preAndPostRestorationActivities.unitPost'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField
+                {...field}
+                value={field.value}
+                sx={{ marginTop: '1em' }}
+                label='Unit (eg: m², km², hectares)'></TextField>
+            )}
+          />
+        </FormQuestionDiv>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.mangroveConditionImprovement.question}</StickyFormLabel>
           <Controller

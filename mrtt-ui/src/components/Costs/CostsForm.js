@@ -53,13 +53,10 @@ const CostsForm = () => {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     supportForActivities: multiselectWithOtherValidationNoMinimum,
-    projectInterventionFunding: yup
-      .object()
-      .shape({
-        fundingType: yup.string(),
-        other: yup.string()
-      })
-      .default([]),
+    projectInterventionFunding: yup.object().shape({
+      fundingType: yup.string(),
+      other: yup.string()
+    }),
     projectFunderNames: yup
       .array()
       .of(

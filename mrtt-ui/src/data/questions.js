@@ -732,6 +732,9 @@ const ecologicalStatusOutcomes = {
     question: '10.4 Was there an improvement in mangrove condition?',
     options: ['Yes', 'No', 'Unknown']
   },
+  preAndPostRestorationActivities: {
+    question: '10.4a What was the mangrove area pre and post restoration activities at the site? '
+  },
   naturalRegenerationOnSite: {
     question: '10.5 Is natural regeneration apparent, with mangroves establishing at the site?',
     options: ['No', 'Mangroves have established', 'Mangroves have established and grown']
