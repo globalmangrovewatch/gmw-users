@@ -96,6 +96,7 @@ export const questionMapping = {
     mangroveAreaIncrease: '10.3',
     mangroveAreaBeforeAfter: '10.3a',
     mangroveConditionImprovement: '10.4',
+    preAndPostRestorationActivities: '10.4a',
     naturalRegenerationOnSite: '10.5',
     percentageSurvival: '10.6',
     causeOfLowSurvival: '10.6a',
