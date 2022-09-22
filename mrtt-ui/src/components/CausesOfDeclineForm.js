@@ -86,8 +86,7 @@ function CausesOfDeclineForm() {
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [causesOfDeclineTypesChecked, causesOfDeclisetCausesOfDeclineTypesCheckedneTypesChecked] =
-    useState([])
+  const [causesOfDeclineTypesChecked, setCausesOfDeclineTypesChecked] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
 
@@ -124,7 +123,7 @@ function CausesOfDeclineForm() {
         })
       }
     })
-    causesOfDeclisetCausesOfDeclineTypesCheckedneTypesChecked(initialCausesOfDeclineTypesChecked)
+    setCausesOfDeclineTypesChecked(initialCausesOfDeclineTypesChecked)
   }, [])
 
   useInitializeQuestionMappedForm({
@@ -246,7 +245,7 @@ function CausesOfDeclineForm() {
       )
       causesOfDeclineTypesCheckedCopy.splice(typeIndex, 1)
     }
-    causesOfDeclisetCausesOfDeclineTypesCheckedneTypesChecked(causesOfDeclineTypesCheckedCopy)
+    setCausesOfDeclineTypesChecked(causesOfDeclineTypesCheckedCopy)
   }
 
   const onSubmit = async (data) => {
@@ -254,7 +253,6 @@ function CausesOfDeclineForm() {
     setIsError(false)
 
     if (!data) return
-    'data', data
 
     axios
       .patch(apiAnswersUrl, mapDataForApi('causesOfDecline', data))
@@ -360,7 +358,7 @@ function CausesOfDeclineForm() {
                                           })
                                         }></Checkbox>
                                     }
-                                    label={<>{secondaryChildOption} </>}
+                                    label={secondaryChildOption}
                                   />
                                 </ListItem>
                               )

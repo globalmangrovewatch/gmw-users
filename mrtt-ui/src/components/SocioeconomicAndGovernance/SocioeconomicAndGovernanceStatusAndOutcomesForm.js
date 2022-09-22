@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -7,10 +7,24 @@ import { toast } from 'react-toastify'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
-import { Controller, useForm } from 'react-hook-form'
-import { MenuItem, Stack, TextField } from '@mui/material'
+import { Controller, useForm, useFieldArray } from 'react-hook-form'
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  ListItem,
+  MenuItem,
+  Stack,
+  TextField
+} from '@mui/material'
 
-import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
+import {
+  Form,
+  FormPageHeader,
+  FormQuestionDiv,
+  NestedLabel1,
+  StickyFormLabel
+} from '../../styles/forms'
 import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
 import language from '../../language'
@@ -24,6 +38,15 @@ import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
+import { socioIndicators } from '../../data/socio_indicator'
+import { findDataItem } from '../../library/findDataItem'
+import SocioeconomicOutcomesRow from './socioeconomicOutcomesRow'
+
+const getSocioeconomicOutcomes = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '9.4') ?? []
+
+const getSocioeconomicAims = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '3.2') ?? []
 
 const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
@@ -34,6 +57,23 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     changeInTenureArrangement: yup.string(),
     currentLandOwnership: multiselectWithOtherValidationNoMinimum,
     rightsToLandInLaw: yup.string(),
+    socioeconomicOutcomes: yup
+      .array()
+      .of(
+        yup.object().shape({
+          mainLabel: yup.string(),
+          secondaryLabel: yup.string(),
+          child: yup.string(),
+          type: yup.string(),
+          trend: yup.string(),
+          linkedAim: yup.string(),
+          measurement: yup.string(),
+          unit: yup.string(),
+          comparison: yup.string(),
+          value: yup.mixed()
+        })
+      )
+      .default([]),
     achievementOfSocioeconomicAims: yup.string()
   })
   const reactHookFormInstance = useForm({
@@ -52,6 +92,14 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     watch: watchForm
   } = reactHookFormInstance
 
+  const {
+    fields: socioeconomicOutcomesFields,
+    append: socioeconomicOutcomesAppend,
+    remove: socioeconomicOutcomesRemove,
+    replace: socioeconomicOutcomesReplace,
+    update: socioeconomicOutcomesUpdate
+  } = useFieldArray({ name: 'socioeconomicOutcomes', control })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -59,12 +107,32 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const changeInGovernanceWatcher = watchForm('changeInGovernance')
   const changeInTenureArrangementWatcher = watchForm('changeInTenureArrangement')
+  const socioeconomicOutcomesWatcher = watchForm('socioeconomicOutcomes')
+  const [socioeconomicAims, setSocioeconomicAims] = useState([])
+  const loadServerData = useCallback(
+    (serverResponse) => {
+      const socioeconomicInitialVal = getSocioeconomicOutcomes(serverResponse)
+      if (socioeconomicInitialVal.length > 0) {
+        socioeconomicOutcomesReplace(socioeconomicInitialVal)
+      }
+      const socioeconomicAimsInitialVal = getSocioeconomicAims(serverResponse)
+      if (socioeconomicAimsInitialVal.selectedValues.length > 0) {
+        const socioeconomicAimsFlattened = socioeconomicAimsInitialVal.selectedValues
+        if (socioeconomicAimsInitialVal.otherValue) {
+          socioeconomicAimsFlattened.push(socioeconomicAimsInitialVal.otherValue)
+        }
+        setSocioeconomicAims(socioeconomicAimsFlattened)
+      }
+    },
+    [socioeconomicOutcomesReplace]
+  )
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.socioeconomicAndGovernanceStatusAndOutcomes,
     resetForm,
-    setIsLoading
+    setIsLoading,
+    successCallback: loadServerData
   })
 
   const handleSubmit = (formData) => {
@@ -82,6 +150,53 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
         setIsSubmitError(true)
         toast.error(language.error.submit)
       })
+  }
+
+  const getSocioEconomicFieldsIndex = (indicator) =>
+    socioeconomicOutcomesFields.findIndex((socioIndicator) => socioIndicator.child === indicator)
+
+  const handleSocioIndicatorsOnChange = ({ event, indicator, childSocioIndicator }) => {
+    const indicatorIndex = getSocioEconomicFieldsIndex(childSocioIndicator)
+
+    if (event.target.checked) {
+      socioeconomicOutcomesAppend({
+        mainLabel: indicator.label,
+        secondaryLabel: indicator.secondaryLabel,
+        child: childSocioIndicator,
+        type: '',
+        trend: '',
+        linkedAim: '',
+        measurement: '',
+        unit: '',
+        comparison: '',
+        value: ''
+      })
+    } else if (!event.target.checked) {
+      socioeconomicOutcomesRemove(indicatorIndex)
+    }
+  }
+
+  const updateSocioeconomicOutcome = ({
+    index,
+    currentType,
+    currentTrend,
+    currentLinkedAim,
+    currentMeasurement,
+    currentUnit,
+    currentComparison,
+    currentValue
+  }) => {
+    const currentItem = socioeconomicOutcomesFields[index]
+
+    if (currentType) currentItem.type = currentType
+    if (currentTrend) currentItem.trend = currentTrend
+    if (currentLinkedAim) currentItem.linkedAim = currentLinkedAim
+    if (currentMeasurement) currentItem.measurement = currentMeasurement
+    if (currentUnit) currentItem.unit = currentUnit
+    if (currentComparison) currentItem.comparison = currentComparison
+    if (currentValue) currentItem.value = currentValue
+
+    socioeconomicOutcomesUpdate(index, currentItem)
   }
 
   return isLoading ? (
@@ -206,6 +321,57 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
               <ErrorText>{errors.rightsToLandInLaw?.message}</ErrorText>
             </FormQuestionDiv>
           </div>
+        ) : null}
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.socioeconomicOutcomes.question}</StickyFormLabel>
+          {socioIndicators.map((indicator, indicatorIndex) => (
+            <Box key={indicatorIndex}>
+              <NestedLabel1>{`${indicator.label}: ${indicator.secondaryLabel}`}</NestedLabel1>
+              {indicator.children.map((childSocioIndicator, childIndex) => (
+                <ListItem key={childIndex}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value={childSocioIndicator}
+                        checked={getSocioEconomicFieldsIndex(childSocioIndicator) !== -1}
+                        onChange={(event) =>
+                          handleSocioIndicatorsOnChange({
+                            event,
+                            indicator,
+                            childSocioIndicator
+                          })
+                        }></Checkbox>
+                    }
+                    label={childSocioIndicator}
+                  />
+                </ListItem>
+              ))}
+            </Box>
+          ))}
+        </FormQuestionDiv>
+        {socioeconomicOutcomesWatcher?.length > 0 ? (
+          <FormQuestionDiv>
+            <StickyFormLabel>
+              {questions.socioeconomicOutcomesAdditionalData.question}
+            </StickyFormLabel>
+            {socioeconomicOutcomesFields?.length > 0
+              ? socioeconomicOutcomesFields?.map((item, index) => (
+                  <SocioeconomicOutcomesRow
+                    key={index}
+                    index={index}
+                    outcome={item.child}
+                    type={item.type}
+                    trend={item.trend}
+                    linkedAim={item.linkedAim}
+                    measurement={item.measurement}
+                    unit={item.unit}
+                    comparison={item.comparison}
+                    value={item.value}
+                    selectedAims={socioeconomicAims}
+                    updateItem={updateSocioeconomicOutcome}></SocioeconomicOutcomesRow>
+                ))
+              : null}
+          </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>
           <StickyFormLabel>{questions.achievementOfSocioeconomicAims.question}</StickyFormLabel>
