@@ -32,6 +32,8 @@ import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndCon
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { findDataItem } from '../../library/findDataItem'
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
+import ButtonDeleteForm from '../ButtonDeleteForm'
+import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2') ?? []
@@ -86,6 +88,8 @@ const EcologicalStatusAndOutcomesForm = () => {
     useState(false)
   const [biophysicalInterventions, setBiophysicalInterventions] = useState([])
   const mangroveConditionImprovementWatcher = watchForm('mangroveConditionImprovement')
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
 
   useEffect(
     function loadBiophysicalInterventions() {
@@ -156,6 +160,25 @@ const EcologicalStatusAndOutcomesForm = () => {
     } else {
       createNewMonitoringForm(payload)
     }
+  }
+
+  const handleDeleteConfirm = () => {
+    setIsDeleting(true)
+    axios
+      .delete(monitoringFormSingularUrl)
+      .then(() => {
+        setIsDeleting(false)
+        toast.success(language.success.getDeleteThingSuccessMessage('That form'))
+        navigate(`/sites/${siteId}/overview`)
+      })
+      .catch(() => {
+        toast.error(language.error.delete)
+        setIsDeleting(false)
+      })
+  }
+
+  const handleDeleteClick = () => {
+    setIsDeleteConfirmPromptOpen(true)
   }
 
   return isMainFormDataLoading || areBiophysicalInterventionsLoading ? (
@@ -384,6 +407,15 @@ const EcologicalStatusAndOutcomesForm = () => {
           <ErrorText>{errors.achievementOfEcologicalAims?.message}</ErrorText>
         </FormQuestionDiv>
       </Form>
+      {isEditMode ? <ButtonDeleteForm onClick={handleDeleteClick} isDeleting={isDeleting} /> : null}
+      <ConfirmPrompt
+        isOpen={isDeleteConfirmPromptOpen}
+        setIsOpen={setIsDeleteConfirmPromptOpen}
+        title={language.form.deletePrompt.title}
+        promptText={language.form.deletePrompt.promptText}
+        confirmButtonText={language.form.deletePrompt.buttonText}
+        onConfirm={handleDeleteConfirm}
+      />
     </ContentWrapper>
   )
 }

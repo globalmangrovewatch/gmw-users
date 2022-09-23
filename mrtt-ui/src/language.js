@@ -33,6 +33,12 @@ const form = {
   validationAlert: {
     title: 'The form was not saved',
     description: 'Please check the form below for validation errors'
+  },
+  deleteForm: 'Delete Form',
+  deletePrompt: {
+    title: 'Delete Form: ',
+    promptText: 'Are you sure you want to delete this form?',
+    buttonText: 'Yes, delete this form'
   }
 }
 
