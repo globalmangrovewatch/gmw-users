@@ -81,11 +81,23 @@ function App() {
                 element={<ManagementStatusAndEffectivenessForm />}
               />
               <Route
+                path='/sites/:siteId/form/management-status-and-effectiveness/:monitoringFormId'
+                element={<ManagementStatusAndEffectivenessForm />}
+              />
+              <Route
                 path='/sites/:siteId/form/socioeconomic-and-governance-status'
                 element={<SocioeconomicAndGovernanceStatusAndOutcomesForm />}
               />
               <Route
+                path='/sites/:siteId/form/socioeconomic-and-governance-status/:monitoringFormId'
+                element={<SocioeconomicAndGovernanceStatusAndOutcomesForm />}
+              />
+              <Route
                 path='/sites/:siteId/form/ecological-status-and-outcomes'
+                element={<EcologicalStatusAndOutcomesForm />}
+              />
+              <Route
+                path='/sites/:siteId/form/ecological-status-and-outcomes/:monitoringFormId'
                 element={<EcologicalStatusAndOutcomesForm />}
               />
               <Route path='/sites/:siteId/form/project-details/' element={<ProjectDetailsForm />} />

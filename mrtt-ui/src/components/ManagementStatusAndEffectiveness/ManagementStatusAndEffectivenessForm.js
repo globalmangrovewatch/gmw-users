@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
@@ -18,7 +18,7 @@ import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiS
 import LoadingIndicator from '../LoadingIndicator'
 import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
-import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import language from '../../language'
 import { mapDataForApi } from '../../library/mapDataForApi'
@@ -27,6 +27,9 @@ import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import MONITORING_FORM_TYPES from '../../constants/monitoringFormTypes'
 
 const ManagementStatusAndEffectivenessForm = () => {
+  const { monitoringFormId } = useParams()
+  const isEditMode = !!monitoringFormId
+  const navigate = useNavigate()
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     dateOfAssessment: yup.string().required(language.form.required),
@@ -61,6 +64,7 @@ const ManagementStatusAndEffectivenessForm = () => {
 
   const { siteId } = useParams()
   const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
+  const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -68,12 +72,42 @@ const ManagementStatusAndEffectivenessForm = () => {
   const projectStatusChangeWatcher = watchForm('projectStatusChange')
   const financeForCiteManagementWatcher = watchForm('financeForCiteManagement')
 
-  useInitializeQuestionMappedForm({
-    apiUrl: monitoringFormsUrl,
+  useInitializeMonitoringForm({
+    apiUrl: monitoringFormSingularUrl,
+    isEditMode,
     questionMapping: questionMapping.managementStatusAndEffectiveness,
     resetForm,
     setIsLoading
   })
+
+  const createNewMonitoringForm = (payload) => {
+    axios
+      .post(monitoringFormsUrl, payload)
+      .then(({ data }) => {
+        setIsSubmitting(false)
+        toast.success(language.success.getCreateThingSuccessMessage('This form'))
+        navigate(data.id)
+      })
+      .catch(() => {
+        setIsSubmitting(false)
+        setIsSubmitError(true)
+        toast.error(language.error.submit)
+      })
+  }
+
+  const editMonitoringForm = (payload) => {
+    axios
+      .put(monitoringFormSingularUrl, payload)
+      .then(() => {
+        setIsSubmitting(false)
+        toast.success(language.success.getEditThingSuccessMessage('This form'))
+      })
+      .catch(() => {
+        setIsSubmitting(false)
+        setIsSubmitError(true)
+        toast.error(language.error.submit)
+      })
+  }
 
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
@@ -84,17 +118,11 @@ const ManagementStatusAndEffectivenessForm = () => {
       answers: mapDataForApi('managementStatusAndEffectiveness', formData)
     }
 
-    axios
-      .post(monitoringFormsUrl, payload)
-      .then(() => {
-        setIsSubmitting(false)
-        toast.success(language.success.submit)
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(language.error.submit)
-      })
+    if (isEditMode) {
+      editMonitoringForm(payload)
+    } else {
+      createNewMonitoringForm(payload)
+    }
   }
 
   return isLoading ? (

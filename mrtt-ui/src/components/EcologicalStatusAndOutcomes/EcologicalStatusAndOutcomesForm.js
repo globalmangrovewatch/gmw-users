@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
@@ -27,7 +27,7 @@ import { mapDataForApi } from '../../library/mapDataForApi'
 import { ecologicalStatusOutcomes as questions } from '../../data/questions'
 import LoadingIndicator from '../LoadingIndicator'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
-import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { findDataItem } from '../../library/findDataItem'
@@ -38,6 +38,9 @@ const getBiophysicalInterventions = (registrationAnswersFromServer) =>
 
 const EcologicalStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
+  const { monitoringFormId } = useParams()
+  const isEditMode = !!monitoringFormId
+  const navigate = useNavigate()
   const validationSchema = yup.object({
     monitoringStartDate: yup.string().nullable().required(language.form.required),
     monitoringEndDate: yup.string().nullable(),
@@ -65,25 +68,69 @@ const EcologicalStatusAndOutcomesForm = () => {
   } = reactHookFormInstance
 
   const { siteId } = useParams()
+  const interventionAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/intervention_answers`
   const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
+  const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isMainFormDataLoading, setIsMainFormDataLoading] = useState(false)
+  const [areBiophysicalInterventionsLoading, setAreBiophysicalInterventionsLoading] =
+    useState(false)
   const [biophysicalInterventions, setBiophysicalInterventions] = useState([])
 
-  const loadServerData = useCallback((serverResponse) => {
-    const biophysicalInterventionsInitialVal = getBiophysicalInterventions(serverResponse)
+  useEffect(
+    function loadBiophysicalInterventions() {
+      setAreBiophysicalInterventionsLoading(true)
+      axios
+        .get(interventionAnswersUrl)
+        .then((response) => {
+          setAreBiophysicalInterventionsLoading(false)
+          setBiophysicalInterventions(getBiophysicalInterventions(response))
+        })
+        .catch(() => {
+          setAreBiophysicalInterventionsLoading(false)
+          toast.error(language.error.apiLoad)
+        })
+    },
+    [interventionAnswersUrl]
+  )
 
-    setBiophysicalInterventions(biophysicalInterventionsInitialVal.selectedValues)
-  }, [])
-
-  useInitializeQuestionMappedForm({
-    apiUrl: monitoringFormsUrl,
+  useInitializeMonitoringForm({
+    apiUrl: monitoringFormSingularUrl,
     questionMapping: questionMapping.ecologicalStatusAndOutcomes,
     resetForm,
-    setIsLoading,
-    successCallback: loadServerData
+    setIsLoading: setIsMainFormDataLoading,
+    isEditMode
   })
+
+  const createNewMonitoringForm = (payload) => {
+    axios
+      .post(monitoringFormsUrl, payload)
+      .then(({ data }) => {
+        setIsSubmitting(false)
+        toast.success(language.success.getCreateThingSuccessMessage('This form'))
+        navigate(data.id)
+      })
+      .catch(() => {
+        setIsSubmitting(false)
+        setIsSubmitError(true)
+        toast.error(language.error.submit)
+      })
+  }
+
+  const editMonitoringForm = (payload) => {
+    axios
+      .put(monitoringFormSingularUrl, payload)
+      .then(() => {
+        setIsSubmitting(false)
+        toast.success(language.success.getEditThingSuccessMessage('This form'))
+      })
+      .catch(() => {
+        setIsSubmitting(false)
+        setIsSubmitError(true)
+        toast.error(language.error.submit)
+      })
+  }
 
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
@@ -94,20 +141,14 @@ const EcologicalStatusAndOutcomesForm = () => {
       answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
     }
 
-    axios
-      .post(monitoringFormsUrl, payload)
-      .then(() => {
-        setIsSubmitting(false)
-        toast.success(language.success.submit)
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(language.error.submit)
-      })
+    if (isEditMode) {
+      editMonitoringForm(payload)
+    } else {
+      createNewMonitoringForm(payload)
+    }
   }
 
-  return isLoading ? (
+  return isMainFormDataLoading || areBiophysicalInterventionsLoading ? (
     <LoadingIndicator />
   ) : (
     <ContentWrapper>
@@ -238,7 +279,8 @@ const EcologicalStatusAndOutcomesForm = () => {
           />
           <ErrorText>{errors.naturalRegenerationOnSite?.message}</ErrorText>
         </FormQuestionDiv>
-        {biophysicalInterventions?.length > 0 && biophysicalInterventions.includes('Planting') ? (
+        {biophysicalInterventions.selectedValues?.length > 0 &&
+        biophysicalInterventions.selectedValues.includes('Planting') ? (
           <div>
             <FormQuestionDiv>
               <StickyFormLabel>{questions.percentageSurvival.question}</StickyFormLabel>
