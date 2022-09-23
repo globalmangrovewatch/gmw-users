@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
@@ -35,21 +35,21 @@ import { mapDataForApi } from '../../library/mapDataForApi'
 import { socioeconomicGovernanceStatusOutcomes as questions } from '../../data/questions'
 import LoadingIndicator from '../LoadingIndicator'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
-import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { socioIndicators } from '../../data/socio_indicator'
 import { findDataItem } from '../../library/findDataItem'
 import SocioeconomicOutcomesRow from './socioeconomicOutcomesRow'
 import MONITORING_FORM_TYPES from '../../constants/monitoringFormTypes'
-
-const getSocioeconomicOutcomes = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '9.4') ?? []
+import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 
 const getSocioeconomicAims = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '3.2') ?? []
 
 const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
+  const navigate = useNavigate()
+  const { monitoringFormId } = useParams()
+  const isEditMode = !!monitoringFormId
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object({
     dateOfOutcomesAssessment: yup.string().nullable().required(language.form.required),
@@ -103,38 +103,78 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
 
   const { siteId } = useParams()
   const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
+  const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
+  const registrationInterventionFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const changeInGovernanceWatcher = watchForm('changeInGovernance')
   const changeInTenureArrangementWatcher = watchForm('changeInTenureArrangement')
   const socioeconomicOutcomesWatcher = watchForm('socioeconomicOutcomes')
   const [socioeconomicAims, setSocioeconomicAims] = useState([])
-  const loadServerData = useCallback(
-    (serverResponse) => {
-      const socioeconomicInitialVal = getSocioeconomicOutcomes(serverResponse)
-      if (socioeconomicInitialVal.length > 0) {
-        socioeconomicOutcomesReplace(socioeconomicInitialVal)
-      }
-      const socioeconomicAimsInitialVal = getSocioeconomicAims(serverResponse)
-      if (socioeconomicAimsInitialVal.selectedValues.length > 0) {
-        const socioeconomicAimsFlattened = socioeconomicAimsInitialVal.selectedValues
-        if (socioeconomicAimsInitialVal.otherValue) {
-          socioeconomicAimsFlattened.push(socioeconomicAimsInitialVal.otherValue)
-        }
-        setSocioeconomicAims(socioeconomicAimsFlattened)
-      }
+  const [isMainFormDataLoading, setIsMainFormDataLoading] = useState(false)
+  const [areSociologicalAimsLoading, setAreSociologicalAimsLoading] = useState(false)
+
+  useEffect(
+    function loadSocioeconomicAims() {
+      setAreSociologicalAimsLoading(true)
+      axios
+        .get(registrationInterventionFormsUrl)
+        .then((registrationInterventionResponse) => {
+          setAreSociologicalAimsLoading(false)
+          const socioeconomicAimsInitialVal = getSocioeconomicAims(registrationInterventionResponse)
+          if (socioeconomicAimsInitialVal.selectedValues.length > 0) {
+            const socioeconomicAimsFlattened = socioeconomicAimsInitialVal.selectedValues
+            if (socioeconomicAimsInitialVal.otherValue) {
+              socioeconomicAimsFlattened.push(socioeconomicAimsInitialVal.otherValue)
+            }
+            setSocioeconomicAims(socioeconomicAimsFlattened)
+          }
+        })
+        .catch(() => {
+          setAreSociologicalAimsLoading(false)
+          toast.error(language.error.apiLoad)
+        })
     },
-    [socioeconomicOutcomesReplace]
+    [monitoringFormsUrl, registrationInterventionFormsUrl, socioeconomicOutcomesReplace]
   )
 
-  useInitializeQuestionMappedForm({
-    apiUrl: monitoringFormsUrl,
+  useInitializeMonitoringForm({
+    apiUrl: monitoringFormSingularUrl,
+    isEditMode,
     questionMapping: questionMapping.socioeconomicAndGovernanceStatusAndOutcomes,
     resetForm,
-    setIsLoading,
-    successCallback: loadServerData
+    setIsLoading: setIsMainFormDataLoading
   })
+  const createNewMonitoringForm = (payload) => {
+    axios
+      .post(monitoringFormsUrl, payload)
+      .then(({ data }) => {
+        setIsSubmitting(false)
+        toast.success(language.success.getCreateThingSuccessMessage('This form'))
+        navigate(data.id)
+      })
+      .catch(() => {
+        setIsSubmitting(false)
+        setIsSubmitError(true)
+        toast.error(language.error.submit)
+      })
+  }
+
+  const editMonitoringForm = (payload) => {
+    axios
+      .put(monitoringFormSingularUrl, payload)
+      .then(() => {
+        setIsSubmitting(false)
+        toast.success(language.success.submit)
+        toast.success(language.success.getEditThingSuccessMessage('This form'))
+      })
+      .catch(() => {
+        setIsSubmitting(false)
+        setIsSubmitError(true)
+        toast.error(language.error.submit)
+      })
+  }
 
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
@@ -145,17 +185,11 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
       answers: mapDataForApi('socioeconomicAndGovernanceStatusAndOutcomes', formData)
     }
 
-    axios
-      .post(monitoringFormsUrl, payload)
-      .then(() => {
-        setIsSubmitting(false)
-        toast.success(language.success.submit)
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(language.error.submit)
-      })
+    if (isEditMode) {
+      editMonitoringForm(payload)
+    } else {
+      createNewMonitoringForm(payload)
+    }
   }
 
   const getSocioEconomicFieldsIndex = (indicator) =>
@@ -205,7 +239,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     socioeconomicOutcomesUpdate(index, currentItem)
   }
 
-  return isLoading ? (
+  return isMainFormDataLoading || areSociologicalAimsLoading ? (
     <LoadingIndicator />
   ) : (
     <ContentWrapper>
