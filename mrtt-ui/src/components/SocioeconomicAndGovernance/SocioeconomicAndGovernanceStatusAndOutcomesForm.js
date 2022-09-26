@@ -123,7 +123,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
         .then((registrationInterventionResponse) => {
           setAreSociologicalAimsLoading(false)
           const socioeconomicAimsInitialVal = getSocioeconomicAims(registrationInterventionResponse)
-          if (socioeconomicAimsInitialVal.selectedValues.length > 0) {
+          if (socioeconomicAimsInitialVal.selectedValues?.length > 0) {
             const socioeconomicAimsFlattened = socioeconomicAimsInitialVal.selectedValues
             if (socioeconomicAimsInitialVal.otherValue) {
               socioeconomicAimsFlattened.push(socioeconomicAimsInitialVal.otherValue)
