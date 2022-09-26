@@ -42,6 +42,12 @@ const EcologicalStatusAndOutcomesForm = () => {
     monitoringStartDate: yup.string().nullable().required(language.form.required),
     monitoringEndDate: yup.string().nullable(),
     ecologicalMonitoringStakeholders: multiselectWithOtherValidationNoMinimum,
+    preAndPostRestorationActivities: yup.object().shape({
+      areaPreIntervention: yup.string(),
+      unitPre: yup.mixed(),
+      areaPostIntervention: yup.string(),
+      unitPost: yup.mixed()
+    }),
     mangroveAreaIncrease: yup.string(),
     mangroveConditionImprovement: yup.string(),
     naturalRegenerationOnSite: yup.string(),
@@ -61,7 +67,8 @@ const EcologicalStatusAndOutcomesForm = () => {
     handleSubmit: validateInputs,
     formState: { errors },
     reset: resetForm,
-    control
+    control,
+    watch: watchForm
   } = reactHookFormInstance
 
   const { siteId } = useParams()
@@ -70,6 +77,7 @@ const EcologicalStatusAndOutcomesForm = () => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [biophysicalInterventions, setBiophysicalInterventions] = useState([])
+  const mangroveConditionImprovementWatcher = watchForm('mangroveConditionImprovement')
 
   const loadServerData = useCallback((serverResponse) => {
     const biophysicalInterventionsInitialVal = getBiophysicalInterventions(serverResponse)
@@ -201,7 +209,6 @@ const EcologicalStatusAndOutcomesForm = () => {
           />
           <ErrorText>{errors.mangroveAreaIncrease?.message}</ErrorText>
         </FormQuestionDiv>
-        {/* TABULAR INPUT GROUP SECTION 10.3A */}
         <FormQuestionDiv>
           <StickyFormLabel>{questions.mangroveConditionImprovement.question}</StickyFormLabel>
           <Controller
@@ -220,6 +227,55 @@ const EcologicalStatusAndOutcomesForm = () => {
           />
           <ErrorText>{errors.mangroveConditionImprovement?.message}</ErrorText>
         </FormQuestionDiv>
+        {mangroveConditionImprovementWatcher === 'Yes' ? (
+          <FormQuestionDiv>
+            <StickyFormLabel>{questions.preAndPostRestorationActivities.question}</StickyFormLabel>
+            <Controller
+              name='preAndPostRestorationActivities.areaPreIntervention'
+              control={control}
+              defaultValue=''
+              render={({ field }) => (
+                <TextField {...field} value={field.value} label='Area pre-intervention'></TextField>
+              )}
+            />
+            <Controller
+              name='preAndPostRestorationActivities.unitPre'
+              control={control}
+              defaultValue=''
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  value={field.value}
+                  sx={{ marginTop: '1em' }}
+                  label='Unit (eg: m², km², hectares)'></TextField>
+              )}
+            />
+            <Controller
+              name='preAndPostRestorationActivities.areaPostIntervention'
+              control={control}
+              defaultValue=''
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  sx={{ marginTop: '1em' }}
+                  value={field.value}
+                  label='Area post-intervention'></TextField>
+              )}
+            />
+            <Controller
+              name='preAndPostRestorationActivities.unitPost'
+              control={control}
+              defaultValue=''
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  value={field.value}
+                  sx={{ marginTop: '1em' }}
+                  label='Unit (eg: m², km², hectares)'></TextField>
+              )}
+            />
+          </FormQuestionDiv>
+        ) : null}
         <FormQuestionDiv>
           <StickyFormLabel>{questions.naturalRegenerationOnSite.question}</StickyFormLabel>
           <Controller
