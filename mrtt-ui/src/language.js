@@ -50,6 +50,18 @@ const multiselectWithOtherFormQuestion = {
 }
 
 const pages = {
+  userSignUp: {
+    confirmPassword: 'Re-type password',
+    email: 'Email',
+    name: 'Name',
+    password: 'Password',
+    title: 'SIGN-UP',
+    validation: {
+      emailValid: 'Must be a valid email',
+      passwordMinimumCharacters: 'Password must be at the minimum 8 characters long',
+      passwordsMustMatch: 'Passwords must match'
+    }
+  },
   organizations: {
     manageUsers: 'Manage users',
     newOrganizationButton: 'New Org',

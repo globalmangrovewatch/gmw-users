@@ -13,16 +13,26 @@ import { Form, MainFormDiv } from '../../styles/forms'
 import { FormLabel, TextField } from '@mui/material'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
+import RequiredIndicator from '../../components/RequiredIndicator'
+
+const signUpFormLanguage = language.pages.userSignUp
 
 const validationSchema = yup.object({
-  email: yup.string().required('Email required').email('Must be a valid email'),
+  email: yup
+    .string()
+    .required(language.form.required)
+    .email(signUpFormLanguage.validation.emailValid),
   password: yup
     .string()
-    .required('Password is required')
-    .min(8, 'Password must be at the minimum 8 characters long')
+    .required(language.form.required)
+    .min(8, signUpFormLanguage.validation.passwordMinimumCharacters),
+  confirmationPassword: yup
+    .string()
+    .required(language.form.required)
+    .oneOf([yup.ref('password')], signUpFormLanguage.validation.passwordsMustMatch)
 })
 
-const formDefaultValues = { name: '', email: '', password: '' }
+const formDefaultValues = { name: '', email: '', password: '', confirmationPassword: '' }
 
 const SignupForm = () => {
   const [isLoading] = useState(false)
@@ -38,9 +48,9 @@ const SignupForm = () => {
     formState: { errors }
   } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
 
-  const signUp = (formData) => {
+  const signUp = ({ email, name, password }) => {
     axios
-      .post(authUrl, { user: formData })
+      .post(authUrl, { user: { email, name, password } })
       .then(() => {
         setIsSubmitting(false)
         toast.success(language.success.signup)
@@ -67,16 +77,19 @@ const SignupForm = () => {
   const form = (
     <MainFormDiv>
       <PagePadding>
-        <PageTitle>Sign-up</PageTitle>
+        <PageTitle>{signUpFormLanguage.title}</PageTitle>
         <Form onSubmit={validateInputs(handleSubmit)}>
-          <FormLabel htmlFor='name'>Name </FormLabel>
+          <FormLabel htmlFor='name'>{signUpFormLanguage.name}</FormLabel>
           <Controller
             name='name'
             control={formControl}
             render={({ field }) => <TextField {...field} id='name' />}
           />
 
-          <FormLabel htmlFor='email'>Email* </FormLabel>
+          <FormLabel htmlFor='email'>
+            {signUpFormLanguage.email}
+            <RequiredIndicator />
+          </FormLabel>
           <Controller
             name='email'
             control={formControl}
@@ -84,13 +97,29 @@ const SignupForm = () => {
           />
           <ErrorText>{errors?.email?.message}</ErrorText>
 
-          <FormLabel htmlFor='password'>Password* </FormLabel>
+          <FormLabel htmlFor='password'>
+            {signUpFormLanguage.password}
+            <RequiredIndicator />
+          </FormLabel>
           <Controller
             name='password'
             control={formControl}
             render={({ field }) => <TextField {...field} id='password' type='password' />}
           />
           <ErrorText>{errors?.password?.message}</ErrorText>
+
+          <FormLabel htmlFor='confirmation-password'>
+            {signUpFormLanguage.confirmPassword}
+            <RequiredIndicator />
+          </FormLabel>
+          <Controller
+            name='confirmationPassword'
+            control={formControl}
+            render={({ field }) => (
+              <TextField {...field} id='confirmation-password' type='password' />
+            )}
+          />
+          <ErrorText>{errors?.confirmationPassword?.message}</ErrorText>
           <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
           <ButtonContainer>
             <ButtonCancel onClick={handleCancelClick} />
