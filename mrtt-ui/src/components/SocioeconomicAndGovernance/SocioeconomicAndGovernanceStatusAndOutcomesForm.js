@@ -205,7 +205,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
         child: childSocioIndicator,
         type: '',
         trend: '',
-        linkedAim: '',
+        linkedAims: [],
         measurement: '',
         unit: '',
         comparison: '',
@@ -230,7 +230,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
 
     if (currentType) currentItem.type = currentType
     if (currentTrend) currentItem.trend = currentTrend
-    if (currentLinkedAims) currentItem.linkedAim = currentLinkedAims
+    if (currentLinkedAims) currentItem.linkedAims = currentLinkedAims
     if (currentMeasurement) currentItem.measurement = currentMeasurement
     if (currentUnit) currentItem.unit = currentUnit
     if (currentComparison) currentItem.comparison = currentComparison

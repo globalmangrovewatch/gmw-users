@@ -110,6 +110,10 @@ const SocioeconomicOutcomesRow = ({
       linkedAimsCopy.splice(aimIndex, 1)
       setCurrentLinkedAims(linkedAimsCopy)
     }
+    // handleUpdate()
+    console.log(currentLinkedAims)
+    // handle update not working
+    // still needs styling
   }
 
   return (
