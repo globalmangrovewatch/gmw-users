@@ -316,6 +316,9 @@ const EcologicalStatusAndOutcomesForm = () => {
         ) : null}
         {/* TABULAR INPUT GROUP SECTION 10.7 */}
         <FormQuestionDiv>
+          <StickyFormLabel>{questions.mangroveEcologicalOutcomes.question}</StickyFormLabel>
+        </FormQuestionDiv>
+        <FormQuestionDiv>
           <StickyFormLabel>{questions.achievementOfEcologicalAims.question}</StickyFormLabel>
           <Controller
             name='achievementOfEcologicalAims'

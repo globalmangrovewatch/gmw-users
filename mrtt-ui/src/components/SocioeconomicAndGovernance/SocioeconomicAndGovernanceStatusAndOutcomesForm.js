@@ -38,7 +38,7 @@ import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
-import { socioIndicators } from '../../data/socio_indicator'
+import { socioIndicators } from '../../data/socioIndicators'
 import { findDataItem } from '../../library/findDataItem'
 import SocioeconomicOutcomesRow from './socioeconomicOutcomesRow'
 
