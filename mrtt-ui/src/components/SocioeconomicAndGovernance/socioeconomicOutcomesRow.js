@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Box, MenuItem, TextField } from '@mui/material'
+import { Box, Checkbox, List, ListItem, MenuItem, TextField, Typography } from '@mui/material'
 
 import { TabularSectionDiv, TabularLabel, TabularInputSection } from '../../styles/forms'
 import {
@@ -14,7 +14,7 @@ const SocioeconomicOutcomesRow = ({
   outcome,
   type,
   trend,
-  linkedAim,
+  linkedAims,
   measurement,
   unit,
   comparison,
@@ -29,8 +29,8 @@ const SocioeconomicOutcomesRow = ({
   const [initialTrend, setInitialTrend] = useState('')
   const [currentTrend, setCurrentTrend] = useState('')
 
-  const [initialLinkedAim, setInitialLinkedAim] = useState('')
-  const [currentLinkedAim, setCurrentLinkedAim] = useState('')
+  const [initialLinkedAims, setInitialLinkedAims] = useState([])
+  const [currentLinkedAims, setCurrentLinkedAims] = useState([])
 
   const [initialMeasurement, setInitialMeasurement] = useState('')
   const [currentMeasurement, setCurrentMeasurement] = useState('')
@@ -51,8 +51,8 @@ const SocioeconomicOutcomesRow = ({
     if (currentTrend !== initialTrend) {
       updateItem({ index, currentTrend })
     }
-    if (currentLinkedAim !== initialLinkedAim) {
-      updateItem({ index, currentLinkedAim })
+    if (currentLinkedAims !== initialLinkedAims) {
+      updateItem({ index, currentLinkedAims })
     }
     if (currentMeasurement !== initialMeasurement) {
       updateItem({ index, currentMeasurement })
@@ -77,9 +77,9 @@ const SocioeconomicOutcomesRow = ({
       setCurrentTrend(trend)
       setInitialTrend(trend)
     }
-    if (linkedAim) {
-      setCurrentLinkedAim(linkedAim)
-      setInitialLinkedAim(linkedAim)
+    if (linkedAims) {
+      setCurrentLinkedAims(linkedAims)
+      setInitialLinkedAims(linkedAims)
     }
     if (measurement) {
       setCurrentMeasurement(measurement)
@@ -97,7 +97,20 @@ const SocioeconomicOutcomesRow = ({
       setCurrentValue(value)
       setInitialValue(value)
     }
-  }, [comparison, linkedAim, measurement, trend, type, unit, value])
+  }, [comparison, linkedAims, measurement, trend, type, unit, value])
+
+  const handleSelectedAimsOnChange = (event, aim) => {
+    const linkedAimsCopy = [...currentLinkedAims]
+
+    if (event.target.checked) {
+      linkedAimsCopy.push(aim)
+      setCurrentLinkedAims(linkedAimsCopy)
+    } else {
+      const aimIndex = linkedAimsCopy.findIndex((item) => item === aim)
+      linkedAimsCopy.splice(aimIndex, 1)
+      setCurrentLinkedAims(linkedAimsCopy)
+    }
+  }
 
   return (
     <TabularSectionDiv>
@@ -181,21 +194,23 @@ const SocioeconomicOutcomesRow = ({
           </div>
         ) : null}
         <TabularInputSection>
-          <TabularLabel>Link outcome to aim</TabularLabel>
+          <TabularLabel>Link outcome to aims</TabularLabel>
           {selectedAims.length > 0 ? (
-            <TextField
-              select
-              sx={{ width: '12.9em' }}
-              value={currentLinkedAim}
-              label='Aims'
-              onBlur={handleUpdate}
-              onChange={(e) => setCurrentLinkedAim(e.target.value)}>
-              {selectedAims.map((option, index) => (
-                <MenuItem key={index} value={option}>
-                  {option}
-                </MenuItem>
+            <List>
+              {selectedAims.map((aim, index) => (
+                <ListItem key={index}>
+                  <Box>
+                    <Box>
+                      <Checkbox
+                        value={aim}
+                        checked={currentLinkedAims.includes(aim)}
+                        onChange={(event) => handleSelectedAimsOnChange(event, aim)}></Checkbox>
+                      <Typography variant='subtitle'>{aim}</Typography>
+                    </Box>
+                  </Box>
+                </ListItem>
               ))}
-            </TextField>
+            </List>
           ) : (
             <ErrorText>Please select aims in 3.2</ErrorText>
           )}
@@ -209,7 +224,7 @@ SocioeconomicOutcomesRow.propTypes = {
   outcome: PropTypes.string.isRequired,
   type: PropTypes.string,
   trend: PropTypes.string,
-  linkedAim: PropTypes.string,
+  linkedAims: PropTypes.arrayOf(PropTypes.string),
   measurement: PropTypes.string,
   unit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   comparison: PropTypes.string,

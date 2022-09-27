@@ -67,7 +67,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           child: yup.string(),
           type: yup.string(),
           trend: yup.string(),
-          linkedAim: yup.string(),
+          linkedAims: yup.array().of(yup.string()).default([]),
           measurement: yup.string(),
           unit: yup.string(),
           comparison: yup.string(),
@@ -220,7 +220,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     index,
     currentType,
     currentTrend,
-    currentLinkedAim,
+    currentLinkedAims,
     currentMeasurement,
     currentUnit,
     currentComparison,
@@ -230,7 +230,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
 
     if (currentType) currentItem.type = currentType
     if (currentTrend) currentItem.trend = currentTrend
-    if (currentLinkedAim) currentItem.linkedAim = currentLinkedAim
+    if (currentLinkedAims) currentItem.linkedAim = currentLinkedAims
     if (currentMeasurement) currentItem.measurement = currentMeasurement
     if (currentUnit) currentItem.unit = currentUnit
     if (currentComparison) currentItem.comparison = currentComparison
@@ -402,7 +402,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
                     outcome={item.child}
                     type={item.type}
                     trend={item.trend}
-                    linkedAim={item.linkedAim}
+                    linkedAims={item.linkedAims}
                     measurement={item.measurement}
                     unit={item.unit}
                     comparison={item.comparison}
