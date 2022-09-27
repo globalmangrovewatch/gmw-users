@@ -1,7 +1,9 @@
 import { Button } from '@mui/material'
 import { styled } from '@mui/system'
 import PropTypes from 'prop-types'
+import ButtonSecondaryWithLoader from '../components/ButtonSecondaryWithLoader'
 import language from '../language'
+import theme from './theme'
 
 const ButtonPrimary = styled(Button)``
 ButtonPrimary.defaultProps = { variant: 'contained' }
@@ -17,6 +19,12 @@ const ButtonSubmit = ({ isSubmitting }) => {
   )
 }
 
+const ButtonCaution = styled(ButtonSecondaryWithLoader)`
+  background-color: ${theme.color.red};
+  &:hover {
+    background-color: ${theme.color.lightRed};
+  }
+`
 ButtonSubmit.propTypes = {
   isSubmitting: PropTypes.bool.isRequired
 }
@@ -25,4 +33,4 @@ const ButtonCancel = (props) => (
   <ButtonSecondary {...props}>{language.buttons.cancel}</ButtonSecondary>
 )
 
-export { ButtonPrimary, ButtonSubmit, ButtonSecondary, ButtonCancel }
+export { ButtonPrimary, ButtonSubmit, ButtonSecondary, ButtonCancel, ButtonCaution }
