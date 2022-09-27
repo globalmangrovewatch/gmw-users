@@ -12,7 +12,8 @@ const color = {
   slub: '#333333D9',
   text: '#000000D9',
   white: '#ffffff',
-  red: '#B20000'
+  red: '#B20000',
+  lightRed: '#D00000'
 }
 
 const form = {
