@@ -1,50 +1,49 @@
-# Getting Started with Create React App
+# Mangrove Restoration Tracking Tool (MRTT) User Interface
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Product Description and Motivation
 
-## Available Scripts
+Product description and motivation coming soon
 
-In the project directory, you can run:
+You can view the data that the MRTT app creates [here](https://globalmangrovewatch.org/).
 
-### `npm start`
+The project board for this work can be found [here](https://github.com/Vizzuality/mangrove-atlas/issues)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Tech Stack and Dependencies Worth Noting
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- React
+- Emotion to manage styling
+- MUI for user already styled user interface components
+- React-toastify
+- React Hook Form
+- Yup for form validation
+- Eslint, Prettier, and Husky to manage git hooks
+- Mapbox to draw mangrove site locations.
+- [The Global Mangrove Watch API](https://github.com/globalmangrovewatch/gmw-api) to handle data on the server side
+- Transifex for user language translation.
 
-### `npm test`
+## Archetectural Decisions and Tradeoffs
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Translation will be provided via Transifex which is configured at `mrtt-ui/public/index.html`. This is unlikely to translate dynamically generated text, so we included a language file (`mrtt-ui/src/language.js`)for easy future translation. We attempted to put all user facing text in the language file, but in some places it is hardcoded in the JSX
+- Theming is configured in two files.
+  - `mrtt-ui/src/styles/themeMui.js` is responsible for setting style defaults for MUI components
+  - `mrtt-ui/src/styles/theme.js` is for all other style tokens. `themeMui.js` should import tokens from `theme.js`
+- This project had a very tight timeline, so it was decided that we skip writing front end tests.
+- The various site data items/form questions and answers have numerical ids based on question order on the server side. It was decided that the front end would use descriptive naming for coding these questions and answers. We map the descriptive names to the ids used on the server in the `mrtt-ui/src/library/mapDataForApi.js` file using a a lookup object found here: `mrtt-ui/src/data/questionMapping.js`.
+- In order for the `QuestionNav` (`mrtt-ui/src/components/QuestionNav.js`) component to work properly, this constants file needs to list all the forms by id in order here: `mrtt-ui/src/constants/sectionNames.js`
+- a convienience custom hook is used to load _most_ data for a given form.
+  - for forms 1-7, `mrtt-ui/src/library/useInitializeQuestionMappedFormjs`. This hook calls a provided callback function with the server response for supplimental form data parsing.
+  - for forms 8-10, `mrtt-ui/src/library/useInitializeMonitoringForm.js`. This hook to-date does not include a callback because those forms happened not to need it.
 
-### `npm run build`
+## Setting Up and Running a Development Environment
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+These instructions assume familarity with React and Create React App
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Create a file called `.env` in the root folder (the same folder as this readme). Copy the keys from `env.sample`. Values for `.env` will need to be obtained from the repo custodian.
+1. Run `npm install`
+1. Run `npm start`. This should open a browser at in development mode.
+
+- If a browser doesnt automatically open, you can view the app at [http://localhost:3000](http://localhost:3000).
+
+## Deploying the app
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-## Misc notes for later refinement
-
-- Plop is configured for easy component scaffolding. To use it, run `plop componentName` and you will find a new component folder and files in `./src/components`
