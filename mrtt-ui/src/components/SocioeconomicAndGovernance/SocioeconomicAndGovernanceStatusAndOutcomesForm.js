@@ -42,6 +42,8 @@ import { findDataItem } from '../../library/findDataItem'
 import SocioeconomicOutcomesRow from './socioeconomicOutcomesRow'
 import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
+import ButtonDeleteForm from '../ButtonDeleteForm'
+import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 
 const getSocioeconomicAims = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '3.2') ?? []
@@ -59,7 +61,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     currentGovenance: multiselectWithOtherValidationNoMinimum,
     changeInTenureArrangement: yup.string(),
     currentLandOwnership: multiselectWithOtherValidationNoMinimum,
-    rightsToLandInLaw: yup.string(),
+    rightsToLandInLaw: yup.string().default(''),
     socioeconomicOutcomes: yup
       .array()
       .of(
@@ -69,7 +71,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           child: yup.string(),
           type: yup.string(),
           trend: yup.string(),
-          linkedAim: yup.string(),
+          linkedAims: yup.array().of(yup.string()).default([]),
           measurement: yup.string(),
           unit: yup.string(),
           comparison: yup.string(),
@@ -116,6 +118,8 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const [socioeconomicAims, setSocioeconomicAims] = useState([])
   const [isMainFormDataLoading, setIsMainFormDataLoading] = useState(false)
   const [areSociologicalAimsLoading, setAreSociologicalAimsLoading] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
 
   useEffect(
     function loadSocioeconomicAims() {
@@ -195,6 +199,25 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     }
   }
 
+  const handleDeleteConfirm = () => {
+    setIsDeleting(true)
+    axios
+      .delete(monitoringFormSingularUrl)
+      .then(() => {
+        setIsDeleting(false)
+        toast.success(language.success.getDeleteThingSuccessMessage('That form'))
+        navigate(`/sites/${siteId}/overview`)
+      })
+      .catch(() => {
+        toast.error(language.error.delete)
+        setIsDeleting(false)
+      })
+  }
+
+  const handleDeleteClick = () => {
+    setIsDeleteConfirmPromptOpen(true)
+  }
+
   const getSocioEconomicFieldsIndex = (indicator) =>
     socioeconomicOutcomesFields.findIndex((socioIndicator) => socioIndicator.child === indicator)
 
@@ -208,7 +231,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
         child: childSocioIndicator,
         type: '',
         trend: '',
-        linkedAim: '',
+        linkedAims: [],
         measurement: '',
         unit: '',
         comparison: '',
@@ -223,7 +246,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     index,
     currentType,
     currentTrend,
-    currentLinkedAim,
+    currentLinkedAims,
     currentMeasurement,
     currentUnit,
     currentComparison,
@@ -233,7 +256,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
 
     if (currentType) currentItem.type = currentType
     if (currentTrend) currentItem.trend = currentTrend
-    if (currentLinkedAim) currentItem.linkedAim = currentLinkedAim
+    if (currentLinkedAims) currentItem.linkedAims = currentLinkedAims
     if (currentMeasurement) currentItem.measurement = currentMeasurement
     if (currentUnit) currentItem.unit = currentUnit
     if (currentComparison) currentItem.comparison = currentComparison
@@ -405,7 +428,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
                     outcome={item.child}
                     type={item.type}
                     trend={item.trend}
-                    linkedAim={item.linkedAim}
+                    linkedAims={item.linkedAims}
                     measurement={item.measurement}
                     unit={item.unit}
                     comparison={item.comparison}
@@ -435,6 +458,15 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           <ErrorText>{errors.achievementOfSocioeconomicAims?.message}</ErrorText>
         </FormQuestionDiv>
       </Form>
+      {isEditMode ? <ButtonDeleteForm onClick={handleDeleteClick} isDeleting={isDeleting} /> : null}
+      <ConfirmPrompt
+        isOpen={isDeleteConfirmPromptOpen}
+        setIsOpen={setIsDeleteConfirmPromptOpen}
+        title={language.form.deletePrompt.title}
+        promptText={language.form.deletePrompt.promptText}
+        confirmButtonText={language.form.deletePrompt.buttonText}
+        onConfirm={handleDeleteConfirm}
+      />
     </ContentWrapper>
   )
 }

@@ -8,11 +8,10 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
+import { ButtonCancel, ButtonCaution, ButtonSubmit } from '../styles/buttons'
 import { ButtonContainer, PaddedSection, RowFlexEnd, ContentWrapper } from '../styles/containers'
 import { ErrorText, PageTitle } from '../styles/typography'
 import { Form } from '../styles/forms'
-import ButtonSecondaryWithLoader from '../components/ButtonSecondaryWithLoader'
 import ConfirmPrompt from '../components/ConfirmPrompt/ConfirmPrompt'
 import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
@@ -229,13 +228,13 @@ const LandscapeForm = ({ isNewLandscape }) => {
           <p>{language.pages.landscapeForm.noAssociatedSites}</p>
         )}
         <div>
-          <ButtonSecondaryWithLoader
+          <ButtonCaution
             disabled={isAssociatedSites}
             onClick={handleDeleteClick}
             isHolding={isDeleting}
             holdingContent={language.buttons.deleting}>
             {language.pages.landscapeForm.delete}
-          </ButtonSecondaryWithLoader>
+          </ButtonCaution>
         </div>
       </PaddedSection>
       <ConfirmPrompt
