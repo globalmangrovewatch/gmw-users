@@ -228,9 +228,6 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   }) => {
     const currentItem = socioeconomicOutcomesFields[index]
 
-    console.log('made it to update')
-    console.log({ currentItem })
-
     if (currentType) currentItem.type = currentType
     if (currentTrend) currentItem.trend = currentTrend
     if (currentLinkedAims) currentItem.linkedAims = currentLinkedAims
@@ -241,8 +238,6 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
 
     socioeconomicOutcomesUpdate(index, currentItem)
   }
-
-  console.log({ errors })
 
   return isMainFormDataLoading || areSociologicalAimsLoading ? (
     <LoadingIndicator />
