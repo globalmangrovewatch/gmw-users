@@ -110,10 +110,6 @@ const SocioeconomicOutcomesRow = ({
       linkedAimsCopy.splice(aimIndex, 1)
       setCurrentLinkedAims(linkedAimsCopy)
     }
-    // handleUpdate()
-    console.log(currentLinkedAims)
-    // handle update not working
-    // still needs styling
   }
 
   return (
@@ -193,6 +189,7 @@ const SocioeconomicOutcomesRow = ({
               <TextField
                 value={currentValue}
                 label='Value'
+                onBlur={handleUpdate}
                 onChange={(e) => setCurrentValue(e.target.value)}></TextField>
             </TabularInputSection>
           </div>
@@ -208,6 +205,7 @@ const SocioeconomicOutcomesRow = ({
                       <Checkbox
                         value={aim}
                         checked={currentLinkedAims.includes(aim)}
+                        onBlur={handleUpdate}
                         onChange={(event) => handleSelectedAimsOnChange(event, aim)}></Checkbox>
                       <Typography variant='subtitle'>{aim}</Typography>
                     </Box>
