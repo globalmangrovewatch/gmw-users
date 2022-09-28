@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useFieldArray } from 'react-hook-form'
 import {
   Box,
   Checkbox,
@@ -67,6 +67,21 @@ const EcologicalStatusAndOutcomesForm = () => {
     naturalRegenerationOnSite: yup.string(),
     percentageSurvival: yup.mixed(),
     causeOfLowSurvival: multiselectWithOtherValidationNoMinimum,
+    monitoringIndicators: yup
+      .array()
+      .of(
+        yup.object().shape({
+          mainLabel: yup.string(),
+          secondaryLabel: yup.string(),
+          indictor: yup.string(),
+          metric: yup.string(),
+          measurement: yup.mixed(),
+          unit: yup.string(),
+          comparison: yup.string(),
+          mesurementComparison: yup.mixed()
+        })
+      )
+      .default([]),
     achievementOfEcologicalAims: yup.string()
   })
   const reactHookFormInstance = useForm({
@@ -84,6 +99,14 @@ const EcologicalStatusAndOutcomesForm = () => {
     control,
     watch: watchForm
   } = reactHookFormInstance
+
+  const {
+    fields: monitoringIndicatorsFields,
+    append: monitoringIndicatorsAppend,
+    remove: monitoringIndicatorsRemove
+    // replace: monitoringIndicatorsReplace,
+    // update: monitoringIndicatorsUpdate
+  } = useFieldArray({ name: 'monitoringIndicators', control })
 
   const { siteId } = useParams()
   const interventionAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/intervention_answers`
@@ -168,8 +191,30 @@ const EcologicalStatusAndOutcomesForm = () => {
     }
   }
 
+  const getMonitoringFieldsIndex = (childMonitoringIndicator) =>
+    monitoringIndicatorsFields.findIndex(
+      (monitoringIndicator) =>
+        monitoringIndicator.indicator === childMonitoringIndicator.indicator &&
+        monitoringIndicator.metric === childMonitoringIndicator.metric
+    )
+
   const handleMonitoringIndicatorsOnChange = (event, indicator, childMonitoringIndicator) => {
-    console.log({ event, indicator, childMonitoringIndicator })
+    const indicatorIndex = getMonitoringFieldsIndex(childMonitoringIndicator)
+
+    if (event.target.checked) {
+      monitoringIndicatorsAppend({
+        mainLabel: indicator.category,
+        secondaryLabel: indicator.sub_category,
+        indictor: childMonitoringIndicator.indicator,
+        metric: childMonitoringIndicator.metric,
+        measurement: '',
+        unit: '',
+        comparison: '',
+        mesurementComparison: ''
+      })
+    } else if (!event.target.checked) {
+      monitoringIndicatorsRemove(indicatorIndex)
+    }
   }
 
   return isMainFormDataLoading || areBiophysicalInterventionsLoading ? (
@@ -383,22 +428,22 @@ const EcologicalStatusAndOutcomesForm = () => {
           {monitoringIndicators.map((indicator, indicatorIndex) => (
             <Box key={indicatorIndex}>
               <NestedLabel1>{`${indicator.category}: ${indicator.sub_category}`}</NestedLabel1>
-              {indicator.indicators.map((childSocioIndicator, childIndex) => (
+              {indicator.indicators.map((childMonitoringIndicator, childIndex) => (
                 <ListItem key={childIndex}>
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={childSocioIndicator.indictor}
-                        // checked={getSocioEconomicFieldsIndex(childSocioIndicator) !== -1}
+                        value={childMonitoringIndicator.indictor}
+                        // checked={getMonitoringFieldsIndex(childMonitoringIndicator) !== -1}
                         onChange={(event) =>
-                          handleMonitoringIndicatorsOnChange({
+                          handleMonitoringIndicatorsOnChange(
                             event,
                             indicator,
-                            childSocioIndicator
-                          })
+                            childMonitoringIndicator
+                          )
                         }></Checkbox>
                     }
-                    label={`${childSocioIndicator.indicator}: ${childSocioIndicator.metric}`}
+                    label={`${childMonitoringIndicator.indicator}: ${childMonitoringIndicator.metric}`}
                   />
                 </ListItem>
               ))}
