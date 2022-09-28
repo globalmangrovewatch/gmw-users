@@ -179,6 +179,8 @@ const EcologicalStatusAndOutcomesForm = () => {
     setIsSubmitting(true)
     setIsSubmitError(false)
 
+    console.log({ formData })
+
     const payload = {
       form_type: formType,
       answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
@@ -200,7 +202,7 @@ const EcologicalStatusAndOutcomesForm = () => {
 
   const handleMonitoringIndicatorsOnChange = (event, indicator, childMonitoringIndicator) => {
     const indicatorIndex = getMonitoringFieldsIndex(childMonitoringIndicator)
-
+    console.log({ indicatorIndex })
     if (event.target.checked) {
       monitoringIndicatorsAppend({
         mainLabel: indicator.category,
@@ -215,6 +217,7 @@ const EcologicalStatusAndOutcomesForm = () => {
     } else if (!event.target.checked) {
       monitoringIndicatorsRemove(indicatorIndex)
     }
+    console.log({ monitoringIndicatorsFields })
   }
 
   return isMainFormDataLoading || areBiophysicalInterventionsLoading ? (
