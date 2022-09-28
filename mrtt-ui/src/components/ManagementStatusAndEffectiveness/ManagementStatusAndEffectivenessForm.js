@@ -24,7 +24,9 @@ import language from '../../language'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
-import MONITORING_FORM_TYPES from '../../constants/monitoringFormTypes'
+import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
+
+const formType = MONITORING_FORM_CONSTANTS.managementStatusAndEffectiveness.payloadType
 
 const ManagementStatusAndEffectivenessForm = () => {
   const { monitoringFormId } = useParams()
@@ -74,6 +76,7 @@ const ManagementStatusAndEffectivenessForm = () => {
 
   useInitializeMonitoringForm({
     apiUrl: monitoringFormSingularUrl,
+    formType,
     isEditMode,
     questionMapping: questionMapping.managementStatusAndEffectiveness,
     resetForm,
@@ -114,7 +117,7 @@ const ManagementStatusAndEffectivenessForm = () => {
     setIsSubmitError(false)
 
     const payload = {
-      form_type: MONITORING_FORM_TYPES.managementStatusAndEffectiveness,
+      form_type: formType,
       answers: mapDataForApi('managementStatusAndEffectiveness', formData)
     }
 

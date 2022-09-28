@@ -159,7 +159,8 @@ const pages = {
       socioeconomicGovernanceStatusOutcomes: 'Socioeconomic and Governance Status and Outcomes',
       ecologicalStatusOutcomes: 'Ecological Status and Outcomes'
     },
-    addMonitoringSectionButton: 'Add Monitoring Section'
+    addMonitoringSectionButton: 'Add Monitoring Section',
+    noMonitoringSections: "You don't have any monitoring sections for this site yet."
   }
 }
 

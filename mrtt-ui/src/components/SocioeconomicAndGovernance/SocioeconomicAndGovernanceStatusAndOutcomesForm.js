@@ -40,11 +40,13 @@ import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiS
 import { socioIndicators } from '../../data/socio_indicator'
 import { findDataItem } from '../../library/findDataItem'
 import SocioeconomicOutcomesRow from './socioeconomicOutcomesRow'
-import MONITORING_FORM_TYPES from '../../constants/monitoringFormTypes'
 import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
+import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 
 const getSocioeconomicAims = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '3.2') ?? []
+
+const formType = MONITORING_FORM_CONSTANTS.socioeconomicGovernanceStatusAndOutcomes.payloadType
 
 const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const navigate = useNavigate()
@@ -141,11 +143,13 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
 
   useInitializeMonitoringForm({
     apiUrl: monitoringFormSingularUrl,
+    formType,
     isEditMode,
     questionMapping: questionMapping.socioeconomicAndGovernanceStatusAndOutcomes,
     resetForm,
     setIsLoading: setIsMainFormDataLoading
   })
+
   const createNewMonitoringForm = (payload) => {
     axios
       .post(monitoringFormsUrl, payload)
@@ -166,7 +170,6 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
       .put(monitoringFormSingularUrl, payload)
       .then(() => {
         setIsSubmitting(false)
-        toast.success(language.success.submit)
         toast.success(language.success.getEditThingSuccessMessage('This form'))
       })
       .catch(() => {
@@ -181,7 +184,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     setIsSubmitError(false)
 
     const payload = {
-      form_type: MONITORING_FORM_TYPES.socioeconomicGovernanceStatusAndOutcomes,
+      form_type: formType,
       answers: mapDataForApi('socioeconomicAndGovernanceStatusAndOutcomes', formData)
     }
 
