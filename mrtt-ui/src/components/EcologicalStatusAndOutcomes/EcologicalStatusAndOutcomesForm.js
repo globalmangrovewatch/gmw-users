@@ -8,12 +8,21 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { Controller, useForm } from 'react-hook-form'
-import { MenuItem, Stack, TextField } from '@mui/material'
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  ListItem,
+  MenuItem,
+  Stack,
+  TextField
+} from '@mui/material'
 
 import {
   Form,
   FormPageHeader,
   FormQuestionDiv,
+  NestedLabel1,
   QuestionSubSection,
   StickyFormLabel
 } from '../../styles/forms'
@@ -32,6 +41,7 @@ import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndCon
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { findDataItem } from '../../library/findDataItem'
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
+import { monitoringIndicators } from '../../data/monitoringIndicators'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2') ?? []
@@ -156,6 +166,10 @@ const EcologicalStatusAndOutcomesForm = () => {
     } else {
       createNewMonitoringForm(payload)
     }
+  }
+
+  const handleMonitoringIndicatorsOnChange = (event, indicator, childMonitoringIndicator) => {
+    console.log({ event, indicator, childMonitoringIndicator })
   }
 
   return isMainFormDataLoading || areBiophysicalInterventionsLoading ? (
@@ -364,7 +378,33 @@ const EcologicalStatusAndOutcomesForm = () => {
             </FormQuestionDiv>
           </div>
         ) : null}
-        {/* TABULAR INPUT GROUP SECTION 10.7 */}
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.mangroveEcologicalOutcomes.question}</StickyFormLabel>
+          {monitoringIndicators.map((indicator, indicatorIndex) => (
+            <Box key={indicatorIndex}>
+              <NestedLabel1>{`${indicator.category}: ${indicator.sub_category}`}</NestedLabel1>
+              {indicator.indicators.map((childSocioIndicator, childIndex) => (
+                <ListItem key={childIndex}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value={childSocioIndicator.indictor}
+                        // checked={getSocioEconomicFieldsIndex(childSocioIndicator) !== -1}
+                        onChange={(event) =>
+                          handleMonitoringIndicatorsOnChange({
+                            event,
+                            indicator,
+                            childSocioIndicator
+                          })
+                        }></Checkbox>
+                    }
+                    label={`${childSocioIndicator.indicator}: ${childSocioIndicator.metric}`}
+                  />
+                </ListItem>
+              ))}
+            </Box>
+          ))}
+        </FormQuestionDiv>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.mangroveEcologicalOutcomes.question}</StickyFormLabel>
         </FormQuestionDiv>
