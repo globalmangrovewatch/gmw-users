@@ -6,20 +6,18 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
+import { ButtonSecondary } from '../../styles/buttons'
+import { ContentWrapper, RowCenterCenter, TitleAndActionContainer } from '../../styles/containers'
 import { ItemSubTitle, ItemTitle, Link } from '../../styles/typography'
-import { ContentWrapper, TitleAndActionContainer } from '../../styles/containers'
-import { TableAlertnatingRows } from '../../styles/table'
+import { TableAlertnatingRows, WideTh } from '../../styles/table'
 import AddMonitoringSectionMenu from './AddMonitoringSectionMenu'
 import ItemDoesntExist from '../../components/ItemDoesntExist'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
-import { ButtonSecondary } from '../../styles/buttons'
+import MonitoringFormsList from './MonitoringFormsList'
 
 const pageLanguage = language.pages.siteQuestionsOverview
 
-const WideTh = styled('th')`
-  width: 100%;
-`
 const StyledSectionHeader = styled('h3')`
   text-transform: uppercase;
   font-weight: 100;
@@ -28,21 +26,37 @@ const StyledSectionHeader = styled('h3')`
 const SiteOverview = () => {
   const [doesSiteExist, setDoesSiteExist] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
-  const [site, setSite] = useState()
   const [landscape, setLandscape] = useState()
+  const [monitoringForms, setMonitoringForms] = useState([])
+  const [site, setSite] = useState()
   const { siteId } = useParams()
+
+  const monitoringFormsSortedByDate = monitoringForms.sort((formA, formB) => {
+    const formAMonitoringDate = formA.monitoring_date
+    const formBMonitoringDate = formB.monitoring_date
+
+    if (formAMonitoringDate > formBMonitoringDate || !formAMonitoringDate) {
+      return -1
+    }
+    if (formAMonitoringDate < formBMonitoringDate) {
+      return 1
+    }
+    return 0
+  })
 
   useEffect(
     function loadDataFromServer() {
       if (siteId) {
         const sitesDataUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}`
         const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes`
+        const monitoringUrl = `${sitesDataUrl}/monitoring_answers`
 
-        Promise.all([axios.get(sitesDataUrl), axios.get(landscapesUrl)])
-          .then(([{ data: siteData }, { data: landscapesData }]) => {
+        Promise.all([axios.get(sitesDataUrl), axios.get(landscapesUrl), axios.get(monitoringUrl)])
+          .then(([{ data: siteData }, { data: landscapesData }, { data: monitoringFormsData }]) => {
             setIsLoading(false)
             setSite(siteData)
             setLandscape(landscapesData.find((landscape) => landscape.id === siteData.landscape_id))
+            setMonitoringForms(monitoringFormsData)
           })
           .catch((error) => {
             setIsLoading(false)
@@ -133,6 +147,14 @@ const SiteOverview = () => {
         </TableAlertnatingRows>
         <StyledSectionHeader>{pageLanguage.formGroupTitle.monitoring}</StyledSectionHeader>
         <AddMonitoringSectionMenu siteId={siteId} />
+        {monitoringFormsSortedByDate.length ? (
+          <MonitoringFormsList
+            monitoringFormsSortedByDate={monitoringFormsSortedByDate}
+            siteId={siteId}
+          />
+        ) : (
+          <RowCenterCenter>{pageLanguage.noMonitoringSections}</RowCenterCenter>
+        )}
       </ContentWrapper>
     </>
   )
