@@ -100,7 +100,7 @@ export const questionMapping = {
     naturalRegenerationOnSite: '10.5',
     percentageSurvival: '10.6',
     causeOfLowSurvival: '10.6a',
-    mangroveEcologicalOutcomes: '10.7',
+    monitoringIndicators: '10.7',
     achievementOfEcologicalAims: '10.8'
   }
 }

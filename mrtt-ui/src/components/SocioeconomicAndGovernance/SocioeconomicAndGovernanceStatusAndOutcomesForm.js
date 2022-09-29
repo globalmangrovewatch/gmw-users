@@ -39,7 +39,7 @@ import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndCon
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { socioIndicators } from '../../data/socioIndicators'
 import { findDataItem } from '../../library/findDataItem'
-import SocioeconomicOutcomesRow from './socioeconomicOutcomesRow'
+import SocioeconomicOutcomesRow from './SocioeconomicOutcomesRow'
 import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import ButtonDeleteForm from '../ButtonDeleteForm'

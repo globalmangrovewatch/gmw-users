@@ -219,13 +219,13 @@ const EcologicalStatusAndOutcomesForm = () => {
   const getMonitoringFieldsIndex = (childMonitoringIndicator) =>
     monitoringIndicatorsFields.findIndex(
       (monitoringIndicator) =>
-        monitoringIndicator.indicator === childMonitoringIndicator.indicator &&
+        monitoringIndicator.indictor === childMonitoringIndicator.indicator &&
         monitoringIndicator.metric === childMonitoringIndicator.metric
     )
 
   const handleMonitoringIndicatorsOnChange = (event, indicator, childMonitoringIndicator) => {
     const indicatorIndex = getMonitoringFieldsIndex(childMonitoringIndicator)
-    console.log({ indicatorIndex })
+
     if (event.target.checked) {
       monitoringIndicatorsAppend({
         mainLabel: indicator.category,
@@ -240,7 +240,6 @@ const EcologicalStatusAndOutcomesForm = () => {
     } else if (!event.target.checked) {
       monitoringIndicatorsRemove(indicatorIndex)
     }
-    console.log({ monitoringIndicatorsFields })
   }
 
   return isMainFormDataLoading || areBiophysicalInterventionsLoading ? (
@@ -460,7 +459,7 @@ const EcologicalStatusAndOutcomesForm = () => {
                     control={
                       <Checkbox
                         value={childMonitoringIndicator.indictor}
-                        // checked={getMonitoringFieldsIndex(childMonitoringIndicator) !== -1}
+                        checked={getMonitoringFieldsIndex(childMonitoringIndicator) !== -1}
                         onChange={(event) =>
                           handleMonitoringIndicatorsOnChange(
                             event,
@@ -477,7 +476,9 @@ const EcologicalStatusAndOutcomesForm = () => {
           ))}
         </FormQuestionDiv>
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.mangroveEcologicalOutcomes.question}</StickyFormLabel>
+          <StickyFormLabel>
+            {questions.mangroveEcologicalOutcomesAdditionalData.question}
+          </StickyFormLabel>
         </FormQuestionDiv>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.achievementOfEcologicalAims.question}</StickyFormLabel>
