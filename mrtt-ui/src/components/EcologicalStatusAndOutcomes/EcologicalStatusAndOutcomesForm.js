@@ -44,6 +44,7 @@ import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import { monitoringIndicators } from '../../data/monitoringIndicators'
 import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
+import EcologicalOutcomesRow from './EcologicalOutcomesRow'
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2') ?? []
@@ -80,7 +81,7 @@ const EcologicalStatusAndOutcomesForm = () => {
           measurement: yup.mixed(),
           unit: yup.string(),
           comparison: yup.string(),
-          mesurementComparison: yup.mixed()
+          measurementComparison: yup.mixed()
         })
       )
       .default([]),
@@ -123,6 +124,7 @@ const EcologicalStatusAndOutcomesForm = () => {
   const mangroveConditionImprovementWatcher = watchForm('mangroveConditionImprovement')
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
+  const monitoringIndicatorsWatcher = watchForm('monitoringIndicators')
 
   useEffect(
     function loadBiophysicalInterventions() {
@@ -183,8 +185,6 @@ const EcologicalStatusAndOutcomesForm = () => {
     setIsSubmitting(true)
     setIsSubmitError(false)
 
-    console.log({ formData })
-
     const payload = {
       form_type: formType,
       answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
@@ -219,7 +219,7 @@ const EcologicalStatusAndOutcomesForm = () => {
   const getMonitoringFieldsIndex = (childMonitoringIndicator) =>
     monitoringIndicatorsFields.findIndex(
       (monitoringIndicator) =>
-        monitoringIndicator.indictor === childMonitoringIndicator.indicator &&
+        monitoringIndicator.indicator === childMonitoringIndicator.indicator &&
         monitoringIndicator.metric === childMonitoringIndicator.metric
     )
 
@@ -230,17 +230,19 @@ const EcologicalStatusAndOutcomesForm = () => {
       monitoringIndicatorsAppend({
         mainLabel: indicator.category,
         secondaryLabel: indicator.sub_category,
-        indictor: childMonitoringIndicator.indicator,
+        indicator: childMonitoringIndicator.indicator,
         metric: childMonitoringIndicator.metric,
         measurement: '',
         unit: '',
         comparison: '',
-        mesurementComparison: ''
+        measurementComparison: ''
       })
     } else if (!event.target.checked) {
       monitoringIndicatorsRemove(indicatorIndex)
     }
   }
+
+  const updateMonitoringOutcome = () => {}
 
   return isMainFormDataLoading || areBiophysicalInterventionsLoading ? (
     <LoadingIndicator />
@@ -458,7 +460,7 @@ const EcologicalStatusAndOutcomesForm = () => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={childMonitoringIndicator.indictor}
+                        value={childMonitoringIndicator.indicator}
                         checked={getMonitoringFieldsIndex(childMonitoringIndicator) !== -1}
                         onChange={(event) =>
                           handleMonitoringIndicatorsOnChange(
@@ -475,11 +477,29 @@ const EcologicalStatusAndOutcomesForm = () => {
             </Box>
           ))}
         </FormQuestionDiv>
-        <FormQuestionDiv>
-          <StickyFormLabel>
-            {questions.mangroveEcologicalOutcomesAdditionalData.question}
-          </StickyFormLabel>
-        </FormQuestionDiv>
+        {monitoringIndicatorsWatcher?.length > 0 ? (
+          <FormQuestionDiv>
+            <StickyFormLabel>
+              {questions.mangroveEcologicalOutcomesAdditionalData.question}
+            </StickyFormLabel>
+            {monitoringIndicatorsFields?.length > 0
+              ? monitoringIndicatorsFields?.map((item, index) => (
+                  <EcologicalOutcomesRow
+                    key={index}
+                    index={index}
+                    mainLabel={item.mainLabel}
+                    secondaryLabel={item.secondaryLabel}
+                    indicator={item.indicator}
+                    metric={item.metric}
+                    measurement={item.measurement}
+                    unit={item.unit}
+                    comparison={item.comparison}
+                    measurementComparison={item.measurementComparison}
+                    updateItem={updateMonitoringOutcome}></EcologicalOutcomesRow>
+                ))
+              : null}
+          </FormQuestionDiv>
+        ) : null}
         <FormQuestionDiv>
           <StickyFormLabel>{questions.achievementOfEcologicalAims.question}</StickyFormLabel>
           <Controller

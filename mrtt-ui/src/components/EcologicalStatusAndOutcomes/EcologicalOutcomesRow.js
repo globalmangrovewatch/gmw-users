@@ -1,111 +1,98 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Box, Checkbox, List, ListItem, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, TextField } from '@mui/material'
 
 import { TabularSectionDiv, TabularLabel, TabularInputSection } from '../../styles/forms'
-import { TrendOptions, TypeOptions } from '../../data/socioeconomicOutcomesOptions'
-import { ErrorText } from '../../styles/typography'
+// import { TrendOptions, TypeOptions } from '../../data/socioeconomicOutcomesOptions'
+// import { ErrorText } from '../../styles/typography'
 
 const EcologicalOutcomesRow = ({
-  outcome,
-  type,
-  trend,
-  linkedAims,
-  selectedAims,
   index,
+  mainLabel,
+  secondaryLabel,
+  indicator,
+  metric,
+  measurement,
+  unit,
+  comparison,
   updateItem
 }) => {
-  const [initialType, setInitialType] = useState('')
-  const [currentType, setCurrentType] = useState('')
+  const [initialMeasurement, setInitialMeasurement] = useState('')
+  const [currentMeasurement, setCurrentMeasurement] = useState('')
 
-  const [initialTrend, setInitialTrend] = useState('')
-  const [currentTrend, setCurrentTrend] = useState('')
+  const [initialUnit, setInitialUnit] = useState('')
+  const [currentUnit, setCurrentUnit] = useState('')
 
-  const [initialLinkedAims, setInitialLinkedAims] = useState([])
-  const [currentLinkedAims, setCurrentLinkedAims] = useState([])
+  const [initialComparison, setInitialComparison] = useState([])
+  const [currentComparison, setCurrentComparison] = useState([])
 
   const handleUpdate = () => {
-    if (currentType !== initialType) {
-      updateItem({ index, currentType })
+    if (currentMeasurement !== initialMeasurement) {
+      updateItem({ index, currentMeasurement })
     }
-    if (currentTrend !== initialTrend) {
-      updateItem({ index, currentTrend })
+    if (currentUnit !== initialUnit) {
+      updateItem({ index, currentUnit })
     }
-    if (currentLinkedAims !== initialLinkedAims) {
-      updateItem({ index, currentLinkedAims })
+    if (currentComparison !== initialComparison) {
+      updateItem({ index, currentComparison })
     }
   }
 
   const _setFormValues = useEffect(() => {
-    if (type) {
-      setCurrentType(type)
-      setInitialType(type)
+    if (measurement) {
+      setCurrentMeasurement(measurement)
+      setInitialMeasurement(measurement)
     }
-    if (trend) {
-      setCurrentTrend(trend)
-      setInitialTrend(trend)
+    if (unit) {
+      setCurrentUnit(unit)
+      setInitialUnit(unit)
     }
-    if (linkedAims) {
-      setCurrentLinkedAims(linkedAims)
-      setInitialLinkedAims(linkedAims)
+    if (comparison) {
+      setCurrentComparison(comparison)
+      setInitialComparison(comparison)
     }
-  }, [linkedAims, trend, type])
+  }, [comparison, measurement, unit])
 
-  const handleSelectedAimsOnChange = (event, aim) => {
-    const linkedAimsCopy = [...currentLinkedAims]
+  //   const handleSelectedAimsOnChange = (event, aim) => {
+  //     const linkedAimsCopy = [...currentLinkedAims]
 
-    if (event.target.checked) {
-      linkedAimsCopy.push(aim)
-      setCurrentLinkedAims(linkedAimsCopy)
-    } else {
-      const aimIndex = linkedAimsCopy.findIndex((item) => item === aim)
-      linkedAimsCopy.splice(aimIndex, 1)
-      setCurrentLinkedAims(linkedAimsCopy)
-    }
-  }
+  //     if (event.target.checked) {
+  //       linkedAimsCopy.push(aim)
+  //       setCurrentLinkedAims(linkedAimsCopy)
+  //     } else {
+  //       const aimIndex = linkedAimsCopy.findIndex((item) => item === aim)
+  //       linkedAimsCopy.splice(aimIndex, 1)
+  //       setCurrentLinkedAims(linkedAimsCopy)
+  //     }
+  //   }
 
   return (
     <TabularSectionDiv>
       <Box sx={{ width: '100%' }}>
         <TabularInputSection>
-          <TabularLabel>{outcome}</TabularLabel>
+          <TabularLabel>{`${mainLabel}: ${secondaryLabel}`}</TabularLabel>
+          <TabularLabel>{`${indicator}: ${metric}`}</TabularLabel>
         </TabularInputSection>
         <TabularInputSection>
-          <TabularLabel>Type</TabularLabel>
+          <TabularLabel>Measurement</TabularLabel>
           <TextField
-            select
             sx={{ width: '12.9em' }}
-            value={currentType}
-            label='Type'
+            value={currentMeasurement}
+            label='Measurement'
             onBlur={handleUpdate}
-            onChange={(e) => setCurrentType(e.target.value)}>
-            {TypeOptions.map((option, index) => (
-              <MenuItem key={index} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </TextField>
+            onChange={(e) => setCurrentMeasurement(e.target.value)}></TextField>
         </TabularInputSection>
-        {currentType === 'Observed' ? (
-          <TabularInputSection>
-            <TabularLabel>Trend</TabularLabel>
-            <TextField
-              select
-              sx={{ width: '12.9em' }}
-              value={currentTrend}
-              label='Trend'
-              onBlur={handleUpdate}
-              onChange={(e) => setCurrentTrend(e.target.value)}>
-              {TrendOptions.map((option, index) => (
-                <MenuItem key={index} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
-            </TextField>
-          </TabularInputSection>
-        ) : null}
-
         <TabularInputSection>
+          <TabularLabel>Unit</TabularLabel>
+          <TextField
+            sx={{ width: '12.9em' }}
+            value={currentUnit}
+            label='Unit'
+            onBlur={handleUpdate}
+            onChange={(e) => setCurrentUnit(e.target.value)}></TextField>
+        </TabularInputSection>
+
+        {/* <TabularInputSection>
           <TabularLabel>Link outcome to aims</TabularLabel>
           {selectedAims.length > 0 ? (
             <List>
@@ -127,20 +114,23 @@ const EcologicalOutcomesRow = ({
           ) : (
             <ErrorText>Please select aims in 3.2</ErrorText>
           )}
-        </TabularInputSection>
+        </TabularInputSection> */}
       </Box>
     </TabularSectionDiv>
   )
 }
 
 EcologicalOutcomesRow.propTypes = {
-  outcome: PropTypes.string.isRequired,
-  type: PropTypes.string,
-  trend: PropTypes.string,
-  linkedAims: PropTypes.arrayOf(PropTypes.string),
-  selectedAims: PropTypes.arrayOf(PropTypes.string),
-  updateItem: PropTypes.func.isRequired,
-  index: PropTypes.number.isRequired
+  index: PropTypes.number.isRequired,
+  mainLabel: PropTypes.string.isRequired,
+  secondaryLabel: PropTypes.string,
+  indicator: PropTypes.string,
+  metric: PropTypes.string,
+  measurement: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  unit: PropTypes.string,
+  comparison: PropTypes.string,
+  measurementComparison: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  updateItem: PropTypes.func.isRequired
 }
 
 export default EcologicalOutcomesRow
