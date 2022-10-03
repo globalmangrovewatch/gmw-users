@@ -101,7 +101,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     fields: socioeconomicOutcomesFields,
     append: socioeconomicOutcomesAppend,
     remove: socioeconomicOutcomesRemove,
-    replace: socioeconomicOutcomesReplace,
+    // replace: socioeconomicOutcomesReplace,
     update: socioeconomicOutcomesUpdate
   } = useFieldArray({ name: 'socioeconomicOutcomes', control })
 
@@ -142,7 +142,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           toast.error(language.error.apiLoad)
         })
     },
-    [monitoringFormsUrl, registrationInterventionFormsUrl, socioeconomicOutcomesReplace]
+    [registrationInterventionFormsUrl]
   )
 
   useInitializeMonitoringForm({

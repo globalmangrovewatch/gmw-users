@@ -46,8 +46,12 @@ import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import EcologicalOutcomesRow from './EcologicalOutcomesRow'
 
+const getEcologicalAims = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '3.1') ?? []
+
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2') ?? []
+
 const formType = MONITORING_FORM_CONSTANTS.ecologicalStatusAndOutcomes.payloadType
 
 const EcologicalStatusAndOutcomesForm = () => {
@@ -113,9 +117,9 @@ const EcologicalStatusAndOutcomesForm = () => {
   } = useFieldArray({ name: 'monitoringIndicators', control })
 
   const { siteId } = useParams()
-  const interventionAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/intervention_answers`
   const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
   const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
+  const registrationInterventionFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isMainFormDataLoading, setIsMainFormDataLoading] = useState(false)
@@ -126,22 +130,32 @@ const EcologicalStatusAndOutcomesForm = () => {
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
   const monitoringIndicatorsWatcher = watchForm('monitoringIndicators')
+  const [ecologicalAims, setEcologicalAims] = useState([])
 
   useEffect(
     function loadBiophysicalInterventions() {
       setAreBiophysicalInterventionsLoading(true)
       axios
-        .get(interventionAnswersUrl)
-        .then((response) => {
+        .get(registrationInterventionFormsUrl)
+        .then((registrationInterventionResponse) => {
           setAreBiophysicalInterventionsLoading(false)
-          setBiophysicalInterventions(getBiophysicalInterventions(response))
+          setBiophysicalInterventions(getBiophysicalInterventions(registrationInterventionResponse))
+          const ecologicalAimsInitialVal = getEcologicalAims(registrationInterventionResponse)
+
+          if (ecologicalAimsInitialVal.selectedValues?.length > 0) {
+            const ecologicalAimsFlattened = ecologicalAimsInitialVal.selectedValues
+            if (ecologicalAimsInitialVal.otherValue) {
+              ecologicalAimsFlattened.push(ecologicalAimsInitialVal.otherValue)
+            }
+            setEcologicalAims(ecologicalAimsFlattened)
+          }
         })
         .catch(() => {
           setAreBiophysicalInterventionsLoading(false)
           toast.error(language.error.apiLoad)
         })
     },
-    [interventionAnswersUrl]
+    [registrationInterventionFormsUrl]
   )
 
   useInitializeMonitoringForm({
@@ -498,7 +512,7 @@ const EcologicalStatusAndOutcomesForm = () => {
                     comparison={item.comparison}
                     measurementComparison={item.measurementComparison}
                     linkedAims={item.linkedAims}
-                    selectedAims={item.selectedAims}
+                    selectedAims={ecologicalAims}
                     updateItem={updateMonitoringOutcome}></EcologicalOutcomesRow>
                 ))
               : null}
