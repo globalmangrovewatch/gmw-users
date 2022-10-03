@@ -81,7 +81,8 @@ const EcologicalStatusAndOutcomesForm = () => {
           measurement: yup.mixed(),
           unit: yup.string(),
           comparison: yup.string(),
-          measurementComparison: yup.mixed()
+          measurementComparison: yup.mixed(),
+          linkedAims: yup.array().of(yup.string()).default([])
         })
       )
       .default([]),
@@ -235,7 +236,8 @@ const EcologicalStatusAndOutcomesForm = () => {
         measurement: '',
         unit: '',
         comparison: '',
-        measurementComparison: ''
+        measurementComparison: '',
+        linkedAims: []
       })
     } else if (!event.target.checked) {
       monitoringIndicatorsRemove(indicatorIndex)
@@ -495,6 +497,8 @@ const EcologicalStatusAndOutcomesForm = () => {
                     unit={item.unit}
                     comparison={item.comparison}
                     measurementComparison={item.measurementComparison}
+                    linkedAims={item.linkedAims}
+                    selectedAims={item.selectedAims}
                     updateItem={updateMonitoringOutcome}></EcologicalOutcomesRow>
                 ))
               : null}

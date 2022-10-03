@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Box, MenuItem, TextField } from '@mui/material'
+import { Box, Checkbox, List, ListItem, MenuItem, TextField, Typography } from '@mui/material'
 
 import {
   NestedLabel1,
@@ -10,8 +10,7 @@ import {
   TabularInputSection
 } from '../../styles/forms'
 import { comparisonOptions } from '../../data/ecologicalOptions'
-// import { TrendOptions, TypeOptions } from '../../data/socioeconomicOutcomesOptions'
-// import { ErrorText } from '../../styles/typography'
+import { ErrorText } from '../../styles/typography'
 
 const EcologicalOutcomesRow = ({
   index,
@@ -23,6 +22,8 @@ const EcologicalOutcomesRow = ({
   unit,
   comparison,
   measurementComparison,
+  linkedAims,
+  selectedAims,
   updateItem
 }) => {
   const [initialMeasurement, setInitialMeasurement] = useState('')
@@ -37,6 +38,9 @@ const EcologicalOutcomesRow = ({
   const [initialMeasurementComparison, setInitialMeasurementComparison] = useState([])
   const [currentMeasurementComparison, setCurrentMeasurementComparison] = useState([])
 
+  const [initialLinkedAims, setInitialLinkedAims] = useState([])
+  const [currentLinkedAims, setCurrentLinkedAims] = useState([])
+
   const handleUpdate = () => {
     if (currentMeasurement !== initialMeasurement) {
       updateItem({ index, currentMeasurement })
@@ -49,6 +53,9 @@ const EcologicalOutcomesRow = ({
     }
     if (currentMeasurementComparison !== initialMeasurementComparison) {
       updateItem({ index, currentMeasurementComparison })
+    }
+    if (currentLinkedAims !== initialLinkedAims) {
+      updateItem({ index, currentLinkedAims })
     }
   }
 
@@ -69,20 +76,24 @@ const EcologicalOutcomesRow = ({
       setCurrentMeasurementComparison(measurementComparison)
       setInitialMeasurementComparison(measurementComparison)
     }
-  }, [comparison, measurement, measurementComparison, unit])
+    if (linkedAims) {
+      setCurrentLinkedAims(linkedAims)
+      setInitialLinkedAims(linkedAims)
+    }
+  }, [comparison, linkedAims, measurement, measurementComparison, unit])
 
-  //   const handleSelectedAimsOnChange = (event, aim) => {
-  //     const linkedAimsCopy = [...currentLinkedAims]
+  const handleSelectedAimsOnChange = (event, aim) => {
+    const linkedAimsCopy = [...currentLinkedAims]
 
-  //     if (event.target.checked) {
-  //       linkedAimsCopy.push(aim)
-  //       setCurrentLinkedAims(linkedAimsCopy)
-  //     } else {
-  //       const aimIndex = linkedAimsCopy.findIndex((item) => item === aim)
-  //       linkedAimsCopy.splice(aimIndex, 1)
-  //       setCurrentLinkedAims(linkedAimsCopy)
-  //     }
-  //   }
+    if (event.target.checked) {
+      linkedAimsCopy.push(aim)
+      setCurrentLinkedAims(linkedAimsCopy)
+    } else {
+      const aimIndex = linkedAimsCopy.findIndex((item) => item === aim)
+      linkedAimsCopy.splice(aimIndex, 1)
+      setCurrentLinkedAims(linkedAimsCopy)
+    }
+  }
 
   return (
     <TabularSectionDiv>
@@ -137,7 +148,7 @@ const EcologicalOutcomesRow = ({
             onChange={(e) => setCurrentMeasurementComparison(e.target.value)}></TextField>
         </TabularInputSection>
 
-        {/* <TabularInputSection>
+        <TabularInputSection>
           <TabularLabel>Link outcome to aims</TabularLabel>
           {selectedAims.length > 0 ? (
             <List>
@@ -157,9 +168,9 @@ const EcologicalOutcomesRow = ({
               ))}
             </List>
           ) : (
-            <ErrorText>Please select aims in 3.2</ErrorText>
+            <ErrorText>Please select aims in 3.1</ErrorText>
           )}
-        </TabularInputSection> */}
+        </TabularInputSection>
       </Box>
     </TabularSectionDiv>
   )
@@ -175,6 +186,8 @@ EcologicalOutcomesRow.propTypes = {
   unit: PropTypes.string,
   comparison: PropTypes.string,
   measurementComparison: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  linkedAims: PropTypes.arrayOf(PropTypes.string),
+  selectedAims: PropTypes.arrayOf(PropTypes.string),
   updateItem: PropTypes.func.isRequired
 }
 
