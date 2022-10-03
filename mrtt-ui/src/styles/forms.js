@@ -51,6 +51,10 @@ export const NestedLabel2 = styled('label')`
   margin-top: 0.75em;
   text-transform: uppercase;
 `
+export const NestedLabel3 = styled('label')`
+  text-transform: uppercase;
+`
+
 export const NestedQuestion = styled('div')`
   padding: ${themeMui.spacing(1)};
   padding-left: ${themeMui.spacing(2)};
