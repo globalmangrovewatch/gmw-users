@@ -28,6 +28,8 @@ import SocioeconomicAndGovernanceStatusAndOutcomesForm from './components/Socioe
 import EcologicalStatusAndOutcomesForm from './components/EcologicalStatusAndOutcomes/EcologicalStatusAndOutcomesForm'
 import ManageOrganizationUsers from './views/ManageOrganizationUsers'
 import NewOrganizationUser from './views/NewOrganizationUser'
+import ForgotPasswordForm from './views/Auth/ForgotPasswordForm'
+import ResetPasswordForm from './views/Auth/ResetPasswordForm'
 
 function App() {
   return (
@@ -114,6 +116,8 @@ function App() {
             <Route path='/auth/signup' element={<SignupForm />} />
             <Route path='/auth/login' element={<LoginForm />} />
             <Route path='/auth/login/newUser' element={<LoginForm isUserNew={true} />} />
+            <Route path='auth/forgot-password' element={<ForgotPasswordForm />} />
+            <Route path='auth/password/reset/' element={<ResetPasswordForm />} />
           </Routes>
         </GlobalLayout>
       </Router>
