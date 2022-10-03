@@ -32,11 +32,11 @@ const EcologicalOutcomesRow = ({
   const [initialUnit, setInitialUnit] = useState('')
   const [currentUnit, setCurrentUnit] = useState('')
 
-  const [initialComparison, setInitialComparison] = useState([])
-  const [currentComparison, setCurrentComparison] = useState([])
+  const [initialComparison, setInitialComparison] = useState('')
+  const [currentComparison, setCurrentComparison] = useState('')
 
-  const [initialMeasurementComparison, setInitialMeasurementComparison] = useState([])
-  const [currentMeasurementComparison, setCurrentMeasurementComparison] = useState([])
+  const [initialMeasurementComparison, setInitialMeasurementComparison] = useState('')
+  const [currentMeasurementComparison, setCurrentMeasurementComparison] = useState('')
 
   const [initialLinkedAims, setInitialLinkedAims] = useState([])
   const [currentLinkedAims, setCurrentLinkedAims] = useState([])
@@ -142,7 +142,7 @@ const EcologicalOutcomesRow = ({
           <TabularLabel>Measurement - Comparison</TabularLabel>
           <TextField
             sx={{ width: '12.9em' }}
-            value={currentUnit}
+            value={currentMeasurementComparison}
             label='Value'
             onBlur={handleUpdate}
             onChange={(e) => setCurrentMeasurementComparison(e.target.value)}></TextField>

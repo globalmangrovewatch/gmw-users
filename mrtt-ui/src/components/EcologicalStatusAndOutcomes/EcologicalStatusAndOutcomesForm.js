@@ -111,9 +111,8 @@ const EcologicalStatusAndOutcomesForm = () => {
   const {
     fields: monitoringIndicatorsFields,
     append: monitoringIndicatorsAppend,
-    remove: monitoringIndicatorsRemove
-    // replace: monitoringIndicatorsReplace,
-    // update: monitoringIndicatorsUpdate
+    remove: monitoringIndicatorsRemove,
+    update: monitoringIndicatorsUpdate
   } = useFieldArray({ name: 'monitoringIndicators', control })
 
   const { siteId } = useParams()
@@ -258,7 +257,25 @@ const EcologicalStatusAndOutcomesForm = () => {
     }
   }
 
-  const updateMonitoringOutcome = () => {}
+  const updateMonitoringOutcome = ({
+    index,
+    currentMeasurement,
+    currentUnit,
+    currentComparison,
+    currentMeasurementComparison,
+    currentLinkedAims
+  }) => {
+    const currentItem = monitoringIndicatorsFields[index]
+
+    if (currentMeasurement) currentItem.measurement = currentMeasurement
+    if (currentUnit) currentItem.unit = currentUnit
+    if (currentComparison) currentItem.comparison = currentComparison
+    if (currentMeasurementComparison)
+      currentItem.measurementComparison = currentMeasurementComparison
+    if (currentLinkedAims) currentItem.linkedAims = currentLinkedAims
+
+    monitoringIndicatorsUpdate(index, currentItem)
+  }
 
   return isMainFormDataLoading || areBiophysicalInterventionsLoading ? (
     <LoadingIndicator />

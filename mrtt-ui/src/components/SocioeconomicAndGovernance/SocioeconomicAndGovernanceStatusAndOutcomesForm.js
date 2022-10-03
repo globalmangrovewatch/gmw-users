@@ -101,7 +101,6 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     fields: socioeconomicOutcomesFields,
     append: socioeconomicOutcomesAppend,
     remove: socioeconomicOutcomesRemove,
-    // replace: socioeconomicOutcomesReplace,
     update: socioeconomicOutcomesUpdate
   } = useFieldArray({ name: 'socioeconomicOutcomes', control })
 
