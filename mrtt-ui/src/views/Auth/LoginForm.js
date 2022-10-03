@@ -10,13 +10,12 @@ import PropTypes from 'prop-types'
 import { Alert, FormLabel, TextField } from '@mui/material'
 import { ButtonCancel, ButtonSubmit } from '../../styles/buttons'
 import { ButtonContainer, PagePadding, RowFlexEnd } from '../../styles/containers'
-import { ErrorText, PageTitle } from '../../styles/typography'
+import { ErrorText, LinkLooksLikeButtonSecondary, PageTitle } from '../../styles/typography'
 import { Form, MainFormDiv } from '../../styles/forms'
-import Button from '@mui/material/Button'
+import { useAuth } from '../../hooks/useAuth'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
-
-import { useAuth } from '../../hooks/useAuth'
+import RequiredIndicator from '../../components/RequiredIndicator'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),
@@ -24,6 +23,8 @@ const validationSchema = yup.object({
 })
 
 const formDefaultValues = { email: '', password: '' }
+
+const pageLanguage = language.pages.login
 
 const LoginForm = ({ isUserNew }) => {
   const [isLoading] = useState(false)
@@ -75,21 +76,25 @@ const LoginForm = ({ isUserNew }) => {
     navigate(-1)
   }
 
-  const handleSignUpOnClick = () => {
-    navigate('/auth/signup')
-  }
-
   const form = (
     <MainFormDiv>
       <PagePadding>
-        <PageTitle>Login</PageTitle>
+        <PageTitle>{pageLanguage.title}</PageTitle>
         {isUserNew ? (
           <Alert variant='outlined' severity='success'>
             {language.success.signup}
           </Alert>
         ) : null}
+        <RowFlexEnd>
+          <LinkLooksLikeButtonSecondary to='/auth/forgot-password'>
+            {pageLanguage.forgotPassowrd}
+          </LinkLooksLikeButtonSecondary>
+        </RowFlexEnd>
         <Form onSubmit={validateInputs(handleSubmit)}>
-          <FormLabel htmlFor='email'>Email* </FormLabel>
+          <FormLabel htmlFor='email'>
+            {pageLanguage.email}
+            <RequiredIndicator />
+          </FormLabel>
           <Controller
             name='email'
             control={formControl}
@@ -97,7 +102,10 @@ const LoginForm = ({ isUserNew }) => {
           />
           <ErrorText>{errors?.email?.message}</ErrorText>
 
-          <FormLabel htmlFor='password'>Password* </FormLabel>
+          <FormLabel htmlFor='password'>
+            {pageLanguage.password}
+            <RequiredIndicator />
+          </FormLabel>
           <Controller
             name='password'
             control={formControl}
@@ -106,9 +114,9 @@ const LoginForm = ({ isUserNew }) => {
           <ErrorText>{errors?.password?.message}</ErrorText>
           <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
           <ButtonContainer>
-            <Button variant='text' onClick={handleSignUpOnClick}>
-              Sign Up
-            </Button>
+            <LinkLooksLikeButtonSecondary to='/auth/signup'>
+              {pageLanguage.signUp}
+            </LinkLooksLikeButtonSecondary>
             <ButtonCancel onClick={handleCancelClick} />
             <ButtonSubmit isSubmitting={isSubmitting} />
           </ButtonContainer>
