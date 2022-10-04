@@ -23,6 +23,7 @@ import QuestionNav from '../QuestionNav'
 import RestorationAimsCheckboxGroupWithLabel from './RestorationAimsCheckboxGroupWithLabel'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
+import { Alert } from '@mui/material'
 
 const getStakeholders = (registrationAnswersFromServer) =>
   registrationAnswersFromServer?.data.find((dataItem) => dataItem.question_id === '2.1')
@@ -35,6 +36,7 @@ const RestorationAimsForm = () => {
   const { site_name } = useSiteInfo()
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const areThereStakeholders = !!stakeholders.length
   const validationSchema = yup.object({
     ecologicalAims: multiselectWithOtherValidation,
     socioEconomicAims: multiselectWithOtherValidation,
@@ -82,6 +84,10 @@ const RestorationAimsForm = () => {
       })
   }
 
+  const noStakeholdersWarning = (
+    <Alert severity='info'>{language.pages.restorationAims.missingStakeholdersWarning}</Alert>
+  )
+
   return isLoading ? (
     <LoadingIndicator />
   ) : (
@@ -99,6 +105,7 @@ const RestorationAimsForm = () => {
       <FormValidationMessageIfErrors formErrors={errors} />
       <Form onSubmit={validateInputs(handleSubmit)}>
         <FormQuestionDiv>
+          {!areThereStakeholders ? noStakeholdersWarning : null}
           <RestorationAimsCheckboxGroupWithLabel
             stakeholders={stakeholders}
             fieldName='ecologicalAims'
@@ -110,6 +117,7 @@ const RestorationAimsForm = () => {
           <ErrorText>{errors.ecologicalAims?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
+          {!areThereStakeholders ? noStakeholdersWarning : null}
           <RestorationAimsCheckboxGroupWithLabel
             stakeholders={stakeholders}
             fieldName='socioEconomicAims'
@@ -121,6 +129,7 @@ const RestorationAimsForm = () => {
           <ErrorText>{errors.socioEconomicAims?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
+          {!areThereStakeholders ? noStakeholdersWarning : null}
           <RestorationAimsCheckboxGroupWithLabel
             stakeholders={stakeholders}
             fieldName='otherAims'

@@ -1,6 +1,15 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Box, Checkbox, List, ListItem, MenuItem, TextField, Typography } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Checkbox,
+  List,
+  ListItem,
+  MenuItem,
+  TextField,
+  Typography
+} from '@mui/material'
 
 import { TabularSectionDiv, TabularLabel, TabularInputSection } from '../../styles/forms'
 import {
@@ -8,7 +17,7 @@ import {
   TrendOptions,
   TypeOptions
 } from '../../data/socioeconomicOutcomesOptions'
-import { ErrorText } from '../../styles/typography'
+import language from '../../language'
 
 const SocioeconomicOutcomesRow = ({
   outcome,
@@ -214,7 +223,9 @@ const SocioeconomicOutcomesRow = ({
               ))}
             </List>
           ) : (
-            <ErrorText>Please select aims in 3.2</ErrorText>
+            <Alert severity='info'>
+              {language.pages.socioeconomicGovernanceStatusOutcomes.missingSocioeconomicAims}
+            </Alert>
           )}
         </TabularInputSection>
       </Box>
