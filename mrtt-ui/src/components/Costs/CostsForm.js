@@ -171,8 +171,7 @@ const CostsForm = () => {
             (item) => item.interventionType
           )
         }
-
-        if (otherActivitiesImplementedInitialVal.selectedValues.length) {
+        if (otherActivitiesImplementedInitialVal.selectedValues?.length) {
           otherInterventionActivities = otherActivitiesImplementedInitialVal.selectedValues
         }
         if (
