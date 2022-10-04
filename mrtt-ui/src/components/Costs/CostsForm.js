@@ -5,7 +5,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
-import { Box, Button, MenuItem, TextField } from '@mui/material'
+import { Alert, Box, Button, MenuItem, TextField } from '@mui/material'
 
 import {
   Form,
@@ -406,7 +406,7 @@ const CostsForm = () => {
                     updateItem={updatePercentageSplitOfActivities}></PercentageSplitOfActivitiesRow>
                 ))
               ) : (
-                <ErrorText>{`No interventions selected in 6.2a & 6.4`}</ErrorText>
+                <Alert severity='info'>{language.pages.costs.missingInterventionsWarning}</Alert>
               )}
             </FormQuestionDiv>
           </div>

@@ -57,6 +57,17 @@ const pages = {
     signUp: 'Sign Up',
     forgotPassowrd: 'Forgot Password'
   },
+  socioeconomicGovernanceStatusOutcomes: {
+    missingSocioeconomicAims: 'Please select aims from question 3.2 in the Restoration Aims form'
+  },
+  costs: {
+    missingInterventionsWarning:
+      'Please select interventions from question 6.2a and 6.4 in the Site Interventions form'
+  },
+  restorationAims: {
+    missingStakeholdersWarning:
+      'In order to rank the importance of aims, questions 2.1 will need to be filled out in the Site Background form.'
+  },
   userSignUp: {
     confirmPassword: 'Re-type password',
     email: 'Email',
