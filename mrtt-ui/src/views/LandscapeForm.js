@@ -28,6 +28,9 @@ const validationSchema = yup.object({
 
 const formDefaultValues = { landscape_name: '', selectedOrganizations: [] }
 
+const getOrgsUserBelongsTo = (organizations) =>
+  organizations.filter(({ role }) => role === 'org-admin' || role === 'org-user')
+
 const LandscapeForm = ({ isNewLandscape }) => {
   const [doesLandscapeExist, setDoesLandscapeExist] = useState(true)
   const [isAssociatedSites, setIsAssociatedSites] = useState(false)
@@ -75,8 +78,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
             setIsAssociatedSites(!!sites.length)
             setLandscapeName(landscape_name)
           }
-
-          setOrganizationOptions(organizationsData)
+          setOrganizationOptions(getOrgsUserBelongsTo(organizationsData))
           setIsLoading(false)
         })
         .catch((error) => {
