@@ -116,7 +116,7 @@ function App() {
             <Route path='/auth/signup' element={<SignupForm />} />
             <Route path='/auth/login' element={<LoginForm />} />
             <Route path='/auth/login/newUser' element={<LoginForm isUserNew={true} />} />
-            <Route path='auth/forgot-password' element={<ForgotPasswordForm />} />
+            <Route path='auth/password/forgot-password' element={<ForgotPasswordForm />} />
             <Route path='auth/password/reset/' element={<ResetPasswordForm />} />
           </Routes>
         </GlobalLayout>
