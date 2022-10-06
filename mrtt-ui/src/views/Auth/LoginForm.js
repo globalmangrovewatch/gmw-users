@@ -86,7 +86,7 @@ const LoginForm = ({ isUserNew }) => {
           </Alert>
         ) : null}
         <RowFlexEnd>
-          <LinkLooksLikeButtonSecondary to='/auth/forgot-password'>
+          <LinkLooksLikeButtonSecondary to='/auth/password/forgot-password'>
             {pageLanguage.forgotPassowrd}
           </LinkLooksLikeButtonSecondary>
         </RowFlexEnd>
