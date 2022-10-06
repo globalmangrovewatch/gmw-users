@@ -37,9 +37,9 @@ import LoadingIndicator from '../LoadingIndicator'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
-import { socioIndicators } from '../../data/socio_indicator'
+import { socioIndicators } from '../../data/socioIndicators'
 import { findDataItem } from '../../library/findDataItem'
-import SocioeconomicOutcomesRow from './socioeconomicOutcomesRow'
+import SocioeconomicOutcomesRow from './SocioeconomicOutcomesRow'
 import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import ButtonDeleteForm from '../ButtonDeleteForm'
@@ -101,7 +101,6 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     fields: socioeconomicOutcomesFields,
     append: socioeconomicOutcomesAppend,
     remove: socioeconomicOutcomesRemove,
-    replace: socioeconomicOutcomesReplace,
     update: socioeconomicOutcomesUpdate
   } = useFieldArray({ name: 'socioeconomicOutcomes', control })
 
@@ -142,7 +141,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           toast.error(language.error.apiLoad)
         })
     },
-    [monitoringFormsUrl, registrationInterventionFormsUrl, socioeconomicOutcomesReplace]
+    [registrationInterventionFormsUrl]
   )
 
   useInitializeMonitoringForm({

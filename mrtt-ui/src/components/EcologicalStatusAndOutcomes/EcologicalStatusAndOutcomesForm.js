@@ -7,13 +7,22 @@ import { toast } from 'react-toastify'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
-import { Controller, useForm } from 'react-hook-form'
-import { MenuItem, Stack, TextField } from '@mui/material'
+import { Controller, useForm, useFieldArray } from 'react-hook-form'
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  ListItem,
+  MenuItem,
+  Stack,
+  TextField
+} from '@mui/material'
 
 import {
   Form,
   FormPageHeader,
   FormQuestionDiv,
+  NestedLabel1,
   QuestionSubSection,
   StickyFormLabel
 } from '../../styles/forms'
@@ -32,11 +41,17 @@ import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndCon
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { findDataItem } from '../../library/findDataItem'
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
+import { monitoringIndicators } from '../../data/monitoringIndicators'
 import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
+import EcologicalOutcomesRow from './EcologicalOutcomesRow'
+
+const getEcologicalAims = (registrationAnswersFromServer) =>
+  findDataItem(registrationAnswersFromServer, '3.1') ?? []
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2') ?? []
+
 const formType = MONITORING_FORM_CONSTANTS.ecologicalStatusAndOutcomes.payloadType
 
 const EcologicalStatusAndOutcomesForm = () => {
@@ -59,6 +74,22 @@ const EcologicalStatusAndOutcomesForm = () => {
     naturalRegenerationOnSite: yup.string(),
     percentageSurvival: yup.mixed(),
     causeOfLowSurvival: multiselectWithOtherValidationNoMinimum,
+    monitoringIndicators: yup
+      .array()
+      .of(
+        yup.object().shape({
+          mainLabel: yup.string(),
+          secondaryLabel: yup.string(),
+          indictor: yup.string(),
+          metric: yup.string(),
+          measurement: yup.mixed(),
+          unit: yup.string(),
+          comparison: yup.string(),
+          measurementComparison: yup.mixed(),
+          linkedAims: yup.array().of(yup.string()).default([])
+        })
+      )
+      .default([]),
     achievementOfEcologicalAims: yup.string()
   })
   const reactHookFormInstance = useForm({
@@ -77,10 +108,17 @@ const EcologicalStatusAndOutcomesForm = () => {
     watch: watchForm
   } = reactHookFormInstance
 
+  const {
+    fields: monitoringIndicatorsFields,
+    append: monitoringIndicatorsAppend,
+    remove: monitoringIndicatorsRemove,
+    update: monitoringIndicatorsUpdate
+  } = useFieldArray({ name: 'monitoringIndicators', control })
+
   const { siteId } = useParams()
-  const interventionAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/intervention_answers`
   const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
   const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
+  const registrationInterventionFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isMainFormDataLoading, setIsMainFormDataLoading] = useState(false)
@@ -90,22 +128,33 @@ const EcologicalStatusAndOutcomesForm = () => {
   const mangroveConditionImprovementWatcher = watchForm('mangroveConditionImprovement')
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
+  const monitoringIndicatorsWatcher = watchForm('monitoringIndicators')
+  const [ecologicalAims, setEcologicalAims] = useState([])
 
   useEffect(
     function loadBiophysicalInterventions() {
       setAreBiophysicalInterventionsLoading(true)
       axios
-        .get(interventionAnswersUrl)
-        .then((response) => {
+        .get(registrationInterventionFormsUrl)
+        .then((registrationInterventionResponse) => {
           setAreBiophysicalInterventionsLoading(false)
-          setBiophysicalInterventions(getBiophysicalInterventions(response))
+          setBiophysicalInterventions(getBiophysicalInterventions(registrationInterventionResponse))
+          const ecologicalAimsInitialVal = getEcologicalAims(registrationInterventionResponse)
+
+          if (ecologicalAimsInitialVal.selectedValues?.length > 0) {
+            const ecologicalAimsFlattened = ecologicalAimsInitialVal.selectedValues
+            if (ecologicalAimsInitialVal.otherValue) {
+              ecologicalAimsFlattened.push(ecologicalAimsInitialVal.otherValue)
+            }
+            setEcologicalAims(ecologicalAimsFlattened)
+          }
         })
         .catch(() => {
           setAreBiophysicalInterventionsLoading(false)
           toast.error(language.error.apiLoad)
         })
     },
-    [interventionAnswersUrl]
+    [registrationInterventionFormsUrl]
   )
 
   useInitializeMonitoringForm({
@@ -179,6 +228,53 @@ const EcologicalStatusAndOutcomesForm = () => {
 
   const handleDeleteClick = () => {
     setIsDeleteConfirmPromptOpen(true)
+  }
+
+  const getMonitoringFieldsIndex = (childMonitoringIndicator) =>
+    monitoringIndicatorsFields.findIndex(
+      (monitoringIndicator) =>
+        monitoringIndicator.indicator === childMonitoringIndicator.indicator &&
+        monitoringIndicator.metric === childMonitoringIndicator.metric
+    )
+
+  const handleMonitoringIndicatorsOnChange = (event, indicator, childMonitoringIndicator) => {
+    const indicatorIndex = getMonitoringFieldsIndex(childMonitoringIndicator)
+
+    if (event.target.checked) {
+      monitoringIndicatorsAppend({
+        mainLabel: indicator.category,
+        secondaryLabel: indicator.sub_category,
+        indicator: childMonitoringIndicator.indicator,
+        metric: childMonitoringIndicator.metric,
+        measurement: '',
+        unit: '',
+        comparison: '',
+        measurementComparison: '',
+        linkedAims: []
+      })
+    } else if (!event.target.checked) {
+      monitoringIndicatorsRemove(indicatorIndex)
+    }
+  }
+
+  const updateMonitoringOutcome = ({
+    index,
+    currentMeasurement,
+    currentUnit,
+    currentComparison,
+    currentMeasurementComparison,
+    currentLinkedAims
+  }) => {
+    const currentItem = monitoringIndicatorsFields[index]
+
+    if (currentMeasurement) currentItem.measurement = currentMeasurement
+    if (currentUnit) currentItem.unit = currentUnit
+    if (currentComparison) currentItem.comparison = currentComparison
+    if (currentMeasurementComparison)
+      currentItem.measurementComparison = currentMeasurementComparison
+    if (currentLinkedAims) currentItem.linkedAims = currentLinkedAims
+
+    monitoringIndicatorsUpdate(index, currentItem)
   }
 
   return isMainFormDataLoading || areBiophysicalInterventionsLoading ? (
@@ -387,7 +483,58 @@ const EcologicalStatusAndOutcomesForm = () => {
             </FormQuestionDiv>
           </div>
         ) : null}
-        {/* TABULAR INPUT GROUP SECTION 10.7 */}
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.mangroveEcologicalOutcomes.question}</StickyFormLabel>
+          {monitoringIndicators.map((indicator, indicatorIndex) => (
+            <Box key={indicatorIndex}>
+              <NestedLabel1>{`${indicator.category}: ${indicator.sub_category}`}</NestedLabel1>
+              {indicator.indicators.map((childMonitoringIndicator, childIndex) => (
+                <ListItem key={childIndex}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value={childMonitoringIndicator.indicator}
+                        checked={getMonitoringFieldsIndex(childMonitoringIndicator) !== -1}
+                        onChange={(event) =>
+                          handleMonitoringIndicatorsOnChange(
+                            event,
+                            indicator,
+                            childMonitoringIndicator
+                          )
+                        }></Checkbox>
+                    }
+                    label={`${childMonitoringIndicator.indicator}: ${childMonitoringIndicator.metric}`}
+                  />
+                </ListItem>
+              ))}
+            </Box>
+          ))}
+        </FormQuestionDiv>
+        {monitoringIndicatorsWatcher?.length > 0 ? (
+          <FormQuestionDiv>
+            <StickyFormLabel>
+              {questions.mangroveEcologicalOutcomesAdditionalData.question}
+            </StickyFormLabel>
+            {monitoringIndicatorsFields?.length > 0
+              ? monitoringIndicatorsFields?.map((item, index) => (
+                  <EcologicalOutcomesRow
+                    key={index}
+                    index={index}
+                    mainLabel={item.mainLabel}
+                    secondaryLabel={item.secondaryLabel}
+                    indicator={item.indicator}
+                    metric={item.metric}
+                    measurement={item.measurement}
+                    unit={item.unit}
+                    comparison={item.comparison}
+                    measurementComparison={item.measurementComparison}
+                    linkedAims={item.linkedAims}
+                    selectedAims={ecologicalAims}
+                    updateItem={updateMonitoringOutcome}></EcologicalOutcomesRow>
+                ))
+              : null}
+          </FormQuestionDiv>
+        ) : null}
         <FormQuestionDiv>
           <StickyFormLabel>{questions.achievementOfEcologicalAims.question}</StickyFormLabel>
           <Controller

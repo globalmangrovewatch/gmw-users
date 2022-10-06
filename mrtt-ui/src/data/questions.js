@@ -773,6 +773,9 @@ const ecologicalStatusOutcomes = {
   mangroveEcologicalOutcomes: {
     question: '10.7 What mangrove ecological outcomes were monitored?'
   },
+  mangroveEcologicalOutcomesAdditionalData: {
+    question: '10.7a Please fill the measurement data for the selected ecological outcomes.'
+  },
   achievementOfEcologicalAims: {
     question: '10.8 To what extent do you feel the ecological aims have been achieved?',
     options: [
