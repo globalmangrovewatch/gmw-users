@@ -75,7 +75,7 @@ const NewOrganizationUser = () => {
         if (error.response.data.error === 'Record not found') {
           setFormError('email', {
             type: 'custom',
-            message: pageLanguage.error.getUserDoesntExist(formData.email)
+            message: pageLanguage.getUserDoesntExist(formData.email)
           })
         }
       })

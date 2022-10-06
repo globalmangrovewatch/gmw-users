@@ -175,18 +175,12 @@ const pages = {
   },
   newOrganizationUser: {
     backToUsers: 'Back to users',
-    description: (
-      <>
-        If the new user is already a member, they will be added to this organization. If the user is
-        not a member, they will be added automatically after they register at{' '}
-        <a href='#'>PLACEHOLDER</a>
-      </>
-    ),
+    description: 'Only users that have signed up can be added to organizations.',
     email: "New user's email address",
     getTitle: (organization) => `New User for ${organization}`,
     getUserAdded: ({ userName, organizationName }) =>
       `The user, ${userName}, has been added to ${organizationName}`,
-    getUserDoesntExist: (userName) => `The user, ${userName}, does not exist.`,
+    getUserDoesntExist: (userName) => `The user, ${userName}, is not registered.`,
     orgAdmin: 'Admin',
     orgUser: 'User',
     role: 'Role'
