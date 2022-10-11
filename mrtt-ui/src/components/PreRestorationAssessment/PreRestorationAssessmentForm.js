@@ -23,8 +23,7 @@ import {
   FormPageHeader,
   FormQuestionDiv,
   StickyFormLabel,
-  SelectedInputSection,
-  TabularLabel
+  SelectedInputSection
 } from '../../styles/forms'
 import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
@@ -230,6 +229,8 @@ function PreRestorationAssessmentForm() {
         toast.error(language.error.submit)
       })
   }
+
+  console.log(mangroveSpeciesList.length ? 'nothing' : 'something')
 
   const handleMangroveSpeciesPresentOnChange = (event, specie) => {
     const mangroveSpeciesTypesCheckedCopy = [...mangroveSpeciesTypesChecked]
@@ -459,30 +460,29 @@ function PreRestorationAssessmentForm() {
               <StickyFormLabel>{questions.mangroveSpeciesPresent.question}</StickyFormLabel>
               {mangroveSpeciesList.length ? (
                 <List>
-                  {mangroveSpeciesList.length ? (
-                    mangroveSpeciesList.map((specie, index) => (
-                      <ListItem key={index}>
-                        <Box>
-                          <Box sx={{ fontStyle: 'italic' }}>
-                            <Checkbox
-                              value={specie}
-                              checked={mangroveSpeciesTypesChecked.includes(specie)}
-                              onChange={(event) =>
-                                handleMangroveSpeciesPresentOnChange(event, specie)
-                              }></Checkbox>
-                            <Typography variant='subtitle'>{specie}</Typography>
+                  {mangroveSpeciesList.length
+                    ? mangroveSpeciesList.map((specie, index) => (
+                        <ListItem key={index}>
+                          <Box>
+                            <Box sx={{ fontStyle: 'italic' }}>
+                              <Checkbox
+                                value={specie}
+                                checked={mangroveSpeciesTypesChecked.includes(specie)}
+                                onChange={(event) =>
+                                  handleMangroveSpeciesPresentOnChange(event, specie)
+                                }></Checkbox>
+                              <Typography variant='subtitle'>{specie}</Typography>
+                            </Box>
                           </Box>
-                        </Box>
-                      </ListItem>
-                    ))
-                  ) : (
-                    <ErrorText>
-                      No items to display. Please select countries in Site Details and Location
-                      (1.2).
-                    </ErrorText>
-                  )}
+                        </ListItem>
+                      ))
+                    : null}
                 </List>
-              ) : null}
+              ) : (
+                <ErrorText>
+                  No items to display. Please select countries in Site Details and Location (1.2).
+                </ErrorText>
+              )}
               <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
             </FormQuestionDiv>
           </>
@@ -520,7 +520,7 @@ function PreRestorationAssessmentForm() {
         ) : null}
         {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
           <FormQuestionDiv>
-            <TabularLabel>{questions.physicalMeasurementsTaken.question}</TabularLabel>
+            <StickyFormLabel>{questions.physicalMeasurementsTaken.question}</StickyFormLabel>
             {physicalMeasurementsTakenFields.length > 0
               ? physicalMeasurementsTakenFields.map((measurementItem, measurementItemIndex) => (
                   <PhysicalMeasurementRow
