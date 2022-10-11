@@ -3,7 +3,6 @@ import {
   Button,
   Checkbox,
   Chip,
-  FormLabel,
   List,
   ListItem,
   ListItemText,
@@ -616,7 +615,7 @@ function SiteInterventionsForm() {
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>
-          <FormLabel>{questions.localParticipantTraining.question}</FormLabel>
+          <StickyFormLabel>{questions.localParticipantTraining.question}</StickyFormLabel>
           <Controller
             name='localParticipantTraining'
             control={control}
