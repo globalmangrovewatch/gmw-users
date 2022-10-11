@@ -1,16 +1,13 @@
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { FormControlLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
+import { FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material'
 import { useForm, Controller } from 'react-hook-form'
 import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import Autocomplete from '@mui/material/Autocomplete'
 import axios from 'axios'
-import turfConvex from '@turf/convex'
 import turfBbox from '@turf/bbox'
 import turfBboxPolygon from '@turf/bbox-polygon'
+import turfConvex from '@turf/convex'
 
 import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
@@ -30,6 +27,7 @@ import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
+import DatePickerUtcMui from './DatePickerUtcMui'
 
 const sortCountries = (a, b) => {
   const textA = a.properties.country.toUpperCase()
@@ -81,8 +79,8 @@ function ProjectDetailsForm() {
     resolver: yupResolver(validationSchema),
     defaultValues: {
       hasProjectEndDate: false,
-      projectStartDate: undefined,
-      projectEndDate: undefined,
+      projectStartDate: null,
+      projectEndDate: null,
       countries: undefined,
       siteArea: emptyFeatureCollection
     }
@@ -180,22 +178,7 @@ function ProjectDetailsForm() {
           <Controller
             name='projectStartDate'
             control={control}
-            defaultValue={new Date().toISOString()}
-            render={({ field }) => (
-              <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                <Stack spacing={3}>
-                  <MobileDatePicker
-                    id='start-date'
-                    label='date'
-                    value={field.value}
-                    onChange={(newValue) => {
-                      field.onChange(newValue?.toISOString())
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </Stack>
-              </LocalizationProvider>
-            )}
+            render={({ field }) => <DatePickerUtcMui id='start-date' label='date' field={field} />}
           />
           <ErrorText>{errors.projectStartDate?.message}</ErrorText>
         </FormQuestionDiv>
@@ -230,21 +213,7 @@ function ProjectDetailsForm() {
             <Controller
               name='projectEndDate'
               control={control}
-              render={({ field }) => (
-                <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                  <Stack spacing={3}>
-                    <MobileDatePicker
-                      id='end-date'
-                      label='date'
-                      value={field.value}
-                      onChange={(newValue) => {
-                        field.onChange(newValue?.toISOString())
-                      }}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
-                  </Stack>
-                </LocalizationProvider>
-              )}
+              render={({ field }) => <DatePickerUtcMui id='end-date' label='date' field={field} />}
             />
             <ErrorText>{errors.projectEndDate?.message}</ErrorText>
           </FormQuestionDiv>

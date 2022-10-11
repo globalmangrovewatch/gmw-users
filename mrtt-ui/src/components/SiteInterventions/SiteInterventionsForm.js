@@ -8,14 +8,10 @@ import {
   ListItemText,
   MenuItem,
   Select,
-  Stack,
   TextField,
   Typography
 } from '@mui/material'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
@@ -43,6 +39,7 @@ import QuestionNav from '../QuestionNav'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
 import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
+import DatePickerUtcMui from '../DatePickerUtcMui'
 
 const getWhichStakeholdersInvolved = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.1') ?? []
@@ -390,19 +387,11 @@ function SiteInterventionsForm() {
                   control={control}
                   defaultValue={null}
                   render={({ field }) => (
-                    <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                      <Stack spacing={3}>
-                        <MobileDatePicker
-                          id='start-date'
-                          label='Intervention start date'
-                          value={field.value}
-                          onChange={(newValue) => {
-                            field.onChange(newValue?.toISOString())
-                          }}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                      </Stack>
-                    </LocalizationProvider>
+                    <DatePickerUtcMui
+                      id='start-date'
+                      label='Intervention start date'
+                      field={field}
+                    />
                   )}
                 />
               </InnerFormDiv>
@@ -412,19 +401,7 @@ function SiteInterventionsForm() {
                   control={control}
                   defaultValue={null}
                   render={({ field }) => (
-                    <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                      <Stack spacing={3}>
-                        <MobileDatePicker
-                          id='end-date'
-                          label='Intervention end date'
-                          value={field.value}
-                          onChange={(newValue) => {
-                            field.onChange(newValue?.toISOString())
-                          }}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                      </Stack>
-                    </LocalizationProvider>
+                    <DatePickerUtcMui id='end-date' label='Intervention end date' field={field} />
                   )}
                 />
               </InnerFormDiv>

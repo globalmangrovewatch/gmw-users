@@ -4,19 +4,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
-import {
-  Box,
-  Checkbox,
-  FormControlLabel,
-  ListItem,
-  MenuItem,
-  Stack,
-  TextField
-} from '@mui/material'
+import { Box, Checkbox, FormControlLabel, ListItem, MenuItem, TextField } from '@mui/material'
 
 import {
   Form,
@@ -45,6 +34,7 @@ import { monitoringIndicators } from '../../data/monitoringIndicators'
 import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import EcologicalOutcomesRow from './EcologicalOutcomesRow'
+import DatePickerUtcMui from '../DatePickerUtcMui'
 
 const getEcologicalAims = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '3.1') ?? []
@@ -303,19 +293,11 @@ const EcologicalStatusAndOutcomesForm = () => {
             control={control}
             defaultValue={null}
             render={({ field }) => (
-              <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                <Stack spacing={3}>
-                  <MobileDatePicker
-                    id='monitoring-start-date'
-                    label='Monitoring start date'
-                    value={field.value}
-                    onChange={(newValue) => {
-                      field.onChange(newValue?.toISOString())
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </Stack>
-              </LocalizationProvider>
+              <DatePickerUtcMui
+                id='monitoring-start-date'
+                label='Monitoring start date'
+                field={field}
+              />
             )}
           />
           <ErrorText>{errors.monitoringStartDate?.message}</ErrorText>
@@ -325,19 +307,11 @@ const EcologicalStatusAndOutcomesForm = () => {
               control={control}
               defaultValue={null}
               render={({ field }) => (
-                <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                  <Stack spacing={3}>
-                    <MobileDatePicker
-                      id='monitoring-end-date'
-                      label='Monitoring end date'
-                      value={field.value}
-                      onChange={(newValue) => {
-                        field.onChange(newValue?.toISOString())
-                      }}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
-                  </Stack>
-                </LocalizationProvider>
+                <DatePickerUtcMui
+                  id='monitoring-end-date'
+                  label='Monitoring end date'
+                  field={field}
+                />
               )}
             />
             <ErrorText>{errors.monitoringEndDate?.message}</ErrorText>

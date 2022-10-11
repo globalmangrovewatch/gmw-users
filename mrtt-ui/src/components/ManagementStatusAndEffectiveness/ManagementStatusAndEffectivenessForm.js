@@ -5,10 +5,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Controller, useForm } from 'react-hook-form'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
-import { Box, MenuItem, Stack, TextField } from '@mui/material'
+import { Box, MenuItem, TextField } from '@mui/material'
 
 import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
 import { ContentWrapper } from '../../styles/containers'
@@ -27,6 +24,7 @@ import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
+import DatePickerUtcMui from '../DatePickerUtcMui'
 
 const formType = MONITORING_FORM_CONSTANTS.managementStatusAndEffectiveness.payloadType
 
@@ -177,19 +175,7 @@ const ManagementStatusAndEffectivenessForm = () => {
             control={control}
             defaultValue={''}
             render={({ field }) => (
-              <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                <Stack spacing={3}>
-                  <MobileDatePicker
-                    id='date-of-assessment'
-                    label='date'
-                    value={field.value}
-                    onChange={(newValue) => {
-                      field.onChange(newValue?.toISOString())
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </Stack>
-              </LocalizationProvider>
+              <DatePickerUtcMui id='date-of-assessment' label='date' field={field} />
             )}
           />
           <ErrorText>{errors.dateOfAssessment?.message}</ErrorText>

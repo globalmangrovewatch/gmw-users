@@ -4,19 +4,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
+
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
-import {
-  Box,
-  Checkbox,
-  FormControlLabel,
-  ListItem,
-  MenuItem,
-  Stack,
-  TextField
-} from '@mui/material'
+import { Box, Checkbox, FormControlLabel, ListItem, MenuItem, TextField } from '@mui/material'
 
 import {
   Form,
@@ -44,6 +34,7 @@ import useInitializeMonitoringForm from '../../library/useInitializeMonitoringFo
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
+import DatePickerUtcMui from '../DatePickerUtcMui'
 
 const getSocioeconomicAims = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '3.2') ?? []
@@ -290,19 +281,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
             control={control}
             defaultValue={null}
             render={({ field }) => (
-              <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                <Stack spacing={3}>
-                  <MobileDatePicker
-                    id='date-of-outcomes-assessment'
-                    label='date'
-                    value={field.value}
-                    onChange={(newValue) => {
-                      field.onChange(newValue?.toISOString())
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </Stack>
-              </LocalizationProvider>
+              <DatePickerUtcMui id='date-of-outcomes-assessment' label='date' field={field} />
             )}
           />
           <ErrorText>{errors.dateOfOutcomesAssessment?.message}</ErrorText>
