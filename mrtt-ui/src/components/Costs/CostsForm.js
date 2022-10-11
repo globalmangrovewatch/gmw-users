@@ -5,7 +5,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
-import { Alert, Box, Button, MenuItem, TextField } from '@mui/material'
+import { Alert, Box, Button, MenuItem, TextField, Typography } from '@mui/material'
 
 import {
   Form,
@@ -136,6 +136,8 @@ const CostsForm = () => {
   const supportForActivitiesWatcher = watchForm('supportForActivities')
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
   const [hasEndDate, setHasEndDate] = useState(false)
+  const costOfProjectActivitiesWatcher = watchForm('costOfProjectActivities')
+  const breakdownOfCostWatcher = watchForm('breakdownOfCost')
 
   const loadServerData = useCallback(
     (serverResponse) => {
@@ -143,12 +145,12 @@ const CostsForm = () => {
       if (endDateResponse) setHasEndDate(true)
 
       const defaultProjectActivities = [
-        { costType: 'Project planning & management' },
-        { costType: 'Biophysical interventions' },
-        { costType: 'Community activities' },
-        { costType: 'Site maintenance' },
-        { costType: 'Monitoring' },
-        { costType: 'Other costs' }
+        { costType: 'Project planning & management', cost: 0 },
+        { costType: 'Biophysical interventions', cost: 0 },
+        { costType: 'Community activities', cost: 0 },
+        { costType: 'Site maintenance', cost: 0 },
+        { costType: 'Monitoring', cost: 0 },
+        { costType: 'Other costs', cost: 0 }
       ]
 
       const breakdownOfCostInitialVal = getBreakdownOfCost(serverResponse)
@@ -256,6 +258,20 @@ const CostsForm = () => {
     const currentItem = percentageSplitOfActivitiesFields[index]
     currentItem.percentage = percentage
     percentageSplitOfActivitiesUpdate(index, currentItem)
+  }
+
+  const isSumOfBreakdownLessOrEqualToTotalCost = () => {
+    const totalCost = Number(costOfProjectActivitiesWatcher?.cost)
+    const costs = breakdownOfCostWatcher.map((item) => Number(item.cost))
+    const sum = costs.reduce((previousValue, currentValue) => previousValue + currentValue, 0)
+    return sum <= totalCost ? true : false
+  }
+
+  const sumOfBreakdownActivties = () => {
+    const costs = breakdownOfCostWatcher.map((item) => Number(item.cost))
+    return costs
+      .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
+      .toLocaleString()
   }
 
   return isLoading ? (
@@ -393,6 +409,10 @@ const CostsForm = () => {
                       updateItem={updateBreakdownOfCostItem}></BreakdownOfCostRow>
                   ))
                 : null}
+              <Typography>Total: {sumOfBreakdownActivties()}</Typography>
+              {isSumOfBreakdownLessOrEqualToTotalCost() ? null : (
+                <ErrorText>Breakdown of activities must not exceed total cost in 7.4</ErrorText>
+              )}
             </FormQuestionDiv>
             <FormQuestionDiv>
               <StickyFormLabel>{questions.percentageSplitOfActivities.question}</StickyFormLabel>
