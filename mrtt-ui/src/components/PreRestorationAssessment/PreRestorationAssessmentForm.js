@@ -230,8 +230,6 @@ function PreRestorationAssessmentForm() {
       })
   }
 
-  console.log(mangroveSpeciesList.length ? 'nothing' : 'something')
-
   const handleMangroveSpeciesPresentOnChange = (event, specie) => {
     const mangroveSpeciesTypesCheckedCopy = [...mangroveSpeciesTypesChecked]
     if (event.target.checked) {
@@ -270,6 +268,13 @@ function PreRestorationAssessmentForm() {
     if (value) currentItem.measurementValue = value
     if (unit) currentItem.measurementUnit = unit
     physicalMeasurementsTakenUpdate(measurementIndex, currentItem)
+  }
+
+  const speciesCompositionPercentageTotal = () => {
+    const percentages = speciesCompositionWatcher.map((specie) =>
+      Number(specie.percentageComposition)
+    )
+    return percentages.reduce((previousValue, currentValue) => previousValue + currentValue, 0)
   }
 
   return isLoading ? (
@@ -483,7 +488,6 @@ function PreRestorationAssessmentForm() {
                   No items to display. Please select countries in Site Details and Location (1.2).
                 </ErrorText>
               )}
-              <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
             </FormQuestionDiv>
           </>
         ) : null}
@@ -516,6 +520,10 @@ function PreRestorationAssessmentForm() {
                 </SelectedInputSection>
               )
             })}
+            {speciesCompositionPercentageTotal() > 100 ? (
+              <ErrorText>Percentage totals must not equal more than 100</ErrorText>
+            ) : null}
+            <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
         {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
