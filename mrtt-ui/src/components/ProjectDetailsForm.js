@@ -1,4 +1,5 @@
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 import { FormControlLabel, Radio, RadioGroup, Stack, TextField } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker'
@@ -30,6 +31,11 @@ import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
+
+import { Settings } from 'luxon'
+
+
+Settings.defaultZone = 'UTC+0'
 
 const sortCountries = (a, b) => {
   const textA = a.properties.country.toUpperCase()
@@ -182,19 +188,36 @@ function ProjectDetailsForm() {
             control={control}
             defaultValue={new Date().toISOString()}
             render={({ field }) => (
-              <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
-                <Stack spacing={3}>
-                  <MobileDatePicker
-                    id='start-date'
-                    label='date'
-                    value={field.value}
-                    onChange={(newValue) => {
-                      field.onChange(newValue?.toISOString())
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </Stack>
-              </LocalizationProvider>
+              <div>
+                <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
+                  <Stack spacing={3}>
+                    <MobileDatePicker
+                      id='start-date'
+                      label='date'
+                      value={field.value}
+                      onChange={(newValue) => {
+                        field.onChange(newValue?.toISOString())
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </Stack>
+                </LocalizationProvider>
+
+                <LocalizationProvider dateAdapter={AdapterLuxon} {...field} ref={null}>
+                  <Stack spacing={3}>
+                    <MobileDatePicker
+                      id='start-date'
+                      label='date'
+                      value={field.value}
+                      inputFormat='MM/dd/yyyy'
+                      onChange={(newValue) => {
+                        field.onChange(newValue?.toISOString())
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </Stack>
+                </LocalizationProvider>
+              </div>
             )}
           />
           <ErrorText>{errors.projectStartDate?.message}</ErrorText>
