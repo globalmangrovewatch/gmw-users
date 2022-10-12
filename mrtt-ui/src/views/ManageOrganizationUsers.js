@@ -117,7 +117,7 @@ const ManageOrganizationUsers = () => {
       <LoadingIndicatorOverlay isVisible={isSubmitting} />
       <ContentWrapper>
         <TitleAndActionContainer>
-          <PageTitle>{pageLanguage.title} (Work in Progress!)</PageTitle>
+          <PageTitle>{pageLanguage.title}</PageTitle>
           <LinkLooksLikeButtonPrimary to={'new'}>{pageLanguage.newUser}</LinkLooksLikeButtonPrimary>
         </TitleAndActionContainer>
 
@@ -133,7 +133,7 @@ const ManageOrganizationUsers = () => {
             </tr>
             {organizationUsers.map((user) => {
               const { id, name, role, email } = user
-              const isOrgUserLoggedIn = id === currentUser.id
+              const isOrgUserLoggedIn = id === currentUser?.id
 
               return (
                 <tr key={id}>
