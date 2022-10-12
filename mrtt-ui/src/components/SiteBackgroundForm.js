@@ -11,7 +11,10 @@ import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
-import { multiselectWithOtherValidation } from '../validation/multiSelectWithOther'
+import {
+  multiselectWithOtherValidation,
+  multiselectWithOtherValidationNoMinimum
+} from '../validation/multiSelectWithOther'
 import { questionMapping } from '../data/questionMapping'
 import { siteBackground } from '../data/questions'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
@@ -46,7 +49,7 @@ const SiteBackgroundForm = () => {
     managementStatus: yup.string(),
     lawStatus: yup.string(),
     managementArea: yup.string(),
-    protectionStatus: multiselectWithOtherValidation,
+    protectionStatus: multiselectWithOtherValidationNoMinimum,
     areStakeholdersInvolved: yup.string().nullable(),
     governmentArrangement: multiselectWithOtherValidation,
     landTenure: multiselectWithOtherValidation,
@@ -245,12 +248,7 @@ const SiteBackgroundForm = () => {
             fieldName='protectionStatus'
             reactHookFormInstance={reactHookFormInstance}
             options={siteBackground.protectionStatus.options}
-            question={
-              <>
-                {siteBackground.protectionStatus.question}
-                <RequiredIndicator />
-              </>
-            }
+            question={siteBackground.protectionStatus.question}
             shouldAddOtherOptionWithClarification={true}
           />
           <ErrorText>{errors.protectionStatus?.selectedValues?.message}</ErrorText>

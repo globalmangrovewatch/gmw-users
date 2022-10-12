@@ -6,11 +6,12 @@ import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import language from '../../language'
 
 import {
+  HorizontalTabularBox,
   LeftColumnDiv,
   RowTextField,
+  TabularInputSection,
   TabularLabel,
-  VerticalTabularBox,
-  VerticalTabularInputSection
+  VerticalTabularBox
 } from '../../styles/forms'
 
 const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateItem }) => {
@@ -46,7 +47,7 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
   }
 
   return (
-    <VerticalTabularInputSection>
+    <TabularInputSection>
       <VerticalTabularBox>
         <LeftColumnDiv>
           <TabularLabel>{label}</TabularLabel>
@@ -60,20 +61,21 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
             onConfirm={handleDelete}
           />
         </LeftColumnDiv>
-        <VerticalTabularBox>
+        <HorizontalTabularBox>
           <RowTextField
             value={currentValue}
             label='value'
             onBlur={handleUpdate}
             onChange={(e) => setCurrentValue(e.target.value)}></RowTextField>
           <RowTextField
+            sx={{ marginLeft: '0.5em', width: '7em' }}
             value={currentUnit}
             label='unit'
             onBlur={handleUpdate}
             onChange={(e) => setCurrentUnit(e.target.value)}></RowTextField>
-        </VerticalTabularBox>
+        </HorizontalTabularBox>
       </VerticalTabularBox>
-    </VerticalTabularInputSection>
+    </TabularInputSection>
   )
 }
 

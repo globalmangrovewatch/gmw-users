@@ -23,13 +23,11 @@ import {
   FormPageHeader,
   FormQuestionDiv,
   StickyFormLabel,
-  SelectedInputSection,
-  TabularLabel
+  SelectedInputSection
 } from '../../styles/forms'
 import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { findDataItem } from '../../library/findDataItem'
-import { mangroveSpeciesPerCountryList } from '../../data/mangroveSpeciesPerCountry'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { preRestorationAssessment as questions } from '../../data/questions'
@@ -44,6 +42,7 @@ import useInitializeQuestionMappedForm from '../../library/useInitializeQuestion
 import useSiteInfo from '../../library/useSiteInfo'
 import RequiredIndicator from '../RequiredIndicator'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
+import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
 
 const getSiteCountries = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '1.2') ?? []
@@ -162,36 +161,9 @@ function PreRestorationAssessmentForm() {
       const siteCountriesResponse = getSiteCountries(serverResponse)
 
       if (siteCountriesResponse.length) {
-        const countriesList = siteCountriesResponse.map(
-          (countryItem) => countryItem.properties.country
-        )
-        // mangroveSpeciesPresent list should display country specific species at the top, with all
-        // species below the country specific list, removing duplicates from the second list
-        const allSpecies = []
-        const countrySelectedSpecies = []
-        let countrySelectedSpeciesWithAllSpecies = []
-        countriesList.forEach((countrySelected) => {
-          mangroveSpeciesPerCountryList.forEach((countryItem) => {
-            if (countryItem.country.name === countrySelected) {
-              countrySelectedSpecies.push(...countryItem.species)
-            }
-            allSpecies.push(...countryItem.species)
-          })
-        })
-        const uniqueCountrySelectedSpecies = [...new Set(countrySelectedSpecies)]
-        uniqueCountrySelectedSpecies.sort()
-        const uniqueAllSpecies = [...new Set(allSpecies)]
-        const filteredUniqueAllSpecies = uniqueAllSpecies.filter(
-          (specie) => !uniqueCountrySelectedSpecies.includes(specie)
-        )
-        filteredUniqueAllSpecies.sort()
+        const organizedSpecies = organizeMangroveSpeciesList(siteCountriesResponse)
 
-        countrySelectedSpeciesWithAllSpecies = [
-          ...uniqueCountrySelectedSpecies,
-          ...filteredUniqueAllSpecies
-        ]
-
-        setMangroveSpeciesList(countrySelectedSpeciesWithAllSpecies)
+        setMangroveSpeciesList(organizedSpecies)
       }
       setMangroveSpeciesTypesChecked(getMangroveSpecies(serverResponse))
 
@@ -269,6 +241,13 @@ function PreRestorationAssessmentForm() {
     if (value) currentItem.measurementValue = value
     if (unit) currentItem.measurementUnit = unit
     physicalMeasurementsTakenUpdate(measurementIndex, currentItem)
+  }
+
+  const speciesCompositionPercentageTotal = () => {
+    const percentages = speciesCompositionWatcher.map((specie) =>
+      Number(specie.percentageComposition)
+    )
+    return percentages.reduce((previousValue, currentValue) => previousValue + currentValue, 0)
   }
 
   return isLoading ? (
@@ -459,31 +438,29 @@ function PreRestorationAssessmentForm() {
               <StickyFormLabel>{questions.mangroveSpeciesPresent.question}</StickyFormLabel>
               {mangroveSpeciesList.length ? (
                 <List>
-                  {mangroveSpeciesList.length ? (
-                    mangroveSpeciesList.map((specie, index) => (
-                      <ListItem key={index}>
-                        <Box>
-                          <Box sx={{ fontStyle: 'italic' }}>
-                            <Checkbox
-                              value={specie}
-                              checked={mangroveSpeciesTypesChecked.includes(specie)}
-                              onChange={(event) =>
-                                handleMangroveSpeciesPresentOnChange(event, specie)
-                              }></Checkbox>
-                            <Typography variant='subtitle'>{specie}</Typography>
+                  {mangroveSpeciesList.length
+                    ? mangroveSpeciesList.map((specie, index) => (
+                        <ListItem key={index}>
+                          <Box>
+                            <Box sx={{ fontStyle: 'italic' }}>
+                              <Checkbox
+                                value={specie}
+                                checked={mangroveSpeciesTypesChecked.includes(specie)}
+                                onChange={(event) =>
+                                  handleMangroveSpeciesPresentOnChange(event, specie)
+                                }></Checkbox>
+                              <Typography variant='subtitle'>{specie}</Typography>
+                            </Box>
                           </Box>
-                        </Box>
-                      </ListItem>
-                    ))
-                  ) : (
-                    <ErrorText>
-                      No items to display. Please select countries in Site Details and Location
-                      (1.2).
-                    </ErrorText>
-                  )}
+                        </ListItem>
+                      ))
+                    : null}
                 </List>
-              ) : null}
-              <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
+              ) : (
+                <ErrorText>
+                  No items to display. Please select countries in Site Details and Location (1.2).
+                </ErrorText>
+              )}
             </FormQuestionDiv>
           </>
         ) : null}
@@ -516,11 +493,15 @@ function PreRestorationAssessmentForm() {
                 </SelectedInputSection>
               )
             })}
+            {speciesCompositionPercentageTotal() > 100 ? (
+              <ErrorText>Percentage totals must not equal more than 100</ErrorText>
+            ) : null}
+            <ErrorText>{errors.mangroveSpeciesPresent?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
         {siteAssessmentBeforeProjectWatcher === 'Yes' ? (
           <FormQuestionDiv>
-            <TabularLabel>{questions.physicalMeasurementsTaken.question}</TabularLabel>
+            <StickyFormLabel>{questions.physicalMeasurementsTaken.question}</StickyFormLabel>
             {physicalMeasurementsTakenFields.length > 0
               ? physicalMeasurementsTakenFields.map((measurementItem, measurementItemIndex) => (
                   <PhysicalMeasurementRow

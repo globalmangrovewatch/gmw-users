@@ -3,7 +3,6 @@ import {
   Button,
   Checkbox,
   Chip,
-  FormLabel,
   List,
   ListItem,
   ListItemText,
@@ -29,7 +28,6 @@ import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { findDataItem } from '../../library/findDataItem'
 import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
-import { mangroveSpeciesPerCountryList } from '../../data/mangroveSpeciesPerCountry'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { propaguleOptions, seedlingOptions } from '../../data/siteInterventionOptions'
@@ -44,6 +42,7 @@ import MangroveAssociatedSpeciesRow from './MangroveAssociatedSpeciesRow'
 import QuestionNav from '../QuestionNav'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
+import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
 
 const getWhichStakeholdersInvolved = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.1') ?? []
@@ -166,20 +165,9 @@ function SiteInterventionsForm() {
     const siteCountriesResponse = getSiteCountries(serverResponse)
 
     if (siteCountriesResponse.length) {
-      const countriesList = siteCountriesResponse.map(
-        (countryItem) => countryItem.properties.country
-      )
-      const species = []
-      countriesList.forEach((countrySelected) => {
-        mangroveSpeciesPerCountryList.forEach((countryItem) => {
-          if (countryItem.country.name === countrySelected) {
-            species.push(...countryItem.species)
-          }
-        })
-      })
-      const uniqueSpecies = [...new Set(species)]
+      const organizedSpecies = organizeMangroveSpeciesList(siteCountriesResponse)
 
-      setMangroveSpeciesForCountriesSelected(uniqueSpecies)
+      setMangroveSpeciesForCountriesSelected(organizedSpecies)
     }
 
     const getMangroveSpeciesUsedFrom6_2b = getMangroveSpeciesUsed(serverResponse)
@@ -627,7 +615,7 @@ function SiteInterventionsForm() {
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>
-          <FormLabel>{questions.localParticipantTraining.question}</FormLabel>
+          <StickyFormLabel>{questions.localParticipantTraining.question}</StickyFormLabel>
           <Controller
             name='localParticipantTraining'
             control={control}

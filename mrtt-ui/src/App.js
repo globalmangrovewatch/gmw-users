@@ -17,7 +17,7 @@ import RestorationAimsForm from './components/RestorationAimsForm/RestorationAim
 import PreRestorationAssessmentForm from './components/PreRestorationAssessment/PreRestorationAssessmentForm'
 import SignupForm from './views/Auth/SignupForm'
 import SiteBackgroundForm from './components/SiteBackgroundForm'
-import SiteInterventionsForm from './components/SiteInterventions/SiteInterventions'
+import SiteInterventionsForm from './components/SiteInterventions/SiteInterventionsForm'
 import SiteForm from './views/SiteForm'
 import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOverview'
 import Sites from './views/Sites'
