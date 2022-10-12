@@ -5,31 +5,32 @@ import React from 'react'
 
 import { CustomToastContainer } from './components/CustomToastContainer'
 import CausesOfDeclineForm from './components/CausesOfDeclineForm'
+import CostsForm from './components/Costs/CostsForm'
+import EcologicalStatusAndOutcomesForm from './components/EcologicalStatusAndOutcomes/EcologicalStatusAndOutcomesForm'
+import ForgotPasswordForm from './views/Auth/ForgotPasswordForm'
 import GlobalLayout from './components/GlobalLayout'
 import LandscapeForm from './views/LandscapeForm'
 import Landscapes from './views/Landscapes'
 import LoginForm from './views/Auth/LoginForm'
-import OrganizationForm from './views/OrganizationForm'
-import Organizations from './views/Organizations'
-import ProjectDetailsForm from './components/ProjectDetailsForm'
-import ProtectedRoutes from './components/Auth/ProtectedRoutes'
-import RestorationAimsForm from './components/RestorationAimsForm/RestorationAimsForm'
-import PreRestorationAssessmentForm from './components/PreRestorationAssessment/PreRestorationAssessmentForm'
-import SignupForm from './views/Auth/SignupForm'
-import SiteBackgroundForm from './components/SiteBackgroundForm'
-import SiteInterventionsForm from './components/SiteInterventions/SiteInterventionsForm'
-import SiteForm from './views/SiteForm'
-import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOverview'
-import Sites from './views/Sites'
-import themeMui from './styles/themeMui'
-import CostsForm from './components/Costs/CostsForm'
 import ManagementStatusAndEffectivenessForm from './components/ManagementStatusAndEffectiveness/ManagementStatusAndEffectivenessForm'
-import SocioeconomicAndGovernanceStatusAndOutcomesForm from './components/SocioeconomicAndGovernance/SocioeconomicAndGovernanceStatusAndOutcomesForm'
-import EcologicalStatusAndOutcomesForm from './components/EcologicalStatusAndOutcomes/EcologicalStatusAndOutcomesForm'
 import ManageOrganizationUsers from './views/ManageOrganizationUsers'
 import NewOrganizationUser from './views/NewOrganizationUser'
-import ForgotPasswordForm from './views/Auth/ForgotPasswordForm'
+import OrganizationForm from './views/OrganizationForm'
+import Organizations from './views/Organizations'
+import PageNotFound from './views/PageNotFound'
+import PreRestorationAssessmentForm from './components/PreRestorationAssessment/PreRestorationAssessmentForm'
+import ProjectDetailsForm from './components/ProjectDetailsForm'
+import ProtectedRoutes from './components/Auth/ProtectedRoutes'
 import ResetPasswordForm from './views/Auth/ResetPasswordForm'
+import RestorationAimsForm from './components/RestorationAimsForm/RestorationAimsForm'
+import SignupForm from './views/Auth/SignupForm'
+import SiteBackgroundForm from './components/SiteBackgroundForm'
+import SiteForm from './views/SiteForm'
+import SiteInterventionsForm from './components/SiteInterventions/SiteInterventionsForm'
+import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOverview'
+import Sites from './views/Sites'
+import SocioeconomicAndGovernanceStatusAndOutcomesForm from './components/SocioeconomicAndGovernance/SocioeconomicAndGovernanceStatusAndOutcomesForm'
+import themeMui from './styles/themeMui'
 
 function App() {
   return (
@@ -118,6 +119,7 @@ function App() {
             <Route path='/auth/login/newUser' element={<LoginForm isUserNew={true} />} />
             <Route path='auth/password/forgot-password' element={<ForgotPasswordForm />} />
             <Route path='auth/password/reset/' element={<ResetPasswordForm />} />
+            <Route path='*' element={<PageNotFound />} />
           </Routes>
         </GlobalLayout>
       </Router>
