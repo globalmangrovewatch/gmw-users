@@ -39,7 +39,8 @@ const form = {
     title: 'Delete Form: ',
     promptText: 'Are you sure you want to delete this form?',
     buttonText: 'Yes, delete this form'
-  }
+  },
+  dateUtc: 'Dates are UTC'
 }
 
 const multiselectWithOtherFormQuestion = {
