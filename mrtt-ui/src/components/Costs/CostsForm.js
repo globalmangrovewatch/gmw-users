@@ -41,7 +41,7 @@ const getBreakdownOfCost = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '7.5') ?? []
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '6.2a') ?? []
+  findDataItem(registrationAnswersFromServer, '6.2') ?? []
 
 const getOtherActivitiesImplemented = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.4') ?? []
@@ -168,10 +168,8 @@ const CostsForm = () => {
         let otherInterventionActivities = []
         let combinedInterventions = []
 
-        if (biophysicalInterventionsInitialVal.length) {
-          interventionTypes = biophysicalInterventionsInitialVal.map(
-            (item) => item.interventionType
-          )
+        if (biophysicalInterventionsInitialVal.selectedValues.length) {
+          interventionTypes = biophysicalInterventionsInitialVal.selectedValues
         }
         if (otherActivitiesImplementedInitialVal.selectedValues?.length) {
           otherInterventionActivities = otherActivitiesImplementedInitialVal.selectedValues
