@@ -50,6 +50,7 @@ const multiselectWithOtherFormQuestion = {
 }
 
 const pages = {
+  pageNotFound: { title: 'Page Not Found' },
   login: {
     title: 'Login',
     email: 'Email',
