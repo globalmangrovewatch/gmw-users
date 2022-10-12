@@ -48,7 +48,9 @@ const SignupForm = () => {
     formState: { errors }
   } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
 
-  const signUp = ({ email, name, password }) => {
+  const handleSubmit = ({ email, name, password }) => {
+    setIsSubmitting(true)
+    setIsSubmitError(false)
     axios
       .post(authUrl, { user: { email, name, password } })
       .then(() => {
@@ -61,13 +63,6 @@ const SignupForm = () => {
         setIsSubmitError(true)
         toast.error(language.error.generic)
       })
-  }
-
-  const handleSubmit = (formData) => {
-    setIsSubmitting(true)
-    setIsSubmitError(false)
-    signUp(formData)
-    setIsSubmitting(false)
   }
 
   const handleCancelClick = () => {
