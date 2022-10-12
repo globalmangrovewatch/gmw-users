@@ -28,7 +28,6 @@ import {
 import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { findDataItem } from '../../library/findDataItem'
-// import { mangroveSpeciesPerCountryList } from '../../data/mangroveSpeciesPerCountry'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { preRestorationAssessment as questions } from '../../data/questions'
