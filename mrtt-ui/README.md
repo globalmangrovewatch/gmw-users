@@ -33,6 +33,7 @@ The project board for this work can be found [here](https://github.com/Vizzualit
 - a convienience custom hook is used to load _most_ data for a given form.
   - for forms 1-7, `mrtt-ui/src/library/useInitializeQuestionMappedFormjs`. This hook calls a provided callback function with the server response for supplimental form data parsing.
   - for forms 8-10, `mrtt-ui/src/library/useInitializeMonitoringForm.js`. This hook to-date does not include a callback because those forms happened not to need it.
+- A date picker was created using MUI and Luxon to display and save all dates in UTC. Any timestamps saved should be ignored as false precision. `mrtt-ui/src/components/DatePickerUtcMui.js`
 
 ## Setting Up and Running a Development Environment
 
