@@ -169,7 +169,7 @@ const SiteBackgroundForm = () => {
                     <Typography variant='subtitle'>{stakeholder}</Typography>
                   </Box>
                   <Box>
-                    {getStakeholder(stakeholder) && (
+                    {getStakeholder(stakeholder) && stakeholder !== 'Unknown' ? (
                       <Controller
                         name={`stakeholders.${stakeholdersFields.findIndex(
                           (field) => field.stakeholderType === stakeholder
@@ -185,7 +185,7 @@ const SiteBackgroundForm = () => {
                           />
                         )}
                       />
-                    )}
+                    ) : null}
                   </Box>
                 </Box>
               </ListItem>
