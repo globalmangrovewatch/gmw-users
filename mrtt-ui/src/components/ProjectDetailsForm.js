@@ -32,10 +32,8 @@ import RequiredIndicator from './RequiredIndicator'
 import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
 
-import { Settings } from 'luxon'
+import { DateTime } from 'luxon'
 
-
-Settings.defaultZone = 'UTC+0'
 
 const sortCountries = (a, b) => {
   const textA = a.properties.country.toUpperCase()
@@ -189,7 +187,7 @@ function ProjectDetailsForm() {
             defaultValue={new Date().toISOString()}
             render={({ field }) => (
               <div>
-                <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns} {...field} ref={null}>
                   <Stack spacing={3}>
                     <MobileDatePicker
                       id='start-date'
@@ -201,22 +199,23 @@ function ProjectDetailsForm() {
                       renderInput={(params) => <TextField {...params} />}
                     />
                   </Stack>
-                </LocalizationProvider>
+                </LocalizationProvider> */}
 
                 <LocalizationProvider dateAdapter={AdapterLuxon} {...field} ref={null}>
                   <Stack spacing={3}>
                     <MobileDatePicker
                       id='start-date'
                       label='date'
-                      value={field.value}
+                      value={DateTime.fromISO(field.value).setZone('UTC+0')}
                       inputFormat='MM/dd/yyyy'
                       onChange={(newValue) => {
-                        field.onChange(newValue?.toISOString())
+                        field.onChange(newValue?.set({hour: 0, minute: 0, second: 0}).toISO())
                       }}
                       renderInput={(params) => <TextField {...params} />}
                     />
                   </Stack>
                 </LocalizationProvider>
+                {JSON.stringify(field.value)}
               </div>
             )}
           />
