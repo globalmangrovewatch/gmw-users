@@ -8,7 +8,7 @@ const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useLocalStorage('token', null)
-  const [currentUser] = useState(decodeToken(token)?.meta)
+  const [currentUser, setCurrentUser] = useState(decodeToken(token)?.meta)
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return !isExpired(token)
   })
@@ -16,10 +16,12 @@ export const AuthProvider = ({ children }) => {
     const login = async (token) => {
       setToken(token)
       setIsLoggedIn(!isExpired(token))
+      setCurrentUser(decodeToken(token)?.meta)
     }
     const logout = () => {
       setToken(null)
       setIsLoggedIn(false)
+      setCurrentUser(null)
     }
     return {
       currentUser,
