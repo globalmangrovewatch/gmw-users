@@ -39,6 +39,9 @@ export const XSmallUpperCase = styled('div')`
   text-transform: uppercase;
   font-size: ${theme.typography.xsmallFontSize};
 `
+export const TextSmall = styled('div')`
+  font-size: ${theme.typography.smallFontSize};
+`
 
 export const ItemTitle = styled('h3')`
   margin: 0;
