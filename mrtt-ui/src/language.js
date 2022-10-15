@@ -188,6 +188,7 @@ const pages = {
     role: 'Role'
   },
   siteQuestionsOverview: {
+    downloadSiteData: 'Download Site Data',
     settings: 'Settings',
 
     formGroupTitle: {

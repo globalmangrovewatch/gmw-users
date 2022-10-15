@@ -1,9 +1,10 @@
-import { useParams, Link as LinkReactRouter } from 'react-router-dom'
-import { Settings } from '@mui/icons-material'
+import { Settings as SettingsIcon } from '@mui/icons-material'
 import { Stack } from '@mui/material'
 import { styled } from '@mui/system'
 import { toast } from 'react-toastify'
+import { useParams, Link as LinkReactRouter } from 'react-router-dom'
 import axios from 'axios'
+import fileDownload from 'js-file-download'
 import React, { useEffect, useState } from 'react'
 
 import { ButtonSecondary } from '../../styles/buttons'
@@ -15,12 +16,17 @@ import ItemDoesntExist from '../../components/ItemDoesntExist'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
 import MonitoringFormsList from './MonitoringFormsList'
+import themeMui from '../../styles/themeMui'
 
 const pageLanguage = language.pages.siteQuestionsOverview
 
 const StyledSectionHeader = styled('h3')`
   text-transform: uppercase;
   font-weight: 100;
+`
+
+const DownloadContainer = styled(RowCenterCenter)`
+  margin-top: ${themeMui.spacing(4)};
 `
 
 const SiteOverview = () => {
@@ -71,6 +77,13 @@ const SiteOverview = () => {
     [siteId]
   )
 
+  const handleDownload = () => {
+    const exportDataUrl = `https://mrtt-api-test-3.herokuapp.com/api/v2/report/answers/${siteId}`
+    axios.get(exportDataUrl, { responseType: 'blob' }).then((response) => {
+      fileDownload(response.data, `${site.site_name}.json`)
+    })
+  }
+
   const siteOverview = !doesSiteExist ? (
     <ItemDoesntExist item='site' />
   ) : (
@@ -82,7 +95,7 @@ const SiteOverview = () => {
             <ItemSubTitle>{landscape?.landscape_name}</ItemSubTitle>
           </Stack>
           <ButtonSecondary component={LinkReactRouter} to={`/sites/${siteId}/edit`}>
-            <Settings /> Settings
+            <SettingsIcon /> {pageLanguage.settings}
           </ButtonSecondary>
         </TitleAndActionContainer>
         <StyledSectionHeader>{pageLanguage.formGroupTitle.registration}</StyledSectionHeader>
@@ -155,6 +168,11 @@ const SiteOverview = () => {
         ) : (
           <RowCenterCenter>{pageLanguage.noMonitoringSections}</RowCenterCenter>
         )}
+        <DownloadContainer>
+          <ButtonSecondary type='button' onClick={handleDownload}>
+            {pageLanguage.downloadSiteData}
+          </ButtonSecondary>
+        </DownloadContainer>
       </ContentWrapper>
     </>
   )
