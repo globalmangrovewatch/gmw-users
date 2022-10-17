@@ -95,8 +95,7 @@ function PreRestorationAssessmentForm() {
       .of(
         yup.object().shape({
           measurementType: yup.string(),
-          measurementValue: yup.mixed(),
-          measurementUnit: yup.string()
+          measurementValue: yup.mixed()
         })
       )
       .default([]),
@@ -224,11 +223,10 @@ function PreRestorationAssessmentForm() {
     return setShowAddTabularInputRow(boolean)
   }
 
-  const saveMeasurementItem = (measurementType, measurementValue, measurementUnit) => {
+  const saveMeasurementItem = (measurementType, measurementValue) => {
     physicalMeasurementsTakenAppend({
       measurementType,
-      measurementValue,
-      measurementUnit
+      measurementValue
     })
   }
 
@@ -236,10 +234,10 @@ function PreRestorationAssessmentForm() {
     physicalMeasurementsTakenRemove(measurementIndex)
   }
 
-  const updateMeasurementItem = (measurementIndex, value, unit) => {
+  const updateMeasurementItem = (measurementIndex, value) => {
     const currentItem = physicalMeasurementsTakenFields[measurementIndex]
     if (value) currentItem.measurementValue = value
-    if (unit) currentItem.measurementUnit = unit
+
     physicalMeasurementsTakenUpdate(measurementIndex, currentItem)
   }
 
@@ -508,7 +506,6 @@ function PreRestorationAssessmentForm() {
                     key={measurementItemIndex}
                     label={measurementItem.measurementType}
                     value={measurementItem.measurementValue}
-                    unit={measurementItem.measurementUnit}
                     index={measurementItemIndex}
                     deleteItem={deleteMeasurementItem}
                     updateItem={updateMeasurementItem}></PhysicalMeasurementRow>

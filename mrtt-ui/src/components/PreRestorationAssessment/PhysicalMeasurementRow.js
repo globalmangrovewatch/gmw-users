@@ -14,11 +14,9 @@ import {
   VerticalTabularBox
 } from '../../styles/forms'
 
-const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateItem }) => {
+const PhysicalMeasurementRow = ({ label, value, index, deleteItem, updateItem }) => {
   const [initialValue, setInitialValue] = useState('')
   const [currentValue, setCurrentValue] = useState('')
-  const [initialUnit, setInitialUnit] = useState('')
-  const [currentUnit, setCurrentUnit] = useState('')
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
   const handleDelete = () => {
     deleteItem(index)
@@ -26,8 +24,8 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
   }
 
   const handleUpdate = () => {
-    if (currentValue !== initialValue || currentUnit !== initialUnit) {
-      updateItem(index, currentValue, currentUnit)
+    if (currentValue !== initialValue) {
+      updateItem(index, currentValue)
     }
   }
 
@@ -36,11 +34,7 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
       setCurrentValue(value)
       setInitialValue(value)
     }
-    if (unit) {
-      setCurrentUnit(unit)
-      setInitialUnit(unit)
-    }
-  }, [value, unit])
+  }, [value])
 
   const handleDeleteClick = () => {
     setIsDeleteConfirmPromptOpen(true)
@@ -67,12 +61,6 @@ const PhysicalMeasurementRow = ({ label, value, unit, index, deleteItem, updateI
             label='value'
             onBlur={handleUpdate}
             onChange={(e) => setCurrentValue(e.target.value)}></RowTextField>
-          <RowTextField
-            sx={{ marginLeft: '0.5em', width: '7em' }}
-            value={currentUnit}
-            label='unit'
-            onBlur={handleUpdate}
-            onChange={(e) => setCurrentUnit(e.target.value)}></RowTextField>
         </HorizontalTabularBox>
       </VerticalTabularBox>
     </TabularInputSection>
