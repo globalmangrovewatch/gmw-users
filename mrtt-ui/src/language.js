@@ -146,6 +146,8 @@ const pages = {
     title: 'Landscapes'
   },
   siteform: {
+    defaultSectionPrivacyDescription:
+      "Default Data Privacy determines if the data from each form will be sharable or not. Each form's privacy can be edited individually later. An exception is that Site Details and Location form is always set to public regardless of the default selected here.",
     titleEditSite: 'Site Settings',
     titleNewSite: 'Create a site',
     labelName: 'Site Name',

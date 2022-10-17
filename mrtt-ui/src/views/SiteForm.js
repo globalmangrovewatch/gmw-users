@@ -16,6 +16,7 @@ import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
 import RequiredIndicator from '../components/RequiredIndicator'
+import PRIVACY_VALUES from '../constants/privacyValues'
 
 const validationSchema = yup.object({
   site_name: yup.string().required(language.pages.siteform.validation.nameRequired),
@@ -81,7 +82,7 @@ const SiteForm = ({ isNewSite }) => {
       site_name,
       landscape_id,
       section_data_visibility: {
-        1: defaultSectionPrivacy,
+        1: PRIVACY_VALUES.public,
         2: defaultSectionPrivacy,
         3: defaultSectionPrivacy,
         4: defaultSectionPrivacy,
@@ -192,11 +193,16 @@ const SiteForm = ({ isNewSite }) => {
                   {...field}
                   id='defaultSectionPrivacy'
                   label={language.pages.siteform.labelDefaultSectionPrivacy}>
-                  <MenuItem value='private'>{language.sectionPrivacy.private}</MenuItem>
-                  <MenuItem value='public'>{language.sectionPrivacy.public}</MenuItem>
+                  <MenuItem value={PRIVACY_VALUES.private}>
+                    {language.sectionPrivacy.private}
+                  </MenuItem>
+                  <MenuItem value={PRIVACY_VALUES.public}>
+                    {language.sectionPrivacy.public}
+                  </MenuItem>
                 </Select>
               )}
             />
+            <p>{language.pages.siteform.defaultSectionPrivacyDescription}</p>
             <ErrorText>{errors?.landscape_id?.message}</ErrorText>
           </QuestionWrapper>
         ) : null}
