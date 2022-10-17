@@ -35,6 +35,7 @@ import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import EcologicalOutcomesRow from './EcologicalOutcomesRow'
 import DatePickerUtcMui from '../DatePickerUtcMui'
+import { unitOptions } from '../../data/ecologicalOptions'
 
 const getEcologicalAims = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '3.1') ?? []
@@ -55,9 +56,11 @@ const EcologicalStatusAndOutcomesForm = () => {
     ecologicalMonitoringStakeholders: multiselectWithOtherValidationNoMinimum,
     preAndPostRestorationActivities: yup.object().shape({
       areaPreIntervention: yup.string(),
-      unitPre: yup.mixed(),
+      unitPre: yup.string(),
+      unitPreOther: yup.string(),
       areaPostIntervention: yup.string(),
-      unitPost: yup.mixed()
+      unitPost: yup.string(),
+      unitPostOther: yup.string()
     }),
     mangroveAreaIncrease: yup.string(),
     mangroveConditionImprovement: yup.string(),
@@ -120,6 +123,7 @@ const EcologicalStatusAndOutcomesForm = () => {
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
   const monitoringIndicatorsWatcher = watchForm('monitoringIndicators')
   const [ecologicalAims, setEcologicalAims] = useState([])
+  const preAndPostRestorationActivitiesWatcher = watchForm('preAndPostRestorationActivities')
 
   useEffect(
     function loadBiophysicalInterventions() {
@@ -381,11 +385,32 @@ const EcologicalStatusAndOutcomesForm = () => {
               render={({ field }) => (
                 <TextField
                   {...field}
+                  select
                   value={field.value}
                   sx={{ marginTop: '1em' }}
-                  label='Unit (eg: m², km², hectares)'></TextField>
+                  label='select unit'>
+                  {unitOptions.map((option, index) => (
+                    <MenuItem key={index} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </TextField>
               )}
             />
+            {preAndPostRestorationActivitiesWatcher.unitPre === 'other' ? (
+              <Controller
+                name='preAndPostRestorationActivities.unitPreOther'
+                control={control}
+                defaultValue=''
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    value={field.value}
+                    sx={{ marginTop: '1em' }}
+                    label='specify other unit'></TextField>
+                )}
+              />
+            ) : null}
             <Controller
               name='preAndPostRestorationActivities.areaPostIntervention'
               control={control}
@@ -405,11 +430,32 @@ const EcologicalStatusAndOutcomesForm = () => {
               render={({ field }) => (
                 <TextField
                   {...field}
+                  select
                   value={field.value}
                   sx={{ marginTop: '1em' }}
-                  label='Unit (eg: m², km², hectares)'></TextField>
+                  label='select unit'>
+                  {unitOptions.map((option, index) => (
+                    <MenuItem key={index} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </TextField>
               )}
             />
+            {preAndPostRestorationActivitiesWatcher.unitPost === 'other' ? (
+              <Controller
+                name='preAndPostRestorationActivities.unitPostOther'
+                control={control}
+                defaultValue=''
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    value={field.value}
+                    sx={{ marginTop: '1em' }}
+                    label='specify other unit'></TextField>
+                )}
+              />
+            ) : null}
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>
