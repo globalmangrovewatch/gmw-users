@@ -14,6 +14,7 @@ import LoadingIndicatorOverlay from './LoadingIndicatorOverlay'
 import SECTION_NAMES from '../constants/sectionNames'
 import theme from '../styles/theme'
 import themeMui from '../styles/themeMui'
+import PRIVACY_VALUES from '../constants/privacyValues'
 
 const componentLanguage = language.questionNav
 
@@ -86,6 +87,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection
   const [siteFromApi, setSiteFromApi] = useState()
   const { siteId } = useParams()
   const currentSectionNameIndex = SECTION_NAMES.indexOf(currentSection)
+  const isFormPrivacyDisabled = currentSection === 'project-details'
   const nextSection = SECTION_NAMES[currentSectionNameIndex + 1]
   const previousSection = SECTION_NAMES[currentSectionNameIndex - 1]
   const sectionIdForApi = currentSectionNameIndex + 1
@@ -107,7 +109,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection
   const handleOnPrivacyChange = (event) => {
     setIsPrivacySaveError(false)
     setIsPrivacySaving(true)
-    if (siteFromApi) {
+    if (siteFromApi && !isFormPrivacyDisabled) {
       const siteWithUpdatedSectionPrivacy = {
         ...siteFromApi,
         section_data_visibility: {
@@ -160,12 +162,13 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection
               id='form-privacy'
               defaultValue={''}
               value={sectionPrivacy}
-              onChange={handleOnPrivacyChange}>
+              onChange={handleOnPrivacyChange}
+              disabled={isFormPrivacyDisabled}>
               <option value={''} disabled>
                 {componentLanguage.privacySelectUndefined}
               </option>
-              <option value={'private'}>{language.sectionPrivacy.private}</option>
-              <option value={'public'}>{language.sectionPrivacy.public}</option>
+              <option value={PRIVACY_VALUES.private}>{language.sectionPrivacy.private}</option>
+              <option value={PRIVACY_VALUES.public}>{language.sectionPrivacy.public}</option>
             </PrivacySelect>
             <ButtonSave isSaving={isFormSaving} onClick={onFormSave} />
           </NavSubWrapper>
