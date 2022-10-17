@@ -88,7 +88,8 @@ const EcologicalStatusAndOutcomesForm = () => {
   const reactHookFormInstance = useForm({
     defaultValues: {
       ecologicalMonitoringStakeholders: { selectedValues: [] },
-      causeOfLowSurvival: { selectedValues: [] }
+      causeOfLowSurvival: { selectedValues: [] },
+      preAndPostRestorationActivities: {}
     },
     resolver: yupResolver(validationSchema)
   })
