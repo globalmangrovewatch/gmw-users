@@ -59,7 +59,7 @@ const StickyStack = styled(Stack)`
   background: white;
   z-index: 3;
   @media (max-width: ${theme.layout.mediaQueryDesktop}) {
-    position: static;
+    position: sticky;
   }
 `
 const NavWrapper = styled('div')`
