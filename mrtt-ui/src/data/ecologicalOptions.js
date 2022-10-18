@@ -5,3 +5,5 @@ export const comparisonOptions = [
   'Literature Value',
   'International'
 ]
+
+export const unitOptions = ['m²', 'km²', 'ha', 'other']
