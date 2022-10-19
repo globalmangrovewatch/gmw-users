@@ -38,7 +38,7 @@ import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
-import { findDataItem, findMonitoringDataItem } from '../../library/findDataItem'
+import { findRegistationDataItem, findMonitoringDataItem } from '../../library/findDataItems'
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import { monitoringIndicators } from '../../data/monitoringIndicators'
 import ButtonDeleteForm from '../ButtonDeleteForm'
@@ -48,10 +48,10 @@ import DatePickerUtcMui from '../DatePickerUtcMui'
 import { unitOptions } from '../../data/ecologicalOptions'
 
 const getEcologicalAims = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '3.1') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '3.1') ?? []
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '6.2') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '6.2') ?? []
 
 const getEcologicalMonitoringStakeholders = (registrationAnswersFromServer) =>
   findMonitoringDataItem(registrationAnswersFromServer, '10.2') ?? []

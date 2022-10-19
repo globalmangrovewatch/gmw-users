@@ -1,4 +1,4 @@
-export const findDataItem = (registrationAnswersFromServer, questionId) =>
+export const findRegistationDataItem = (registrationAnswersFromServer, questionId) =>
   registrationAnswersFromServer?.data.find((dataItem) => dataItem.question_id === questionId)
     ?.answer_value
 

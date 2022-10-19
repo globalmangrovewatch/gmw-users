@@ -22,7 +22,7 @@ import axios from 'axios'
 
 import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
-import { findDataItem } from '../../library/findDataItem'
+import { findRegistationDataItem } from '../../library/findDataItems'
 import {
   Form,
   FormPageHeader,
@@ -48,13 +48,13 @@ import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesLi
 import DatePickerUtcMui from '../DatePickerUtcMui'
 
 const getWhichStakeholdersInvolved = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '6.1') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '6.1') ?? []
 
 const getSiteCountries = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '1.2') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '1.2') ?? []
 
 const getMangroveSpeciesUsed = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '6.2b') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '6.2b') ?? []
 
 function SiteInterventionsForm() {
   const { site_name } = useSiteInfo()

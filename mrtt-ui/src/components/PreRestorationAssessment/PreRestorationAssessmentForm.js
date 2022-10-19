@@ -27,7 +27,7 @@ import {
 } from '../../styles/forms'
 import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
-import { findDataItem } from '../../library/findDataItem'
+import { findRegistationDataItem } from '../../library/findDataItems'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { preRestorationAssessment as questions } from '../../data/questions'
@@ -45,13 +45,13 @@ import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
 
 const getSiteCountries = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '1.2') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '1.2') ?? []
 
 const getMangroveSpecies = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '5.3e') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '5.3e') ?? []
 
 const getPhysicalMeasurementsTaken = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '5.3g') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '5.3g') ?? []
 
 function PreRestorationAssessmentForm() {
   const { site_name } = useSiteInfo()
