@@ -51,8 +51,11 @@ const EcologicalStatusAndOutcomesForm = () => {
   const isEditMode = !!monitoringFormId
   const navigate = useNavigate()
   const validationSchema = yup.object({
-    monitoringStartDate: yup.string().nullable().required(language.form.required),
-    monitoringEndDate: yup.string().nullable(),
+    monitoringStartDate: yup.date().nullable().required(language.form.required),
+    monitoringEndDate: yup
+      .date()
+      .nullable()
+      .min(yup.ref(' monitoringStartDate'), "End date can't be before start date"),
     ecologicalMonitoringStakeholders: multiselectWithOtherValidationNoMinimum,
     preAndPostRestorationActivities: yup.object().shape({
       areaPreIntervention: yup.string(),
@@ -87,7 +90,6 @@ const EcologicalStatusAndOutcomesForm = () => {
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
-      ecologicalMonitoringStakeholders: { selectedValues: [] },
       causeOfLowSurvival: { selectedValues: [] },
       preAndPostRestorationActivities: {}
     },
