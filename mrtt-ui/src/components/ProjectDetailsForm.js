@@ -48,8 +48,11 @@ function ProjectDetailsForm() {
     hasProjectEndDate: yup.boolean(),
     projectStartDate: yup.string().required('Select a start date'),
     projectEndDate: yup.string().when('hasProjectEndDate', {
-      is: true,
-      then: yup.string().required('Please select an end date')
+      is: (endDate) => endDate === true,
+      then: yup
+        .string()
+        .required('Please select an end date')
+        .min(yup.ref('projectStartDate'), "End date can't be before start date")
     }),
     countries: yup
       .array()
