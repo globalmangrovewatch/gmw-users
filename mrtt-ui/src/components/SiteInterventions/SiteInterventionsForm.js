@@ -23,7 +23,13 @@ import axios from 'axios'
 import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { findDataItem } from '../../library/findDataItem'
-import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
+import {
+  Form,
+  FormPageHeader,
+  FormQuestionDiv,
+  InnerFormDiv,
+  StickyFormLabel
+} from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { propaguleOptions, seedlingOptions } from '../../data/siteInterventionOptions'
@@ -101,7 +107,6 @@ function SiteInterventionsForm() {
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
-      whichStakeholdersInvolved: { selectedValues: [], otherValue: undefined },
       organizationsProvidingTraining: { selectedValues: [], otherValue: undefined },
       otherActivitiesImplemented: { selectedValues: [], otherValue: undefined }
     },
@@ -638,12 +643,6 @@ function SiteInterventionsForm() {
 }
 
 export default SiteInterventionsForm
-
-const InnerFormDiv = styled('div')`
-  margin-top: 1em;
-  margin-left: 0.75em;
-  max-width: 15em;
-`
 
 const SubgroupDiv = styled('div')`
   margin-left: 2.7em;

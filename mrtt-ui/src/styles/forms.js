@@ -121,3 +121,8 @@ export const LeftColumnDiv = styled(Box)`
   display: flex;
   margin-bottom: 1em;
 `
+export const InnerFormDiv = styled('div')`
+  margin-top: 1em;
+  margin-left: 0.75em;
+  max-width: 15em;
+`
