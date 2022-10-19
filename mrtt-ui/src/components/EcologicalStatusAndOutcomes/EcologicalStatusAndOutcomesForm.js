@@ -55,7 +55,7 @@ const EcologicalStatusAndOutcomesForm = () => {
     monitoringEndDate: yup
       .date()
       .nullable()
-      .min(yup.ref(' monitoringStartDate'), "End date can't be before start date"),
+      .min(yup.ref('monitoringStartDate'), "End date can't be before start date"),
     ecologicalMonitoringStakeholders: multiselectWithOtherValidationNoMinimum,
     preAndPostRestorationActivities: yup.object().shape({
       areaPreIntervention: yup.string(),
