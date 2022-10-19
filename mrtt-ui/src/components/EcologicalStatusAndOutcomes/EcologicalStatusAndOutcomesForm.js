@@ -5,12 +5,22 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
-import { Box, Checkbox, FormControlLabel, ListItem, MenuItem, TextField } from '@mui/material'
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  List,
+  ListItem,
+  MenuItem,
+  TextField,
+  Typography
+} from '@mui/material'
 
 import {
   Form,
   FormPageHeader,
   FormQuestionDiv,
+  InnerFormDiv,
   NestedLabel1,
   QuestionSubSection,
   StickyFormLabel
@@ -28,7 +38,7 @@ import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
-import { findDataItem } from '../../library/findDataItem'
+import { findDataItem, findMonitoringDataItem } from '../../library/findDataItem'
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import { monitoringIndicators } from '../../data/monitoringIndicators'
 import ButtonDeleteForm from '../ButtonDeleteForm'
@@ -43,6 +53,9 @@ const getEcologicalAims = (registrationAnswersFromServer) =>
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findDataItem(registrationAnswersFromServer, '6.2') ?? []
 
+const getEcologicalMonitoringStakeholders = (registrationAnswersFromServer) =>
+  findMonitoringDataItem(registrationAnswersFromServer, '10.2') ?? []
+
 const formType = MONITORING_FORM_CONSTANTS.ecologicalStatusAndOutcomes.payloadType
 
 const EcologicalStatusAndOutcomesForm = () => {
@@ -53,7 +66,15 @@ const EcologicalStatusAndOutcomesForm = () => {
   const validationSchema = yup.object({
     monitoringStartDate: yup.string().nullable().required(language.form.required),
     monitoringEndDate: yup.string().nullable(),
-    ecologicalMonitoringStakeholders: multiselectWithOtherValidationNoMinimum,
+    ecologicalMonitoringStakeholders: yup
+      .array()
+      .of(
+        yup.object().shape({
+          stakeholder: yup.string(),
+          stakeholderType: yup.string()
+        })
+      )
+      .default([]),
     preAndPostRestorationActivities: yup.object().shape({
       areaPreIntervention: yup.string(),
       unitPre: yup.string(),
@@ -87,7 +108,7 @@ const EcologicalStatusAndOutcomesForm = () => {
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
-      ecologicalMonitoringStakeholders: { selectedValues: [] },
+      ecologicalMonitoringStakeholders: [],
       causeOfLowSurvival: { selectedValues: [] },
       preAndPostRestorationActivities: {}
     },
@@ -109,6 +130,12 @@ const EcologicalStatusAndOutcomesForm = () => {
     update: monitoringIndicatorsUpdate
   } = useFieldArray({ name: 'monitoringIndicators', control })
 
+  const {
+    fields: ecologicalMonitoringStakeholdersFields,
+    append: ecologicalMonitoringStakeholdersAppend,
+    remove: ecologicalMonitoringStakeholdersRemove
+  } = useFieldArray({ name: 'ecologicalMonitoringStakeholders', control })
+
   const { siteId } = useParams()
   const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
   const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
@@ -125,9 +152,13 @@ const EcologicalStatusAndOutcomesForm = () => {
   const monitoringIndicatorsWatcher = watchForm('monitoringIndicators')
   const [ecologicalAims, setEcologicalAims] = useState([])
   const preAndPostRestorationActivitiesWatcher = watchForm('preAndPostRestorationActivities')
+  const [
+    ecologicalMonitoringStakeholdersTypesChecked,
+    setEcologicalMonitoringStakeholdersTypesChecked
+  ] = useState([])
 
-  useEffect(
-    function loadBiophysicalInterventions() {
+  const _loadRegistrationAnswers = useEffect(
+    function loadRegistrationServerData() {
       setAreBiophysicalInterventionsLoading(true)
       axios
         .get(registrationInterventionFormsUrl)
@@ -143,6 +174,18 @@ const EcologicalStatusAndOutcomesForm = () => {
             }
             setEcologicalAims(ecologicalAimsFlattened)
           }
+          // set ecologicalMonitoringStakeholders
+          const ecologicalMonitoringStakeholdersInitialVal = getEcologicalMonitoringStakeholders(
+            registrationInterventionResponse
+          )
+
+          const initialEcologicalMonitoringStakeholdersTypesChecked =
+            ecologicalMonitoringStakeholdersInitialVal?.map(
+              (stakeholder) => stakeholder.stakeholder
+            )
+          setEcologicalMonitoringStakeholdersTypesChecked(
+            initialEcologicalMonitoringStakeholdersTypesChecked
+          )
         })
         .catch(() => {
           setAreBiophysicalInterventionsLoading(false)
@@ -150,6 +193,30 @@ const EcologicalStatusAndOutcomesForm = () => {
         })
     },
     [registrationInterventionFormsUrl]
+  )
+
+  const _loadMonitoringAnswers = useEffect(
+    function loadMonitoringServerData() {
+      setAreBiophysicalInterventionsLoading(true)
+      axios
+        .get(monitoringFormSingularUrl)
+        .then((monitoringResponse) => {
+          const ecologicalMonitoringStakeholdersInitialVal =
+            getEcologicalMonitoringStakeholders(monitoringResponse)
+
+          const initialEcologicalMonitoringStakeholdersTypesChecked =
+            ecologicalMonitoringStakeholdersInitialVal?.map(
+              (stakeholder) => stakeholder.stakeholder
+            )
+          setEcologicalMonitoringStakeholdersTypesChecked(
+            initialEcologicalMonitoringStakeholdersTypesChecked
+          )
+        })
+        .catch(() => {
+          toast.error(language.error.apiLoad)
+        })
+    },
+    [monitoringFormSingularUrl]
   )
 
   useInitializeMonitoringForm({
@@ -272,6 +339,35 @@ const EcologicalStatusAndOutcomesForm = () => {
     monitoringIndicatorsUpdate(index, currentItem)
   }
 
+  const handleEcologicalMonitoringStakeholdersOnChange = (event, stakeholder) => {
+    const ecologicalMonitoringStakeholdersTypesCheckedCopy = [
+      ...ecologicalMonitoringStakeholdersTypesChecked
+    ]
+
+    if (event.target.checked) {
+      ecologicalMonitoringStakeholdersAppend({
+        stakeholder: stakeholder,
+        stakeholderType: ''
+      })
+      ecologicalMonitoringStakeholdersTypesCheckedCopy.push(stakeholder)
+    } else {
+      const fieldIndex = ecologicalMonitoringStakeholdersFields.findIndex(
+        (field) => field.stakeholder === stakeholder
+      )
+      const typeIndex = ecologicalMonitoringStakeholdersTypesCheckedCopy.findIndex(
+        (type) => type === stakeholder
+      )
+      ecologicalMonitoringStakeholdersTypesCheckedCopy.splice(typeIndex, 1)
+      ecologicalMonitoringStakeholdersRemove(fieldIndex)
+    }
+    setEcologicalMonitoringStakeholdersTypesChecked(
+      ecologicalMonitoringStakeholdersTypesCheckedCopy
+    )
+  }
+
+  const getWhichStakeholderInvolved = (stakeholder) =>
+    ecologicalMonitoringStakeholdersFields.find((field) => field.stakeholder === stakeholder)
+
   return isMainFormDataLoading || areBiophysicalInterventionsLoading ? (
     <LoadingIndicator />
   ) : (
@@ -323,13 +419,53 @@ const EcologicalStatusAndOutcomesForm = () => {
           </QuestionSubSection>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          <CheckboxGroupWithLabelAndController
-            fieldName='ecologicalMonitoringStakeholders'
-            reactHookFormInstance={reactHookFormInstance}
-            options={questions.ecologicalMonitoringStakeholders.options}
-            question={questions.ecologicalMonitoringStakeholders.question}
-            shouldAddOtherOptionWithClarification={true}
-          />
+          <StickyFormLabel>{questions.ecologicalMonitoringStakeholders.question}</StickyFormLabel>
+          <List>
+            {questions.ecologicalMonitoringStakeholders.options.map((stakeholder, index) => (
+              <ListItem key={index}>
+                <Box>
+                  <Box>
+                    <Checkbox
+                      value={stakeholder}
+                      checked={ecologicalMonitoringStakeholdersTypesChecked.includes(stakeholder)}
+                      onChange={(event) =>
+                        handleEcologicalMonitoringStakeholdersOnChange(event, stakeholder)
+                      }></Checkbox>
+                    <Typography variant='subtitle'>{stakeholder}</Typography>
+                  </Box>
+                  <Box>
+                    {getWhichStakeholderInvolved(stakeholder) && (
+                      <Box>
+                        <InnerFormDiv>
+                          <Controller
+                            name={`ecologicalMonitoringStakeholders.${ecologicalMonitoringStakeholdersFields.findIndex(
+                              (field) => field.stakeholder === stakeholder
+                            )}.stakeholderType`}
+                            control={control}
+                            defaultValue=''
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                select
+                                value={field.value}
+                                label='select'
+                                sx={{ width: '10em' }}>
+                                {['Paid', 'Voluntary'].map((item, index) => (
+                                  <MenuItem key={index} value={item}>
+                                    {item}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
+                            )}
+                          />
+                        </InnerFormDiv>
+                      </Box>
+                    )}
+                  </Box>
+                </Box>
+              </ListItem>
+            ))}
+          </List>
           <ErrorText>{errors.ecologicalMonitoringStakeholders?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
