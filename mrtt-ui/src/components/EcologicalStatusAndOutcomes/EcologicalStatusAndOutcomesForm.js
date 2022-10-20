@@ -121,7 +121,7 @@ const EcologicalStatusAndOutcomesForm = () => {
   const [areBiophysicalInterventionsLoading, setAreBiophysicalInterventionsLoading] =
     useState(false)
   const [biophysicalInterventions, setBiophysicalInterventions] = useState([])
-  const mangroveConditionImprovementWatcher = watchForm('mangroveConditionImprovement')
+  const mangroveAreaIncreaseWatcher = watchForm('mangroveAreaIncrease')
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
   const monitoringIndicatorsWatcher = watchForm('monitoringIndicators')
@@ -352,25 +352,7 @@ const EcologicalStatusAndOutcomesForm = () => {
           />
           <ErrorText>{errors.mangroveAreaIncrease?.message}</ErrorText>
         </FormQuestionDiv>
-        <FormQuestionDiv>
-          <StickyFormLabel>{questions.mangroveConditionImprovement.question}</StickyFormLabel>
-          <Controller
-            name='mangroveConditionImprovement'
-            control={control}
-            defaultValue=''
-            render={({ field }) => (
-              <TextField {...field} select value={field.value} label='select'>
-                {questions.mangroveConditionImprovement.options.map((item, index) => (
-                  <MenuItem key={index} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
-          />
-          <ErrorText>{errors.mangroveConditionImprovement?.message}</ErrorText>
-        </FormQuestionDiv>
-        {mangroveConditionImprovementWatcher === 'Yes' ? (
+        {mangroveAreaIncreaseWatcher === 'Yes' || mangroveAreaIncreaseWatcher === 'No' ? (
           <FormQuestionDiv>
             <StickyFormLabel>{questions.preAndPostRestorationActivities.question}</StickyFormLabel>
             <Controller
@@ -461,6 +443,24 @@ const EcologicalStatusAndOutcomesForm = () => {
             ) : null}
           </FormQuestionDiv>
         ) : null}
+        <FormQuestionDiv>
+          <StickyFormLabel>{questions.mangroveConditionImprovement.question}</StickyFormLabel>
+          <Controller
+            name='mangroveConditionImprovement'
+            control={control}
+            defaultValue=''
+            render={({ field }) => (
+              <TextField {...field} select value={field.value} label='select'>
+                {questions.mangroveConditionImprovement.options.map((item, index) => (
+                  <MenuItem key={index} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <ErrorText>{errors.mangroveConditionImprovement?.message}</ErrorText>
+        </FormQuestionDiv>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.naturalRegenerationOnSite.question}</StickyFormLabel>
           <Controller
