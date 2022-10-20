@@ -46,10 +46,13 @@ function ProjectDetailsForm() {
   const { site_name } = useSiteInfo()
   const validationSchema = yup.object().shape({
     hasProjectEndDate: yup.boolean(),
-    projectStartDate: yup.string().required('Select a start date'),
-    projectEndDate: yup.string().when('hasProjectEndDate', {
-      is: true,
-      then: yup.string().required('Please select an end date')
+    projectStartDate: yup.date().required('Select a start date'),
+    projectEndDate: yup.date().when('hasProjectEndDate', {
+      is: (endDate) => endDate === true,
+      then: yup
+        .date()
+        .min(yup.ref('projectStartDate'), "End date can't be before start date")
+        .required('Please select an end date')
     }),
     countries: yup
       .array()

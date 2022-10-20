@@ -69,9 +69,13 @@ function SiteInterventionsForm() {
       )
       .default([]),
     biophysicalInterventionsUsed: multiselectWithOtherValidationNoMinimum,
-    biophysicalInterventionDuration: yup
-      .object()
-      .shape({ startDate: yup.string().nullable(), endDate: yup.string().nullable() }),
+    biophysicalInterventionDuration: yup.object().shape({
+      startDate: yup.string().nullable(),
+      endDate: yup
+        .string()
+        .nullable()
+        .min(yup.ref('startDate'), "End date can't be before start date")
+    }),
     mangroveSpeciesUsed: yup
       .array()
       .of(
@@ -410,6 +414,7 @@ function SiteInterventionsForm() {
                   )}
                 />
               </InnerFormDiv>
+              <ErrorText>{errors.biophysicalInterventionDuration?.endDate.message}</ErrorText>
             </Box>
           </FormQuestionDiv>
         ) : null}
