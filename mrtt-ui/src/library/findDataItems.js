@@ -3,6 +3,6 @@ export const findRegistationDataItem = (registrationAnswersFromServer, questionI
     ?.answer_value
 
 export const findMonitoringDataItem = (registrationAnswersFromServer, questionId) =>
-  registrationAnswersFromServer?.data.answers.find(
+  registrationAnswersFromServer?.data?.answers?.find(
     (dataItem) => dataItem.question_id === questionId
   )?.answer_value

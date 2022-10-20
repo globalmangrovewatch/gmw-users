@@ -197,26 +197,30 @@ const EcologicalStatusAndOutcomesForm = () => {
 
   const _loadMonitoringAnswers = useEffect(
     function loadMonitoringServerData() {
-      setAreBiophysicalInterventionsLoading(true)
-      axios
-        .get(monitoringFormSingularUrl)
-        .then((monitoringResponse) => {
-          const ecologicalMonitoringStakeholdersInitialVal =
-            getEcologicalMonitoringStakeholders(monitoringResponse)
+      if (isEditMode) {
+        setAreBiophysicalInterventionsLoading(true)
+        axios
+          .get(monitoringFormSingularUrl)
+          .then((monitoringResponse) => {
+            setAreBiophysicalInterventionsLoading(false)
+            const ecologicalMonitoringStakeholdersInitialVal =
+              getEcologicalMonitoringStakeholders(monitoringResponse)
 
-          const initialEcologicalMonitoringStakeholdersTypesChecked =
-            ecologicalMonitoringStakeholdersInitialVal?.map(
-              (stakeholder) => stakeholder.stakeholder
+            const initialEcologicalMonitoringStakeholdersTypesChecked =
+              ecologicalMonitoringStakeholdersInitialVal?.map(
+                (stakeholder) => stakeholder.stakeholder
+              )
+            setEcologicalMonitoringStakeholdersTypesChecked(
+              initialEcologicalMonitoringStakeholdersTypesChecked
             )
-          setEcologicalMonitoringStakeholdersTypesChecked(
-            initialEcologicalMonitoringStakeholdersTypesChecked
-          )
-        })
-        .catch(() => {
-          toast.error(language.error.apiLoad)
-        })
+          })
+          .catch(() => {
+            setAreBiophysicalInterventionsLoading(false)
+            toast.error(language.error.apiLoad)
+          })
+      }
     },
-    [monitoringFormSingularUrl]
+    [monitoringFormSingularUrl, isEditMode]
   )
 
   useInitializeMonitoringForm({

@@ -20,13 +20,14 @@ const useInitializeMonitoringForm = ({
         axios
           .get(apiUrl)
           .then(({ data }) => {
+            setIsLoading(false)
             const formTypeInResponse = data.form_type
             if (formType !== formTypeInResponse) {
               throw new Error(
                 'Monitoring data is being accessed with the wrong form component for the form type'
               )
             }
-            setIsLoading(false)
+
             const initialValuesForForm = formatApiAnswersForForm({
               apiAnswers: data.answers,
               questionMapping
