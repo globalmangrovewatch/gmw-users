@@ -28,7 +28,7 @@ import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { socioIndicators } from '../../data/socioIndicators'
-import { findDataItem } from '../../library/findDataItem'
+import { findRegistationDataItem } from '../../library/findDataItems'
 import SocioeconomicOutcomesRow from './SocioeconomicOutcomesRow'
 import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
@@ -37,7 +37,7 @@ import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import DatePickerUtcMui from '../DatePickerUtcMui'
 
 const getSocioeconomicAims = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '3.2') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '3.2') ?? []
 
 const formType = MONITORING_FORM_CONSTANTS.socioeconomicGovernanceStatusAndOutcomes.payloadType
 

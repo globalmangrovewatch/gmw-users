@@ -31,23 +31,23 @@ import ProjectFunderNamesRow from './ProjectFunderNamesRow'
 import BreakdownOfCostRow from './BreakdownOfCostRow'
 import PercentageSplitOfActivitiesRow from './PercentageSplitOfActivitiesRow'
 import { currencies } from '../../data/currencies'
-import { findDataItem } from '../../library/findDataItem'
+import { findRegistationDataItem } from '../../library/findDataItems'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 
 const getEndDate = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '1.1b') ?? ''
+  findRegistationDataItem(registrationAnswersFromServer, '1.1b') ?? ''
 
 const getBreakdownOfCost = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '7.5') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '7.5') ?? []
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '6.2') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '6.2') ?? []
 
 const getOtherActivitiesImplemented = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '6.4') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '6.4') ?? []
 
 const getPercentageSplitOfActivities = (registrationAnswersFromServer) =>
-  findDataItem(registrationAnswersFromServer, '7.5a') ?? []
+  findRegistationDataItem(registrationAnswersFromServer, '7.5a') ?? []
 
 const CostsForm = () => {
   const { site_name } = useSiteInfo()

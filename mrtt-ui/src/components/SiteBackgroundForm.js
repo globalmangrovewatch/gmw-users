@@ -11,10 +11,7 @@ import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
-import {
-  multiselectWithOtherValidation,
-  multiselectWithOtherValidationNoMinimum
-} from '../validation/multiSelectWithOther'
+import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
 import { questionMapping } from '../data/questionMapping'
 import { siteBackground } from '../data/questions'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
@@ -51,8 +48,8 @@ const SiteBackgroundForm = () => {
     managementArea: yup.string(),
     protectionStatus: multiselectWithOtherValidationNoMinimum,
     areStakeholdersInvolved: yup.string().nullable(),
-    governmentArrangement: multiselectWithOtherValidation,
-    landTenure: multiselectWithOtherValidation,
+    governmentArrangement: multiselectWithOtherValidationNoMinimum,
+    landTenure: multiselectWithOtherValidationNoMinimum,
     customaryRights: yup.string()
   })
 
@@ -280,12 +277,7 @@ const SiteBackgroundForm = () => {
             fieldName='governmentArrangement'
             reactHookFormInstance={reactHookFormInstance}
             options={siteBackground.governmentArrangement.options}
-            question={
-              <>
-                {siteBackground.governmentArrangement.question}
-                <RequiredIndicator />
-              </>
-            }
+            question={<>{siteBackground.governmentArrangement.question}</>}
             shouldAddOtherOptionWithClarification={true}
           />
           <ErrorText>{errors.governmentArrangement?.selectedValues?.message}</ErrorText>
@@ -296,12 +288,7 @@ const SiteBackgroundForm = () => {
             fieldName='landTenure'
             reactHookFormInstance={reactHookFormInstance}
             options={siteBackground.landTenure.options}
-            question={
-              <>
-                {siteBackground.landTenure.question}
-                <RequiredIndicator />
-              </>
-            }
+            question={<>{siteBackground.landTenure.question}</>}
             shouldAddOtherOptionWithClarification={true}
           />
           <ErrorText>{errors.landTenure?.selectedValues?.message}</ErrorText>
