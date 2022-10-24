@@ -2,7 +2,7 @@
 
 ## Product Description and Motivation
 
-Product description and motivation coming soon
+Global Mangrove Watch's Mangrove Restoration Tracking Tool (MRTT) is a data entry tool that is part of an online platform that provides access to remote sensing data and tools for monitoring mangroves, necessary for their conservation and management. It gives universal access to near real-time information on where mangroves are and what changes there have been to their distribution across the world and highlights why they are valuable.
 
 You can view the data that the MRTT app creates [here](https://globalmangrovewatch.org/).
 
