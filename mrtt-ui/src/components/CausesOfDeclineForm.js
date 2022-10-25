@@ -457,6 +457,7 @@ function CausesOfDeclineForm() {
               </Box>
             ))}
             <ErrorText>
+              {/* if error msg exists, this has to do with MOI. Reduces complexity in flitering */}
               {errors.causesOfDecline?.length
                 ? `Please select magnitude of impact for each item`
                 : null}
