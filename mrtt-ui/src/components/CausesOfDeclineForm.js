@@ -458,6 +458,11 @@ function CausesOfDeclineForm() {
                 })}
               </Box>
             ))}
+            <ErrorText>
+              {errors.causesOfDecline?.length
+                ? `Please select magnitude of impact for each item`
+                : null}
+            </ErrorText>
           </FormQuestionDiv>
         ) : null}
       </Form>
