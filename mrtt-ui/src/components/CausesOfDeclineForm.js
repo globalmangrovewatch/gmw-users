@@ -342,24 +342,22 @@ function CausesOfDeclineForm() {
                             (secondaryChildOption, secondaryChildIndex) => {
                               return (
                                 <ListItem key={secondaryChildIndex}>
-                                  <FormControlLabel
-                                    control={
-                                      <Checkbox
-                                        value={secondaryChildOption}
-                                        checked={causesOfDeclineTypesChecked.includes(
-                                          `${subCause.secondaryLabel}-${secondaryChildOption}`
-                                        )}
-                                        onChange={(event) =>
-                                          handleCausesOfDeclineOnChange({
-                                            event,
-                                            mainCauseLabel: mainCause.label,
-                                            subCauseLabel: subCause.secondaryLabel,
-                                            secondaryChildOption
-                                          })
-                                        }></Checkbox>
-                                    }
-                                    label={secondaryChildOption}
-                                  />
+                                  <Checkbox
+                                    value={secondaryChildOption}
+                                    checked={causesOfDeclineTypesChecked.includes(
+                                      `${subCause.secondaryLabel}-${secondaryChildOption}`
+                                    )}
+                                    onChange={(event) =>
+                                      handleCausesOfDeclineOnChange({
+                                        event,
+                                        mainCauseLabel: mainCause.label,
+                                        subCauseLabel: subCause.secondaryLabel,
+                                        secondaryChildOption
+                                      })
+                                    }></Checkbox>
+                                  <Typography variant='subtitle2'>
+                                    {secondaryChildOption}
+                                  </Typography>
                                 </ListItem>
                               )
                             }
@@ -403,7 +401,7 @@ function CausesOfDeclineForm() {
                               marginBottom: '1.5em'
                             }}>
                             {causesOfDecline.levelsOfDegredation.options.map((item, index) => (
-                              <MenuItem key={index} value={item}>
+                              <MenuItem key={index} value={item} sx={{ fontSize: '1.8rem' }}>
                                 {item}
                               </MenuItem>
                             ))}
