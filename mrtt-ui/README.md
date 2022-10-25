@@ -21,7 +21,7 @@ The project board for this work can be found [here](https://github.com/Vizzualit
 - [The Global Mangrove Watch API](https://github.com/globalmangrovewatch/gmw-api) to handle data on the server side
 - Transifex for user language translation.
 
-## Archetectural Decisions and Tradeoffs
+## Architectural Decisions and Tradeoffs
 
 - Translation will be provided via Transifex which is configured at `mrtt-ui/public/index.html`. This is unlikely to translate dynamically generated text, so we included a language file (`mrtt-ui/src/language.js`)for easy future translation. We attempted to put all user facing text in the language file, but in some places it is hardcoded in the JSX
 - Theming is configured in two files.

@@ -3,8 +3,9 @@ export const causesOfDeclineOptions = [
     label: 'Residential & commercial development',
     children: [
       'Housing & urban areas',
-      'Commercial & industrial areas',
-      'Tourism & recreation areas'
+      'Commercial & industrial areas e.g. ports, oil refineries',
+      'Tourism & recreation areas',
+      'Land reclamation'
     ]
   },
   {
@@ -16,7 +17,10 @@ export const causesOfDeclineOptions = [
           'Shifting agriculture',
           'Small-holder farming',
           'Agro-industry farming',
-          'Scale Unknown/Unrecorded'
+          'Rice',
+          'Coconuts',
+          'Limes',
+          'Other crops'
         ]
       },
       {
@@ -24,16 +28,17 @@ export const causesOfDeclineOptions = [
         secondaryChildren: [
           'Small-holder plantations',
           'Agro-industry plantations',
-          'Scale Unknown/Unrecorded'
+          'Oil palm',
+          'Eucalyptus'
         ]
       },
       {
         secondaryLabel: 'Livestock farming & ranching',
         secondaryChildren: [
           'Nomadic grazing',
-          'Small-holder grazing, ranching or farming',
-          'Agro-industry grazing, ranching or farming',
-          'Scale Unknown/Unrecorded'
+          'Small-holder cattle grazing, ranching or farming',
+          'Agro-industry cattle grazing, ranching or farming',
+          'Goat, camel or yak herding'
         ]
       },
       {
@@ -41,59 +46,53 @@ export const causesOfDeclineOptions = [
         secondaryChildren: [
           'Subsistence/artisanal aquaculture',
           'Industrial aquaculture',
-          'Scale Unknown/Unrecorded'
+          'Fish aquaculture',
+          'Shrimp aquaculture',
+          'Seaweed farming'
         ]
       }
     ]
   },
   {
     label: 'Energy production & mining',
-    children: ['Oil & gas drilling', 'Mining & quarrying', 'Renewable energy']
+    children: [
+      'Oil & gas drilling e.g. subsidence, habitat destruction',
+      'Mining & quarrying',
+      'Renewable energy'
+    ]
   },
   {
     label: 'Transportation & service corridors',
-    children: ['Roads & railroads', 'Utility & service lines', 'Shipping lanes', 'Flight paths']
+    children: ['Roads & railroads', 'Oil and gas pipelines', 'Shipping lanes']
   },
   {
     label: 'Biological resource use',
     children: [
       {
-        secondaryLabel: 'Hunting & collecting terrestrial animals',
+        secondaryLabel: 'Resource use',
         secondaryChildren: [
-          'Intentional use (species being assessed is the target)',
-          'Unintentional effects (species being assessed is not the target)',
-          'Persecution/control',
-          'Motivation Unknown/Unrecorded'
-        ]
-      },
-      {
-        secondaryLabel: 'Gathering terrestrial plants',
-        secondaryChildren: [
-          'Intentional use (species being assessed is the target)',
-          'Unintentional effects (species being assessed is not the target)',
-          'Persecution/control',
-          'Motivation Unknown/Unrecorded'
+          'Hunting & collecting terrestrial animals',
+          'Gathering terrestrial plants',
+          'Salt pannes/ponds',
+          'Coral burning'
         ]
       },
       {
         secondaryLabel: 'Logging & wood harvesting',
         secondaryChildren: [
-          'Intentional use: subsistence/small scale (species being assessed is the target [harvest])',
-          'Intentional use: large scale (species being assessed is the target)[harvest]',
-          'Unintentional effects: subsistence/small scale (species being assessed is not the target)[harvest]',
-          'Unintentional effects: large scale (species being assessed is not the target)[harvest]',
-          'Motivation Unknown/Unrecorded'
+          'Building materials',
+          'Charcoal production',
+          'Fuel wood collection',
+          'Fish aggregation devices'
         ]
       },
       {
         secondaryLabel: 'Fishing & harvesting aquatic resources',
         secondaryChildren: [
-          'Intentional use: subsistence/small scale (species being assessed is the target)[harvest]',
-          'Intentional use: large scale (species being assessed is the target)[harvest]',
-          'Unintentional effects: subsistence/small scale (species being assessed is not the target)[harvest]',
-          'Unintentional effects: large scale (species being assessed is not the target)[harvest]',
-          'Persecution/control',
-          'Motivation Unknown/Unrecorded'
+          'Artisanal fishing',
+          'Commercial fishing',
+          'Seaweed collection',
+          'Shellfish collection'
         ]
       }
     ]
@@ -113,109 +112,56 @@ export const causesOfDeclineOptions = [
         secondaryLabel: 'Fire & fire suppression',
         secondaryChildren: [
           'Increase in fire frequency/intensity',
-          'Suppression in fire frequency/intensity',
-          'Trend Unknown/Unrecorded'
+          'Suppression in fire frequency/intensity'
         ]
       },
       {
         secondaryLabel: 'Dams & water management/use',
         secondaryChildren: [
-          'Abstraction of surface water (domestic use)',
-          'Abstraction of surface water (commercial use)',
-          'Abstraction of surface water (agricultural use)',
-          'Abstraction of surface water (unknown use)',
-          'Abstraction of ground water (domestic use)',
-          'Abstraction of ground water (commercial use)',
-          'Abstraction of ground water (agricultural use)',
-          'Abstraction of ground water (unknown use)',
-          'Small dams',
-          'Large dams',
-          'Dams (size unknown)'
+          'Hypersaline conditions',
+          'Reduced sediment flows',
+          'Reduction in flows/altered hydrology'
         ]
-      },
-      { secondaryLabel: 'Other ecosystem modifications', secondaryChildren: [] }
+      }
     ]
   },
   {
     label: 'Invasive & other problematic species, genes & diseases',
-    children: [
-      {
-        secondaryLabel: 'Invasive non-native/alien species/diseases',
-        secondaryChildren: ['Unspecified species', 'Named species']
-      },
-      {
-        secondaryLabel: 'Problematic native species/diseases',
-        secondaryChildren: ['Unspecified species', 'Named species']
-      },
-      {
-        secondaryLabel: 'Introduced genetic material',
-        secondaryChildren: []
-      },
-      {
-        secondaryLabel: 'Problematic species/diseases of unknown origin',
-        secondaryChildren: ['Unspecified species', 'Named species']
-      },
-      {
-        secondaryLabel: 'Viral/prion-induced diseases',
-        secondaryChildren: ['Unspecified "species" (disease)', 'Named "species" (disease)']
-      },
-      {
-        secondaryLabel: 'Diseases of unknown cause',
-        secondaryChildren: []
-      }
-    ]
+    children: ['Invasive non-native/alien species/diseases', 'Problematic native species/diseases']
   },
   {
     label: 'Pollution',
     children: [
       {
         secondaryLabel: 'Domestic & urban waste water',
-        secondaryChildren: ['Sewage', 'Run-off', 'Type Unknown/Unrecorded']
+        secondaryChildren: ['Sewage', 'Run-off', 'Garbage & solid waste']
       },
       {
         secondaryLabel: 'Industrial & military effluents',
-        secondaryChildren: ['Oil spills', 'Seepage from mining', 'Type Unknown/Unrecorded']
+        secondaryChildren: ['Oil spills', 'Seepage from mining', 'Other industrial effluents']
       },
       {
         secondaryLabel: 'Agricultural & forestry effluents',
         secondaryChildren: [
           'Nutrient loads',
           'Soil erosion, sedimentation',
-          'Herbicides & pesticides',
-          'Type Unknown/Unrecorded'
-        ]
-      },
-      {
-        secondaryLabel: 'Garbage & solid waste',
-        secondaryChildren: []
-      },
-      {
-        secondaryLabel: 'Air-borne pollutants',
-        secondaryChildren: ['Acid rain', 'Smog', 'Ozone', 'Type Unknown/Unrecorded']
-      },
-      {
-        secondaryLabel: 'Excess energy',
-        secondaryChildren: [
-          'Light pollution',
-          'Thermal pollution',
-          'Noise pollution',
-          'Type Unknown/Unrecorded'
+          'Herbicides & pesticides'
         ]
       }
     ]
   },
   {
     label: 'Geological events',
-    children: ['Volcanoes', 'Earthquakes/tsunamis', 'Avalanches/landslides']
+    children: ['Volcanoes', 'Earthquakes/tsunamis', 'Avalanches/landslides', 'Erosion']
   },
   {
     label: 'Climate change & severe weather',
     children: [
       'Habitat shifting & alteration',
+      'Sea level change',
       'Droughts',
       'Temperature extremes',
-      'Storms & flooding',
-      'Other impacts'
+      'Storms & flooding'
     ]
   },
   {
