@@ -4,7 +4,7 @@ export const causesOfDeclineOptions = [
     children: [
       'Housing & urban areas',
       'Commercial & industrial areas e.g. ports, oil refineries',
-      'Tourism & recreation areas', 
+      'Tourism & recreation areas',
       'Land reclamation'
     ]
   },
@@ -28,7 +28,7 @@ export const causesOfDeclineOptions = [
         secondaryChildren: [
           'Small-holder plantations',
           'Agro-industry plantations',
-          'Oil palm', 
+          'Oil palm',
           'Eucalyptus'
         ]
       },
@@ -47,7 +47,7 @@ export const causesOfDeclineOptions = [
           'Subsistence/artisanal aquaculture',
           'Industrial aquaculture',
           'Fish aquaculture',
-          'Shrimp aquaculture', 
+          'Shrimp aquaculture',
           'Seaweed farming'
         ]
       }
@@ -56,18 +56,14 @@ export const causesOfDeclineOptions = [
   {
     label: 'Energy production & mining',
     children: [
-      'Oil & gas drilling e.g. subsidence, habitat destruction', 
-      'Mining & quarrying', 
+      'Oil & gas drilling e.g. subsidence, habitat destruction',
+      'Mining & quarrying',
       'Renewable energy'
     ]
   },
   {
     label: 'Transportation & service corridors',
-    children: [
-      'Roads & railroads', 
-      'Oil and gas pipelines', 
-      'Shipping lanes'
-    ]
+    children: ['Roads & railroads', 'Oil and gas pipelines', 'Shipping lanes']
   },
   {
     label: 'Biological resource use',
@@ -126,34 +122,23 @@ export const causesOfDeclineOptions = [
           'Reduced sediment flows',
           'Reduction in flows/altered hydrology'
         ]
-      },
+      }
     ]
   },
   {
     label: 'Invasive & other problematic species, genes & diseases',
-    children: [
-        'Invasive non-native/alien species/diseases',
-        'Problematic native species/diseases'        
-    ]
+    children: ['Invasive non-native/alien species/diseases', 'Problematic native species/diseases']
   },
   {
     label: 'Pollution',
     children: [
       {
         secondaryLabel: 'Domestic & urban waste water',
-        secondaryChildren: [
-          'Sewage', 
-          'Run-off',
-          'Garbage & solid waste'
-        ]
+        secondaryChildren: ['Sewage', 'Run-off', 'Garbage & solid waste']
       },
       {
         secondaryLabel: 'Industrial & military effluents',
-        secondaryChildren: [
-          'Oil spills', 
-          'Seepage from mining', 
-          'Other industrial effluents'
-        ]
+        secondaryChildren: ['Oil spills', 'Seepage from mining', 'Other industrial effluents']
       },
       {
         secondaryLabel: 'Agricultural & forestry effluents',
@@ -162,17 +147,12 @@ export const causesOfDeclineOptions = [
           'Soil erosion, sedimentation',
           'Herbicides & pesticides'
         ]
-      },
+      }
     ]
   },
   {
     label: 'Geological events',
-    children: [
-      'Volcanoes', 
-      'Earthquakes/tsunamis', 
-      'Avalanches/landslides',
-      'Erosion'
-    ]
+    children: ['Volcanoes', 'Earthquakes/tsunamis', 'Avalanches/landslides', 'Erosion']
   },
   {
     label: 'Climate change & severe weather',
