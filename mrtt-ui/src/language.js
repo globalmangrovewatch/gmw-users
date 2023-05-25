@@ -99,6 +99,7 @@ const pages = {
       'Your request has been submitted. If you have an account with that email address, you will receive an email with further instructions.'
   },
   organizations: {
+    downloadOrganizationSites: 'Download Data',
     manageUsers: 'Manage users',
     newOrganizationButton: 'New Org',
     noOtherOrganizations: 'There are no other organizations',
@@ -116,7 +117,12 @@ const pages = {
       nameRequired: 'Please enter a name'
     }
   },
-  sites: { title: 'Sites', newSiteButton: 'New Site', lastUpdated: 'Last updated' },
+  sites: {
+    downloadSites: 'Download Data',
+    lastUpdated: 'Last updated',
+    newSiteButton: 'New Site',
+    title: 'Sites'
+  },
   landscapeForm: {
     delete: 'Delete this landscape',
     deletePrompt: {
@@ -138,6 +144,7 @@ const pages = {
     }
   },
   landscapes: {
+    downloadLandscapeSites: 'Download Data',
     newLandscapeButton: 'New Landscape',
     noOrganizarions: 'No organizations in this landscape',
     noSites: 'No sites in this landscape',
@@ -190,7 +197,7 @@ const pages = {
     role: 'Role'
   },
   siteQuestionsOverview: {
-    downloadSiteData: 'Download Site Data',
+    downloadSiteData: 'Download PDF',
     settings: 'Settings',
 
     formGroupTitle: {

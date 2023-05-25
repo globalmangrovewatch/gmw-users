@@ -1,7 +1,8 @@
-import { ButtonPrimary } from '../styles/buttons'
+import { ButtonPrimary, ButtonSecondary } from '../styles/buttons'
 import React, { useEffect, useState } from 'react'
 
 import {
+  ButtonContainer,
   Card,
   ContentWrapper,
   PaddedSection,
@@ -44,11 +45,16 @@ function Organizations() {
           <Card as='li' key={organizationId}>
             <RowSpaceBetween>
               {organization_name}
-              {canManageUsers ? (
-                <LinkLooksLikeButtonSecondary to={`/organizations/${organizationId}/users`}>
-                  {language.pages.organizations.manageUsers}
-                </LinkLooksLikeButtonSecondary>
-              ) : null}
+              <ButtonContainer>
+                <ButtonSecondary type='button'>
+                  {language.pages.landscapes.downloadLandscapeSites}
+                </ButtonSecondary>
+                {canManageUsers ? (
+                  <LinkLooksLikeButtonSecondary to={`/organizations/${organizationId}/users`}>
+                    {language.pages.organizations.manageUsers}
+                  </LinkLooksLikeButtonSecondary>
+                ) : null}
+              </ButtonContainer>
             </RowSpaceBetween>
           </Card>
         )

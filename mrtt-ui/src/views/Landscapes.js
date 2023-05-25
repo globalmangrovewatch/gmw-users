@@ -3,10 +3,10 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 
 import {
+  ButtonContainer,
   Card,
   ContentWrapper,
   PaddedSection,
-  RowCenterCenter,
   RowSpaceBetween,
   TitleAndActionContainer
 } from '../styles/containers'
@@ -18,6 +18,7 @@ import {
   PageTitle,
   SmallUpperCase
 } from '../styles/typography'
+import { ButtonSecondary } from '../styles/buttons'
 import { UlUndecorated } from '../styles/lists'
 import EditLink from '../components/EditLink'
 import language from '../language'
@@ -77,9 +78,12 @@ function Landscapes() {
         <Card key={id}>
           <RowSpaceBetween>
             <ItemTitle>{landscape_name}</ItemTitle>
-            <RowCenterCenter>
+            <ButtonContainer>
+              <ButtonSecondary type='button'>
+                {language.pages.landscapes.downloadLandscapeSites}
+              </ButtonSecondary>
               <EditLink to={`/landscapes/${id}/edit`} />
-            </RowCenterCenter>
+            </ButtonContainer>
           </RowSpaceBetween>
           <H4>{language.pages.landscapes.sites}</H4>
           <PaddedSection>{landscapeAssociatedSites}</PaddedSection>

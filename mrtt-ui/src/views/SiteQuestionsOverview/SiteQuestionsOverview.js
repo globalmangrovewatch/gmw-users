@@ -8,7 +8,12 @@ import fileDownload from 'js-file-download'
 import React, { useEffect, useState } from 'react'
 
 import { ButtonSecondary } from '../../styles/buttons'
-import { ContentWrapper, RowCenterCenter, TitleAndActionContainer } from '../../styles/containers'
+import {
+  ButtonContainer,
+  ContentWrapper,
+  RowCenterCenter,
+  TitleAndActionContainer
+} from '../../styles/containers'
 import { ItemSubTitle, ItemTitle, Link } from '../../styles/typography'
 import { TableAlertnatingRows, WideTh } from '../../styles/table'
 import AddMonitoringSectionMenu from './AddMonitoringSectionMenu'
@@ -16,17 +21,12 @@ import ItemDoesntExist from '../../components/ItemDoesntExist'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
 import MonitoringFormsList from './MonitoringFormsList'
-import themeMui from '../../styles/themeMui'
 
 const pageLanguage = language.pages.siteQuestionsOverview
 
 const StyledSectionHeader = styled('h3')`
   text-transform: uppercase;
   font-weight: 100;
-`
-
-const DownloadContainer = styled(RowCenterCenter)`
-  margin-top: ${themeMui.spacing(4)};
 `
 
 const SiteOverview = () => {
@@ -78,8 +78,8 @@ const SiteOverview = () => {
   )
 
   const handleDownload = () => {
-    const exportDataUrl = `https://mrtt-api-test-3.herokuapp.com/api/v2/report/answers/${siteId}`
-    axios.get(exportDataUrl, { responseType: 'blob' }).then((response) => {
+    const siteDownloadUrl = `${process.env.REACT_APP_API_URL}/report/answers/${siteId}`
+    axios.get(siteDownloadUrl, { responseType: 'blob' }).then((response) => {
       fileDownload(response.data, `${site.site_name}.json`)
     })
   }
@@ -94,9 +94,14 @@ const SiteOverview = () => {
             <ItemTitle as='h2'>{site?.site_name}</ItemTitle>
             <ItemSubTitle>{landscape?.landscape_name}</ItemSubTitle>
           </Stack>
-          <ButtonSecondary component={LinkReactRouter} to={`/sites/${siteId}/edit`}>
-            <SettingsIcon /> {pageLanguage.settings}
-          </ButtonSecondary>
+          <ButtonContainer>
+            <ButtonSecondary type='button' onClick={handleDownload}>
+              {pageLanguage.downloadSiteData}
+            </ButtonSecondary>
+            <ButtonSecondary component={LinkReactRouter} to={`/sites/${siteId}/edit`}>
+              <SettingsIcon /> {pageLanguage.settings}
+            </ButtonSecondary>
+          </ButtonContainer>
         </TitleAndActionContainer>
         <StyledSectionHeader>{pageLanguage.formGroupTitle.registration}</StyledSectionHeader>
         {/* this is a table instead of a ul to leave room for a cell that shows
@@ -168,11 +173,6 @@ const SiteOverview = () => {
         ) : (
           <RowCenterCenter>{pageLanguage.noMonitoringSections}</RowCenterCenter>
         )}
-        <DownloadContainer>
-          <ButtonSecondary type='button' onClick={handleDownload}>
-            {pageLanguage.downloadSiteData}
-          </ButtonSecondary>
-        </DownloadContainer>
       </ContentWrapper>
     </>
   )

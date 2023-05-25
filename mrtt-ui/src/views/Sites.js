@@ -5,8 +5,13 @@ import axios from 'axios'
 import LoadingIndicator from '../components/LoadingIndicator'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonPrimary } from '../styles/buttons'
-import { LinkCard, ContentWrapper, TitleAndActionContainer } from '../styles/containers'
+import { ButtonPrimary, ButtonSecondary } from '../styles/buttons'
+import {
+  LinkCard,
+  ContentWrapper,
+  TitleAndActionContainer,
+  ButtonContainer
+} from '../styles/containers'
 import { ItemTitle, ItemSubTitle, PageTitle } from '../styles/typography'
 import language from '../language'
 
@@ -68,9 +73,12 @@ function Sites() {
     <ContentWrapper>
       <TitleAndActionContainer>
         <PageTitle>{language.pages.sites.title}</PageTitle>
-        <ButtonPrimary component={Link} to='/sites/new'>
-          {language.pages.sites.newSiteButton}
-        </ButtonPrimary>
+        <ButtonContainer>
+          <ButtonSecondary type='button'>{language.pages.sites.downloadSites}</ButtonSecondary>
+          <ButtonPrimary component={Link} to='/sites/new'>
+            {language.pages.sites.newSiteButton}
+          </ButtonPrimary>
+        </ButtonContainer>
       </TitleAndActionContainer>
       <Stack>{sitesList}</Stack>
     </ContentWrapper>
