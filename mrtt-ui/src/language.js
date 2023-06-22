@@ -99,11 +99,13 @@ const pages = {
       'Your request has been submitted. If you have an account with that email address, you will receive an email with further instructions.'
   },
   organizations: {
+    allData: 'All Data',
     downloadOrganizationSites: 'Download Data',
     manageUsers: 'Manage users',
     newOrganizationButton: 'New Org',
     noOtherOrganizations: 'There are no other organizations',
     noYourOrganizations: 'You dont have any organizations',
+    publicData: 'Public Data',
     title: 'Organizations',
     titleOtherOrganizations: 'Other Organizations',
     titleYourOrganizations: 'Your Organizations'
@@ -118,9 +120,11 @@ const pages = {
     }
   },
   sites: {
+    allData: 'All Data',
     downloadSites: 'Download Data',
     lastUpdated: 'Last updated',
     newSiteButton: 'New Site',
+    publicData: 'Public Data',
     title: 'Sites'
   },
   landscapeForm: {
@@ -144,7 +148,6 @@ const pages = {
     }
   },
   landscapes: {
-    downloadLandscapeSites: 'Download Data',
     newLandscapeButton: 'New Landscape',
     noOrganizarions: 'No organizations in this landscape',
     noSites: 'No sites in this landscape',
