@@ -1,5 +1,6 @@
 import { ButtonPrimary, ButtonSecondary } from '../styles/buttons'
 import React, { useEffect, useState } from 'react'
+import { Menu, MenuItem } from '@mui/material'
 
 import {
   ButtonContainer,
@@ -24,6 +25,9 @@ function Organizations() {
   const [yourOrganizations, setYourOrganizations] = useState([])
   const [otherOrganizations, setOtherOrganizations] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [downloadOptionsAnchorEl, setDownloadOptionsAnchorEl] = useState(null)
+  const [targetOrganization, setTargetOrganization] = useState(null)
+
   useEffect(function loadOrganizations() {
     axios
       .get(organizationsUrl)
@@ -37,6 +41,37 @@ function Organizations() {
       })
   }, [])
 
+  const handleDownloadButtonClick = (event, organizationId) => {
+    setDownloadOptionsAnchorEl(event.currentTarget)
+    setTargetOrganization(organizationId)
+  }
+
+  const handleDownloadMenuClose = () => {
+    setDownloadOptionsAnchorEl(null)
+  }
+
+  const handleDownloadOptionSelect = ({ publicOnly }) => {
+    setDownloadOptionsAnchorEl(null)
+    axios({
+      url: `${process.env.REACT_APP_API_URL}/report/answers_as_xlsx?organization_id=${targetOrganization}&public_only=${publicOnly}`,
+      method: 'GET',
+      responseType: 'blob'
+    }).then((response) => {
+      const href = URL.createObjectURL(response.data)
+
+      const link = document.createElement('a')
+      link.href = href
+      link.setAttribute('download', 'organization-data.xlsx')
+      document.body.appendChild(link)
+      link.click()
+
+      document.body.removeChild(link)
+      URL.revokeObjectURL(href)
+    })
+  }
+
+  const open = Boolean(downloadOptionsAnchorEl)
+
   const yourOrganizationsList = (
     <UlUndecorated>
       {yourOrganizations.map(({ id: organizationId, organization_name, role }) => {
@@ -46,8 +81,14 @@ function Organizations() {
             <RowSpaceBetween>
               {organization_name}
               <ButtonContainer>
-                <ButtonSecondary type='button'>
-                  {language.pages.landscapes.downloadLandscapeSites}
+                <ButtonSecondary
+                  type='button'
+                  id='download-options'
+                  aria-controls={open ? 'download-options-menu' : undefined}
+                  aria-haspopup='true'
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={(event) => handleDownloadButtonClick(event, organizationId)}>
+                  {language.pages.organizations.downloadOrganizationSites}
                 </ButtonSecondary>
                 {canManageUsers ? (
                   <LinkLooksLikeButtonSecondary to={`/organizations/${organizationId}/users`}>
@@ -59,6 +100,31 @@ function Organizations() {
           </Card>
         )
       })}
+      <Menu
+        id='download-options-menu'
+        open={open}
+        anchorEl={downloadOptionsAnchorEl}
+        onClose={handleDownloadMenuClose}
+        MenuListProps={{
+          'aria-labelledby': 'download-options'
+        }}>
+        <MenuItem
+          onClick={() =>
+            handleDownloadOptionSelect({
+              publicOnly: false
+            })
+          }>
+          {language.pages.organizations.allData}
+        </MenuItem>
+        <MenuItem
+          onClick={() =>
+            handleDownloadOptionSelect({
+              publicOnly: true
+            })
+          }>
+          {language.pages.organizations.publicData}
+        </MenuItem>
+      </Menu>
     </UlUndecorated>
   )
 

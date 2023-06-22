@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Stack } from '@mui/material'
+import { Menu, MenuItem, Stack } from '@mui/material'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import LoadingIndicator from '../components/LoadingIndicator'
@@ -20,6 +20,7 @@ const sitesUrl = `${process.env.REACT_APP_API_URL}/sites/`
 function Sites() {
   const [isLoading, setIsLoading] = useState(true)
   const [sites, setSites] = useState([])
+  const [downloadOptionsAnchorEl, setDownloadOptionsAnchorEl] = React.useState(null)
 
   useEffect(function loadSitesData() {
     axios
@@ -30,6 +31,36 @@ function Sites() {
       })
       .catch(() => toast.error(language.error.apiLoad))
   }, [])
+
+  const handleDownloadButtonClick = (event) => {
+    setDownloadOptionsAnchorEl(event.currentTarget)
+  }
+
+  const handleDownloadMenuClose = () => {
+    setDownloadOptionsAnchorEl(null)
+  }
+
+  const handleDownloadOptionSelect = ({ publicOnly }) => {
+    setDownloadOptionsAnchorEl(null)
+    axios({
+      url: `${process.env.REACT_APP_API_URL}/report/answers_as_xlsx?&public_only=${publicOnly}`,
+      method: 'GET',
+      responseType: 'blob'
+    }).then((response) => {
+      const href = URL.createObjectURL(response.data)
+
+      const link = document.createElement('a')
+      link.href = href
+      link.setAttribute('download', 'organization-data.xlsx')
+      document.body.appendChild(link)
+      link.click()
+
+      document.body.removeChild(link)
+      URL.revokeObjectURL(href)
+    })
+  }
+
+  const open = Boolean(downloadOptionsAnchorEl)
 
   const sitesList = sites
     .sort((siteA, siteB) => {
@@ -74,7 +105,40 @@ function Sites() {
       <TitleAndActionContainer>
         <PageTitle>{language.pages.sites.title}</PageTitle>
         <ButtonContainer>
-          <ButtonSecondary type='button'>{language.pages.sites.downloadSites}</ButtonSecondary>
+          <ButtonSecondary
+            type='button'
+            id='download-options'
+            aria-controls={open ? 'download-options-menu' : undefined}
+            aria-haspopup='true'
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleDownloadButtonClick}>
+            {language.pages.sites.downloadSites}
+          </ButtonSecondary>
+          <Menu
+            id='download-options-menu'
+            open={open}
+            anchorEl={downloadOptionsAnchorEl}
+            onClose={handleDownloadMenuClose}
+            MenuListProps={{
+              'aria-labelledby': 'download-options'
+            }}>
+            <MenuItem
+              onClick={() =>
+                handleDownloadOptionSelect({
+                  publicOnly: false
+                })
+              }>
+              {language.pages.sites.allData}
+            </MenuItem>
+            <MenuItem
+              onClick={() =>
+                handleDownloadOptionSelect({
+                  publicOnly: true
+                })
+              }>
+              {language.pages.sites.publicData}
+            </MenuItem>
+          </Menu>
           <ButtonPrimary component={Link} to='/sites/new'>
             {language.pages.sites.newSiteButton}
           </ButtonPrimary>
