@@ -1,5 +1,5 @@
 import { Settings as SettingsIcon } from '@mui/icons-material'
-import { Stack } from '@mui/material'
+import { Menu, MenuItem, Stack } from '@mui/material'
 import { styled } from '@mui/system'
 import { toast } from 'react-toastify'
 import { useParams, Link as LinkReactRouter } from 'react-router-dom'
@@ -35,6 +35,7 @@ const SiteOverview = () => {
   const [landscape, setLandscape] = useState()
   const [monitoringForms, setMonitoringForms] = useState([])
   const [site, setSite] = useState()
+  const [downloadOptionsAnchorEl, setDownloadOptionsAnchorEl] = React.useState(null)
   const { siteId } = useParams()
 
   const monitoringFormsSortedByDate = monitoringForms.sort((formA, formB) => {
@@ -77,12 +78,23 @@ const SiteOverview = () => {
     [siteId]
   )
 
-  const handleDownload = () => {
-    const siteDownloadUrl = `${process.env.REACT_APP_API_URL}/report/answers_as_pdf/${siteId}`
+  const handleDownloadButtonClick = (event) => {
+    setDownloadOptionsAnchorEl(event.currentTarget)
+  }
+
+  const handleDownloadMenuClose = () => {
+    setDownloadOptionsAnchorEl(null)
+  }
+
+  const handleDownloadOptionSelect = ({ publicOnly }) => {
+    setDownloadOptionsAnchorEl(null)
+    const siteDownloadUrl = `${process.env.REACT_APP_API_URL}/report/answers_as_pdf/${siteId}?&public_only=${publicOnly}`
     axios.get(siteDownloadUrl, { responseType: 'blob' }).then((response) => {
       fileDownload(response.data, `${site.site_name}.pdf`)
     })
   }
+
+  const open = Boolean(downloadOptionsAnchorEl)
 
   const siteOverview = !doesSiteExist ? (
     <ItemDoesntExist item='site' />
@@ -95,9 +107,40 @@ const SiteOverview = () => {
             <ItemSubTitle>{landscape?.landscape_name}</ItemSubTitle>
           </Stack>
           <ButtonContainer>
-            <ButtonSecondary type='button' onClick={handleDownload}>
+            <ButtonSecondary
+              type='button'
+              id='download-options'
+              aria-controls={open ? 'download-options-menu' : undefined}
+              aria-haspopup='true'
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleDownloadButtonClick}>
               {pageLanguage.downloadSiteData}
             </ButtonSecondary>
+            <Menu
+              id='download-options-menu'
+              open={open}
+              anchorEl={downloadOptionsAnchorEl}
+              onClose={handleDownloadMenuClose}
+              MenuListProps={{
+                'aria-labelledby': 'download-options'
+              }}>
+              <MenuItem
+                onClick={() =>
+                  handleDownloadOptionSelect({
+                    publicOnly: false
+                  })
+                }>
+                {language.pages.sites.allData}
+              </MenuItem>
+              <MenuItem
+                onClick={() =>
+                  handleDownloadOptionSelect({
+                    publicOnly: true
+                  })
+                }>
+                {language.pages.sites.publicData}
+              </MenuItem>
+            </Menu>
             <ButtonSecondary component={LinkReactRouter} to={`/sites/${siteId}/edit`}>
               <SettingsIcon /> {pageLanguage.settings}
             </ButtonSecondary>
