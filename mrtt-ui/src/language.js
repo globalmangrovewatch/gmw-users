@@ -200,7 +200,7 @@ const pages = {
     role: 'Role'
   },
   siteQuestionsOverview: {
-    downloadSiteData: 'Download PDF',
+    downloadSiteData: 'Download Report',
     settings: 'Settings',
 
     formGroupTitle: {
