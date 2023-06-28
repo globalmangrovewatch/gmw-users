@@ -78,9 +78,9 @@ const SiteOverview = () => {
   )
 
   const handleDownload = () => {
-    const siteDownloadUrl = `${process.env.REACT_APP_API_URL}/report/answers/${siteId}`
+    const siteDownloadUrl = `${process.env.REACT_APP_API_URL}/report/answers_as_pdf/${siteId}`
     axios.get(siteDownloadUrl, { responseType: 'blob' }).then((response) => {
-      fileDownload(response.data, `${site.site_name}.json`)
+      fileDownload(response.data, `${site.site_name}.pdf`)
     })
   }
 
