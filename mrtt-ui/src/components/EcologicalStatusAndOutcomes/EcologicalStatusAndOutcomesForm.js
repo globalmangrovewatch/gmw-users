@@ -396,8 +396,10 @@ const EcologicalStatusAndOutcomesForm = () => {
 
       <Form>
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.dateOfEcologicalMonitoring.question}</StickyFormLabel>
-          <RequiredIndicator />
+          <StickyFormLabel>
+            {questions.dateOfEcologicalMonitoring.question}
+            <RequiredIndicator />
+          </StickyFormLabel>
           <Controller
             name='monitoringStartDate'
             control={control}
