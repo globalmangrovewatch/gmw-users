@@ -40,7 +40,6 @@ import QuestionNav from '../QuestionNav'
 import PhysicalMeasurementRow from './PhysicalMeasurementRow'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
-import RequiredIndicator from '../RequiredIndicator'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
 
