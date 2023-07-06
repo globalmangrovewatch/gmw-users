@@ -389,7 +389,7 @@ function SiteInterventionsForm() {
             question={questions.biophysicalInterventionsUsed.question}
             shouldAddOtherOptionWithClarification={true}
           />
-          <ErrorText>{errors.biophysicalInterventionsUsed?.message}</ErrorText>
+          <ErrorText>{errors.biophysicalInterventionsUsed?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         {!biophysicalInterventionsUsedWatcher?.selectedValues?.includes('None') ? (
           <FormQuestionDiv>
