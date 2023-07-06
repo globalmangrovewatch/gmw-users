@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { StickyFormLabel } from '../styles/forms'
 import { Controller } from 'react-hook-form'
 import CheckboxGroup from './CheckboxGroup/CheckboxGroup'
+import RequiredIndicator from './RequiredIndicator'
 import getOptionsValuesAndLabels from '../library/getOptionsValuesAndLabels'
 
 const CheckboxGroupWithLabelAndController = ({
@@ -10,7 +11,8 @@ const CheckboxGroupWithLabelAndController = ({
   options,
   question,
   reactHookFormInstance,
-  shouldAddOtherOptionWithClarification
+  shouldAddOtherOptionWithClarification,
+  required = false
 }) => {
   const { control: formControl } = reactHookFormInstance
   const labelId = `${fieldName}-label`
@@ -18,7 +20,10 @@ const CheckboxGroupWithLabelAndController = ({
 
   return (
     <>
-      <StickyFormLabel id={labelId}>{question}</StickyFormLabel>
+      <StickyFormLabel id={labelId}>
+        {question}
+        {required && <RequiredIndicator />}
+      </StickyFormLabel>
       <Controller
         name={fieldName}
         control={formControl}
@@ -43,7 +48,8 @@ CheckboxGroupWithLabelAndController.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
   question: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
   reactHookFormInstance: PropTypes.any.isRequired,
-  shouldAddOtherOptionWithClarification: PropTypes.bool
+  shouldAddOtherOptionWithClarification: PropTypes.bool,
+  required: PropTypes.bool
 }
 CheckboxGroup.defaultProps = { shouldAddOtherOptionWithClarification: false }
 

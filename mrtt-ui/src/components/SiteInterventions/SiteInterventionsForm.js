@@ -49,7 +49,6 @@ import useInitializeQuestionMappedForm from '../../library/useInitializeQuestion
 import useSiteInfo from '../../library/useSiteInfo'
 import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
 import DatePickerUtcMui from '../DatePickerUtcMui'
-import RequiredIndicator from '../RequiredIndicator'
 
 const getWhichStakeholdersInvolved = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '6.1') ?? []
@@ -381,13 +380,13 @@ function SiteInterventionsForm() {
           <ErrorText>{errors.whichStakeholdersInvolved?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
-          <RequiredIndicator />
           <CheckboxGroupWithLabelAndController
             fieldName='biophysicalInterventionsUsed'
             reactHookFormInstance={reactHookFormInstance}
             options={questions.biophysicalInterventionsUsed.options}
             question={questions.biophysicalInterventionsUsed.question}
             shouldAddOtherOptionWithClarification={true}
+            required
           />
           <ErrorText>{errors.biophysicalInterventionsUsed?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
@@ -638,13 +637,13 @@ function SiteInterventionsForm() {
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>
-          <RequiredIndicator />
           <CheckboxGroupWithLabelAndController
             fieldName='otherActivitiesImplemented'
             reactHookFormInstance={reactHookFormInstance}
             options={questions.otherActivitiesImplemented.options}
             question={questions.otherActivitiesImplemented.question}
             shouldAddOtherOptionWithClarification={true}
+            required
           />
           <ErrorText>{errors.otherActivitiesImplemented?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
