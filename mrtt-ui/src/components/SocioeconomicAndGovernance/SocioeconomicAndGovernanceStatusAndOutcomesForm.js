@@ -277,8 +277,9 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
 
       <Form>
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.dateOfOutcomesAssessment.question}</StickyFormLabel>
-          <RequiredIndicator />
+          <StickyFormLabel>{questions.dateOfOutcomesAssessment.question}
+            <RequiredIndicator />
+          </StickyFormLabel>
           <Controller
             name='dateOfOutcomesAssessment'
             control={control}

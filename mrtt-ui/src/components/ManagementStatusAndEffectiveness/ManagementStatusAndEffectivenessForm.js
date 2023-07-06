@@ -170,8 +170,9 @@ const ManagementStatusAndEffectivenessForm = () => {
 
       <Form>
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.dateOfAssessment.question}</StickyFormLabel>
-          <RequiredIndicator />
+          <StickyFormLabel>{questions.dateOfAssessment.question}
+            <RequiredIndicator />
+          </StickyFormLabel>
           <Controller
             name='dateOfAssessment'
             control={control}
