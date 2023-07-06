@@ -31,7 +31,10 @@ import {
   StickyFormLabel
 } from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
-import { multiselectWithOtherValidationNoMinimum, multiselectWithOtherValidation } from '../../validation/multiSelectWithOther'
+import {
+  multiselectWithOtherValidationNoMinimum,
+  multiselectWithOtherValidation
+} from '../../validation/multiSelectWithOther'
 import { propaguleOptions, seedlingOptions } from '../../data/siteInterventionOptions'
 import { questionMapping } from '../../data/questionMapping'
 import { siteInterventions as questions } from '../../data/questions'
@@ -378,7 +381,7 @@ function SiteInterventionsForm() {
           <ErrorText>{errors.whichStakeholdersInvolved?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
-        <RequiredIndicator />
+          <RequiredIndicator />
           <CheckboxGroupWithLabelAndController
             fieldName='biophysicalInterventionsUsed'
             reactHookFormInstance={reactHookFormInstance}
