@@ -35,6 +35,7 @@ import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import DatePickerUtcMui from '../DatePickerUtcMui'
+import RequiredIndicator from '../RequiredIndicator'
 
 const getSocioeconomicAims = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '3.2') ?? []
@@ -277,6 +278,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
       <Form>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.dateOfOutcomesAssessment.question}</StickyFormLabel>
+          <RequiredIndicator />
           <Controller
             name='dateOfOutcomesAssessment'
             control={control}

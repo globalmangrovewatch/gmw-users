@@ -31,7 +31,7 @@ import {
   StickyFormLabel
 } from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
-import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
+import { multiselectWithOtherValidationNoMinimum, multiselectWithOtherValidation } from '../../validation/multiSelectWithOther'
 import { propaguleOptions, seedlingOptions } from '../../data/siteInterventionOptions'
 import { questionMapping } from '../../data/questionMapping'
 import { siteInterventions as questions } from '../../data/questions'
@@ -46,6 +46,7 @@ import useInitializeQuestionMappedForm from '../../library/useInitializeQuestion
 import useSiteInfo from '../../library/useSiteInfo'
 import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
 import DatePickerUtcMui from '../DatePickerUtcMui'
+import RequiredIndicator from '../RequiredIndicator'
 
 const getWhichStakeholdersInvolved = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '6.1') ?? []
@@ -68,7 +69,7 @@ function SiteInterventionsForm() {
         })
       )
       .default([]),
-    biophysicalInterventionsUsed: multiselectWithOtherValidationNoMinimum,
+    biophysicalInterventionsUsed: multiselectWithOtherValidation,
     biophysicalInterventionDuration: yup.object().shape({
       startDate: yup.string().nullable(),
       endDate: yup
@@ -107,7 +108,7 @@ function SiteInterventionsForm() {
       .default([]),
     localParticipantTraining: yup.string(),
     organizationsProvidingTraining: multiselectWithOtherValidationNoMinimum,
-    otherActivitiesImplemented: multiselectWithOtherValidationNoMinimum
+    otherActivitiesImplemented: multiselectWithOtherValidation
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
@@ -377,6 +378,7 @@ function SiteInterventionsForm() {
           <ErrorText>{errors.whichStakeholdersInvolved?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         <FormQuestionDiv>
+        <RequiredIndicator />
           <CheckboxGroupWithLabelAndController
             fieldName='biophysicalInterventionsUsed'
             reactHookFormInstance={reactHookFormInstance}
@@ -633,6 +635,7 @@ function SiteInterventionsForm() {
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>
+          <RequiredIndicator />
           <CheckboxGroupWithLabelAndController
             fieldName='otherActivitiesImplemented'
             reactHookFormInstance={reactHookFormInstance}

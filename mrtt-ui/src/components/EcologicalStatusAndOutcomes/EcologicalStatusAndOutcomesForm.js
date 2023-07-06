@@ -46,6 +46,7 @@ import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import EcologicalOutcomesRow from './EcologicalOutcomesRow'
 import DatePickerUtcMui from '../DatePickerUtcMui'
 import { unitOptions } from '../../data/ecologicalOptions'
+import RequiredIndicator from '../RequiredIndicator'
 
 const getEcologicalAims = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '3.1') ?? []
@@ -396,6 +397,7 @@ const EcologicalStatusAndOutcomesForm = () => {
       <Form>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.dateOfEcologicalMonitoring.question}</StickyFormLabel>
+          <RequiredIndicator />
           <Controller
             name='monitoringStartDate'
             control={control}

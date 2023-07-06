@@ -65,6 +65,8 @@ function PreRestorationAssessmentForm() {
         .typeError(language.form.error.noYearProvided)
         .min(1900, language.form.error.yearTooLow)
         .max(new Date().getFullYear(), language.form.error.yearTooHigh)
+        .nullable(true)
+        .transform((_, val) => val === Number(val) ? val : null) 
     }),
     previousBiophysicalInterventions: multiselectWithOtherValidationNoMinimum,
     whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidationNoMinimum,
@@ -78,6 +80,8 @@ function PreRestorationAssessmentForm() {
         .typeError(language.form.error.noYearProvided)
         .min(1900, language.form.error.yearTooLow)
         .max(new Date().getFullYear(), language.form.error.yearTooHigh)
+        .nullable(true)
+        .transform((_, val) => val === Number(val) ? val : null) 
     }),
     naturalRegenerationAtSite: yup.string(),
     mangroveSpeciesPresent: yup.array().of(yup.string()).default([]).nullable(),
@@ -308,7 +312,6 @@ function PreRestorationAssessmentForm() {
             <FormQuestionDiv>
               <StickyFormLabel>
                 {questions.lastRestorationAttemptYear.question}
-                <RequiredIndicator />
               </StickyFormLabel>
               <Controller
                 name='lastRestorationAttemptYear'
@@ -378,7 +381,7 @@ function PreRestorationAssessmentForm() {
             </FormQuestionDiv>
             <FormQuestionDiv>
               <StickyFormLabel>
-                {questions.referenceSite.question} <RequiredIndicator />
+                {questions.referenceSite.question}
               </StickyFormLabel>
               <Controller
                 name='referenceSite'
@@ -399,7 +402,6 @@ function PreRestorationAssessmentForm() {
             <FormQuestionDiv>
               <StickyFormLabel>
                 {questions.lostMangrovesYear.question}
-                <RequiredIndicator />
               </StickyFormLabel>
               <Controller
                 name='lostMangrovesYear'
@@ -414,7 +416,6 @@ function PreRestorationAssessmentForm() {
             <FormQuestionDiv>
               <StickyFormLabel>
                 {questions.naturalRegenerationAtSite.question}
-                <RequiredIndicator />
               </StickyFormLabel>
               <Controller
                 name='naturalRegenerationAtSite'
