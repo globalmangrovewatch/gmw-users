@@ -277,7 +277,8 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
 
       <Form>
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.dateOfOutcomesAssessment.question}
+          <StickyFormLabel>
+            {questions.dateOfOutcomesAssessment.question}
             <RequiredIndicator />
           </StickyFormLabel>
           <Controller
