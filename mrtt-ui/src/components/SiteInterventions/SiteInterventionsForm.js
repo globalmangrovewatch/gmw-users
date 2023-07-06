@@ -31,7 +31,10 @@ import {
   StickyFormLabel
 } from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
-import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
+import {
+  multiselectWithOtherValidationNoMinimum,
+  multiselectWithOtherValidation
+} from '../../validation/multiSelectWithOther'
 import { propaguleOptions, seedlingOptions } from '../../data/siteInterventionOptions'
 import { questionMapping } from '../../data/questionMapping'
 import { siteInterventions as questions } from '../../data/questions'
@@ -68,7 +71,7 @@ function SiteInterventionsForm() {
         })
       )
       .default([]),
-    biophysicalInterventionsUsed: multiselectWithOtherValidationNoMinimum,
+    biophysicalInterventionsUsed: multiselectWithOtherValidation,
     biophysicalInterventionDuration: yup.object().shape({
       startDate: yup.string().nullable(),
       endDate: yup
@@ -107,7 +110,7 @@ function SiteInterventionsForm() {
       .default([]),
     localParticipantTraining: yup.string(),
     organizationsProvidingTraining: multiselectWithOtherValidationNoMinimum,
-    otherActivitiesImplemented: multiselectWithOtherValidationNoMinimum
+    otherActivitiesImplemented: multiselectWithOtherValidation
   })
   const reactHookFormInstance = useForm({
     defaultValues: {
@@ -383,8 +386,9 @@ function SiteInterventionsForm() {
             options={questions.biophysicalInterventionsUsed.options}
             question={questions.biophysicalInterventionsUsed.question}
             shouldAddOtherOptionWithClarification={true}
+            required
           />
-          <ErrorText>{errors.biophysicalInterventionsUsed?.message}</ErrorText>
+          <ErrorText>{errors.biophysicalInterventionsUsed?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         {!biophysicalInterventionsUsedWatcher?.selectedValues?.includes('None') ? (
           <FormQuestionDiv>
@@ -639,6 +643,7 @@ function SiteInterventionsForm() {
             options={questions.otherActivitiesImplemented.options}
             question={questions.otherActivitiesImplemented.question}
             shouldAddOtherOptionWithClarification={true}
+            required
           />
           <ErrorText>{errors.otherActivitiesImplemented?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>

@@ -40,7 +40,6 @@ import QuestionNav from '../QuestionNav'
 import PhysicalMeasurementRow from './PhysicalMeasurementRow'
 import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
-import RequiredIndicator from '../RequiredIndicator'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
 
@@ -65,6 +64,8 @@ function PreRestorationAssessmentForm() {
         .typeError(language.form.error.noYearProvided)
         .min(1900, language.form.error.yearTooLow)
         .max(new Date().getFullYear(), language.form.error.yearTooHigh)
+        .nullable(true)
+        .transform((_, val) => (val === Number(val) ? val : null))
     }),
     previousBiophysicalInterventions: multiselectWithOtherValidationNoMinimum,
     whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidationNoMinimum,
@@ -78,6 +79,8 @@ function PreRestorationAssessmentForm() {
         .typeError(language.form.error.noYearProvided)
         .min(1900, language.form.error.yearTooLow)
         .max(new Date().getFullYear(), language.form.error.yearTooHigh)
+        .nullable(true)
+        .transform((_, val) => (val === Number(val) ? val : null))
     }),
     naturalRegenerationAtSite: yup.string(),
     mangroveSpeciesPresent: yup.array().of(yup.string()).default([]).nullable(),
@@ -306,10 +309,7 @@ function PreRestorationAssessmentForm() {
         {mangroveRestorationAttemptedWatcher === 'Yes' ? (
           <>
             <FormQuestionDiv>
-              <StickyFormLabel>
-                {questions.lastRestorationAttemptYear.question}
-                <RequiredIndicator />
-              </StickyFormLabel>
+              <StickyFormLabel>{questions.lastRestorationAttemptYear.question}</StickyFormLabel>
               <Controller
                 name='lastRestorationAttemptYear'
                 control={control}
@@ -377,9 +377,7 @@ function PreRestorationAssessmentForm() {
               <ErrorText>{errors.siteAssessmentType?.selectedValues?.message}</ErrorText>
             </FormQuestionDiv>
             <FormQuestionDiv>
-              <StickyFormLabel>
-                {questions.referenceSite.question} <RequiredIndicator />
-              </StickyFormLabel>
+              <StickyFormLabel>{questions.referenceSite.question}</StickyFormLabel>
               <Controller
                 name='referenceSite'
                 control={control}
@@ -397,10 +395,7 @@ function PreRestorationAssessmentForm() {
               <ErrorText>{errors.referenceSite?.message}</ErrorText>
             </FormQuestionDiv>
             <FormQuestionDiv>
-              <StickyFormLabel>
-                {questions.lostMangrovesYear.question}
-                <RequiredIndicator />
-              </StickyFormLabel>
+              <StickyFormLabel>{questions.lostMangrovesYear.question}</StickyFormLabel>
               <Controller
                 name='lostMangrovesYear'
                 control={control}
@@ -412,10 +407,7 @@ function PreRestorationAssessmentForm() {
               <ErrorText>{errors.lostMangrovesYear?.message}</ErrorText>
             </FormQuestionDiv>
             <FormQuestionDiv>
-              <StickyFormLabel>
-                {questions.naturalRegenerationAtSite.question}
-                <RequiredIndicator />
-              </StickyFormLabel>
+              <StickyFormLabel>{questions.naturalRegenerationAtSite.question}</StickyFormLabel>
               <Controller
                 name='naturalRegenerationAtSite'
                 control={control}

@@ -25,6 +25,7 @@ import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import DatePickerUtcMui from '../DatePickerUtcMui'
+import RequiredIndicator from '../RequiredIndicator'
 
 const formType = MONITORING_FORM_CONSTANTS.managementStatusAndEffectiveness.payloadType
 
@@ -169,7 +170,10 @@ const ManagementStatusAndEffectivenessForm = () => {
 
       <Form>
         <FormQuestionDiv>
-          <StickyFormLabel>{questions.dateOfAssessment.question}</StickyFormLabel>
+          <StickyFormLabel>
+            {questions.dateOfAssessment.question}
+            <RequiredIndicator />
+          </StickyFormLabel>
           <Controller
             name='dateOfAssessment'
             control={control}
