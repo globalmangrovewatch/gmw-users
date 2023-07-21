@@ -10,7 +10,7 @@ import { ButtonCancel, ButtonSubmit } from '../../styles/buttons'
 import { ButtonContainer, PagePadding, RowFlexEnd } from '../../styles/containers'
 import { ErrorText, PageTitle } from '../../styles/typography'
 import { Form, MainFormDiv } from '../../styles/forms'
-import { FormLabel, TextField } from '@mui/material'
+import { Checkbox, Link, FormControlLabel, FormLabel, TextField } from '@mui/material'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
 import RequiredIndicator from '../../components/RequiredIndicator'
@@ -29,10 +29,20 @@ const validationSchema = yup.object({
   confirmationPassword: yup
     .string()
     .required(language.form.required)
-    .oneOf([yup.ref('password')], signUpFormLanguage.validation.passwordsMustMatch)
+    .oneOf([yup.ref('password')], signUpFormLanguage.validation.passwordsMustMatch),
+  termsAndConditions: yup
+    .boolean()
+    .required(signUpFormLanguage.validation.termsAndConditions)
+    .oneOf([true], signUpFormLanguage.validation.termsAndConditions)
 })
 
-const formDefaultValues = { name: '', email: '', password: '', confirmationPassword: '' }
+const formDefaultValues = {
+  name: '',
+  email: '',
+  password: '',
+  confirmationPassword: '',
+  termsAndConditions: false
+}
 
 const SignupForm = () => {
   const [isLoading] = useState(false)
@@ -49,6 +59,7 @@ const SignupForm = () => {
   } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
 
   const handleSubmit = ({ email, name, password }) => {
+    console.log('WE ATTEMPT')
     setIsSubmitting(true)
     setIsSubmitError(false)
     axios
@@ -68,6 +79,8 @@ const SignupForm = () => {
   const handleCancelClick = () => {
     navigate(-1)
   }
+
+  console.log(errors)
 
   const form = (
     <MainFormDiv>
@@ -115,6 +128,33 @@ const SignupForm = () => {
             )}
           />
           <ErrorText>{errors?.confirmationPassword?.message}</ErrorText>
+
+          <FormControlLabel
+            control={
+              <Controller
+                name='termsAndConditions'
+                control={formControl}
+                render={({ field }) => {
+                  console.log(field)
+                  return <Checkbox {...field} id='terms-and-conditions' />
+                }}
+              />
+            }
+            label={
+              <>
+                I have read and accept the terms of the{' '}
+                <Link
+                  href='/mrtt-general-usage-terms-and-conditions.pdf'
+                  target='_blank'
+                  rel='noopener'>
+                  MRTT- general (usage) terms and conditions
+                </Link>{' '}
+                applicable to the use of this account and the Mangrove Restoration Tracker Tool
+                <RequiredIndicator />
+              </>
+            }
+          />
+          <ErrorText>{errors?.termsAndConditions?.message}</ErrorText>
           <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
           <ButtonContainer>
             <ButtonCancel onClick={handleCancelClick} />
