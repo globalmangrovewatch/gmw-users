@@ -138,13 +138,14 @@ const SignupForm = () => {
             }
             label={
               <>
-                {signUpFormLanguage.termsAndConditions}{' '}
+                I have read and accept the terms of the{' '}
                 <Link
                   href='/mrtt-general-usage-terms-and-conditions.pdf'
                   target='_blank'
                   rel='noopener'>
-                  {signUpFormLanguage.termsAndConditionsLink}
-                </Link>
+                  MRTT- general (usage) terms and conditions
+                </Link>{' '}
+                applicable to the use of this account and the Mangrove Restoration Tracker Tool
                 <RequiredIndicator />
               </>
             }
