@@ -76,11 +76,14 @@ const pages = {
     name: 'Name',
     password: 'Password',
     title: 'Sign Up',
+    termsAndConditions:
+      'I have read and accept the terms applicable to the use of this account and the Mangrove Restoration Tracker Tool.',
+    termsAndConditionsLink: 'View MRTT- general (usage) terms and conditions',
     validation: {
       emailValid: 'Must be a valid email',
       passwordMinimumCharacters: 'Password must be at the minimum 8 characters long',
       passwordsMustMatch: 'Passwords must match',
-      termsAndConditions: 'The terms and conditions must be accepted.'
+      termsAndConditions: 'You must accept the terms and conditions to sign up'
     }
   },
   resetPassword: {

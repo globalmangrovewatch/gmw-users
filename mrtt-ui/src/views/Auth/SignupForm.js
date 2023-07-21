@@ -59,7 +59,6 @@ const SignupForm = () => {
   } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
 
   const handleSubmit = ({ email, name, password }) => {
-    console.log('WE ATTEMPT')
     setIsSubmitting(true)
     setIsSubmitError(false)
     axios
@@ -79,8 +78,6 @@ const SignupForm = () => {
   const handleCancelClick = () => {
     navigate(-1)
   }
-
-  console.log(errors)
 
   const form = (
     <MainFormDiv>
@@ -135,21 +132,19 @@ const SignupForm = () => {
                 name='termsAndConditions'
                 control={formControl}
                 render={({ field }) => {
-                  console.log(field)
                   return <Checkbox {...field} id='terms-and-conditions' />
                 }}
               />
             }
             label={
               <>
-                I have read and accept the terms of the{' '}
+                {signUpFormLanguage.termsAndConditions}{' '}
                 <Link
                   href='/mrtt-general-usage-terms-and-conditions.pdf'
                   target='_blank'
                   rel='noopener'>
-                  MRTT- general (usage) terms and conditions
-                </Link>{' '}
-                applicable to the use of this account and the Mangrove Restoration Tracker Tool
+                  {signUpFormLanguage.termsAndConditionsLink}
+                </Link>
                 <RequiredIndicator />
               </>
             }
