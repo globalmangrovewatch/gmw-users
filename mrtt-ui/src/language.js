@@ -79,7 +79,8 @@ const pages = {
     validation: {
       emailValid: 'Must be a valid email',
       passwordMinimumCharacters: 'Password must be at the minimum 8 characters long',
-      passwordsMustMatch: 'Passwords must match'
+      passwordsMustMatch: 'Passwords must match',
+      termsAndConditions: 'The terms and conditions must be accepted.'
     }
   },
   resetPassword: {
