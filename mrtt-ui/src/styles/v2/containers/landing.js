@@ -23,6 +23,26 @@ export const Base = styled('div')(
 `
 )
 
+export const LogoContainer = styled('div')`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background-color: transparent;
+`
+
+export const Logo = styled('img')(
+  ({ theme }) => `
+  width: 55%;
+  height: auto;
+  flex-shrink: 0;
+
+  ${theme.breakpoints.up('lg')} {
+    width: 281px;
+  }
+`
+)
+
 export const Hero = styled('div')(
   ({ theme }) => `
   position: relative;

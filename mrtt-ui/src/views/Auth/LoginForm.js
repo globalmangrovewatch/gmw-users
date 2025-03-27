@@ -23,7 +23,9 @@ import {
   MainContent,
   MainTitle,
   Form,
-  FormFooter
+  FormFooter,
+  LogoContainer,
+  Logo
 } from '../../styles/v2/containers/landing'
 import { Paragraph, StyledLink } from '../../styles/v2/ui/typography'
 import { Button } from '../../styles/v2/ui/button'
@@ -84,6 +86,9 @@ const LoginForm = ({ isUserNew }) => {
   const form = (
     <Base>
       <Hero>
+        <LogoContainer>
+          <Logo src='/images/landing/logo.webp' />
+        </LogoContainer>
         <HeroContent>
           <HeroHeadline>Welcome to the Mangrove Restoration Tracker Tool</HeroHeadline>
           <HeroText variant='text-sm'>
