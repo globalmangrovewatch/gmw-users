@@ -2,15 +2,15 @@ import { styled } from '@mui/system'
 import { Typography } from '@mui/material'
 import { H1 } from '../ui/typography'
 
-export const Base = styled('div')`
+export const Base = styled('div')(
+  ({ theme }) => `
   display: flex;
   flex-direction: column;
   height: 100vh;
-  position: relative;
   padding-bottom: 50px;
   overflow-y: auto;
 
-  @media (min-width: 1024px) {
+  ${theme.breakpoints.up('lg')} {
     overflow: hidden;
     flex-direction: row;
     padding-bottom: 0;
@@ -21,11 +21,13 @@ export const Base = styled('div')`
     background-repeat: no-repeat, no-repeat, no-repeat;
   }
 `
+)
 
-export const Hero = styled('div')`
+export const Hero = styled('div')(
+  ({ theme }) => `
   position: relative;
   display: flex;
-  padding-top: 300px;
+  padding-top: 25vh;
   justify-content: center;
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),
     linear-gradient(
@@ -49,7 +51,7 @@ export const Hero = styled('div')`
     mix-blend-mode: color;
   }
 
-  @media (min-width: 1024px) {
+  ${theme.breakpoints.up('lg')} {
     padding-top: 0;
     justify-content: flex-start;
     align-items: center;
@@ -61,30 +63,38 @@ export const Hero = styled('div')`
     }
   }
 `
+)
 
-export const HeroContent = styled('section')`
+export const HeroContent = styled('section')(
+  ({ theme }) => `
   padding: 24px;
   width: 410px;
 
-  @media (min-width: 1024px) {
+  ${theme.breakpoints.up('lg')} {
     margin-left: 110px;
     padding: 0;
   }
 `
+)
 
-export const HeroText = styled(Typography)`
-  color: ${({ theme }) => theme.palette.common.white};
+export const HeroText = styled(Typography)(
+  ({ theme }) => `
+  color: ${theme.palette.common.white};
 `
+)
 
-export const HeroHeadline = styled('h2')`
+export const HeroHeadline = styled('h2')(
+  ({ theme }) => `
   font-size: 40px;
   font-weight: 300;
   line-height: 50px;
   margin-bottom: 24px;
-  color: ${({ theme }) => theme.palette.common.white};
+  color: ${theme.palette.common.white};
 `
+)
 
-export const Main = styled('div')`
+export const Main = styled('div')(
+  ({ theme }) => `
   display: flex;
   align-items: center;
   flex: 1;
@@ -92,7 +102,12 @@ export const Main = styled('div')`
   background-size: cover;
   background-position: left center;
   background-repeat: no-repeat;
+
+  ${theme.breakpoints.up('lg')} {
+    background-image: none;
+  }
 `
+)
 
 export const MainContent = styled('section')`
   padding: 24px;

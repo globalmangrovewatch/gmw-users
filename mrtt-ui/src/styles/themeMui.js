@@ -36,7 +36,16 @@ const themeMui = createTheme({
     }
   },
   spacing: (factor) => `${0.5 * factor}rem`,
-
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536
+    }
+  },
   components: {
     MuiDropzoneArea: {
       styleOverrides: {

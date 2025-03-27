@@ -4,6 +4,7 @@ import theme from '../../styles/theme'
 import HeaderMenu from './HeaderMenu'
 import { ReactComponent as GmwLogo } from '../../assets/gmw-logo.svg'
 import { useFeatureFlags } from '../../hooks/useFeatureFlags'
+import { Header as HeaderV2, Logo } from '../../styles/v2/containers/header'
 
 const HeaderContainer = styled('header')`
   background-color: ${theme.color.secondary};
@@ -26,18 +27,15 @@ const StyledGmwLogo = styled(GmwLogo)`
   width: auto;
 `
 
-const HeaderContainerV2 = styled('header')`
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`
-
 const Header = () => {
   const { showNewLandingPage } = useFeatureFlags()
 
   if (showNewLandingPage) {
-    return <HeaderContainerV2>headerV2</HeaderContainerV2>
+    return (
+      <HeaderV2>
+        <Logo src='/images/landing/logo.webp' />
+      </HeaderV2>
+    )
   }
 
   return (

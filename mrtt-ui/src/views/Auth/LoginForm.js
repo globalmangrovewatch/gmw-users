@@ -29,7 +29,6 @@ import { Paragraph, StyledLink } from '../../styles/v2/ui/typography'
 import { Button } from '../../styles/v2/ui/button'
 import { Divider } from '../../styles/v2/ui/divider'
 import { FormInput } from '../../components/Form/FormInput'
-import { Header, Logo } from '../../styles/v2/containers/header'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),
@@ -84,9 +83,6 @@ const LoginForm = ({ isUserNew }) => {
 
   const form = (
     <Base>
-      <Header>
-        <Logo src='/images/landing/logo.webp' />
-      </Header>
       <Hero>
         <HeroContent>
           <HeroHeadline>Welcome to the Mangrove Restoration Tracker Tool</HeroHeadline>

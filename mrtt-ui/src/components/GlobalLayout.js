@@ -25,7 +25,12 @@ const GlobalLayout = ({ children }) => {
   const { showNewLandingPage } = useFeatureFlags()
 
   if (showNewLandingPage) {
-    return <main>{children}</main>
+    return (
+      <main>
+        <Header />
+        {children}
+      </main>
+    )
   }
 
   return (
