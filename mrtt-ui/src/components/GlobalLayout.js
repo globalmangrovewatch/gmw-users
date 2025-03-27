@@ -6,8 +6,8 @@ import theme from '../styles/theme'
 import Footer from './MobileFooter'
 import Header from './Header/Header'
 import themeMui from '../styles/themeMui'
-
 import { useAuth } from '../hooks/useAuth'
+import { useFeatureFlags } from '../hooks/useFeatureFlags'
 
 const LayoutWrapper = styled('div')`
   display: flex;
@@ -22,6 +22,12 @@ const Main = styled('main')`
 
 const GlobalLayout = ({ children }) => {
   const { isLoggedIn } = useAuth()
+  const { showNewLandingPage } = useFeatureFlags()
+
+  if (showNewLandingPage) {
+    return <main>{children}</main>
+  }
+
   return (
     <LayoutWrapper>
       <Header />

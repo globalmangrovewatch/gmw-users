@@ -1,4 +1,4 @@
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
@@ -7,15 +7,29 @@ import * as yup from 'yup'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 
-import { Alert, FormLabel, TextField } from '@mui/material'
-import { ButtonCancel, ButtonSubmit } from '../../styles/buttons'
-import { ButtonContainer, PagePadding, RowFlexEnd } from '../../styles/containers'
-import { ErrorText, LinkLooksLikeButtonSecondary, PageTitle } from '../../styles/typography'
-import { Form, MainFormDiv } from '../../styles/forms'
+import { Alert } from '@mui/material'
+import { RowFlexEnd } from '../../styles/containers'
+import { ErrorText } from '../../styles/typography'
 import { useAuth } from '../../hooks/useAuth'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
-import RequiredIndicator from '../../components/RequiredIndicator'
+import {
+  Aside,
+  AsideContent,
+  AsideHeadline,
+  AsideText,
+  Base,
+  Main,
+  MainContent,
+  MainTitle,
+  Form,
+  FormFooter
+} from '../../styles/v2/containers/landing'
+import { Paragraph, StyledLink } from '../../styles/v2/ui/typography'
+import { Button } from '../../styles/v2/ui/button'
+import { Divider } from '../../styles/v2/ui/divider'
+import { FormInput } from '../../components/Form/FormInput'
+import { Header, Logo } from '../../styles/v2/containers/header'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),
@@ -29,7 +43,6 @@ const pageLanguage = language.pages.login
 const LoginForm = ({ isUserNew }) => {
   const [isLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
 
   const authUrl = `${process.env.REACT_APP_AUTH_URL}/users/sign_in`
@@ -53,76 +66,81 @@ const LoginForm = ({ isUserNew }) => {
     axios
       .post(authUrl, { user: formData }, options)
       .then(({ data }) => {
-        setIsSubmitting(false)
         if (data.token) {
           login(data.token)
           navigate('/sites')
         }
       })
       .catch((error) => {
-        setIsSubmitting(false)
         setIsSubmitError(true)
         toast.error(error.response.data.error)
       })
   }
 
   const handleSubmit = (formData) => {
-    setIsSubmitting(true)
     setIsSubmitError(false)
     signIn(formData)
   }
 
-  const handleCancelClick = () => {
-    navigate(-1)
-  }
-
   const form = (
-    <MainFormDiv>
-      <PagePadding>
-        <PageTitle>{pageLanguage.title}</PageTitle>
-        {isUserNew ? (
-          <Alert variant='outlined' severity='success'>
-            {language.success.signup}
-          </Alert>
-        ) : null}
-        <RowFlexEnd>
-          <LinkLooksLikeButtonSecondary to='/auth/password/forgot-password'>
-            {pageLanguage.forgotPassowrd}
-          </LinkLooksLikeButtonSecondary>
-        </RowFlexEnd>
-        <Form onSubmit={validateInputs(handleSubmit)}>
-          <FormLabel htmlFor='email'>
-            {pageLanguage.email}
-            <RequiredIndicator />
-          </FormLabel>
-          <Controller
-            name='email'
-            control={formControl}
-            render={({ field }) => <TextField {...field} id='email' />}
-          />
-          <ErrorText>{errors?.email?.message}</ErrorText>
+    <Base>
+      <Header>
+        <Logo src='/images/landing/logo.webp' />
+      </Header>
+      <Aside>
+        <AsideContent>
+          <AsideHeadline>Welcome to the Mangrove Restoration Tracker Tool</AsideHeadline>
+          <AsideText variant='text-sm'>
+            The MRTT is an open-access resource to support restoration practitioners. It provides a
+            secure location to hold information across restoration planning, intervention and
+            monitoring. Learn more
+          </AsideText>
+        </AsideContent>
+      </Aside>
+      <Main>
+        <MainContent>
+          <MainTitle>{pageLanguage.title}</MainTitle>
+          {isUserNew ? (
+            <Alert variant='outlined' severity='success'>
+              {language.success.signup}
+            </Alert>
+          ) : null}
+          <Form onSubmit={validateInputs(handleSubmit)}>
+            <FormInput
+              type='email'
+              name='email'
+              label={pageLanguage.email}
+              placeholder='Enter your email'
+              control={formControl}
+              error={errors?.email?.message}
+            />
+            <FormInput
+              type='password'
+              name='password'
+              label={pageLanguage.password}
+              placeholder='Enter your password'
+              control={formControl}
+              error={errors?.password?.message}
+            />
 
-          <FormLabel htmlFor='password'>
-            {pageLanguage.password}
-            <RequiredIndicator />
-          </FormLabel>
-          <Controller
-            name='password'
-            control={formControl}
-            render={({ field }) => <TextField {...field} id='password' type='password' />}
-          />
-          <ErrorText>{errors?.password?.message}</ErrorText>
-          <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
-          <ButtonContainer>
-            <LinkLooksLikeButtonSecondary to='/auth/signup'>
-              {pageLanguage.signUp}
-            </LinkLooksLikeButtonSecondary>
-            <ButtonCancel onClick={handleCancelClick} />
-            <ButtonSubmit isSubmitting={isSubmitting} />
-          </ButtonContainer>
-        </Form>
-      </PagePadding>
-    </MainFormDiv>
+            <RowFlexEnd>
+              {isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}
+            </RowFlexEnd>
+            <Button type='submit'>Log in</Button>
+          </Form>
+          <FormFooter>
+            <StyledLink to='/auth/password/forgot-password'>
+              {pageLanguage.forgotPassowrd}
+            </StyledLink>
+            <Divider />
+            <Paragraph>
+              Don&apos;t have an account?&nbsp;
+              <StyledLink to='/auth/signup'>{pageLanguage.signUp}</StyledLink>
+            </Paragraph>
+          </FormFooter>
+        </MainContent>
+      </Main>
+    </Base>
   )
 
   return isLoading ? <LoadingIndicator /> : form

@@ -53,11 +53,11 @@ const multiselectWithOtherFormQuestion = {
 const pages = {
   pageNotFound: { title: 'Page Not Found' },
   login: {
-    title: 'Login',
+    title: 'Log in',
     email: 'Email',
     password: 'Password',
     signUp: 'Sign Up',
-    forgotPassowrd: 'Forgot Password'
+    forgotPassowrd: 'Forgot your password?'
   },
   socioeconomicGovernanceStatusOutcomes: {
     missingSocioeconomicAims: 'Please select aims from question 3.2 in the Restoration Aims form'
