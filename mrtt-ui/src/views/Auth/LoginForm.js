@@ -14,10 +14,10 @@ import { useAuth } from '../../hooks/useAuth'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
 import {
-  Aside,
-  AsideContent,
-  AsideHeadline,
-  AsideText,
+  Hero,
+  HeroContent,
+  HeroHeadline,
+  HeroText,
   Base,
   Main,
   MainContent,
@@ -87,16 +87,16 @@ const LoginForm = ({ isUserNew }) => {
       <Header>
         <Logo src='/images/landing/logo.webp' />
       </Header>
-      <Aside>
-        <AsideContent>
-          <AsideHeadline>Welcome to the Mangrove Restoration Tracker Tool</AsideHeadline>
-          <AsideText variant='text-sm'>
+      <Hero>
+        <HeroContent>
+          <HeroHeadline>Welcome to the Mangrove Restoration Tracker Tool</HeroHeadline>
+          <HeroText variant='text-sm'>
             The MRTT is an open-access resource to support restoration practitioners. It provides a
             secure location to hold information across restoration planning, intervention and
             monitoring. Learn more
-          </AsideText>
-        </AsideContent>
-      </Aside>
+          </HeroText>
+        </HeroContent>
+      </Hero>
       <Main>
         <MainContent>
           <MainTitle>{pageLanguage.title}</MainTitle>
