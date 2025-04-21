@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - develop
-jobs:  
+jobs:
   create-review-app:
     if: |
       github.event_name == 'pull_request' && (
@@ -87,7 +87,7 @@ jobs:
           REACT_APP_MAPBOX_ACCESS_TOKEN: ${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}
           REACT_APP_MAPBOX_ACCOUNT: ${{ secrets.REACT_APP_MAPBOX_ACCOUNT }}
           REACT_APP_TRANSIFEX_API_KEY: ${{ secrets.REACT_APP_TRANSIFEX_API_KEY }}
-  
+
   delete-review-app:
     if: |
       github.event_name == 'pull_request' && github.event.action == 'closed'

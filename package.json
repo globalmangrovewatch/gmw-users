@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
+    "@types/node": "^18.19.86",
     "husky": "^7.0.0"
   },
   "engines": {
-    "node": "~16.15.0"
+    "node": "~18.20.6"
   },
   "scripts": {
     "prepare": "husky install"
