@@ -10,7 +10,7 @@ import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
 import { ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
 import { Controller, useForm } from 'react-hook-form'
 import { ErrorText, Link, PageTitle } from '../styles/typography'
-import { Form } from '../styles/forms'
+import { FormLayout } from '../styles/forms'
 import { FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
@@ -90,7 +90,7 @@ const NewOrganizationUser = () => {
         <ArrowBack />
         {pageLanguage.backToUsers}
       </Link>
-      <Form onSubmit={validateInputs(handleSubmit)}>
+      <FormLayout onSubmit={validateInputs(handleSubmit)}>
         <FormLabel htmlFor='email'>
           {pageLanguage.email}
           <RequiredIndicator />
@@ -131,7 +131,7 @@ const NewOrganizationUser = () => {
           <ButtonCancel onClick={handleCancelClick} />
           <ButtonSubmit isSubmitting={isSubmitting} />
         </ButtonContainer>
-      </Form>
+      </FormLayout>
     </ContentWrapper>
   )
 }

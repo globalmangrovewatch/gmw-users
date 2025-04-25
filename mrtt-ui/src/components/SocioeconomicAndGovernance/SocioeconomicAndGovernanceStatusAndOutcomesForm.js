@@ -9,7 +9,7 @@ import { Controller, useForm, useFieldArray } from 'react-hook-form'
 import { Box, Checkbox, FormControlLabel, ListItem, MenuItem, TextField } from '@mui/material'
 
 import {
-  Form,
+  FormLayout,
   FormPageHeader,
   FormQuestionDiv,
   NestedLabel1,
@@ -275,7 +275,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
       />
       <FormValidationMessageIfErrors formErrors={errors} />
 
-      <Form>
+      <FormLayout>
         <FormQuestionDiv>
           <StickyFormLabel>
             {questions.dateOfOutcomesAssessment.question}
@@ -440,7 +440,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           />
           <ErrorText>{errors.achievementOfSocioeconomicAims?.message}</ErrorText>
         </FormQuestionDiv>
-      </Form>
+      </FormLayout>
       {isEditMode ? <ButtonDeleteForm onClick={handleDeleteClick} isDeleting={isDeleting} /> : null}
       <ConfirmPrompt
         isOpen={isDeleteConfirmPromptOpen}

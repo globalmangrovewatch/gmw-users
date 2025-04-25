@@ -10,7 +10,7 @@ import axios from 'axios'
 import { ButtonContainer, RowFlexEnd, ContentWrapper } from '../../styles/containers'
 import { ButtonSubmit } from '../../styles/buttons'
 import { ErrorText, PageTitle } from '../../styles/typography'
-import { Form } from '../../styles/forms'
+import { FormLayout } from '../../styles/forms'
 import language from '../../language'
 import RequiredIndicator from '../../components/RequiredIndicator'
 
@@ -71,7 +71,7 @@ const ResetPasswordForm = () => {
   return (
     <ContentWrapper>
       <PageTitle>{pageLanguage.title}</PageTitle>
-      <Form onSubmit={validateInputs(handleSubmit)}>
+      <FormLayout onSubmit={validateInputs(handleSubmit)}>
         <FormLabel htmlFor='password'>
           {pageLanguage.password}
           <RequiredIndicator />
@@ -99,7 +99,7 @@ const ResetPasswordForm = () => {
         <ButtonContainer>
           <ButtonSubmit isSubmitting={isSubmitting} />
         </ButtonContainer>
-      </Form>
+      </FormLayout>
     </ContentWrapper>
   )
 }

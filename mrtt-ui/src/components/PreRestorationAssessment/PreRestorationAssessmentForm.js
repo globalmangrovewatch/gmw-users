@@ -19,7 +19,7 @@ import axios from 'axios'
 import { styled } from '@mui/material/styles'
 
 import {
-  Form,
+  FormLayout,
   FormPageHeader,
   FormQuestionDiv,
   StickyFormLabel,
@@ -38,7 +38,7 @@ import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
 import QuestionNav from '../QuestionNav'
 import PhysicalMeasurementRow from './PhysicalMeasurementRow'
-import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
@@ -269,7 +269,7 @@ function PreRestorationAssessmentForm() {
       />
       <FormValidationMessageIfErrors formErrors={errors} />
 
-      <Form>
+      <FormLayout>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.mangrovesPreviouslyOccured.question}</StickyFormLabel>
           <Controller
@@ -550,7 +550,7 @@ function PreRestorationAssessmentForm() {
           />
           <ErrorText>{errors.guidanceForSiteRestoration?.message}</ErrorText>
         </FormQuestionDiv>
-      </Form>
+      </FormLayout>
     </ContentWrapper>
   )
 }

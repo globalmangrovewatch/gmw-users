@@ -17,7 +17,7 @@ import {
 } from '@mui/material'
 
 import {
-  Form,
+  FormLayout,
   FormPageHeader,
   FormQuestionDiv,
   InnerFormDiv,
@@ -394,7 +394,7 @@ const EcologicalStatusAndOutcomesForm = () => {
       />
       <FormValidationMessageIfErrors formErrors={errors} />
 
-      <Form>
+      <FormLayout>
         <FormQuestionDiv>
           <StickyFormLabel>
             {questions.dateOfEcologicalMonitoring.question}
@@ -721,7 +721,7 @@ const EcologicalStatusAndOutcomesForm = () => {
           />
           <ErrorText>{errors.achievementOfEcologicalAims?.message}</ErrorText>
         </FormQuestionDiv>
-      </Form>
+      </FormLayout>
       {isEditMode ? <ButtonDeleteForm onClick={handleDeleteClick} isDeleting={isDeleting} /> : null}
       <ConfirmPrompt
         isOpen={isDeleteConfirmPromptOpen}

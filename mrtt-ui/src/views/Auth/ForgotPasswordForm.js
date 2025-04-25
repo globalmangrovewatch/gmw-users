@@ -9,7 +9,7 @@ import axios from 'axios'
 import { ButtonContainer, ContentWrapper, RowFlexEnd } from '../../styles/containers'
 import { ButtonSubmit } from '../../styles/buttons'
 import { ErrorText, LinkLooksLikeButtonSecondary, PageTitle } from '../../styles/typography'
-import { Form } from '../../styles/forms'
+import { FormLayout } from '../../styles/forms'
 import language from '../../language'
 import RequiredIndicator from '../../components/RequiredIndicator'
 
@@ -53,7 +53,7 @@ const ForgotPasswordForm = () => {
   return (
     <ContentWrapper>
       <PageTitle>{pageLanguage.title}</PageTitle>
-      <Form onSubmit={validateInputs(handleSubmit)}>
+      <FormLayout onSubmit={validateInputs(handleSubmit)}>
         <FormLabel htmlFor='email'>
           {pageLanguage.email}
           <RequiredIndicator />
@@ -71,7 +71,7 @@ const ForgotPasswordForm = () => {
           </LinkLooksLikeButtonSecondary>
           <ButtonSubmit isSubmitting={isSubmitting} />
         </ButtonContainer>
-      </Form>
+      </FormLayout>
     </ContentWrapper>
   )
 }

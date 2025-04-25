@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import { Controller, useForm } from 'react-hook-form'
 import { Box, MenuItem, TextField } from '@mui/material'
 
-import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
+import { FormLayout, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
 import { ContentWrapper } from '../../styles/containers'
 import { managementStatusAndEffectiveness as questions } from '../../data/questions'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
@@ -168,7 +168,7 @@ const ManagementStatusAndEffectivenessForm = () => {
       />
       <FormValidationMessageIfErrors formErrors={errors} />
 
-      <Form>
+      <FormLayout>
         <FormQuestionDiv>
           <StickyFormLabel>
             {questions.dateOfAssessment.question}
@@ -420,7 +420,7 @@ const ManagementStatusAndEffectivenessForm = () => {
           />
           <ErrorText>{errors.climateChangeAdaptation?.message}</ErrorText>
         </FormQuestionDiv>
-      </Form>
+      </FormLayout>
       {isEditMode ? <ButtonDeleteForm onClick={handleDeleteClick} isDeleting={isDeleting} /> : null}
       <ConfirmPrompt
         isOpen={isDeleteConfirmPromptOpen}

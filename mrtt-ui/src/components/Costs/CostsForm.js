@@ -8,7 +8,7 @@ import { Controller, useForm, useFieldArray } from 'react-hook-form'
 import { Alert, Box, Button, MenuItem, TextField, Typography } from '@mui/material'
 
 import {
-  Form,
+  FormLayout,
   FormPageHeader,
   FormQuestionDiv,
   QuestionSubSection,
@@ -25,7 +25,7 @@ import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
 import LoadingIndicator from '../LoadingIndicator'
-import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
 import ProjectFunderNamesRow from './ProjectFunderNamesRow'
 import BreakdownOfCostRow from './BreakdownOfCostRow'
@@ -287,7 +287,7 @@ const CostsForm = () => {
         currentSection='costs'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
-      <Form>
+      <FormLayout>
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
             fieldName='supportForActivities'
@@ -441,7 +441,7 @@ const CostsForm = () => {
             <ErrorText>{errors.nonmonetisedContributions?.selectedValues?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
-      </Form>
+      </FormLayout>
     </ContentWrapper>
   )
 }

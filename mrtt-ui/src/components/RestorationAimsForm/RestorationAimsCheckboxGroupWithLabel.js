@@ -12,15 +12,11 @@ const RestorationAimsCheckboxGroupWithLabel = ({
   fieldName,
   options,
   question,
-  reactHookFormInstance,
+  form,
   showAsterisk,
   stakeholders
 }) => {
-  const {
-    control: formControl,
-    getValues: getFormValues,
-    setValue: setFormValue
-  } = reactHookFormInstance
+  const { control: formControl, getValues: getFormValues, setValue: setFormValue } = form
   const optionsValueLabels = getOptionsValuesAndLabels(options)
   const id = `${fieldName}-label`
 
@@ -70,7 +66,7 @@ const RestorationAimsCheckboxGroupWithLabel = ({
               SelectedMarkup={({ optionId, optionValue }) => (
                 <StakeholderBenefitsInputs
                   stakeholders={stakeholders}
-                  reactHookFormInstance={reactHookFormInstance}
+                  form={form}
                   parentQuestionFieldName={fieldName}
                   optionId={optionId}
                   optionValue={optionValue}
@@ -88,7 +84,7 @@ RestorationAimsCheckboxGroupWithLabel.propTypes = {
   fieldName: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
   question: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
-  reactHookFormInstance: PropTypes.any.isRequired,
+  form: PropTypes.any.isRequired,
   showAsterisk: PropTypes.bool,
   stakeholders: stakeholdersPropType.isRequired
 }

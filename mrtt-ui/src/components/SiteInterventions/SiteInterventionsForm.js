@@ -24,7 +24,7 @@ import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { findRegistationDataItem } from '../../library/findDataItems'
 import {
-  Form,
+  FormLayout,
   FormPageHeader,
   FormQuestionDiv,
   InnerFormDiv,
@@ -45,7 +45,7 @@ import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
 import MangroveAssociatedSpeciesRow from './MangroveAssociatedSpeciesRow'
 import QuestionNav from '../QuestionNav'
-import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
 import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
 import DatePickerUtcMui from '../DatePickerUtcMui'
@@ -328,7 +328,7 @@ function SiteInterventionsForm() {
       />
       <FormValidationMessageIfErrors formErrors={errors} />
 
-      <Form>
+      <FormLayout>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.whichStakeholdersInvolved.question}</StickyFormLabel>
           <List>
@@ -647,7 +647,7 @@ function SiteInterventionsForm() {
           />
           <ErrorText>{errors.otherActivitiesImplemented?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
-      </Form>
+      </FormLayout>
     </ContentWrapper>
   )
 }

@@ -9,7 +9,7 @@ import axios from 'axios'
 import { ButtonCancel, ButtonSubmit } from '../../styles/buttons'
 import { ButtonContainer, PagePadding, RowFlexEnd } from '../../styles/containers'
 import { ErrorText, PageTitle } from '../../styles/typography'
-import { Form, MainFormDiv } from '../../styles/forms'
+import { FormLayout, MainFormDiv } from '../../styles/forms'
 import { Checkbox, Link, FormControlLabel, FormLabel, TextField } from '@mui/material'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
@@ -83,7 +83,7 @@ const SignupForm = () => {
     <MainFormDiv>
       <PagePadding>
         <PageTitle>{signUpFormLanguage.title}</PageTitle>
-        <Form onSubmit={validateInputs(handleSubmit)}>
+        <FormLayout onSubmit={validateInputs(handleSubmit)}>
           <FormLabel htmlFor='name'>{signUpFormLanguage.name}</FormLabel>
           <Controller
             name='name'
@@ -156,7 +156,7 @@ const SignupForm = () => {
             <ButtonCancel onClick={handleCancelClick} />
             <ButtonSubmit isSubmitting={isSubmitting} />
           </ButtonContainer>
-        </Form>
+        </FormLayout>
       </PagePadding>
     </MainFormDiv>
   )

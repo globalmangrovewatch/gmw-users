@@ -10,11 +10,10 @@ const CheckboxGroupWithLabelAndController = ({
   fieldName,
   options,
   question,
-  reactHookFormInstance,
+  control,
   shouldAddOtherOptionWithClarification,
   required = false
 }) => {
-  const { control: formControl } = reactHookFormInstance
   const labelId = `${fieldName}-label`
   const optionsValueLabels = getOptionsValuesAndLabels(options)
 
@@ -26,7 +25,7 @@ const CheckboxGroupWithLabelAndController = ({
       </StickyFormLabel>
       <Controller
         name={fieldName}
-        control={formControl}
+        control={control}
         render={({ field }) => {
           return (
             <CheckboxGroup
@@ -47,7 +46,7 @@ CheckboxGroupWithLabelAndController.propTypes = {
   fieldName: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
   question: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
-  reactHookFormInstance: PropTypes.any.isRequired,
+  control: PropTypes.any.isRequired,
   shouldAddOtherOptionWithClarification: PropTypes.bool,
   required: PropTypes.bool
 }
