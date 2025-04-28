@@ -50,7 +50,6 @@ const SiteBackgroundForm = () => {
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.siteBackground,
     resetForm: form.reset,
-    setIsLoading: () => {},
     successCallback: setInitialStakeholderTypesFromServerData
   })
 
@@ -94,7 +93,7 @@ const SiteBackgroundForm = () => {
     stakeholdersFields.find((field) => field.stakeholderType === stakeholder)
 
   const stakeholdersChecked = useMemo(
-    () => form.getValues('stakeholders').map((stakeholder) => stakeholder.stakeholderType),
+    () => form.getValues('stakeholders')?.map((d) => d?.stakeholderType),
     [form]
   )
 
@@ -119,13 +118,13 @@ const SiteBackgroundForm = () => {
             {siteBackground.stakeholders.question} <RequiredIndicator />
           </StickyFormLabel>
           <List>
-            {siteBackground.stakeholders.options.map((stakeholder, index) => (
+            {siteBackground.stakeholders.options?.map((stakeholder, index) => (
               <ListItem key={index}>
                 <Box>
                   <Box>
                     <Checkbox
                       value={stakeholder}
-                      checked={stakeholdersChecked.includes(stakeholder)}
+                      checked={stakeholdersChecked?.includes(stakeholder)}
                       onChange={(event) => {
                         handleStakeholdersOnChange(event, stakeholder)
                       }}></Checkbox>
@@ -171,7 +170,7 @@ const SiteBackgroundForm = () => {
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label={language.form.selectLabel}>
-                {siteBackground.managementStatus.options.map((item, index) => (
+                {siteBackground.managementStatus.options?.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -190,7 +189,7 @@ const SiteBackgroundForm = () => {
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label={language.form.selectLabel}>
-                {siteBackground.lawStatus.options.map((item, index) => (
+                {siteBackground.lawStatus.options?.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -231,7 +230,7 @@ const SiteBackgroundForm = () => {
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label={language.form.selectLabel}>
-                {siteBackground.areStakeholdersInvolved.options.map((item, index) => (
+                {siteBackground.areStakeholdersInvolved.options?.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -274,7 +273,7 @@ const SiteBackgroundForm = () => {
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label={language.form.selectLabel}>
-                {siteBackground.customaryRights.options.map((item, index) => (
+                {siteBackground.customaryRights.options?.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>

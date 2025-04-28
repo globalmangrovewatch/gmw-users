@@ -10,11 +10,9 @@ import {
   Typography
 } from '@mui/material'
 import { toast } from 'react-toastify'
-import { useForm, useFieldArray, Controller, FormProvider } from 'react-hook-form'
+import { useFieldArray, Controller, FormProvider, useFormContext } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
-import { useState, useCallback } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { useState, useCallback, useMemo } from 'react'
 import axios from 'axios'
 
 import {
@@ -33,7 +31,6 @@ import { mapDataForApi } from '../library/mapDataForApi'
 import { questionMapping } from '../data/questionMapping'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '../language'
-import LoadingIndicator from './LoadingIndicator'
 import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
 import { useInitializeQuestionMappedForm } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
@@ -41,39 +38,10 @@ import useSiteInfo from '../library/useSiteInfo'
 
 function CausesOfDeclineForm() {
   const { site_name } = useSiteInfo()
-  const validationSchema = yup.object().shape({
-    lossKnown: yup.string(),
-    causesOfDecline: yup
-      .array()
-      .of(
-        yup.object().shape({
-          mainCauseLabel: yup.string(),
-          mainCauseAnswers: yup.array().of(
-            yup.object().shape({
-              mainCauseAnswer: yup.string(),
-              levelOfDegredation: yup.string().required()
-            })
-          ),
-          subCauses: yup.array().of(
-            yup.object().shape({
-              subCauseLabel: yup.string(),
-              subCauseAnswers: yup.array().of(
-                yup.object().shape({
-                  subCauseAnswer: yup.string(),
-                  levelOfDegredation: yup.string().required()
-                })
-              )
-            })
-          )
-        })
-      )
-      .default([])
-  })
-
-  const formOptions = { resolver: yupResolver(validationSchema) }
+  const form = useFormContext()
 
   // get functions to build form with useForm() hook
-  const { control, formState, watch, handleSubmit, reset: resetForm } = useForm(formOptions)
+  const { control, formState, watch, handleSubmit } = form
   const { errors } = formState
   const {
     fields: causesOfDeclineFields,
@@ -85,7 +53,6 @@ function CausesOfDeclineForm() {
 
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [causesOfDeclineTypesChecked, setCausesOfDeclineTypesChecked] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
@@ -129,8 +96,6 @@ function CausesOfDeclineForm() {
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.causesOfDecline,
-    resetForm,
-    setIsLoading,
     successCallback: setInitialCausesOfDeclineTypesFromServerData
   })
 
@@ -267,9 +232,16 @@ function CausesOfDeclineForm() {
       })
   }
 
-  return isLoading ? (
-    <LoadingIndicator />
-  ) : (
+  const causesOfDeclineChecked = useMemo(
+    () => form.getValues('causesOfDecline')?.map((cause) => cause.mainCauseLabel),
+    [form]
+  )
+  console.log(
+    { causesOfDeclineChecked, causesOfDeclineTypesChecked, causesOfDeclineOptions },
+    form.getValues()
+  )
+
+  return (
     <ContentWrapper>
       <FormPageHeader>
         <PageTitle>{language.pages.siteQuestionsOverview.formName.causesOfDecline}</PageTitle>
@@ -318,7 +290,7 @@ function CausesOfDeclineForm() {
                               <ListItem>
                                 <Checkbox
                                   value={childOption}
-                                  checked={causesOfDeclineTypesChecked.includes(
+                                  checked={causesOfDeclineChecked.includes(
                                     `${mainCause.label}-${childOption}`
                                   )}
                                   onChange={(event) =>
@@ -368,13 +340,13 @@ function CausesOfDeclineForm() {
                   </Box>
                 )
               })}
-              <ErrorText>{errors.causesOfDecline?.message}</ErrorText>
+              <ErrorText>{errors?.causesOfDecline?.message}</ErrorText>
             </FormQuestionDiv>
           ) : null}
           {causesOfDeclineFields.length ? (
             <FormQuestionDiv>
               <StickyFormLabel>{causesOfDecline.levelsOfDegredation.question}</StickyFormLabel>
-              {causesOfDeclineFields.map((mainCause, mainCauseIndex) => (
+              {causesOfDeclineFields?.map((mainCause, mainCauseIndex) => (
                 <Box key={mainCauseIndex}>
                   <NestedLabel1>{mainCause.mainCauseLabel}</NestedLabel1>
                   {mainCause.mainCauseAnswers?.map((answer, answerIndex) => {
@@ -439,7 +411,7 @@ function CausesOfDeclineForm() {
                                       marginTop: '0.5em',
                                       marginBottom: '1em'
                                     }}>
-                                    {causesOfDecline.levelsOfDegredation.options.map(
+                                    {causesOfDecline?.levelsOfDegredation.options?.map(
                                       (item, index) => (
                                         <MenuItem key={index} value={item}>
                                           {item}
@@ -459,7 +431,7 @@ function CausesOfDeclineForm() {
               ))}
               <ErrorText>
                 {/* if error msg exists, this has to do with MOI. Reduces complexity in flitering */}
-                {errors.causesOfDecline?.length
+                {errors?.causesOfDecline?.length
                   ? `Please select magnitude of impact for each item`
                   : null}
               </ErrorText>

@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Controller, useForm, useFieldArray } from 'react-hook-form'
+import { Controller, useFormContext, useFieldArray } from 'react-hook-form'
 import {
   Box,
   Checkbox,
@@ -33,11 +31,9 @@ import { questionMapping } from '../../data/questionMapping'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { ecologicalStatusOutcomes as questions } from '../../data/questions'
-import LoadingIndicator from '../LoadingIndicator'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { findRegistationDataItem, findMonitoringDataItem } from '../../library/findDataItems'
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import { monitoringIndicators } from '../../data/monitoringIndicators'
@@ -64,68 +60,15 @@ const EcologicalStatusAndOutcomesForm = () => {
   const { monitoringFormId } = useParams()
   const isEditMode = !!monitoringFormId
   const navigate = useNavigate()
-  const validationSchema = yup.object({
-    monitoringStartDate: yup.date().nullable().required(language.form.required),
-    monitoringEndDate: yup
-      .date()
-      .nullable()
-      .min(yup.ref('monitoringStartDate'), "End date can't be before start date"),
-    ecologicalMonitoringStakeholders: yup
-      .array()
-      .of(
-        yup.object().shape({
-          stakeholder: yup.string(),
-          stakeholderType: yup.string()
-        })
-      )
-      .default([]),
-    preAndPostRestorationActivities: yup.object().shape({
-      areaPreIntervention: yup.string(),
-      unitPre: yup.string(),
-      unitPreOther: yup.string(),
-      areaPostIntervention: yup.string(),
-      unitPost: yup.string(),
-      unitPostOther: yup.string()
-    }),
-    mangroveAreaIncrease: yup.string(),
-    mangroveConditionImprovement: yup.string(),
-    naturalRegenerationOnSite: yup.string(),
-    percentageSurvival: yup.mixed(),
-    causeOfLowSurvival: multiselectWithOtherValidationNoMinimum,
-    monitoringIndicators: yup
-      .array()
-      .of(
-        yup.object().shape({
-          mainLabel: yup.string(),
-          secondaryLabel: yup.string(),
-          indictor: yup.string(),
-          metric: yup.string(),
-          measurement: yup.mixed(),
-          unit: yup.string(),
-          comparison: yup.string(),
-          measurementComparison: yup.mixed(),
-          linkedAims: yup.array().of(yup.string()).default([])
-        })
-      )
-      .default([]),
-    achievementOfEcologicalAims: yup.string()
-  })
-  const reactHookFormInstance = useForm({
-    defaultValues: {
-      ecologicalMonitoringStakeholders: [],
-      causeOfLowSurvival: { selectedValues: [] },
-      preAndPostRestorationActivities: {}
-    },
-    resolver: yupResolver(validationSchema)
-  })
+
+  const form = useFormContext()
 
   const {
     handleSubmit: validateInputs,
     formState: { errors },
-    reset: resetForm,
     control,
     watch: watchForm
-  } = reactHookFormInstance
+  } = form
 
   const {
     fields: monitoringIndicatorsFields,
@@ -146,9 +89,6 @@ const EcologicalStatusAndOutcomesForm = () => {
   const registrationInterventionFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-  const [isMainFormDataLoading, setIsMainFormDataLoading] = useState(false)
-  const [areBiophysicalInterventionsLoading, setAreBiophysicalInterventionsLoading] =
-    useState(false)
   const [biophysicalInterventions, setBiophysicalInterventions] = useState([])
   const mangroveAreaIncreaseWatcher = watchForm('mangroveAreaIncrease')
   const [isDeleting, setIsDeleting] = useState(false)
@@ -163,11 +103,9 @@ const EcologicalStatusAndOutcomesForm = () => {
 
   const _loadRegistrationAnswers = useEffect(
     function loadRegistrationServerData() {
-      setAreBiophysicalInterventionsLoading(true)
       axios
         .get(registrationInterventionFormsUrl)
         .then((registrationInterventionResponse) => {
-          setAreBiophysicalInterventionsLoading(false)
           setBiophysicalInterventions(getBiophysicalInterventions(registrationInterventionResponse))
           const ecologicalAimsInitialVal = getEcologicalAims(registrationInterventionResponse)
 
@@ -192,7 +130,6 @@ const EcologicalStatusAndOutcomesForm = () => {
           )
         })
         .catch(() => {
-          setAreBiophysicalInterventionsLoading(false)
           toast.error(language.error.apiLoad)
         })
     },
@@ -202,11 +139,9 @@ const EcologicalStatusAndOutcomesForm = () => {
   const _loadMonitoringAnswers = useEffect(
     function loadMonitoringServerData() {
       if (isEditMode) {
-        setAreBiophysicalInterventionsLoading(true)
         axios
           .get(monitoringFormSingularUrl)
           .then((monitoringResponse) => {
-            setAreBiophysicalInterventionsLoading(false)
             const ecologicalMonitoringStakeholdersInitialVal =
               getEcologicalMonitoringStakeholders(monitoringResponse)
 
@@ -219,7 +154,6 @@ const EcologicalStatusAndOutcomesForm = () => {
             )
           })
           .catch(() => {
-            setAreBiophysicalInterventionsLoading(false)
             toast.error(language.error.apiLoad)
           })
       }
@@ -231,9 +165,7 @@ const EcologicalStatusAndOutcomesForm = () => {
     apiUrl: monitoringFormSingularUrl,
     formType,
     isEditMode,
-    questionMapping: questionMapping.ecologicalStatusAndOutcomes,
-    resetForm,
-    setIsLoading: setIsMainFormDataLoading
+    questionMapping: questionMapping.ecologicalStatusAndOutcomes
   })
 
   const createNewMonitoringForm = (payload) => {
@@ -376,9 +308,7 @@ const EcologicalStatusAndOutcomesForm = () => {
   const getWhichStakeholderInvolved = (stakeholder) =>
     ecologicalMonitoringStakeholdersFields.find((field) => field.stakeholder === stakeholder)
 
-  return isMainFormDataLoading || areBiophysicalInterventionsLoading ? (
-    <LoadingIndicator />
-  ) : (
+  return (
     <ContentWrapper>
       <FormPageHeader>
         <PageTitle>
@@ -642,7 +572,7 @@ const EcologicalStatusAndOutcomesForm = () => {
             <FormQuestionDiv>
               <CheckboxGroupWithLabelAndController
                 fieldName='causeOfLowSurvival'
-                reactHookFormInstance={reactHookFormInstance}
+                control={control}
                 options={questions.causeOfLowSurvival.options}
                 question={questions.causeOfLowSurvival.question}
                 shouldAddOtherOptionWithClarification={true}

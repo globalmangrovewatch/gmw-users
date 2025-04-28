@@ -43,7 +43,6 @@ function ProjectDetailsForm() {
 
   const [mapExtent, setMapExtent] = useState()
   const [isError, setIsError] = useState(false)
-  // const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { site_name } = useSiteInfo()
 
@@ -58,8 +57,7 @@ function ProjectDetailsForm() {
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     resetForm: form.reset,
-    questionMapping: questionMapping.projectDetails,
-    setIsLoading: () => {}
+    questionMapping: questionMapping.projectDetails
   })
 
   const onCountriesChange = (field, features) => {

@@ -1,18 +1,14 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { Box, MenuItem, TextField } from '@mui/material'
 
 import { FormLayout, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
 import { ContentWrapper } from '../../styles/containers'
 import { managementStatusAndEffectiveness as questions } from '../../data/questions'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
-import LoadingIndicator from '../LoadingIndicator'
 import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
 import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
@@ -34,43 +30,21 @@ const ManagementStatusAndEffectivenessForm = () => {
   const isEditMode = !!monitoringFormId
   const navigate = useNavigate()
   const { site_name } = useSiteInfo()
-  const validationSchema = yup.object({
-    dateOfAssessment: yup.string().required(language.form.required),
-    stakeholderManagement: multiselectWithOtherValidationNoMinimum,
-    stakeholderInfluence: yup.string(),
-    managementStatusChanges: yup.string(),
-    currentManagementStatus: yup.string().nullable(),
-    managementLaws: yup.string().nullable(),
-    nameOfFormalManagementArea: yup.string().nullable(),
-    projectStatusChange: yup.string(),
-    currentProtectionStatus: yup.string().nullable(),
-    financeForCiteManagement: yup.string(),
-    sufficientFunds: yup.string(),
-    resourcesToEnforceRegulations: yup.string(),
-    equitableSharingOfSiteBenefits: yup.string(),
-    climateChangeAdaptation: yup.string()
-  })
-  const reactHookFormInstance = useForm({
-    defaultValues: {
-      stakeholderManagement: { selectedValues: [], otherValue: undefined }
-    },
-    resolver: yupResolver(validationSchema)
-  })
+
+  const form = useFormContext()
 
   const {
     handleSubmit: validateInputs,
     formState: { errors },
-    reset: resetForm,
     control,
     watch: watchForm
-  } = reactHookFormInstance
+  } = form
 
   const { siteId } = useParams()
   const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
   const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const managementStatusChangesWatcher = watchForm('managementStatusChanges')
   const projectStatusChangeWatcher = watchForm('projectStatusChange')
   const financeForCiteManagementWatcher = watchForm('financeForCiteManagement')
@@ -81,9 +55,7 @@ const ManagementStatusAndEffectivenessForm = () => {
     apiUrl: monitoringFormSingularUrl,
     formType,
     isEditMode,
-    questionMapping: questionMapping.managementStatusAndEffectiveness,
-    resetForm,
-    setIsLoading
+    questionMapping: questionMapping.managementStatusAndEffectiveness
   })
 
   const createNewMonitoringForm = (payload) => {
@@ -150,9 +122,7 @@ const ManagementStatusAndEffectivenessForm = () => {
     setIsDeleteConfirmPromptOpen(true)
   }
 
-  return isLoading ? (
-    <LoadingIndicator />
-  ) : (
+  return (
     <ContentWrapper>
       <FormPageHeader>
         <PageTitle>
@@ -187,7 +157,7 @@ const ManagementStatusAndEffectivenessForm = () => {
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
             fieldName='stakeholderManagement'
-            reactHookFormInstance={reactHookFormInstance}
+            control={control}
             options={questions.stakeholderManagement.options}
             question={questions.stakeholderManagement.question}
             shouldAddOtherOptionWithClarification={true}

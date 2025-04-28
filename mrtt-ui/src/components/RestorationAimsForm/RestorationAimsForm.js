@@ -23,6 +23,7 @@ import { Alert } from '@mui/material'
 const getStakeholders = (registrationAnswersFromServer) =>
   registrationAnswersFromServer?.data.find((dataItem) => dataItem.question_id === '2.1')
     ?.answer_value ?? []
+
 const RestorationAimsForm = () => {
   const form = useFormContext()
   const [isLoading, setIsLoading] = useState(false)
