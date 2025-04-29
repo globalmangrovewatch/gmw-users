@@ -57,7 +57,8 @@
     "lint:fix": "eslint './src/**/*.{js,jsx,tsx,ts}' --fix --no-error-on-unmatched-pattern",
     "prettier": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "heroku-postbuild": "pnpm build"
   },
   "eslintConfig": {
     "extends": [
