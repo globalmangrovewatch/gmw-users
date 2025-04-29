@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-cd ./mrtt-ui &&  npm run lint:fix && npm test -- --watchAll=false
+cd ./mrtt-ui &&  pnpm run lint:fix && pnpm test -- --watchAll=false
