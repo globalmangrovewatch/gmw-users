@@ -5,4 +5,4 @@
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-cd ./mrtt-ui &&  pnpm run prettier  
+cd ./mrtt-ui &&  npm run prettier  
