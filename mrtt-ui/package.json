@@ -119,5 +119,14 @@
   },
   "engines": {
     "node": "22.15.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "core-js",
+      "core-js-pure",
+      "esbuild",
+      "fsevents"
+    ]
   }
 }
