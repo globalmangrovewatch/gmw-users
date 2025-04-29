@@ -49,6 +49,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
+    "heroku-prebuild": "npm install --legacy-peer-deps",
     "test": "react-app-rewired test  --passWithNoTests",
     "eject": "react-scripts eject",
     "lint": "eslint './src/**/*.{js,jsx,tsx,ts}' --no-error-on-unmatched-pattern",
