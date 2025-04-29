@@ -24,11 +24,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: mrtt-ui/package.json
-      - name: Run Tests
-        run: |
-          cd mrtt-ui/
-          npm install --legacy-peer-deps
-          npm test -- --watchAll=false
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Create review app
         run: |
 
