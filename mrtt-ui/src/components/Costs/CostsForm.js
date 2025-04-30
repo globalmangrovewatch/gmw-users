@@ -22,7 +22,6 @@ import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndCon
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
-import LoadingIndicator from '../LoadingIndicator'
 import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
 import ProjectFunderNamesRow from './ProjectFunderNamesRow'
