@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
@@ -33,12 +33,16 @@ import { Paragraph, StyledLink } from '../../styles/v2/ui/typography'
 import { Divider } from '../../styles/v2/ui/divider'
 import { FormInput } from '../../components/Form/FormInput'
 
-import { Button } from '@mui/material'
-
 import LandingHeaderDesktop from '../../components/landing/header-desktop'
 import LandingHeaderMobile from '../../components/landing/header-mobile'
 import { useTheme } from '@mui/styles'
 import { useMediaQuery } from '@mui/system'
+import { Button, Menu, Stack } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import styled from '@emotion/styled'
+
+import ContactForm from '../../components/contact'
+import { ContactUsButton } from '../../components/contact/styles'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),
@@ -50,6 +54,9 @@ const formDefaultValues = { email: '', password: '' }
 const pageLanguage = language.pages.login
 
 const LoginForm = ({ isUserNew }) => {
+  const [isOpen, setIsOpen] = useState()
+  const [isOpenAbout, setIsOpenAbout] = useState(false)
+
   const [isLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const navigate = useNavigate()
@@ -117,6 +124,7 @@ const LoginForm = ({ isUserNew }) => {
       </Hero>
       <Main>
         <MainContent>
+          <LandingHeader />
           <MainTitle>{pageLanguage.title}</MainTitle>
           {isUserNew ? (
             <Alert variant='outlined' severity='success'>
