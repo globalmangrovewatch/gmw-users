@@ -85,6 +85,30 @@ export const Hero = styled('div')(
 `
 )
 
+export const LandingHeaderContainer = styled('header')(
+  ({ theme }) => `
+  display: flex;
+  justify-content: center;
+  position: relative;
+  align-items: center;
+  padding: 24px;
+  width: 100%;
+  background-color: ${theme.palette.common.themeColor};
+  z-index: 10;
+
+  ${theme.breakpoints.up('lg')} {
+    padding: 0;
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 20;
+  }
+`
+)
+
 export const HeroContent = styled('section')(
   ({ theme }) => `
   padding: 24px;

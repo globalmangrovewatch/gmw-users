@@ -12,28 +12,11 @@ import language from '../../language'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import ContactForm from '../contact'
-
-import { css } from '@emotion/react'
+import { ContactUsButton } from '../contact/styles'
 
 const CustomButton = styled(Button)`
   margin: 0;
   color: ${theme.color.white};
-`
-
-const ContactUsButton = styled(Button)`
-  text-transform: capitalize;
-  display: flex;
-  align-items: start;
-  justify-content: start;
-  color: ${(props) => (props.active === 'true' ? theme.color.primary : theme.color.text)};
-  padding: 0 !important;
-  @media (min-width: ${theme.layout.mediaQueryDesktop}) {
-    flex-direction: row;
-    gap: 1rem;
-  }
-  ${theme.hoverState(css`
-    color: ${theme.color.primaryHover};
-  `)}
 `
 
 function HeaderMenu() {

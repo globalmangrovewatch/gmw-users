@@ -236,10 +236,6 @@ function CausesOfDeclineForm() {
     () => form.getValues('causesOfDecline')?.map((cause) => cause.mainCauseLabel),
     [form]
   )
-  console.log(
-    { causesOfDeclineChecked, causesOfDeclineTypesChecked, causesOfDeclineOptions },
-    form.getValues()
-  )
 
   return (
     <ContentWrapper>

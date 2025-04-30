@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
@@ -25,12 +26,16 @@ import {
   Form,
   FormFooter,
   LogoContainer,
-  Logo
+  Logo,
+  LandingHeaderContainer
 } from '../../styles/v2/containers/landing'
 import { Paragraph, StyledLink } from '../../styles/v2/ui/typography'
-import { Button } from '../../styles/v2/ui/button'
 import { Divider } from '../../styles/v2/ui/divider'
 import { FormInput } from '../../components/Form/FormInput'
+
+import { Button } from '@mui/material'
+
+import LandingHeader from '../../components/landing/header'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),
@@ -86,9 +91,13 @@ const LoginForm = ({ isUserNew }) => {
   const form = (
     <Base>
       <Hero>
-        <LogoContainer>
-          <Logo src='/images/landing/logo.webp' />
-        </LogoContainer>
+        <LandingHeaderContainer>
+          <LogoContainer draggable='false'>
+            <Link to='https://www.globalmangrovewatch.org/' target='_blank' rel='noreferrer'>
+              <Logo src='/images/landing/logo.webp' />
+            </Link>
+          </LogoContainer>
+        </LandingHeaderContainer>
         <HeroContent>
           <HeroHeadline>Welcome to the Mangrove Restoration Tracker Tool</HeroHeadline>
           <HeroText variant='text-sm'>
@@ -100,6 +109,7 @@ const LoginForm = ({ isUserNew }) => {
       </Hero>
       <Main>
         <MainContent>
+          <LandingHeader />
           <MainTitle>{pageLanguage.title}</MainTitle>
           {isUserNew ? (
             <Alert variant='outlined' severity='success'>
