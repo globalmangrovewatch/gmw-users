@@ -4,18 +4,48 @@ import theme from './theme'
 const themeMui = createTheme({
   typography: {
     fontFamily: theme.typography.fontStack.join(','),
-    htmlFontSize: 10
+    htmlFontSize: 10,
+    'text-sm': {
+      fontSize: '14px',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      lineHeight: '21px',
+      fontFeatureSettings: "'liga' off, 'clig' off"
+    },
+    'text-sm-semibold': {
+      fontSize: '14px',
+      fontStyle: 'normal',
+      fontWeight: 600,
+      lineHeight: '21px',
+      fontFeatureSettings: "'liga' off, 'clig' off"
+    }
   },
   palette: {
     primary: {
-      main: theme.color.primary
+      main: '#00857f'
     },
     secondary: {
       main: theme.color.secondary
+    },
+    error: {
+      main: '#D00000'
+    },
+    common: {
+      white: '#ffffff',
+      beige: '#EFEEEE'
     }
   },
   spacing: (factor) => `${0.5 * factor}rem`,
-
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536
+    }
+  },
   components: {
     MuiDropzoneArea: {
       styleOverrides: {
