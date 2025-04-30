@@ -1,78 +1,40 @@
 import { Box, Checkbox, List, ListItem, MenuItem, TextField, Typography } from '@mui/material'
 import { toast } from 'react-toastify'
-import { useForm, useFieldArray, Controller } from 'react-hook-form'
+import { useFieldArray, Controller, useFormContext } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
-import { useState, useCallback } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { useState, useCallback, useMemo } from 'react'
+
 import axios from 'axios'
 
 import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
-import { Form, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
+import { FormLayout, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
 import { mapDataForApi } from '../library/mapDataForApi'
-import { multiselectWithOtherValidationNoMinimum } from '../validation/multiSelectWithOther'
+
 import { questionMapping } from '../data/questionMapping'
 import { siteBackground } from '../data/questions'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '../language'
-import LoadingIndicator from './LoadingIndicator'
 import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
-import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedForm } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
 
 const SiteBackgroundForm = () => {
+  const form = useFormContext()
   const [isError, setIsError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setisSubmitting] = useState(false)
   const [stakeholderTypesChecked, setStakeholderTypesChecked] = useState([])
   const { site_name } = useSiteInfo()
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
 
-  const validationSchema = yup.object().shape({
-    stakeholders: yup
-      .array()
-      .of(
-        yup.object().shape({
-          stakeholderType: yup.string(),
-          stackholderName: yup.string()
-        })
-      )
-      .min(1)
-      .required('Select at least one stakeholder'),
-    managementStatus: yup.string(),
-    lawStatus: yup.string(),
-    managementArea: yup.string(),
-    protectionStatus: multiselectWithOtherValidationNoMinimum,
-    areStakeholdersInvolved: yup.string().nullable(),
-    governmentArrangement: multiselectWithOtherValidationNoMinimum,
-    landTenure: multiselectWithOtherValidationNoMinimum,
-    customaryRights: yup.string()
-  })
-
-  const reactHookFormInstance = useForm({
-    defaultValues: {
-      protectionStatus: { selectedValues: [], otherValue: undefined },
-      landTenure: { selectedValues: [], otherValue: undefined }
-    },
-    resolver: yupResolver(validationSchema)
-  })
-
-  const {
-    handleSubmit: validateInputs,
-    formState: { errors },
-    control,
-    reset: resetForm
-  } = reactHookFormInstance
-
   const {
     fields: stakeholdersFields,
     append: stakeholdersAppend,
     remove: stakeholdersRemove
-  } = useFieldArray({ name: 'stakeholders', control })
+  } = useFieldArray({ name: 'stakeholders', control: form.control })
 
   const setInitialStakeholderTypesFromServerData = useCallback((serverResponse) => {
     const initialStakeholders =
@@ -87,8 +49,7 @@ const SiteBackgroundForm = () => {
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.siteBackground,
-    resetForm,
-    setIsLoading,
+    resetForm: form.reset,
     successCallback: setInitialStakeholderTypesFromServerData
   })
 
@@ -124,15 +85,19 @@ const SiteBackgroundForm = () => {
       stakeholderTypesCheckedCopy.splice(typeIndex, 1)
       stakeholdersRemove(fieldIndex)
     }
+
     setStakeholderTypesChecked(stakeholderTypesCheckedCopy)
   }
 
   const getStakeholder = (stakeholder) =>
     stakeholdersFields.find((field) => field.stakeholderType === stakeholder)
 
-  return isLoading ? (
-    <LoadingIndicator />
-  ) : (
+  const stakeholdersChecked = useMemo(
+    () => form.getValues('stakeholders')?.map((d) => d?.stakeholderType),
+    [form]
+  )
+
+  return (
     <ContentWrapper>
       <FormPageHeader>
         <PageTitle>{language.pages.siteQuestionsOverview.formName.siteBackground}</PageTitle>
@@ -141,28 +106,28 @@ const SiteBackgroundForm = () => {
       <QuestionNav
         isFormSaving={isSubmitting}
         isFormSaveError={isError}
-        onFormSave={validateInputs(handleSubmit)}
+        onFormSave={form.handleSubmit(handleSubmit)}
         currentSection='site-background'
       />
-      <FormValidationMessageIfErrors formErrors={errors} />
+      <FormValidationMessageIfErrors formErrors={form.errors} />
 
       {/* Select Stakeholders */}
-      <Form>
+      <FormLayout>
         <FormQuestionDiv>
           <StickyFormLabel>
             {siteBackground.stakeholders.question} <RequiredIndicator />
           </StickyFormLabel>
           <List>
-            {siteBackground.stakeholders.options.map((stakeholder, index) => (
+            {siteBackground.stakeholders.options?.map((stakeholder, index) => (
               <ListItem key={index}>
                 <Box>
                   <Box>
                     <Checkbox
                       value={stakeholder}
-                      checked={stakeholderTypesChecked.includes(stakeholder)}
-                      onChange={(event) =>
+                      checked={stakeholdersChecked?.includes(stakeholder)}
+                      onChange={(event) => {
                         handleStakeholdersOnChange(event, stakeholder)
-                      }></Checkbox>
+                      }}></Checkbox>
                     <Typography variant='subtitle'>{stakeholder}</Typography>
                   </Box>
                   <Box>
@@ -171,7 +136,7 @@ const SiteBackgroundForm = () => {
                         name={`stakeholders.${stakeholdersFields.findIndex(
                           (field) => field.stakeholderType === stakeholder
                         )}.stakeholderName`}
-                        control={control}
+                        control={form.control}
                         defaultValue=''
                         render={({ field }) => (
                           <TextField
@@ -179,6 +144,12 @@ const SiteBackgroundForm = () => {
                             label='Name'
                             variant='outlined'
                             {...field}
+                            // onChange={() => {
+                            //   ;`stakeholders.${stakeholdersFields.findIndex(
+                            //     (field) => field.stakeholderType === stakeholder
+                            //   )}.stakeholderName`
+                            // }}
+                            // value={field.value}
                           />
                         )}
                       />
@@ -188,18 +159,18 @@ const SiteBackgroundForm = () => {
               </ListItem>
             ))}
           </List>
-          <ErrorText>{errors.stakeholders?.message}</ErrorText>
+          <ErrorText>{form.errors?.stakeholders?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Select Management Status*/}
         <FormQuestionDiv>
           <StickyFormLabel>{siteBackground.managementStatus.question}</StickyFormLabel>
           <Controller
             name='managementStatus'
-            control={control}
+            control={form.control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label={language.form.selectLabel}>
-                {siteBackground.managementStatus.options.map((item, index) => (
+                {siteBackground.managementStatus.options?.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -207,18 +178,18 @@ const SiteBackgroundForm = () => {
               </TextField>
             )}
           />
-          <ErrorText>{errors.managementStatus?.message}</ErrorText>
+          <ErrorText>{form.errors?.managementStatus?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Law recognition */}
         <FormQuestionDiv>
           <StickyFormLabel>{siteBackground.lawStatus.question}</StickyFormLabel>
           <Controller
             name='lawStatus'
-            control={control}
+            control={form.control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label={language.form.selectLabel}>
-                {siteBackground.lawStatus.options.map((item, index) => (
+                {siteBackground.lawStatus.options?.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -226,40 +197,40 @@ const SiteBackgroundForm = () => {
               </TextField>
             )}
           />
-          <ErrorText>{errors.lawStatus?.message}</ErrorText>
+          <ErrorText>{form.errors?.lawStatus?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Management Area*/}
         <FormQuestionDiv>
           <StickyFormLabel>{siteBackground.managementArea.question}</StickyFormLabel>
           <Controller
             name='managementArea'
-            control={control}
+            control={form.control}
             defaultValue=''
             render={({ field }) => <TextField {...field} value={field.value}></TextField>}
           />
-          <ErrorText>{errors.managementArea?.message}</ErrorText>
+          <ErrorText>{form.errors?.managementArea?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Protection Status*/}
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
             fieldName='protectionStatus'
-            reactHookFormInstance={reactHookFormInstance}
+            control={form.control}
             options={siteBackground.protectionStatus.options}
             question={siteBackground.protectionStatus.question}
             shouldAddOtherOptionWithClarification={true}
           />
-          <ErrorText>{errors.protectionStatus?.selectedValues?.message}</ErrorText>
+          <ErrorText>{form.errors?.protectionStatus?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         {/* areStakeholdersInvolved */}
         <FormQuestionDiv>
           <StickyFormLabel>{siteBackground.areStakeholdersInvolved.question}</StickyFormLabel>
           <Controller
             name='areStakeholdersInvolved'
-            control={control}
+            control={form.control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label={language.form.selectLabel}>
-                {siteBackground.areStakeholdersInvolved.options.map((item, index) => (
+                {siteBackground.areStakeholdersInvolved.options?.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -268,41 +239,41 @@ const SiteBackgroundForm = () => {
             )}
           />
           <ErrorText variant='subtitle' sx={{ color: 'red' }}>
-            {errors.areStakeholdersInvolved?.message}
+            {form.errors?.areStakeholdersInvolved?.message}
           </ErrorText>
         </FormQuestionDiv>
         {/* Government Arrangement */}
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
             fieldName='governmentArrangement'
-            reactHookFormInstance={reactHookFormInstance}
+            control={form.control}
             options={siteBackground.governmentArrangement.options}
             question={<>{siteBackground.governmentArrangement.question}</>}
             shouldAddOtherOptionWithClarification={true}
           />
-          <ErrorText>{errors.governmentArrangement?.selectedValues?.message}</ErrorText>
+          <ErrorText>{form.errors?.governmentArrangement?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Land Tenure */}
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
             fieldName='landTenure'
-            reactHookFormInstance={reactHookFormInstance}
+            control={form.control}
             options={siteBackground.landTenure.options}
             question={<>{siteBackground.landTenure.question}</>}
             shouldAddOtherOptionWithClarification={true}
           />
-          <ErrorText>{errors.landTenure?.selectedValues?.message}</ErrorText>
+          <ErrorText>{form.errors?.landTenure?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
         {/* customaryRights */}
         <FormQuestionDiv>
           <StickyFormLabel>{siteBackground.customaryRights.question}</StickyFormLabel>
           <Controller
             name='customaryRights'
-            control={control}
+            control={form.control}
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label={language.form.selectLabel}>
-                {siteBackground.customaryRights.options.map((item, index) => (
+                {siteBackground.customaryRights.options?.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -310,9 +281,9 @@ const SiteBackgroundForm = () => {
               </TextField>
             )}
           />
-          <ErrorText>{errors.customaryRights?.message}</ErrorText>
+          <ErrorText>{form.errors?.customaryRights?.message}</ErrorText>
         </FormQuestionDiv>
-      </Form>
+      </FormLayout>
     </ContentWrapper>
   )
 }

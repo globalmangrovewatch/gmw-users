@@ -10,16 +10,15 @@ import {
   Typography
 } from '@mui/material'
 import { toast } from 'react-toastify'
-import { useForm, useFieldArray, Controller } from 'react-hook-form'
+import { useFieldArray, Controller, useFormContext } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { useState, useCallback } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+
 import axios from 'axios'
 import { styled } from '@mui/material/styles'
 
 import {
-  Form,
+  FormLayout,
   FormPageHeader,
   FormQuestionDiv,
   StickyFormLabel,
@@ -29,7 +28,6 @@ import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { findRegistationDataItem } from '../../library/findDataItems'
 import { mapDataForApi } from '../../library/mapDataForApi'
-import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { preRestorationAssessment as questions } from '../../data/questions'
 import { questionMapping } from '../../data/questionMapping'
 import AddPhysicalMeasurementRow from './AddPhysicalMeasurementRow'
@@ -38,7 +36,7 @@ import language from '../../language'
 import LoadingIndicator from '../LoadingIndicator'
 import QuestionNav from '../QuestionNav'
 import PhysicalMeasurementRow from './PhysicalMeasurementRow'
-import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
@@ -54,64 +52,9 @@ const getPhysicalMeasurementsTaken = (registrationAnswersFromServer) =>
 
 function PreRestorationAssessmentForm() {
   const { site_name } = useSiteInfo()
-  const validationSchema = yup.object().shape({
-    mangrovesPreviouslyOccured: yup.string(),
-    mangroveRestorationAttempted: yup.string(),
-    lastRestorationAttemptYear: yup.mixed().when('mangroveRestorationAttempted', {
-      is: (val) => val && val === 'Yes',
-      then: yup
-        .number()
-        .typeError(language.form.error.noYearProvided)
-        .min(1900, language.form.error.yearTooLow)
-        .max(new Date().getFullYear(), language.form.error.yearTooHigh)
-        .nullable(true)
-        .transform((_, val) => (val === Number(val) ? val : null))
-    }),
-    previousBiophysicalInterventions: multiselectWithOtherValidationNoMinimum,
-    whyUnsuccessfulRestorationAttempt: multiselectWithOtherValidationNoMinimum,
-    siteAssessmentBeforeProject: yup.string(),
-    siteAssessmentType: multiselectWithOtherValidationNoMinimum,
-    referenceSite: yup.string(),
-    lostMangrovesYear: yup.mixed().when('siteAssessmentBeforeProject', {
-      is: (val) => val && val === 'Yes',
-      then: yup
-        .number()
-        .typeError(language.form.error.noYearProvided)
-        .min(1900, language.form.error.yearTooLow)
-        .max(new Date().getFullYear(), language.form.error.yearTooHigh)
-        .nullable(true)
-        .transform((_, val) => (val === Number(val) ? val : null))
-    }),
-    naturalRegenerationAtSite: yup.string(),
-    mangroveSpeciesPresent: yup.array().of(yup.string()).default([]).nullable(),
-    speciesComposition: yup
-      .array()
-      .of(
-        yup.object().shape({
-          mangroveSpeciesType: yup.mixed(),
-          percentageComposition: yup.number().typeError('Please enter a number')
-        })
-      )
-      .default([]),
-    physicalMeasurementsTaken: yup
-      .array()
-      .of(
-        yup.object().shape({
-          measurementType: yup.string(),
-          measurementValue: yup.mixed()
-        })
-      )
-      .default([]),
-    pilotTestConducted: yup.string(),
-    guidanceForSiteRestoration: yup.string()
-  })
-  const reactHookFormInstance = useForm({
-    defaultValues: {
-      previousBiophysicalInterventions: { selectedValues: [], otherValue: undefined },
-      whyUnsuccessfulRestorationAttempt: { selectedValues: [], otherValue: undefined }
-    },
-    resolver: yupResolver(validationSchema)
-  })
+
+  const form = useFormContext()
+
   const {
     handleSubmit: validateInputs,
     formState: { errors },
@@ -119,7 +62,7 @@ function PreRestorationAssessmentForm() {
     reset: resetForm,
     setValue: setFormValue,
     watch: watchForm
-  } = reactHookFormInstance
+  } = form
 
   const {
     fields: speciesCompositionFields,
@@ -269,7 +212,7 @@ function PreRestorationAssessmentForm() {
       />
       <FormValidationMessageIfErrors formErrors={errors} />
 
-      <Form>
+      <FormLayout>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.mangrovesPreviouslyOccured.question}</StickyFormLabel>
           <Controller
@@ -323,7 +266,7 @@ function PreRestorationAssessmentForm() {
             <FormQuestionDiv>
               <CheckboxGroupWithLabelAndController
                 fieldName='previousBiophysicalInterventions'
-                reactHookFormInstance={reactHookFormInstance}
+                control={control}
                 options={questions.previousBiophysicalInterventions.options}
                 question={questions.previousBiophysicalInterventions.question}
                 shouldAddOtherOptionWithClarification={true}
@@ -335,7 +278,7 @@ function PreRestorationAssessmentForm() {
             <FormQuestionDiv>
               <CheckboxGroupWithLabelAndController
                 fieldName='whyUnsuccessfulRestorationAttempt'
-                reactHookFormInstance={reactHookFormInstance}
+                control={control}
                 options={questions.whyUnsuccessfulRestorationAttempt.options}
                 question={questions.whyUnsuccessfulRestorationAttempt.question}
                 shouldAddOtherOptionWithClarification={true}
@@ -369,7 +312,7 @@ function PreRestorationAssessmentForm() {
             <FormQuestionDiv>
               <CheckboxGroupWithLabelAndController
                 fieldName='siteAssessmentType'
-                reactHookFormInstance={reactHookFormInstance}
+                control={control}
                 options={questions.siteAssessmentType.options}
                 question={questions.siteAssessmentType.question}
                 shouldAddOtherOptionWithClarification={false}
@@ -550,7 +493,7 @@ function PreRestorationAssessmentForm() {
           />
           <ErrorText>{errors.guidanceForSiteRestoration?.message}</ErrorText>
         </FormQuestionDiv>
-      </Form>
+      </FormLayout>
     </ContentWrapper>
   )
 }

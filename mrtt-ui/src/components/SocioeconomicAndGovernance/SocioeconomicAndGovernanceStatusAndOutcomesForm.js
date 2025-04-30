@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-import { Controller, useForm, useFieldArray } from 'react-hook-form'
+import { Controller, useFormContext, useFieldArray } from 'react-hook-form'
 import { Box, Checkbox, FormControlLabel, ListItem, MenuItem, TextField } from '@mui/material'
 
 import {
-  Form,
+  FormLayout,
   FormPageHeader,
   FormQuestionDiv,
   NestedLabel1,
@@ -26,7 +25,6 @@ import { socioeconomicGovernanceStatusOutcomes as questions } from '../../data/q
 import LoadingIndicator from '../LoadingIndicator'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { socioIndicators } from '../../data/socioIndicators'
 import { findRegistationDataItem } from '../../library/findDataItems'
 import SocioeconomicOutcomesRow from './SocioeconomicOutcomesRow'
@@ -47,47 +45,15 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const { monitoringFormId } = useParams()
   const isEditMode = !!monitoringFormId
   const { site_name } = useSiteInfo()
-  const validationSchema = yup.object({
-    dateOfOutcomesAssessment: yup.string().nullable().required(language.form.required),
-    changeInGovernance: yup.string(),
-    currentGovenance: multiselectWithOtherValidationNoMinimum,
-    changeInTenureArrangement: yup.string(),
-    currentLandOwnership: multiselectWithOtherValidationNoMinimum,
-    rightsToLandInLaw: yup.string().default(''),
-    socioeconomicOutcomes: yup
-      .array()
-      .of(
-        yup.object().shape({
-          mainLabel: yup.string(),
-          secondaryLabel: yup.string(),
-          child: yup.string(),
-          type: yup.string(),
-          trend: yup.string(),
-          linkedAims: yup.array().of(yup.string()).default([]),
-          measurement: yup.string(),
-          unit: yup.string(),
-          comparison: yup.string(),
-          value: yup.mixed()
-        })
-      )
-      .default([]),
-    achievementOfSocioeconomicAims: yup.string()
-  })
-  const reactHookFormInstance = useForm({
-    defaultValues: {
-      currentGovenance: { selectedValues: [] },
-      currentLandOwnership: { selectedValues: [] }
-    },
-    resolver: yupResolver(validationSchema)
-  })
+
+  const form = useFormContext()
 
   const {
     handleSubmit: validateInputs,
     formState: { errors },
-    reset: resetForm,
     control,
     watch: watchForm
-  } = reactHookFormInstance
+  } = form
 
   const {
     fields: socioeconomicOutcomesFields,
@@ -142,7 +108,6 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     formType,
     isEditMode,
     questionMapping: questionMapping.socioeconomicAndGovernanceStatusAndOutcomes,
-    resetForm,
     setIsLoading: setIsMainFormDataLoading
   })
 
@@ -275,7 +240,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
       />
       <FormValidationMessageIfErrors formErrors={errors} />
 
-      <Form>
+      <FormLayout>
         <FormQuestionDiv>
           <StickyFormLabel>
             {questions.dateOfOutcomesAssessment.question}
@@ -313,7 +278,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           <FormQuestionDiv>
             <CheckboxGroupWithLabelAndController
               fieldName='currentGovenance'
-              reactHookFormInstance={reactHookFormInstance}
+              control={control}
               options={questions.currentGovenance.options}
               question={questions.currentGovenance.question}
               shouldAddOtherOptionWithClarification={false}
@@ -344,7 +309,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
             <FormQuestionDiv>
               <CheckboxGroupWithLabelAndController
                 fieldName='currentLandOwnership'
-                reactHookFormInstance={reactHookFormInstance}
+                control={control}
                 options={questions.currentLandOwnership.options}
                 question={questions.currentLandOwnership.question}
                 shouldAddOtherOptionWithClarification={true}
@@ -440,7 +405,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           />
           <ErrorText>{errors.achievementOfSocioeconomicAims?.message}</ErrorText>
         </FormQuestionDiv>
-      </Form>
+      </FormLayout>
       {isEditMode ? <ButtonDeleteForm onClick={handleDeleteClick} isDeleting={isDeleting} /> : null}
       <ConfirmPrompt
         isOpen={isDeleteConfirmPromptOpen}

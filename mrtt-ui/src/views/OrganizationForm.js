@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react'
 import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
 import { ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
 import { ErrorText, PageTitle } from '../styles/typography'
-import { Form } from '../styles/forms'
+import { FormLayout } from '../styles/forms'
 import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
 import LoadingIndicator from '../components/LoadingIndicator'
@@ -122,7 +122,7 @@ const OrganizationForm = ({ isNewOrganization }) => {
             ? language.pages.organizationForm.titleNew
             : language.pages.organizationForm.titleEdit}
         </PageTitle>
-        <Form onSubmit={validateInputs(handleSubmit)}>
+        <FormLayout onSubmit={validateInputs(handleSubmit)}>
           <FormLabel htmlFor='name'>
             {language.pages.organizationForm.labelName}
             <RequiredIndicator />
@@ -142,7 +142,7 @@ const OrganizationForm = ({ isNewOrganization }) => {
             <ButtonCancel onClick={handleCancelClick} />
             <ButtonSubmit isSubmitting={isSubmitting} />
           </ButtonContainer>
-        </Form>
+        </FormLayout>
       </ContentWrapper>
     </>
   )

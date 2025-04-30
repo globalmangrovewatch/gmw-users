@@ -9,7 +9,7 @@ import PropTypes from 'prop-types'
 
 import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
 import { ErrorText, PageTitle } from '../styles/typography'
-import { Form } from '../styles/forms'
+import { FormLayout } from '../styles/forms'
 import { FormLabel, MenuItem, Select, TextField } from '@mui/material'
 import { QuestionWrapper, ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
 import ItemDoesntExist from '../components/ItemDoesntExist'
@@ -143,7 +143,7 @@ const SiteForm = ({ isNewSite }) => {
   ) : (
     <ContentWrapper>
       <PageTitle>{isNewSite ? language.pages.siteform.titleNewSite : 'placeholder name'}</PageTitle>
-      <Form onSubmit={validateInputs(handleSubmit)}>
+      <FormLayout onSubmit={validateInputs(handleSubmit)}>
         <QuestionWrapper>
           <FormLabel htmlFor='name'>
             {language.pages.siteform.labelName}
@@ -212,7 +212,7 @@ const SiteForm = ({ isNewSite }) => {
           <ButtonCancel onClick={handleCancelClick} />
           <ButtonSubmit isSubmitting={isSubmitting} />
         </ButtonContainer>
-      </Form>
+      </FormLayout>
     </ContentWrapper>
   )
 

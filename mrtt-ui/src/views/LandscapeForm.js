@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react'
 import { ButtonCancel, ButtonCaution, ButtonSubmit } from '../styles/buttons'
 import { ButtonContainer, PaddedSection, RowFlexEnd, ContentWrapper } from '../styles/containers'
 import { ErrorText, PageTitle } from '../styles/typography'
-import { Form } from '../styles/forms'
+import { FormLayout } from '../styles/forms'
 import ConfirmPrompt from '../components/ConfirmPrompt/ConfirmPrompt'
 import ItemDoesntExist from '../components/ItemDoesntExist'
 import language from '../language'
@@ -177,7 +177,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
             ? language.pages.landscapeForm.titleNew
             : language.pages.landscapeForm.titleEdit}
         </PageTitle>
-        <Form onSubmit={validateInputs(handleSubmit)}>
+        <FormLayout onSubmit={validateInputs(handleSubmit)}>
           <FormLabel htmlFor='name'>
             {language.pages.landscapeForm.labelName}
             <RequiredIndicator />
@@ -216,7 +216,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
             <ButtonCancel onClick={handleCancelClick} />
             <ButtonSubmit isSubmitting={isSubmitting} />
           </ButtonContainer>
-        </Form>
+        </FormLayout>
       </ContentWrapper>
     </>
   )

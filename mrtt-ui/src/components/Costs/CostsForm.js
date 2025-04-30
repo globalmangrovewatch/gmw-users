@@ -1,14 +1,13 @@
 import { useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Controller, useForm, useFieldArray } from 'react-hook-form'
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
 import { Alert, Box, Button, MenuItem, TextField, Typography } from '@mui/material'
 
 import {
-  Form,
+  FormLayout,
   FormPageHeader,
   FormQuestionDiv,
   QuestionSubSection,
@@ -20,12 +19,10 @@ import language from '../../language'
 import { ContentWrapper } from '../../styles/containers'
 import { costs as questions } from '../../data/questions'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import { multiselectWithOtherValidationNoMinimum } from '../../validation/multiSelectWithOther'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
-import LoadingIndicator from '../LoadingIndicator'
-import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
 import ProjectFunderNamesRow from './ProjectFunderNamesRow'
 import BreakdownOfCostRow from './BreakdownOfCostRow'
@@ -51,62 +48,15 @@ const getPercentageSplitOfActivities = (registrationAnswersFromServer) =>
 
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
-  const validationSchema = yup.object({
-    supportForActivities: multiselectWithOtherValidationNoMinimum,
-    projectInterventionFunding: yup.object().shape({
-      fundingType: yup.string(),
-      other: yup.string()
-    }),
-    projectFunderNames: yup
-      .array()
-      .of(
-        yup.object().shape({
-          funderName: yup.string(),
-          funderType: yup.string(),
-          percentage: yup.mixed()
-        })
-      )
-      .default([]),
-    breakdownOfCost: yup
-      .array()
-      .of(
-        yup.object().shape({
-          costType: yup.string(),
-          cost: yup.mixed(),
-          currency: yup.string()
-        })
-      )
-      .default([]),
-    costOfProjectActivities: yup.object().shape({
-      cost: yup.mixed(),
-      currency: yup.string()
-    }),
-    percentageSplitOfActivities: yup
-      .array()
-      .of(
-        yup.object().shape({
-          intervention: yup.string(),
-          percentage: yup.mixed().nullable()
-        })
-      )
-      .default([]),
-    nonmonetisedContributions: multiselectWithOtherValidationNoMinimum
-  })
-  const reactHookFormInstance = useForm({
-    defaultValues: {
-      supportForActivities: { selectedValues: [], otherValue: undefined },
-      nonmonetisedContributions: { selectedValues: [], otherValue: undefined }
-    },
-    resolver: yupResolver(validationSchema)
-  })
+
+  const form = useFormContext()
 
   const {
     handleSubmit: validateInputs,
     formState: { errors },
-    reset: resetForm,
     control,
     watch: watchForm
-  } = reactHookFormInstance
+  } = form
 
   const {
     fields: projectFunderNamesFields,
@@ -131,7 +81,6 @@ const CostsForm = () => {
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const projectInterventionFundingWatcher = watchForm('projectInterventionFunding')
   const supportForActivitiesWatcher = watchForm('supportForActivities')
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
@@ -200,8 +149,6 @@ const CostsForm = () => {
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.costs,
-    resetForm,
-    setIsLoading,
     successCallback: loadServerData
   })
 
@@ -272,9 +219,7 @@ const CostsForm = () => {
       .toLocaleString()
   }
 
-  return isLoading ? (
-    <LoadingIndicator />
-  ) : (
+  return (
     <ContentWrapper>
       <FormPageHeader>
         <PageTitle>{language.pages.siteQuestionsOverview.formName.costs}</PageTitle>
@@ -287,11 +232,11 @@ const CostsForm = () => {
         currentSection='costs'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
-      <Form>
+      <FormLayout>
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
             fieldName='supportForActivities'
-            reactHookFormInstance={reactHookFormInstance}
+            control={control}
             options={questions.supportForActivities.options}
             question={questions.supportForActivities.question}
             shouldAddOtherOptionWithClarification={false}
@@ -433,7 +378,7 @@ const CostsForm = () => {
           <FormQuestionDiv>
             <CheckboxGroupWithLabelAndController
               fieldName='nonmonetisedContributions'
-              reactHookFormInstance={reactHookFormInstance}
+              control={control}
               options={questions.nonmonetisedContributions.options}
               question={questions.nonmonetisedContributions.question}
               shouldAddOtherOptionWithClarification={true}
@@ -441,7 +386,7 @@ const CostsForm = () => {
             <ErrorText>{errors.nonmonetisedContributions?.selectedValues?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
-      </Form>
+      </FormLayout>
     </ContentWrapper>
   )
 }

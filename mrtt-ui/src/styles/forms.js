@@ -33,7 +33,7 @@ export const StickyFormLabel = styled(FormLabel)`
   }
 `
 
-export const Form = styled('form')`
+export const FormLayout = styled('form')`
   display: flex;
   flex-direction: column;
   padding-bottom: ${theme.layout.footerHeight};

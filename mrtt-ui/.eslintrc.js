@@ -9,8 +9,10 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
-    'plugin:storybook/recommended'
+    'plugin:storybook/recommended',
+    'plugin:@typescript-eslint/recommended'
   ],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true
@@ -20,17 +22,24 @@ module.exports = {
   },
   plugins: ['react', 'react-hooks'],
   rules: {
-    'no-unused-vars': [
-      'error',
+    'no-unused-vars': 'off', // turn off default
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
       {
         varsIgnorePattern: '^_',
-        argsIgnorePattern: '^_' // ignore unused vars and args that start with _. These vars are unsued, but named for readability/maintainability of code.
+        argsIgnorePattern: '^_'
       }
     ],
     'prettier/prettier': [
       'error',
       {
         jsxSingleQuote: true
+      }
+    ],
+    '@typescript-eslint/no-empty-function': [
+      'warn',
+      {
+        allow: ['arrowFunctions']
       }
     ],
     'react-hooks/exhaustive-deps': 'error',

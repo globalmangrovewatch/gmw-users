@@ -1,8 +1,7 @@
 import { FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { useState } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+
 import Autocomplete from '@mui/material/Autocomplete'
 import axios from 'axios'
 import turfBbox from '@turf/bbox'
@@ -14,20 +13,21 @@ import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { mapDataForApi } from '../library/mapDataForApi'
 import { projectDetails as questions } from '../data/questions'
 import { questionMapping } from '../data/questionMapping'
-import { StickyFormLabel, FormPageHeader, FormQuestionDiv, Form } from '../styles/forms'
+import { StickyFormLabel, FormPageHeader, FormQuestionDiv, FormLayout } from '../styles/forms'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import emptyFeatureCollection from '../data/emptyFeatureCollection'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '../language'
-import LoadingIndicator from './LoadingIndicator'
+// import LoadingIndicator from './LoadingIndicator'
 import mangroveCountries from '../data/mangrove_countries.json'
 import ProjectAreaMap from './ProjectAreaMap'
 import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
-import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedForm } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
 import DatePickerUtcMui from './DatePickerUtcMui'
+
+export const siteAreaError = 'Please provide a site area'
 
 const sortCountries = (a, b) => {
   const textA = a.properties.country.toUpperCase()
@@ -36,79 +36,28 @@ const sortCountries = (a, b) => {
   return textA < textB ? -1 : textA > textB ? 1 : 0
 }
 const countriesGeojson = mangroveCountries.features.sort(sortCountries)
-const siteAreaError = 'Please provide a site area'
 
 function ProjectDetailsForm() {
+  const form = useFormContext()
+  const errors = form.errors
+
   const [mapExtent, setMapExtent] = useState()
   const [isError, setIsError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { site_name } = useSiteInfo()
-  const validationSchema = yup.object().shape({
-    hasProjectEndDate: yup.boolean(),
-    projectStartDate: yup.date().required('Select a start date'),
-    projectEndDate: yup.date().when('hasProjectEndDate', {
-      is: (endDate) => endDate === true,
-      then: yup
-        .date()
-        .min(yup.ref('projectStartDate'), "End date can't be before start date")
-        .required('Please select an end date')
-    }),
-    countries: yup
-      .array()
-      .of(
-        yup.object().shape({
-          bbox: yup.array().of(yup.number()),
-          geometry: yup.object().shape({
-            coordinates: yup.array().of(yup.number()),
-            type: yup.string()
-          }),
-          properties: yup.object().shape({
-            country: yup.string(),
-            mangroves: yup.string()
-          })
-        })
-      )
-      .min(1)
-      .typeError('Select at least one country'),
-    siteArea: yup
-      .object()
-      .shape({
-        features: yup.array().min(1, siteAreaError).required(siteAreaError)
-      })
-      .required(siteAreaError)
-  })
-  const formOptions = {
-    resolver: yupResolver(validationSchema),
-    defaultValues: {
-      hasProjectEndDate: false,
-      projectStartDate: null,
-      projectEndDate: null,
-      countries: undefined,
-      siteArea: emptyFeatureCollection
-    }
-  }
 
-  const {
-    control,
-    handleSubmit: validateInputs,
-    formState,
-    watch,
-    reset: resetForm
-  } = useForm(formOptions)
-  const { errors } = formState
+  // const { errors } = form.formState
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
-  let watchHasProjectEndDate = watch('hasProjectEndDate', false)
+  let watchHasProjectEndDate = form.watch('hasProjectEndDate', false)
   /* showEndDateInput is a hack because MUI follows native html and casts values to strings.
    The api casts them to boolean so we support both */
   const showEndDateInput = watchHasProjectEndDate === 'true' || watchHasProjectEndDate === true
 
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
-    resetForm,
-    questionMapping: questionMapping.projectDetails,
-    setIsLoading
+    resetForm: form.reset,
+    questionMapping: questionMapping.projectDetails
   })
 
   const onCountriesChange = (field, features) => {
@@ -156,9 +105,7 @@ function ProjectDetailsForm() {
       })
   }
 
-  return isLoading ? (
-    <LoadingIndicator />
-  ) : (
+  return (
     <ContentWrapper>
       <FormPageHeader>
         <PageTitle>{language.pages.siteQuestionsOverview.formName.siteDetails}</PageTitle>
@@ -167,23 +114,27 @@ function ProjectDetailsForm() {
       <QuestionNav
         isFormSaving={isSubmitting}
         isFormSaveError={isError}
-        onFormSave={validateInputs(handleSubmit)}
+        onFormSave={form.handleSubmit(handleSubmit)}
         currentSection='project-details'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
-      <Form>
+      {/* <FormWrapperProvider> */}
+      {/* <FormProvider {...form}> */}
+      <FormLayout>
         {/* Start Date */}
         <FormQuestionDiv>
           <StickyFormLabel id='project-start-date-label'>
-            {questions.projectStartDate.question}
+            {questions?.projectStartDate.question}
             <RequiredIndicator />
           </StickyFormLabel>
           <Controller
             name='projectStartDate'
-            control={control}
-            render={({ field }) => <DatePickerUtcMui id='start-date' label='date' field={field} />}
+            control={form.control}
+            render={({ field }) => {
+              return <DatePickerUtcMui id='start-date' label='date' field={field} />
+            }}
           />
-          <ErrorText>{errors.projectStartDate?.message}</ErrorText>
+          <ErrorText>{errors?.projectStartDate?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Has project end date radio group */}
         <FormQuestionDiv>
@@ -193,13 +144,17 @@ function ProjectDetailsForm() {
           </StickyFormLabel>
           <Controller
             name='hasProjectEndDate'
-            control={control}
+            control={form.control}
             defaultValue={false}
             render={({ field }) => (
               <RadioGroup
                 {...field}
                 aria-labelledby='has-project-end-date-label'
-                name='radio-buttons-group'>
+                name='radio-buttons-group'
+                value={field.value}
+                onChange={(e) => {
+                  field.onChange(e.target.value === 'true')
+                }}>
                 <FormControlLabel value={true} control={<Radio />} label='Yes' />
                 <FormControlLabel value={false} control={<Radio />} label='No' />
               </RadioGroup>
@@ -215,20 +170,29 @@ function ProjectDetailsForm() {
             </StickyFormLabel>
             <Controller
               name='projectEndDate'
-              control={control}
-              render={({ field }) => <DatePickerUtcMui id='end-date' label='date' field={field} />}
+              control={form.control}
+              render={({ field }) => (
+                <DatePickerUtcMui
+                  id='end-date'
+                  label='date'
+                  field={field}
+                  onChange={(e) => {
+                    field.onChange(e)
+                  }}
+                />
+              )}
             />
-            <ErrorText>{errors.projectEndDate?.message}</ErrorText>
+            <ErrorText>{errors?.projectEndDate?.message}</ErrorText>
           </FormQuestionDiv>
         )}
         {/* Countries selector */}
         <FormQuestionDiv>
           <StickyFormLabel htmlFor='countries'>
-            {questions.countries.question} <RequiredIndicator />
+            {questions?.countries?.question} <RequiredIndicator />
           </StickyFormLabel>
           <Controller
             name='countries'
-            control={control}
+            control={form.control}
             defaultValue={[]}
             render={({ field }) => (
               <Autocomplete
@@ -247,16 +211,16 @@ function ProjectDetailsForm() {
               />
             )}
           />
-          <ErrorText>{errors.countries?.message}</ErrorText>
+          <ErrorText>{errors?.countries?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Draw or upload site area */}
         <FormQuestionDiv>
           <StickyFormLabel>
-            {questions.siteArea.question} <RequiredIndicator />
+            {questions?.siteArea.question} <RequiredIndicator />
           </StickyFormLabel>
           <Controller
             name='siteArea'
-            control={control}
+            control={form.control}
             defaultValue={undefined}
             render={({ field }) => (
               <ProjectAreaMap
@@ -269,9 +233,11 @@ function ProjectDetailsForm() {
                 }}></ProjectAreaMap>
             )}
           />
-          <ErrorText>{errors.siteArea?.features?.message}</ErrorText>
+          <ErrorText>{errors?.siteArea?.features?.message}</ErrorText>
         </FormQuestionDiv>
-      </Form>
+      </FormLayout>
+      {/* </FormProvider> */}
+      {/* </FormWrapperProvider> */}
     </ContentWrapper>
   )
 }

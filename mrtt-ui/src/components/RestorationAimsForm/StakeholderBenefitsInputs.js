@@ -13,15 +13,11 @@ const stakeholdersPropType = PropTypes.arrayOf(
 const StakeholderBenefitsInputs = ({
   optionId,
   parentQuestionFieldName,
-  reactHookFormInstance,
+  form,
   stakeholders,
   optionValue
 }) => {
-  const {
-    setValue: setFormValue,
-    getValues: getFormValues,
-    control: formControl
-  } = reactHookFormInstance
+  const { setValue: setFormValue, getValues: getFormValues, control: formControl } = form
   const parentFormValues = useWatch({ control: formControl, name: parentQuestionFieldName })
   const questionLabelId = `${optionId}-question-label`
   const stakeholdersToUse = stakeholders ?? []
@@ -84,7 +80,7 @@ const StakeholderBenefitsInputs = ({
 }
 
 StakeholderBenefitsInputs.propTypes = {
-  reactHookFormInstance: PropTypes.any.isRequired,
+  form: PropTypes.any.isRequired,
   optionId: PropTypes.string.isRequired,
   optionValue: PropTypes.string.isRequired,
   parentQuestionFieldName: PropTypes.string.isRequired,

@@ -11,30 +11,25 @@ import {
   TextField,
   Typography
 } from '@mui/material'
-import { Controller, useForm, useFieldArray } from 'react-hook-form'
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import { useState, useCallback } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 import axios from 'axios'
 
 import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { findRegistationDataItem } from '../../library/findDataItems'
 import {
-  Form,
+  FormLayout,
   FormPageHeader,
   FormQuestionDiv,
   InnerFormDiv,
   StickyFormLabel
 } from '../../styles/forms'
 import { mapDataForApi } from '../../library/mapDataForApi'
-import {
-  multiselectWithOtherValidationNoMinimum,
-  multiselectWithOtherValidation
-} from '../../validation/multiSelectWithOther'
+
 import { propaguleOptions, seedlingOptions } from '../../data/siteInterventionOptions'
 import { questionMapping } from '../../data/questionMapping'
 import { siteInterventions as questions } from '../../data/questions'
@@ -42,10 +37,9 @@ import AddMangroveAssociatedSpeciesRow from './AddMangroveAssociatedSpeciesRow'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import language from '../../language'
-import LoadingIndicator from '../LoadingIndicator'
 import MangroveAssociatedSpeciesRow from './MangroveAssociatedSpeciesRow'
 import QuestionNav from '../QuestionNav'
-import useInitializeQuestionMappedForm from '../../library/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../../library/useSiteInfo'
 import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
 import DatePickerUtcMui from '../DatePickerUtcMui'
@@ -61,72 +55,15 @@ const getMangroveSpeciesUsed = (registrationAnswersFromServer) =>
 
 function SiteInterventionsForm() {
   const { site_name } = useSiteInfo()
-  const validationSchema = yup.object({
-    whichStakeholdersInvolved: yup
-      .array()
-      .of(
-        yup.object().shape({
-          stakeholder: yup.string(),
-          stakeholderType: yup.string()
-        })
-      )
-      .default([]),
-    biophysicalInterventionsUsed: multiselectWithOtherValidation,
-    biophysicalInterventionDuration: yup.object().shape({
-      startDate: yup.string().nullable(),
-      endDate: yup
-        .string()
-        .nullable()
-        .min(yup.ref('startDate'), "End date can't be before start date")
-    }),
-    mangroveSpeciesUsed: yup
-      .array()
-      .of(
-        yup.object().shape({
-          type: yup.string(),
-          seed: yup.object().shape({
-            checked: yup.bool(),
-            source: yup.array().of(yup.string()),
-            count: yup.mixed()
-          }),
-          propagule: yup.object().shape({
-            checked: yup.bool(),
-            source: yup.array().of(yup.string()),
-            count: yup.mixed()
-          })
-        })
-      )
-      .default([]),
-    mangroveAssociatedSpecies: yup
-      .array()
-      .of(
-        yup.object().shape({
-          type: yup.string(),
-          count: yup.mixed(),
-          source: yup.string(),
-          purpose: yup.object().shape({ purpose: yup.string(), other: yup.string() })
-        })
-      )
-      .default([]),
-    localParticipantTraining: yup.string(),
-    organizationsProvidingTraining: multiselectWithOtherValidationNoMinimum,
-    otherActivitiesImplemented: multiselectWithOtherValidation
-  })
-  const reactHookFormInstance = useForm({
-    defaultValues: {
-      organizationsProvidingTraining: { selectedValues: [], otherValue: undefined },
-      otherActivitiesImplemented: { selectedValues: [], otherValue: undefined }
-    },
-    resolver: yupResolver(validationSchema)
-  })
+
+  const form = useFormContext()
 
   const {
     handleSubmit: validateInputs,
     formState: { errors },
-    reset: resetForm,
     watch: watchForm,
     control
-  } = reactHookFormInstance
+  } = form
 
   const {
     fields: mangroveSpeciesUsedFields,
@@ -152,7 +89,6 @@ function SiteInterventionsForm() {
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
   const [mangroveSpeciesUsedChecked, setMangroveSpeciesUsedChecked] = useState([])
   const [whichStakeholdersInvolvedTypesChecked, setWhichStakeholdersInvolvedTypesChecked] =
@@ -190,8 +126,6 @@ function SiteInterventionsForm() {
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.siteInterventions,
-    resetForm,
-    setIsLoading,
     successCallback: loadServerData
   })
 
@@ -312,9 +246,7 @@ function SiteInterventionsForm() {
     mangroveAssociatedSpeciesUpdate(measurementIndex, currentItem)
   }
 
-  return isLoading ? (
-    <LoadingIndicator />
-  ) : (
+  return (
     <ContentWrapper>
       <FormPageHeader>
         <PageTitle>{language.pages.siteQuestionsOverview.formName.siteInterventions}</PageTitle>
@@ -328,7 +260,7 @@ function SiteInterventionsForm() {
       />
       <FormValidationMessageIfErrors formErrors={errors} />
 
-      <Form>
+      <FormLayout>
         <FormQuestionDiv>
           <StickyFormLabel>{questions.whichStakeholdersInvolved.question}</StickyFormLabel>
           <List>
@@ -382,7 +314,7 @@ function SiteInterventionsForm() {
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
             fieldName='biophysicalInterventionsUsed'
-            reactHookFormInstance={reactHookFormInstance}
+            control={control}
             options={questions.biophysicalInterventionsUsed.options}
             question={questions.biophysicalInterventionsUsed.question}
             shouldAddOtherOptionWithClarification={true}
@@ -628,7 +560,7 @@ function SiteInterventionsForm() {
           <FormQuestionDiv>
             <CheckboxGroupWithLabelAndController
               fieldName='organizationsProvidingTraining'
-              reactHookFormInstance={reactHookFormInstance}
+              control={control}
               options={questions.organizationsProvidingTraining.options}
               question={questions.organizationsProvidingTraining.question}
               shouldAddOtherOptionWithClarification={true}
@@ -639,7 +571,7 @@ function SiteInterventionsForm() {
         <FormQuestionDiv>
           <CheckboxGroupWithLabelAndController
             fieldName='otherActivitiesImplemented'
-            reactHookFormInstance={reactHookFormInstance}
+            control={control}
             options={questions.otherActivitiesImplemented.options}
             question={questions.otherActivitiesImplemented.question}
             shouldAddOtherOptionWithClarification={true}
@@ -647,7 +579,7 @@ function SiteInterventionsForm() {
           />
           <ErrorText>{errors.otherActivitiesImplemented?.selectedValues?.message}</ErrorText>
         </FormQuestionDiv>
-      </Form>
+      </FormLayout>
     </ContentWrapper>
   )
 }

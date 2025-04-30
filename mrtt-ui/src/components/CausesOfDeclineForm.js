@@ -10,15 +10,13 @@ import {
   Typography
 } from '@mui/material'
 import { toast } from 'react-toastify'
-import { useForm, useFieldArray, Controller } from 'react-hook-form'
+import { useFieldArray, Controller, FormProvider, useFormContext } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
-import { useState, useCallback } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { useState, useCallback, useMemo } from 'react'
 import axios from 'axios'
 
 import {
-  Form,
+  FormLayout,
   FormPageHeader,
   FormQuestionDiv,
   NestedLabel1,
@@ -33,47 +31,17 @@ import { mapDataForApi } from '../library/mapDataForApi'
 import { questionMapping } from '../data/questionMapping'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '../language'
-import LoadingIndicator from './LoadingIndicator'
 import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
-import useInitializeQuestionMappedForm from '../library/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedForm } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
 
 function CausesOfDeclineForm() {
   const { site_name } = useSiteInfo()
-  const validationSchema = yup.object().shape({
-    lossKnown: yup.string(),
-    causesOfDecline: yup
-      .array()
-      .of(
-        yup.object().shape({
-          mainCauseLabel: yup.string(),
-          mainCauseAnswers: yup.array().of(
-            yup.object().shape({
-              mainCauseAnswer: yup.string(),
-              levelOfDegredation: yup.string().required()
-            })
-          ),
-          subCauses: yup.array().of(
-            yup.object().shape({
-              subCauseLabel: yup.string(),
-              subCauseAnswers: yup.array().of(
-                yup.object().shape({
-                  subCauseAnswer: yup.string(),
-                  levelOfDegredation: yup.string().required()
-                })
-              )
-            })
-          )
-        })
-      )
-      .default([])
-  })
-
-  const formOptions = { resolver: yupResolver(validationSchema) }
+  const form = useFormContext()
 
   // get functions to build form with useForm() hook
-  const { control, formState, watch, handleSubmit, reset: resetForm } = useForm(formOptions)
+  const { control, formState, watch, handleSubmit } = form
   const { errors } = formState
   const {
     fields: causesOfDeclineFields,
@@ -85,7 +53,6 @@ function CausesOfDeclineForm() {
 
   const [isSubmitting, setisSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [causesOfDeclineTypesChecked, setCausesOfDeclineTypesChecked] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
@@ -129,8 +96,6 @@ function CausesOfDeclineForm() {
   useInitializeQuestionMappedForm({
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping.causesOfDecline,
-    resetForm,
-    setIsLoading,
     successCallback: setInitialCausesOfDeclineTypesFromServerData
   })
 
@@ -267,9 +232,16 @@ function CausesOfDeclineForm() {
       })
   }
 
-  return isLoading ? (
-    <LoadingIndicator />
-  ) : (
+  const causesOfDeclineChecked = useMemo(
+    () => form.getValues('causesOfDecline')?.map((cause) => cause.mainCauseLabel),
+    [form]
+  )
+  console.log(
+    { causesOfDeclineChecked, causesOfDeclineTypesChecked, causesOfDeclineOptions },
+    form.getValues()
+  )
+
+  return (
     <ContentWrapper>
       <FormPageHeader>
         <PageTitle>{language.pages.siteQuestionsOverview.formName.causesOfDecline}</PageTitle>
@@ -282,189 +254,191 @@ function CausesOfDeclineForm() {
         currentSection='causes-of-decline'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
-      <Form>
-        <FormQuestionDiv>
-          <StickyFormLabel>{causesOfDecline.lossKnown.question}</StickyFormLabel>
-          <Controller
-            name='lossKnown'
-            control={control}
-            defaultValue={false}
-            render={({ field }) => (
-              <RadioGroup
-                {...field}
-                aria-labelledby='demo-radio-buttons-group-label'
-                name='radio-buttons-group'>
-                {/* Mui converts values to strings, even for booleans */}
-                <FormControlLabel value={'true'} control={<Radio />} label='Yes' />
-                <FormControlLabel value={'false'} control={<Radio />} label='No' />
-              </RadioGroup>
-            )}
-          />
-        </FormQuestionDiv>
-        {lossKnownWatcher === 'true' ? (
+      <FormProvider>
+        <FormLayout>
           <FormQuestionDiv>
-            <StickyFormLabel>
-              {causesOfDecline.causesOfDecline.question} <RequiredIndicator />
-            </StickyFormLabel>
-            {causesOfDeclineOptions.map((mainCause, mainCauseIndex) => {
-              return (
-                <Box key={mainCauseIndex} sx={{ marginTop: '0.75em', marginBottom: '1.5em' }}>
-                  <NestedLabel1>{mainCause.label}</NestedLabel1>
-                  {typeof mainCause.children[0] === 'string'
-                    ? mainCause.children.map((childOption, childIndex) => (
-                        <Box key={childIndex}>
-                          <Box>
-                            <ListItem>
-                              <Checkbox
-                                value={childOption}
-                                checked={causesOfDeclineTypesChecked.includes(
-                                  `${mainCause.label}-${childOption}`
-                                )}
-                                onChange={(event) =>
-                                  handleCausesOfDeclineOnChange({
-                                    event,
-                                    mainCauseLabel: mainCause.label,
-                                    childOption
-                                  })
-                                }></Checkbox>
-                              <Typography variant='subtitle2'>{childOption}</Typography>
-                            </ListItem>
-                          </Box>
-                        </Box>
-                      ))
-                    : mainCause.children.map((subCause, subCauseIndex) => (
-                        <Box
-                          key={subCauseIndex}
-                          variant='subtitle2'
-                          sx={{ marginLeft: '1em', marginTop: '0.75em' }}>
-                          <NestedLabel2>{subCause.secondaryLabel}</NestedLabel2>
-                          {subCause.secondaryChildren.map(
-                            (secondaryChildOption, secondaryChildIndex) => {
-                              return (
-                                <ListItem key={secondaryChildIndex}>
-                                  <Checkbox
-                                    value={secondaryChildOption}
-                                    checked={causesOfDeclineTypesChecked.includes(
-                                      `${subCause.secondaryLabel}-${secondaryChildOption}`
-                                    )}
-                                    onChange={(event) =>
-                                      handleCausesOfDeclineOnChange({
-                                        event,
-                                        mainCauseLabel: mainCause.label,
-                                        subCauseLabel: subCause.secondaryLabel,
-                                        secondaryChildOption
-                                      })
-                                    }></Checkbox>
-                                  <Typography variant='subtitle2'>
-                                    {secondaryChildOption}
-                                  </Typography>
-                                </ListItem>
-                              )
-                            }
-                          )}
-                        </Box>
-                      ))}
-                </Box>
-              )
-            })}
-            <ErrorText>{errors.causesOfDecline?.message}</ErrorText>
+            <StickyFormLabel>{causesOfDecline.lossKnown.question}</StickyFormLabel>
+            <Controller
+              name='lossKnown'
+              control={control}
+              defaultValue={false}
+              render={({ field }) => (
+                <RadioGroup
+                  {...field}
+                  aria-labelledby='demo-radio-buttons-group-label'
+                  name='radio-buttons-group'>
+                  {/* Mui converts values to strings, even for booleans */}
+                  <FormControlLabel value={'true'} control={<Radio />} label='Yes' />
+                  <FormControlLabel value={'false'} control={<Radio />} label='No' />
+                </RadioGroup>
+              )}
+            />
           </FormQuestionDiv>
-        ) : null}
-        {causesOfDeclineFields.length ? (
-          <FormQuestionDiv>
-            <StickyFormLabel>{causesOfDecline.levelsOfDegredation.question}</StickyFormLabel>
-            {causesOfDeclineFields.map((mainCause, mainCauseIndex) => (
-              <Box key={mainCauseIndex}>
-                <NestedLabel1>{mainCause.mainCauseLabel}</NestedLabel1>
-                {mainCause.mainCauseAnswers?.map((answer, answerIndex) => {
-                  return (
-                    <Box key={answerIndex}>
-                      <Typography sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
-                        {answer.mainCauseAnswer}
-                      </Typography>
-                      <Controller
-                        name={`causesOfDecline.${mainCauseIndex}.mainCauseAnswers.${answerIndex}.levelOfDegredation`}
-                        control={control}
-                        defaultValue=''
-                        required
-                        render={({ field }) => (
-                          <TextField
-                            {...field}
-                            select
-                            required
-                            value={field.value}
-                            label='Magnitude of impact *'
-                            sx={{
-                              width: '13em',
-                              marginLeft: '0.5em',
-                              marginTop: '0.5em',
-                              marginBottom: '1.5em'
-                            }}>
-                            {causesOfDecline.levelsOfDegredation.options.map((item, index) => (
-                              <MenuItem key={index} value={item} sx={{ fontSize: '1.8rem' }}>
-                                {item}
-                              </MenuItem>
-                            ))}
-                          </TextField>
-                        )}
-                      />
-                    </Box>
-                  )
-                })}
-                {mainCause.subCauses?.map((subCause, subCauseIndex) => {
-                  return (
-                    <Box key={subCauseIndex}>
-                      <NestedLabel2>{subCause.subCauseLabel}</NestedLabel2>
-                      {subCause.subCauseAnswers?.map((subCauseAnswer, subCauseAnswerIndex) => {
-                        return (
-                          <Box key={subCauseAnswerIndex}>
-                            <Typography sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
-                              {subCauseAnswer.subCauseAnswer}
-                            </Typography>
-                            <Controller
-                              name={`causesOfDecline.${mainCauseIndex}.subCauses.${subCauseIndex}.subCauseAnswers.${subCauseAnswerIndex}.levelOfDegredation`}
-                              control={control}
-                              defaultValue=''
-                              required
-                              render={({ field }) => (
-                                <TextField
-                                  {...field}
-                                  select
-                                  value={field.value}
-                                  label='Magnitude of impact *'
-                                  sx={{
-                                    width: '13em',
-                                    marginLeft: '0.5em',
-                                    marginTop: '0.5em',
-                                    marginBottom: '1em'
-                                  }}>
-                                  {causesOfDecline.levelsOfDegredation.options.map(
-                                    (item, index) => (
-                                      <MenuItem key={index} value={item}>
-                                        {item}
-                                      </MenuItem>
-                                    )
+          {lossKnownWatcher === 'true' ? (
+            <FormQuestionDiv>
+              <StickyFormLabel>
+                {causesOfDecline.causesOfDecline.question} <RequiredIndicator />
+              </StickyFormLabel>
+              {causesOfDeclineOptions.map((mainCause, mainCauseIndex) => {
+                return (
+                  <Box key={mainCauseIndex} sx={{ marginTop: '0.75em', marginBottom: '1.5em' }}>
+                    <NestedLabel1>{mainCause.label}</NestedLabel1>
+                    {typeof mainCause.children[0] === 'string'
+                      ? mainCause.children.map((childOption, childIndex) => (
+                          <Box key={childIndex}>
+                            <Box>
+                              <ListItem>
+                                <Checkbox
+                                  value={childOption}
+                                  checked={causesOfDeclineChecked.includes(
+                                    `${mainCause.label}-${childOption}`
                                   )}
-                                </TextField>
-                              )}
-                            />
+                                  onChange={(event) =>
+                                    handleCausesOfDeclineOnChange({
+                                      event,
+                                      mainCauseLabel: mainCause.label,
+                                      childOption
+                                    })
+                                  }></Checkbox>
+                                <Typography variant='subtitle2'>{childOption}</Typography>
+                              </ListItem>
+                            </Box>
                           </Box>
-                        )
-                      })}
-                    </Box>
-                  )
-                })}
-              </Box>
-            ))}
-            <ErrorText>
-              {/* if error msg exists, this has to do with MOI. Reduces complexity in flitering */}
-              {errors.causesOfDecline?.length
-                ? `Please select magnitude of impact for each item`
-                : null}
-            </ErrorText>
-          </FormQuestionDiv>
-        ) : null}
-      </Form>
+                        ))
+                      : mainCause.children.map((subCause, subCauseIndex) => (
+                          <Box
+                            key={subCauseIndex}
+                            variant='subtitle2'
+                            sx={{ marginLeft: '1em', marginTop: '0.75em' }}>
+                            <NestedLabel2>{subCause.secondaryLabel}</NestedLabel2>
+                            {subCause.secondaryChildren.map(
+                              (secondaryChildOption, secondaryChildIndex) => {
+                                return (
+                                  <ListItem key={secondaryChildIndex}>
+                                    <Checkbox
+                                      value={secondaryChildOption}
+                                      checked={causesOfDeclineTypesChecked.includes(
+                                        `${subCause.secondaryLabel}-${secondaryChildOption}`
+                                      )}
+                                      onChange={(event) =>
+                                        handleCausesOfDeclineOnChange({
+                                          event,
+                                          mainCauseLabel: mainCause.label,
+                                          subCauseLabel: subCause.secondaryLabel,
+                                          secondaryChildOption
+                                        })
+                                      }></Checkbox>
+                                    <Typography variant='subtitle2'>
+                                      {secondaryChildOption}
+                                    </Typography>
+                                  </ListItem>
+                                )
+                              }
+                            )}
+                          </Box>
+                        ))}
+                  </Box>
+                )
+              })}
+              <ErrorText>{errors?.causesOfDecline?.message}</ErrorText>
+            </FormQuestionDiv>
+          ) : null}
+          {causesOfDeclineFields.length ? (
+            <FormQuestionDiv>
+              <StickyFormLabel>{causesOfDecline.levelsOfDegredation.question}</StickyFormLabel>
+              {causesOfDeclineFields?.map((mainCause, mainCauseIndex) => (
+                <Box key={mainCauseIndex}>
+                  <NestedLabel1>{mainCause.mainCauseLabel}</NestedLabel1>
+                  {mainCause.mainCauseAnswers?.map((answer, answerIndex) => {
+                    return (
+                      <Box key={answerIndex}>
+                        <Typography sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
+                          {answer.mainCauseAnswer}
+                        </Typography>
+                        <Controller
+                          name={`causesOfDecline.${mainCauseIndex}.mainCauseAnswers.${answerIndex}.levelOfDegredation`}
+                          control={control}
+                          defaultValue=''
+                          required
+                          render={({ field }) => (
+                            <TextField
+                              {...field}
+                              select
+                              required
+                              value={field.value}
+                              label='Magnitude of impact *'
+                              sx={{
+                                width: '13em',
+                                marginLeft: '0.5em',
+                                marginTop: '0.5em',
+                                marginBottom: '1.5em'
+                              }}>
+                              {causesOfDecline.levelsOfDegredation.options.map((item, index) => (
+                                <MenuItem key={index} value={item} sx={{ fontSize: '1.8rem' }}>
+                                  {item}
+                                </MenuItem>
+                              ))}
+                            </TextField>
+                          )}
+                        />
+                      </Box>
+                    )
+                  })}
+                  {mainCause.subCauses?.map((subCause, subCauseIndex) => {
+                    return (
+                      <Box key={subCauseIndex}>
+                        <NestedLabel2>{subCause.subCauseLabel}</NestedLabel2>
+                        {subCause.subCauseAnswers?.map((subCauseAnswer, subCauseAnswerIndex) => {
+                          return (
+                            <Box key={subCauseAnswerIndex}>
+                              <Typography sx={{ marginLeft: '0.75em' }} variant='subtitle2'>
+                                {subCauseAnswer.subCauseAnswer}
+                              </Typography>
+                              <Controller
+                                name={`causesOfDecline.${mainCauseIndex}.subCauses.${subCauseIndex}.subCauseAnswers.${subCauseAnswerIndex}.levelOfDegredation`}
+                                control={control}
+                                defaultValue=''
+                                required
+                                render={({ field }) => (
+                                  <TextField
+                                    {...field}
+                                    select
+                                    value={field.value}
+                                    label='Magnitude of impact *'
+                                    sx={{
+                                      width: '13em',
+                                      marginLeft: '0.5em',
+                                      marginTop: '0.5em',
+                                      marginBottom: '1em'
+                                    }}>
+                                    {causesOfDecline?.levelsOfDegredation.options?.map(
+                                      (item, index) => (
+                                        <MenuItem key={index} value={item}>
+                                          {item}
+                                        </MenuItem>
+                                      )
+                                    )}
+                                  </TextField>
+                                )}
+                              />
+                            </Box>
+                          )
+                        })}
+                      </Box>
+                    )
+                  })}
+                </Box>
+              ))}
+              <ErrorText>
+                {/* if error msg exists, this has to do with MOI. Reduces complexity in flitering */}
+                {errors?.causesOfDecline?.length
+                  ? `Please select magnitude of impact for each item`
+                  : null}
+              </ErrorText>
+            </FormQuestionDiv>
+          ) : null}
+        </FormLayout>
+      </FormProvider>
     </ContentWrapper>
   )
 }
