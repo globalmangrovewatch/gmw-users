@@ -1,23 +1,44 @@
+import { useState } from 'react'
 import { Button, Menu, Stack } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from '@emotion/styled'
 
 import { ButtonSecondary } from '../../styles/buttons'
 import { PaddedSection } from '../../styles/containers'
-import language from '../../language'
 import theme from '../../styles/theme'
+import language from '../../language'
 
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import ContactForm from '../contact'
+
+import { css } from '@emotion/react'
 
 const CustomButton = styled(Button)`
   margin: 0;
   color: ${theme.color.white};
 `
 
+const ContactUsButton = styled(Button)`
+  text-transform: capitalize;
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  color: ${(props) => (props.active === 'true' ? theme.color.primary : theme.color.text)};
+  padding: 0 !important;
+  @media (min-width: ${theme.layout.mediaQueryDesktop}) {
+    flex-direction: row;
+    gap: 1rem;
+  }
+  ${theme.hoverState(css`
+    color: ${theme.color.primaryHover};
+  `)}
+`
+
 function HeaderMenu() {
-  const [anchorElement, setAnchorElement] = React.useState(null)
+  const [anchorElement, setAnchorElement] = useState(null)
+  const [isOpen, setIsOpen] = useState(false)
   const navigate = useNavigate()
   const { logout } = useAuth()
 
@@ -35,6 +56,10 @@ function HeaderMenu() {
     setAnchorElement(null)
   }
 
+  const handleContactFormDialog = useCallback(() => {
+    setIsOpen(!isOpen)
+  }, [isOpen])
+
   return (
     <>
       <CustomButton
@@ -50,6 +75,15 @@ function HeaderMenu() {
         open={Boolean(anchorElement)}
         onClose={handleMenuClose}>
         <PaddedSection>
+          <Stack>
+            <ContactUsButton type='button' onClick={handleContactFormDialog}>
+              Contact us
+            </ContactUsButton>
+
+            <div>
+              <ContactForm isOpen={isOpen} setIsOpen={setIsOpen} />
+            </div>
+          </Stack>
           <Stack>
             <label>Profile Placeholder</label>
             <div>
