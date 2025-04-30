@@ -36,7 +36,7 @@ const cardCss = css`
 const LinkCard = styled(Link)`
   ${cardCss}
   cursor: pointer;
-  border-color: ${theme.color.lightGrey};
+  border-color: ${theme.color.lightGreen};
   ${theme.hoverState(css`
     color: ${theme.color.text};
     border-color: ${theme.color.primary};

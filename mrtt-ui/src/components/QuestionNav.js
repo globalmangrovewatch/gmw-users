@@ -30,8 +30,8 @@ const getMobileNavButtonSecondaryCss = (props) => css`
   ${props.disabled
     ? css`
         background-color: ${theme.color.bodyBackground};
-        border: solid thin ${theme.color.lightGrey};
-        color: ${theme.color.lightGrey};
+        border: solid thin ${theme.color.lightGreen};
+        color: ${theme.color.lightGreen};
       `
     : theme.hoverState(css`
         background-color: ${theme.color.primary};
