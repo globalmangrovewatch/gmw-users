@@ -102,6 +102,8 @@ const LoginForm = ({ isUserNew }) => {
             <Logo src='/images/landing/logo.webp' />
           </Link>
         </LogoContainer>
+        {!isMobile && <LandingHeaderDesktop />}
+        {isMobile && <LandingHeaderMobile />}
       </LandingHeaderContainer>
       <Hero>
         <HeroContent>
@@ -115,8 +117,6 @@ const LoginForm = ({ isUserNew }) => {
       </Hero>
       <Main>
         <MainContent>
-          {!isMobile && <LandingHeaderDesktop />}
-          {isMobile && <LandingHeaderMobile />}
           <MainTitle>{pageLanguage.title}</MainTitle>
           {isUserNew ? (
             <Alert variant='outlined' severity='success'>

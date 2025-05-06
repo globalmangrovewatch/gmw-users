@@ -3,7 +3,7 @@ import { Dialog, Box, Typography } from '@mui/material'
 
 import { AboutParagraph, ExternalLink, Highlight, List, ListItem } from './styles'
 
-const AboutDialogContent = ({ isOpen, setIsOpen, onSuccess }) => {
+const AboutDialogContent = ({ isOpen, setIsOpen }) => {
   const onClose = () => {
     setIsOpen(false)
   }

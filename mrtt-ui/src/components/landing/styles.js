@@ -1,7 +1,5 @@
 import styled from '@emotion/styled'
 import theme from '../../styles/theme'
-import { css } from '@emotion/react'
-import { Button } from '@mui/material'
 
 export const LanguagePickerStyledContainer = styled('div')`
   position: absolute;
