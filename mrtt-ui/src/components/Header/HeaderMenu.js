@@ -3,6 +3,8 @@ import { Button, Menu, Stack } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import React, { useCallback } from 'react'
 import styled from '@emotion/styled'
+import { Link } from 'react-router-dom'
+import { StyledLabel } from './styles'
 
 import { ButtonSecondary } from '../../styles/buttons'
 import { PaddedSection } from '../../styles/containers'
@@ -61,17 +63,25 @@ function HeaderMenu() {
         <PaddedSection>
           <Stack spacing={3}>
             <ContactUsButton type='button' onClick={handleContactFormDialog}>
-              Contact us
+              <StyledLabel> Contact us</StyledLabel>
             </ContactUsButton>
-
-            <LanguagePicker theme='light' />
-
+            <Link
+              to='https://www.mangrovealliance.org/wp-content/uploads/2023/07/MRTT-Guide-v15.pdf'
+              rel='noreferrer'
+              target='_blank'
+              style={{ textDecoration: 'none' }}>
+              <StyledLabel> User guide</StyledLabel>
+            </Link>
+            <Stack spacing={1}>
+              <StyledLabel> Language</StyledLabel>
+              <LanguagePicker theme='light' />
+            </Stack>
             <div>
               <ContactForm isOpen={isOpen} setIsOpen={setIsOpen} />
             </div>
           </Stack>
-          <Stack>
-            <label>Profile Placeholder</label>
+          <Stack spacing={1}>
+            <StyledLabel>Profile Placeholder</StyledLabel>
             <div>
               <ButtonSecondary onClick={handleLogoutOnClick}>
                 {language.header.logout}

@@ -33,12 +33,11 @@ import { Paragraph, StyledLink } from '../../styles/v2/ui/typography'
 import { Divider } from '../../styles/v2/ui/divider'
 import { FormInput } from '../../components/Form/FormInput'
 
-import { Button } from '@mui/material'
-
 import LandingHeaderDesktop from '../../components/landing/header-desktop'
 import LandingHeaderMobile from '../../components/landing/header-mobile'
 import { useTheme } from '@mui/styles'
 import { useMediaQuery } from '@mui/system'
+import { Button } from '@mui/material'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),

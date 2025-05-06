@@ -5,10 +5,8 @@ import AboutDialogContent from '../about'
 import ContactForm from '../contact'
 import { ContactUsButton } from '../contact/styles'
 import LanguagePicker from '../language-selector'
-import { Link } from 'react-router-dom'
-import { MenuStyledLabel } from './styles'
 
-const LandingHeaderDesktop = () => {
+const LandingHeader = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isOpenAbout, setIsOpenAbout] = useState(false)
 
@@ -24,30 +22,22 @@ const LandingHeaderDesktop = () => {
     <>
       <Stack
         direction='row'
-        spacing={4}
+        spacing={2}
         sx={{
           position: 'absolute',
           top: '1rem',
           right: '1rem',
           alignItems: 'center',
           backgroundColor: 'transparent',
-          zIndex: 10,
-          color: 'red'
+          zIndex: 10
         }}>
         <ContactUsButton type='button' onClick={handleAbout}>
-          <MenuStyledLabel>About</MenuStyledLabel>
-        </ContactUsButton>
-        <ContactUsButton type='button' onClick={handleContactFormDialog}>
-          <MenuStyledLabel>Contact us</MenuStyledLabel>
+          About
         </ContactUsButton>
 
-        <Link
-          to='https://www.mangrovealliance.org/wp-content/uploads/2023/07/MRTT-Guide-v15.pdf'
-          rel='noreferrer'
-          target='_blank'
-          style={{ textDecoration: 'none' }}>
-          <MenuStyledLabel> User guide</MenuStyledLabel>
-        </Link>
+        <ContactUsButton type='button' onClick={handleContactFormDialog}>
+          Contact us
+        </ContactUsButton>
         <LanguagePicker />
       </Stack>
 
@@ -57,4 +47,4 @@ const LandingHeaderDesktop = () => {
   )
 }
 
-export default LandingHeaderDesktop
+export default LandingHeader
