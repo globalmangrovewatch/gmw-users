@@ -35,7 +35,10 @@ import { FormInput } from '../../components/Form/FormInput'
 
 import { Button } from '@mui/material'
 
-import LandingHeader from '../../components/landing/header'
+import LandingHeaderDesktop from '../../components/landing/header-desktop'
+import LandingHeaderMobile from '../../components/landing/header-mobile'
+import { useTheme } from '@mui/styles'
+import { useMediaQuery } from '@mui/system'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),
@@ -88,16 +91,19 @@ const LoginForm = ({ isUserNew }) => {
     signIn(formData)
   }
 
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const form = (
     <Base>
+      <LandingHeaderContainer>
+        <LogoContainer draggable='false'>
+          <Link to='https://www.globalmangrovewatch.org/' target='_blank' rel='noreferrer'>
+            <Logo src='/images/landing/logo.webp' />
+          </Link>
+        </LogoContainer>
+      </LandingHeaderContainer>
       <Hero>
-        <LandingHeaderContainer>
-          <LogoContainer draggable='false'>
-            <Link to='https://www.globalmangrovewatch.org/' target='_blank' rel='noreferrer'>
-              <Logo src='/images/landing/logo.webp' />
-            </Link>
-          </LogoContainer>
-        </LandingHeaderContainer>
         <HeroContent>
           <HeroHeadline>Welcome to the Mangrove Restoration Tracker Tool</HeroHeadline>
           <HeroText variant='text-sm'>
@@ -109,7 +115,8 @@ const LoginForm = ({ isUserNew }) => {
       </Hero>
       <Main>
         <MainContent>
-          <LandingHeader />
+          {!isMobile && <LandingHeaderDesktop />}
+          {isMobile && <LandingHeaderMobile />}
           <MainTitle>{pageLanguage.title}</MainTitle>
           {isUserNew ? (
             <Alert variant='outlined' severity='success'>
