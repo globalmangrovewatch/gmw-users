@@ -19,7 +19,6 @@ const LayoutWrapper = styled('div')`
 const Main = styled('main')`
   margin: ${theme.layout.headerHeight} 0 ${themeMui.spacing(4)} 0;
 `
-
 const GlobalLayout = ({ children }) => {
   const { isLoggedIn } = useAuth()
   const { showNewLandingPage } = useFeatureFlags()

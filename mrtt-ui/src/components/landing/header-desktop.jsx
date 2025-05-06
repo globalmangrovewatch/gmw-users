@@ -6,7 +6,7 @@ import ContactForm from '../contact'
 import { ContactUsButton } from '../contact/styles'
 import LanguagePicker from '../language-selector'
 
-const LandingHeader = () => {
+const LandingHeaderDesktop = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isOpenAbout, setIsOpenAbout] = useState(false)
 
@@ -47,4 +47,4 @@ const LandingHeader = () => {
   )
 }
 
-export default LandingHeader
+export default LandingHeaderDesktop

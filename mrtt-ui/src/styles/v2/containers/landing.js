@@ -89,11 +89,10 @@ export const LandingHeaderContainer = styled('header')(
   ({ theme }) => `
   display: flex;
   justify-content: center;
-  position: relative;
-  align-items: center;
-  padding: 24px;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  background-color: ${theme.palette.common.themeColor};
   z-index: 10;
 
   ${theme.breakpoints.up('lg')} {
