@@ -22,14 +22,15 @@ const LandingHeaderDesktop = () => {
     <>
       <Stack
         direction='row'
-        spacing={2}
+        spacing={4}
         sx={{
           position: 'absolute',
           top: '1rem',
           right: '1rem',
           alignItems: 'center',
           backgroundColor: 'transparent',
-          zIndex: 10
+          zIndex: 10,
+          color: 'red'
         }}>
         <ContactUsButton type='button' onClick={handleAbout}>
           About

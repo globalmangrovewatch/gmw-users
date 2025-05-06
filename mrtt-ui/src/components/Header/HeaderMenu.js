@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import ContactForm from '../contact'
 import { ContactUsButton } from '../contact/styles'
+import LanguagePicker from '../language-selector'
 
 const CustomButton = styled(Button)`
   margin: 0;
@@ -58,10 +59,12 @@ function HeaderMenu() {
         open={Boolean(anchorElement)}
         onClose={handleMenuClose}>
         <PaddedSection>
-          <Stack>
+          <Stack spacing={3}>
             <ContactUsButton type='button' onClick={handleContactFormDialog}>
               Contact us
             </ContactUsButton>
+
+            <LanguagePicker theme='light' />
 
             <div>
               <ContactForm isOpen={isOpen} setIsOpen={setIsOpen} />

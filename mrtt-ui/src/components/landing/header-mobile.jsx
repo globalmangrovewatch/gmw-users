@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { useState, useCallback } from 'react'
-import { Dialog, DialogContent, DialogActions, Button, Stack, IconButton, Box } from '@mui/material'
+import { Dialog, DialogContent, Stack, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
 import { Link } from 'react-router-dom'
@@ -57,7 +57,7 @@ const LandingHeaderMobile = () => {
           <Stack
             spacing={2}
             direction='column'
-            sx={{ minWidth: '200px', mt: 4, position: 'relative', height: '100%' }}>
+            sx={{ minWidth: '200px', mt: 4, position: 'relative', height: '100%', zIndex: 1000 }}>
             <ContactUsButton type='button' onClick={handleAbout}>
               <StyledLabel>About</StyledLabel>
             </ContactUsButton>

@@ -93,11 +93,9 @@ export const LandingHeaderContainer = styled('header')(
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 10;
 
   ${theme.breakpoints.up('lg')} {
     padding: 0;
-    background-color: transparent;
     position: absolute;
     top: 0;
     left: 0;
