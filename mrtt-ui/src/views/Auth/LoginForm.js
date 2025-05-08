@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 
 import { Alert } from '@mui/material'
 import { RowFlexEnd } from '../../styles/containers'
-import { ErrorText } from '../../styles/typography'
+import { ErrorText, Link as ExternalLink } from '../../styles/typography'
 import { useAuth } from '../../hooks/useAuth'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
@@ -36,7 +36,7 @@ import { FormInput } from '../../components/Form/FormInput'
 import LandingHeaderDesktop from '../../components/landing/header-desktop'
 import LandingHeaderMobile from '../../components/landing/header-mobile'
 import { useTheme } from '@mui/styles'
-import { useMediaQuery } from '@mui/system'
+import { fontWeight, useMediaQuery } from '@mui/system'
 import { Button } from '@mui/material'
 
 const validationSchema = yup.object({
@@ -110,7 +110,14 @@ const LoginForm = ({ isUserNew }) => {
           <HeroText variant='text-sm'>
             The MRTT is an open-access resource to support restoration practitioners. It provides a
             secure location to hold information across restoration planning, intervention and
-            monitoring. Learn more
+            monitoring.{' '}
+            <ExternalLink
+              to='https://www.mangrovealliance.org/wp-content/uploads/2023/07/MRTT-Guide-v15.pdf'
+              rel='noreferrer'
+              target='_blank'
+              style={{ color: 'white' }}>
+              Learn more
+            </ExternalLink>
           </HeroText>
         </HeroContent>
       </Hero>
