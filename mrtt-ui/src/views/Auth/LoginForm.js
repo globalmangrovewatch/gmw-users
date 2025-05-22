@@ -36,7 +36,7 @@ import { FormInput } from '../../components/Form/FormInput'
 import LandingHeaderDesktop from '../../components/landing/header-desktop'
 import LandingHeaderMobile from '../../components/landing/header-mobile'
 import { useTheme } from '@mui/styles'
-import { fontWeight, useMediaQuery } from '@mui/system'
+import { useMediaQuery } from '@mui/system'
 import { Button } from '@mui/material'
 
 const validationSchema = yup.object({
