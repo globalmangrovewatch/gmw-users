@@ -71,7 +71,7 @@ const ContactForm = ({ isOpen, setIsOpen, onSuccess }) => {
   const onSubmit = async (data) => {
     setStatus('loading')
     try {
-      const res = await fetch('https://www.globalmangrovewatch.org/api/contact', {
+      const res = await fetch('https://www.globalmangrovewatch.org/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
