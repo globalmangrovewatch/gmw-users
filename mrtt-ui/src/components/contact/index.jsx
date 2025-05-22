@@ -17,6 +17,8 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
+const isDev = process.env.NODE_ENV === 'development'
+
 const TOPICS = [
   { label: 'General', value: 'general' },
   { label: 'Datasets', value: 'datasets' },
@@ -33,8 +35,10 @@ const schema = yup.object().shape({
     .string()
     .oneOf(TOPICS.map((t) => t.value))
     .required('Topic is required'),
-  message: yup.string(),
-  privacyPolicy: yup.boolean().oneOf([true], 'You must accept the privacy policy')
+  message: yup.string().min(2).required('Message is required'),
+  privacyPolicy: isDev
+    ? yup.boolean().oneOf([true], 'You must accept the Privacy Policy')
+    : yup.boolean().optional()
 })
 
 const defaultValues = {
@@ -48,7 +52,6 @@ const defaultValues = {
 
 const ContactForm = ({ isOpen, setIsOpen, onSuccess }) => {
   const [status, setStatus] = useState('idle')
-
   const {
     control,
     handleSubmit,
@@ -68,7 +71,7 @@ const ContactForm = ({ isOpen, setIsOpen, onSuccess }) => {
   const onSubmit = async (data) => {
     setStatus('loading')
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch('https://www.globalmangrovewatch.org/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
@@ -102,7 +105,11 @@ const ContactForm = ({ isOpen, setIsOpen, onSuccess }) => {
                   {...field}
                   label='Name'
                   error={!!errors.name}
-                  helperText={errors.name?.message}
+                  helperText={
+                    errors.name?.message
+                      ? errors.name.message.charAt(0).toUpperCase() + errors.name.message.slice(1)
+                      : ''
+                  }
                   required
                 />
               )}
@@ -153,27 +160,44 @@ const ContactForm = ({ isOpen, setIsOpen, onSuccess }) => {
             <Controller
               name='message'
               control={control}
-              render={({ field }) => <TextField {...field} label='Message' multiline minRows={4} />}
-            />
-
-            <Controller
-              name='privacyPolicy'
-              control={control}
               render={({ field }) => (
-                <FormControl error={!!errors.privacyPolicy}>
-                  <Box display='flex' alignItems='center' gap={1}>
-                    <Checkbox {...field} checked={field.value} />
-                    <FormLabel sx={{ margin: 0 }}>
-                      I agree with the{' '}
-                      <a href='/' target='_blank' rel='noopener noreferrer'>
-                        Privacy Policy
-                      </a>
-                    </FormLabel>
-                  </Box>
-                  <FormHelperText>{errors.privacyPolicy?.message}</FormHelperText>
-                </FormControl>
+                <TextField
+                  {...field}
+                  label='Message'
+                  multiline
+                  minRows={4}
+                  error={!!errors.message}
+                  helperText={
+                    errors.message?.message
+                      ? errors.message.message.charAt(0).toUpperCase() +
+                        errors.message.message.slice(1)
+                      : ''
+                  }
+                  required
+                />
               )}
             />
+
+            {isDev && (
+              <Controller
+                name='privacyPolicy'
+                control={control}
+                render={({ field }) => (
+                  <FormControl error={!!errors.privacyPolicy}>
+                    <Box display='flex' alignItems='center' gap={1}>
+                      <Checkbox {...field} checked={field.value} />
+                      <FormLabel sx={{ margin: 0 }}>
+                        I agree with the{' '}
+                        <a href='/' target='_blank' rel='noopener noreferrer'>
+                          Privacy Policy
+                        </a>
+                      </FormLabel>
+                    </Box>
+                    <FormHelperText>{errors.privacyPolicy?.message}</FormHelperText>
+                  </FormControl>
+                )}
+              />
+            )}
 
             {status === 'success' && (
               <Typography color='success.main'>Email sent successfully!</Typography>
