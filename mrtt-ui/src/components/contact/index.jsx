@@ -47,7 +47,7 @@ const defaultValues = {
   email: '',
   topic: '',
   message: '',
-  privacyPolicy: false
+  privacyPolicy: true
 }
 
 const ContactForm = ({ isOpen, setIsOpen, onSuccess }) => {
