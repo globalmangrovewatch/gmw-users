@@ -50,7 +50,7 @@ const defaultValues = {
   privacyPolicy: true
 }
 
-const ContactForm = ({ isOpen, setIsOpen, onSuccess }) => {
+const ContactForm = ({ isOpen, setIsOpen }) => {
   const [status, setStatus] = useState('idle')
   const {
     control,
@@ -68,22 +68,27 @@ const ContactForm = ({ isOpen, setIsOpen, onSuccess }) => {
     setStatus('idle')
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (values) => {
+    console.info(values)
+
     setStatus('loading')
     try {
       const res = await fetch('https://www.globalmangrovewatch.org/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(values)
       })
+      const data = await res.json()
+      console.info(data, res)
 
-      if (!res.ok) throw new Error('Failed to send')
-
+      if (!res.ok) {
+        console.log(data.error.message)
+        throw new Error(data.error || `Failed to send email: ${res.statusText}`)
+      }
       setStatus('success')
-      onSuccess?.()
       reset()
-    } catch (err) {
-      console.error(err)
+    } catch (error) {
+      console.error('Error submitting form:', error)
       setStatus('error')
     }
   }
