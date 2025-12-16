@@ -7,13 +7,13 @@ import language from '../../language'
 
 type FormattedResponse = {
   response: AxiosResponse
-  formattedData: any
+  formattedData: unknown
 }
 
 type Params = {
   apiUrl: string
-  questionMapping: any
-  resetForm: (values: any) => void
+  questionMapping: unknown
+  resetForm: (values: unknown) => void
   successCallback?: (response: AxiosResponse) => void
   enabled?: boolean
 }
