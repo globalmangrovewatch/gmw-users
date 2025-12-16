@@ -79,7 +79,6 @@ const ContactForm = ({ isOpen, setIsOpen }) => {
         body: JSON.stringify(values)
       })
       const data = await res.json()
-      console.info(data, res)
 
       if (!res.ok) {
         console.log(data.error.message)
