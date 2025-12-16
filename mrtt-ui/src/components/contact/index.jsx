@@ -73,11 +73,7 @@ const ContactForm = ({ isOpen, setIsOpen }) => {
 
     setStatus('loading')
     try {
-<<<<<<< HEAD
       const res = await fetch('https://www.globalmangrovewatch.org/api/send', {
-=======
-      const res = await fetch('https://www.globalmangrovewatch.org/api/contact', {
->>>>>>> 874f14a (contact url)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values)
