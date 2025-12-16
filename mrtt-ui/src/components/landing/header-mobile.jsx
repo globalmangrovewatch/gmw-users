@@ -70,7 +70,7 @@ const LandingHeaderMobile = () => {
               <LanguagePicker theme='light' />
             </LanguagePickerStyledContainer>
             <Link
-              to='/https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
+              to='https://tnc\.app\.box\.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
               rel='noopener noreferrer'
               target='_blank'
               style={{ textDecoration: 'none' }}>
