@@ -29,7 +29,7 @@ const RestorationAimsForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [stakeholders, setStakeholders] = useState([])
+  const [stakeholders, setStakeholders] = useState(form.getValues('stakeholders') || [])
   const { site_name } = useSiteInfo()
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`

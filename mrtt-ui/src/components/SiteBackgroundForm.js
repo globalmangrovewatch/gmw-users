@@ -24,7 +24,7 @@ import useSiteInfo from '../library/useSiteInfo'
 const SiteBackgroundForm = () => {
   const form = useFormContext()
   const [isError, setIsError] = useState(false)
-  const [isSubmitting, setisSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [stakeholderTypesChecked, setStakeholderTypesChecked] = useState([])
   const { site_name } = useSiteInfo()
   const { siteId } = useParams()
@@ -54,7 +54,7 @@ const SiteBackgroundForm = () => {
   })
 
   const handleSubmit = async (formData) => {
-    setisSubmitting(true)
+    setIsSubmitting(true)
     setIsError(false)
 
     if (!formData) return
@@ -62,12 +62,12 @@ const SiteBackgroundForm = () => {
     axios
       .patch(apiAnswersUrl, mapDataForApi('siteBackground', formData))
       .then(() => {
-        setisSubmitting(false)
+        setIsSubmitting(false)
         toast.success(language.success.submit)
       })
       .catch(() => {
         setIsError(true)
-        setisSubmitting(false)
+        setIsSubmitting(false)
         toast.error(language.error.submit)
       })
   }

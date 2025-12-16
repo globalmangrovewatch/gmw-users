@@ -76,6 +76,7 @@ const ContactForm = ({ isOpen, setIsOpen, onSuccess }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       })
+      const data = await res.json()
 
       if (!res.ok) throw new Error('Failed to send')
 

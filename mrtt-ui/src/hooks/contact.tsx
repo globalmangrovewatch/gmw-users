@@ -2,7 +2,7 @@ import express from 'express'
 import { Resend } from 'resend'
 
 const router = express.Router()
-
+let recipients = []
 interface ContactEmailProps {
   name: string
   email: string
@@ -16,7 +16,7 @@ router.post('/contact', async (req, res) => {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'GMW <onboarding@resend.dev>',
+      from: 'GMW <noreply@globalmangrovewatch.org>',
       to: ['maria.luena@vizzuality.com'],
       subject: `New message from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
