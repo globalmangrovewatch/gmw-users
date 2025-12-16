@@ -3,7 +3,6 @@ import { useState, useCallback } from 'react'
 import { Dialog, DialogContent, Stack, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
-import { Link } from 'react-router-dom'
 import { ButtonBurger, ButtonBurgerItem } from '../../styles/buttons'
 import theme from '../../styles/theme'
 import AboutDialogContent from '../about'
@@ -69,13 +68,13 @@ const LandingHeaderMobile = () => {
             <LanguagePickerStyledContainer>
               <LanguagePicker theme='light' />
             </LanguagePickerStyledContainer>
-            <Link
-              to='https://tnc\.app\.box\.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
+            <a
+              href='https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
               rel='noopener noreferrer'
               target='_blank'
               style={{ textDecoration: 'none' }}>
               <StyledLabel>User Guide</StyledLabel>
-            </Link>
+            </a>
             <AboutDialogContent isOpen={isOpenAbout} setIsOpen={setIsOpenAbout} />
             <ContactForm isOpen={isOpen} setIsOpen={setIsOpen} />
           </Stack>

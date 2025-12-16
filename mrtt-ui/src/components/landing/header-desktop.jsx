@@ -5,7 +5,6 @@ import AboutDialogContent from '../about'
 import ContactForm from '../contact'
 import { ContactUsButton } from '../contact/styles'
 import LanguagePicker from '../language-selector'
-import { Link } from 'react-router-dom'
 import { MenuStyledLabel } from './styles'
 
 const LandingHeaderDesktop = () => {
@@ -41,13 +40,13 @@ const LandingHeaderDesktop = () => {
           <MenuStyledLabel>Contact us</MenuStyledLabel>
         </ContactUsButton>
 
-        <Link
-          to='https://tnc\.app\.box\.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
+        <a
+          href='https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
           rel='noreferrer'
           target='_blank'
           style={{ textDecoration: 'none' }}>
           <MenuStyledLabel> User guide</MenuStyledLabel>
-        </Link>
+        </a>
         <LanguagePicker />
       </Stack>
 

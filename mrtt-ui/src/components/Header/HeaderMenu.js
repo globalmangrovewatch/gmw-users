@@ -3,7 +3,6 @@ import { Button, Menu, Stack } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import React, { useCallback } from 'react'
 import styled from '@emotion/styled'
-import { Link } from 'react-router-dom'
 import { StyledLabel } from './styles'
 
 import { ButtonSecondary } from '../../styles/buttons'
@@ -65,13 +64,13 @@ function HeaderMenu() {
             <ContactUsButton type='button' onClick={handleContactFormDialog}>
               <StyledLabel> Contact us</StyledLabel>
             </ContactUsButton>
-            <Link
-              to='https://tnc\.app\.box\.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
+            <a
+              href='https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
               rel='noreferrer'
               target='_blank'
               style={{ textDecoration: 'none' }}>
               <StyledLabel> User guide</StyledLabel>
-            </Link>
+            </a>
             <Stack spacing={1}>
               <StyledLabel> Language</StyledLabel>
               <LanguagePicker theme='light' />
