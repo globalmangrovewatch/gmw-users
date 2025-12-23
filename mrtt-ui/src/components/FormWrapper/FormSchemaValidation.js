@@ -15,13 +15,17 @@ export const validationSchema = yup.object().shape({
   // project details
   projectStartDate: yup.date().required('Select a start date'),
   hasProjectEndDate: yup.boolean(),
-  projectEndDate: yup.date().when('hasProjectEndDate', {
-    is: (endDate) => endDate === true,
-    then: yup
-      .date()
-      .min(yup.ref('projectStartDate'), "End date can't be before start date")
-      .required('Please select an end date')
-  }),
+  projectEndDate: yup
+    .date()
+    .nullable()
+    .when('hasProjectEndDate', {
+      is: true,
+      then: (schema) =>
+        schema
+          .min(yup.ref('projectStartDate'), "End date can't be before start date")
+          .required('Please select an end date'),
+      otherwise: (schema) => schema.notRequired().nullable()
+    }),
   countries: yup
     .array()
     .of(
