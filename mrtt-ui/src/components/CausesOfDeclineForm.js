@@ -232,10 +232,14 @@ function CausesOfDeclineForm() {
       })
   }
 
-  const causesOfDeclineChecked = useMemo(
-    () => form.getValues('causesOfDecline')?.map((cause) => cause.mainCauseLabel),
-    [form]
-  )
+  const causesOfDeclineChecked = useMemo(() => {
+    const causes = form.getValues('causesOfDecline') ?? []
+    return causes.flatMap((cause) => {
+      return (cause.mainCauseAnswers ?? []).map(
+        (option) => `${cause.mainCauseLabel}-${option.mainCauseAnswer}`
+      )
+    })
+  }, [form])
 
   return (
     <ContentWrapper>
@@ -258,16 +262,18 @@ function CausesOfDeclineForm() {
               name='lossKnown'
               control={control}
               defaultValue={false}
-              render={({ field }) => (
-                <RadioGroup
-                  {...field}
-                  aria-labelledby='demo-radio-buttons-group-label'
-                  name='radio-buttons-group'>
-                  {/* Mui converts values to strings, even for booleans */}
-                  <FormControlLabel value={'true'} control={<Radio />} label='Yes' />
-                  <FormControlLabel value={'false'} control={<Radio />} label='No' />
-                </RadioGroup>
-              )}
+              render={({ field }) => {
+                return (
+                  <RadioGroup
+                    {...field}
+                    aria-labelledby='demo-radio-buttons-group-label'
+                    name='radio-buttons-group'>
+                    {/* Mui converts values to strings, even for booleans */}
+                    <FormControlLabel value={true} control={<Radio />} label='Yes' />
+                    <FormControlLabel value={false} control={<Radio />} label='No' />
+                  </RadioGroup>
+                )
+              }}
             />
           </FormQuestionDiv>
           {lossKnownWatcher === 'true' ? (
