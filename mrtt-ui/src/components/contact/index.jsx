@@ -70,7 +70,6 @@ const ContactForm = ({ isOpen, setIsOpen }) => {
 
   const onSubmit = async (values) => {
     console.info(values)
-
     setStatus('loading')
     try {
       const res = await fetch('https://www.globalmangrovewatch.org/api/send', {
@@ -81,7 +80,6 @@ const ContactForm = ({ isOpen, setIsOpen }) => {
       const data = await res.json()
 
       if (!res.ok) {
-        console.log(data.error.message)
         throw new Error(data.error || `Failed to send email: ${res.statusText}`)
       }
       setStatus('success')

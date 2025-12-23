@@ -67,7 +67,8 @@ const EcologicalStatusAndOutcomesForm = () => {
     handleSubmit: validateInputs,
     formState: { errors },
     control,
-    watch: watchForm
+    watch: watchForm,
+    reset: resetForm
   } = form
 
   const {
@@ -167,13 +168,13 @@ const EcologicalStatusAndOutcomesForm = () => {
     isEditMode,
     questionMapping: questionMapping.ecologicalStatusAndOutcomes
   })
-
   const createNewMonitoringForm = (payload) => {
     axios
       .post(monitoringFormsUrl, payload)
       .then(({ data }) => {
         setIsSubmitting(false)
         toast.success(language.success.getCreateThingSuccessMessage('This form'))
+        resetForm()
         navigate(data.id)
       })
       .catch(() => {
