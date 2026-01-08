@@ -112,7 +112,7 @@ const LoginForm = ({ isUserNew }) => {
             secure location to hold information across restoration planning, intervention and
             monitoring.{' '}
             <ExternalLink
-              to='https://www.mangrovealliance.org/wp-content/uploads/2023/07/MRTT-Guide-v15.pdf'
+              to='https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
               rel='noreferrer'
               target='_blank'
               style={{ color: 'white' }}>
