@@ -45,7 +45,7 @@ const AboutDialogContent = ({ isOpen, setIsOpen }) => {
           <AboutParagraph>
             For support on how to enter data into the MRTT please see the{' '}
             <ExternalLink
-              to='https://www.mangrovealliance.org/wp-content/uploads/2023/07/MRTT-Guide-v15.pdf'
+              to='https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
               rel='noreferrer'
               target='_blank'>
               user guide
