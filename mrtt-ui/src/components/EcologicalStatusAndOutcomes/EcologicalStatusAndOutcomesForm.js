@@ -29,7 +29,7 @@ import language from '../../language'
 import { ContentWrapper } from '../../styles/containers'
 import { questionMapping } from '../../data/questionMapping'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
-import { mapDataForApi } from '../../library/mapDataForApi'
+import { mapAllDataForApi } from '../../library/mapDataForApi'
 import { ecologicalStatusOutcomes as questions } from '../../data/questions'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
@@ -204,7 +204,19 @@ const EcologicalStatusAndOutcomesForm = () => {
 
     const payload = {
       form_type: formType,
-      answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
+      // answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
+      answers: mapAllDataForApi({
+        projectDetails: { ...formData },
+        siteBackground: { ...formData },
+        restorationAims: { ...formData },
+        causesOfDecline: { ...formData },
+        preRestorationAssessment: { ...formData },
+        siteInterventions: { ...formData },
+        costs: { ...formData },
+        managementStatusAndEffectiveness: { ...formData },
+        socioeconomicAndGovernanceStatusAndOutcomes: { ...formData },
+        ecologicalStatusAndOutcomes: { ...formData }
+      })
     }
 
     if (isEditMode) {

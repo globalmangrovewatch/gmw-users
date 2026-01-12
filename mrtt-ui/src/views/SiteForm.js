@@ -94,6 +94,7 @@ const SiteForm = ({ isNewSite }) => {
         10: defaultSectionPrivacy
       }
     }
+
     axios
       .post(sitesUrl, siteDataToSubmit)
       .then(({ data: { site_name } }) => {
