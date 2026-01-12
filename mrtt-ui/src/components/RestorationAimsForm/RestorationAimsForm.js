@@ -56,6 +56,7 @@ const RestorationAimsForm = () => {
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
+
     axios
       .patch(apiAnswersUrl, mapDataForApi('restorationAims', formData))
       .then(() => {
