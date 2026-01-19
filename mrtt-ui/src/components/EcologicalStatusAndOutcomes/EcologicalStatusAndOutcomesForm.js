@@ -223,6 +223,19 @@ const EcologicalStatusAndOutcomesForm = () => {
       editMonitoringForm(payload)
     } else {
       createNewMonitoringForm(payload)
+      axios
+        .post(registrationInterventionFormsUrl, payload)
+        .then(({ data }) => {
+          setIsSubmitting(false)
+          toast.success(language.success.getCreateThingSuccessMessage('This form'))
+          resetForm()
+          navigate(data.id)
+        })
+        .catch(() => {
+          setIsSubmitting(false)
+          setIsSubmitError(true)
+          toast.error(language.error.submit)
+        })
     }
   }
 

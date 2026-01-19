@@ -44,7 +44,7 @@ const ManagementStatusAndEffectivenessForm = () => {
   const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
   const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitError, setIsSubmitError] = useState(false)
+  const [isError, setIsError] = useState(false)
   const managementStatusChangesWatcher = watchForm('managementStatusChanges')
   const projectStatusChangeWatcher = watchForm('projectStatusChange')
   const financeForCiteManagementWatcher = watchForm('financeForCiteManagement')
@@ -68,7 +68,7 @@ const ManagementStatusAndEffectivenessForm = () => {
       })
       .catch(() => {
         setIsSubmitting(false)
-        setIsSubmitError(true)
+        setIsError(true)
         toast.error(language.error.submit)
       })
   }
@@ -82,20 +82,28 @@ const ManagementStatusAndEffectivenessForm = () => {
       })
       .catch(() => {
         setIsSubmitting(false)
-        setIsSubmitError(true)
+        setIsError(true)
         toast.error(language.error.submit)
       })
   }
 
-  const handleSubmit = (formData) => {
+  const handleSubmit = async (formData) => {
+    const fields = Object.keys(questionMapping['managementStatusAndEffectiveness'])
+    const ok = await form.trigger(fields, { shouldFocus: true })
+    if (!ok) {
+      setIsError(true)
+      toast.error(language.error.validation)
+      return
+    }
     setIsSubmitting(true)
-    setIsSubmitError(false)
+    setIsError(false)
+    if (!formData) return
 
     const payload = {
       form_type: formType,
       answers: mapDataForApi('managementStatusAndEffectiveness', formData)
     }
-
+    console.log(isEditMode, 'edit mode')
     if (isEditMode) {
       editMonitoringForm(payload)
     } else {
@@ -132,8 +140,8 @@ const ManagementStatusAndEffectivenessForm = () => {
       </FormPageHeader>
       <QuestionNav
         isFormSaving={isSubmitting}
-        isFormSaveError={isSubmitError}
-        onFormSave={validateInputs(handleSubmit)}
+        isFormSaveError={isError}
+        onFormSave={() => handleSubmit(form.getValues())}
         currentSection='management-status-and-effectiveness'
       />
       <FormValidationMessageIfErrors formErrors={errors} />

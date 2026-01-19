@@ -25,7 +25,9 @@ const SiteBackgroundForm = () => {
   const form = useFormContext()
   const [isError, setIsError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [stakeholderTypesChecked, setStakeholderTypesChecked] = useState([])
+  const [stakeholderTypesChecked, setStakeholderTypesChecked] = useState(
+    form.getValues('stakeholders')?.map((s) => s.stakeholderType) || []
+  )
   const { site_name } = useSiteInfo()
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
@@ -54,9 +56,15 @@ const SiteBackgroundForm = () => {
   })
 
   const handleSubmit = async (formData) => {
+    const fields = Object.keys(questionMapping['siteBackground'])
+    const ok = await form.trigger(fields, { shouldFocus: true })
+    if (!ok) {
+      setIsError(true)
+      toast.error(language.error.validation)
+      return
+    }
     setIsSubmitting(true)
     setIsError(false)
-
     if (!formData) return
 
     axios
@@ -72,30 +80,27 @@ const SiteBackgroundForm = () => {
       })
   }
 
-  const handleStakeholdersOnChange = (event, stakeholder) => {
-    const stakeholderTypesCheckedCopy = [...stakeholderTypesChecked]
-    if (event.target.checked) {
-      stakeholdersAppend({ stakeholderType: stakeholder })
-      stakeholderTypesCheckedCopy.push(stakeholder)
-    } else {
-      const fieldIndex = stakeholdersFields.findIndex(
-        (field) => field.stakeholderType === stakeholder
-      )
-      const typeIndex = stakeholderTypesCheckedCopy.findIndex((type) => type === stakeholder)
-      stakeholderTypesCheckedCopy.splice(typeIndex, 1)
-      stakeholdersRemove(fieldIndex)
-    }
+  const handleStakeholdersOnChange = (_event, stakeholder) => {
+    setStakeholderTypesChecked((prev) => {
+      const isChecked = prev.includes(stakeholder)
+      const next = isChecked ? prev.filter((t) => t !== stakeholder) : [...prev, stakeholder]
 
-    setStakeholderTypesChecked(stakeholderTypesCheckedCopy)
+      if (isChecked) {
+        const fieldIndex = stakeholdersFields.findIndex(
+          (field) => field.stakeholderType === stakeholder
+        )
+        if (fieldIndex !== -1) stakeholdersRemove(fieldIndex)
+      } else {
+        const exists = stakeholdersFields.some((f) => f.stakeholderType === stakeholder)
+        if (!exists) stakeholdersAppend({ stakeholderType: stakeholder })
+      }
+
+      return next
+    })
   }
 
   const getStakeholder = (stakeholder) =>
     stakeholdersFields.find((field) => field.stakeholderType === stakeholder)
-
-  const stakeholdersChecked = useMemo(
-    () => form.getValues('stakeholders')?.map((d) => d?.stakeholderType),
-    [form]
-  )
 
   return (
     <ContentWrapper>
@@ -106,7 +111,7 @@ const SiteBackgroundForm = () => {
       <QuestionNav
         isFormSaving={isSubmitting}
         isFormSaveError={isError}
-        onFormSave={form.handleSubmit(handleSubmit)}
+        onFormSave={() => handleSubmit(form.getValues())}
         currentSection='site-background'
       />
       <FormValidationMessageIfErrors formErrors={form.errors} />
@@ -118,46 +123,42 @@ const SiteBackgroundForm = () => {
             {siteBackground.stakeholders.question} <RequiredIndicator />
           </StickyFormLabel>
           <List>
-            {siteBackground.stakeholders.options?.map((stakeholder, index) => (
-              <ListItem key={index}>
-                <Box>
+            {siteBackground.stakeholders.options?.map((stakeholder, index) => {
+              return (
+                <ListItem key={index}>
                   <Box>
-                    <Checkbox
-                      value={stakeholder}
-                      checked={stakeholdersChecked?.includes(stakeholder)}
-                      onChange={(event) => {
-                        handleStakeholdersOnChange(event, stakeholder)
-                      }}></Checkbox>
-                    <Typography variant='subtitle'>{stakeholder}</Typography>
+                    <Box>
+                      <Checkbox
+                        value={stakeholder}
+                        checked={stakeholderTypesChecked?.includes(stakeholder)}
+                        onChange={(event) => {
+                          handleStakeholdersOnChange(event, stakeholder)
+                        }}></Checkbox>
+                      <Typography variant='subtitle'>{stakeholder}</Typography>
+                    </Box>
+                    <Box>
+                      {getStakeholder(stakeholder) && stakeholder !== 'Unknown' ? (
+                        <Controller
+                          name={`stakeholders.${stakeholdersFields.findIndex(
+                            (field) => field.stakeholderType === stakeholder
+                          )}.stakeholderName`}
+                          control={form.control}
+                          defaultValue=''
+                          render={({ field }) => (
+                            <TextField
+                              sx={{ marginTop: '1em' }}
+                              label='Name'
+                              variant='outlined'
+                              {...field}
+                            />
+                          )}
+                        />
+                      ) : null}
+                    </Box>
                   </Box>
-                  <Box>
-                    {getStakeholder(stakeholder) && stakeholder !== 'Unknown' ? (
-                      <Controller
-                        name={`stakeholders.${stakeholdersFields.findIndex(
-                          (field) => field.stakeholderType === stakeholder
-                        )}.stakeholderName`}
-                        control={form.control}
-                        defaultValue=''
-                        render={({ field }) => (
-                          <TextField
-                            sx={{ marginTop: '1em' }}
-                            label='Name'
-                            variant='outlined'
-                            {...field}
-                            // onChange={() => {
-                            //   ;`stakeholders.${stakeholdersFields.findIndex(
-                            //     (field) => field.stakeholderType === stakeholder
-                            //   )}.stakeholderName`
-                            // }}
-                            // value={field.value}
-                          />
-                        )}
-                      />
-                    ) : null}
-                  </Box>
-                </Box>
-              </ListItem>
-            ))}
+                </ListItem>
+              )
+            })}
           </List>
           <ErrorText>{form.errors?.stakeholders?.message}</ErrorText>
         </FormQuestionDiv>

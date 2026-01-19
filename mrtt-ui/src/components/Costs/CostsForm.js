@@ -17,7 +17,7 @@ import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
 import language from '../../language'
 import { ContentWrapper } from '../../styles/containers'
-import { costs as questions } from '../../data/questions'
+import { costs as questions, siteInterventions } from '../../data/questions'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { mapDataForApi } from '../../library/mapDataForApi'
@@ -76,7 +76,7 @@ const CostsForm = () => {
     replace: percentageSplitOfActivitiesReplace,
     update: percentageSplitOfActivitiesUpdate
   } = useFieldArray({ name: 'percentageSplitOfActivities', control })
-
+  console.log({ percentageSplitOfActivitiesFields })
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -218,7 +218,7 @@ const CostsForm = () => {
       .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
       .toLocaleString()
   }
-
+  console.log(questions, form.getValues(), siteInterventions)
   return (
     <ContentWrapper>
       <FormPageHeader>
