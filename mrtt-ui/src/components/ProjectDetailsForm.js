@@ -1,6 +1,6 @@
 import { FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material'
 import { Controller, useFormContext } from 'react-hook-form'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import Autocomplete from '@mui/material/Autocomplete'
 import axios from 'axios'
@@ -11,7 +11,7 @@ import turfConvex from '@turf/convex'
 import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { mapDataForApi, mapAllDataForApi } from '../library/mapDataForApi'
-import { projectDetails, projectDetails as questions } from '../data/questions'
+import { projectDetails as questions } from '../data/questions'
 import { questionMapping } from '../data/questionMapping'
 import { StickyFormLabel, FormPageHeader, FormQuestionDiv, FormLayout } from '../styles/forms'
 import { toast } from 'react-toastify'
@@ -26,7 +26,7 @@ import RequiredIndicator from './RequiredIndicator'
 import { useInitializeQuestionMappedForm } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
 import DatePickerUtcMui from './DatePickerUtcMui'
-import { useRegistrationAnswers } from '../hooks/registrationInterventionAnswers'
+
 export const siteAreaError = 'Please provide a site area'
 
 const sortCountries = (a, b) => {
@@ -39,7 +39,6 @@ const countriesGeojson = mangroveCountries.features.sort(sortCountries)
 
 function ProjectDetailsForm() {
   const form = useFormContext()
-  const { reset } = form
   const [isLoading, setIsLoading] = useState(false)
   const errors = form.errors
 
@@ -48,7 +47,6 @@ function ProjectDetailsForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { site_name } = useSiteInfo()
 
-  // const { errors } = form.formState
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
 
@@ -80,7 +78,7 @@ function ProjectDetailsForm() {
       console.error(e)
     }
   }
-  console.log('project dtails')
+
   const onSiteAreaFeatureCollectionChange = (field, featureCollection) => {
     field.onChange(featureCollection)
 
@@ -91,7 +89,7 @@ function ProjectDetailsForm() {
 
   const handleSubmit = async (formData) => {
     const fields = Object.keys(questionMapping['projectDetails'])
-    console.log(fields, 'fields')
+
     const ok = await form.trigger(fields, { shouldFocus: true })
     if (!ok) {
       setIsError(true)
@@ -100,7 +98,7 @@ function ProjectDetailsForm() {
     }
     setIsSubmitting(true)
     setIsError(false)
-    console.log(formData, 'form data')
+
     if (!formData) return
 
     const payload = {
@@ -121,8 +119,7 @@ function ProjectDetailsForm() {
 
     axios
       .get(apiAnswersUrl, mapDataForApi(payload))
-      .then((data) => {
-        console.log(data, '*******')
+      .then(() => {
         setIsError(false)
         setIsSubmitting(false)
         toast.success(language.success.submit)

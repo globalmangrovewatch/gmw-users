@@ -257,7 +257,7 @@ function CausesOfDeclineForm() {
       <QuestionNav
         isFormSaving={isSubmitting}
         isFormSaveError={isError}
-        onFormSave={() => onSubmit(form.getValues())}
+        onFormSave={handleSubmit(onSubmit)}
         currentSection='causes-of-decline'
       />
       <FormValidationMessageIfErrors formErrors={errors} />

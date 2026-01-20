@@ -29,7 +29,10 @@ import language from '../../language'
 import { ContentWrapper } from '../../styles/containers'
 import { questionMapping } from '../../data/questionMapping'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
-import { mapAllDataForApi } from '../../library/mapDataForApi'
+import {
+  // mapAllDataForApi,
+  mapDataForApi
+} from '../../library/mapDataForApi'
 import { ecologicalStatusOutcomes as questions } from '../../data/questions'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
 import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
@@ -58,6 +61,7 @@ const formType = MONITORING_FORM_CONSTANTS.ecologicalStatusAndOutcomes.payloadTy
 const EcologicalStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
   const { monitoringFormId } = useParams()
+
   const isEditMode = !!monitoringFormId
   const navigate = useNavigate()
 
@@ -168,13 +172,14 @@ const EcologicalStatusAndOutcomesForm = () => {
     isEditMode,
     questionMapping: questionMapping.ecologicalStatusAndOutcomes
   })
+
   const createNewMonitoringForm = (payload) => {
     axios
       .post(monitoringFormsUrl, payload)
       .then(({ data }) => {
         setIsSubmitting(false)
         toast.success(language.success.getCreateThingSuccessMessage('This form'))
-        resetForm()
+        // resetForm()
         navigate(data.id)
       })
       .catch(() => {
@@ -204,21 +209,20 @@ const EcologicalStatusAndOutcomesForm = () => {
 
     const payload = {
       form_type: formType,
-      // answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
-      answers: mapAllDataForApi({
-        projectDetails: { ...formData },
-        siteBackground: { ...formData },
-        restorationAims: { ...formData },
-        causesOfDecline: { ...formData },
-        preRestorationAssessment: { ...formData },
-        siteInterventions: { ...formData },
-        costs: { ...formData },
-        managementStatusAndEffectiveness: { ...formData },
-        socioeconomicAndGovernanceStatusAndOutcomes: { ...formData },
-        ecologicalStatusAndOutcomes: { ...formData }
-      })
+      answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
+      // answers: mapAllDataForApi({
+      //   projectDetails: { ...formData },
+      //   siteBackground: { ...formData },
+      //   restorationAims: { ...formData },
+      //   causesOfDecline: { ...formData },
+      //   preRestorationAssessment: { ...formData },
+      //   siteInterventions: { ...formData },
+      //   costs: { ...formData },
+      //   managementStatusAndEffectiveness: { ...formData },
+      //   socioeconomicAndGovernanceStatusAndOutcomes: { ...formData },
+      //   ecologicalStatusAndOutcomes: { ...formData }
+      // })
     }
-
     if (isEditMode) {
       editMonitoringForm(payload)
     } else {
