@@ -76,7 +76,7 @@ const CostsForm = () => {
     replace: percentageSplitOfActivitiesReplace,
     update: percentageSplitOfActivitiesUpdate
   } = useFieldArray({ name: 'percentageSplitOfActivities', control })
-  console.log({ percentageSplitOfActivitiesFields })
+
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -218,7 +218,7 @@ const CostsForm = () => {
       .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
       .toLocaleString()
   }
-  console.log(questions, form.getValues(), siteInterventions)
+
   return (
     <ContentWrapper>
       <FormPageHeader>

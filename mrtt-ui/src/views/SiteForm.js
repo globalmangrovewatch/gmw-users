@@ -40,7 +40,7 @@ const SiteForm = ({ isNewSite }) => {
 
   const siteForm = useFormContext()
   const { reset: resetSiteForm, getValues: siteFormValues } = siteForm
-  console.log(siteFormValues(), 'site form values')
+
   const {
     control: formControl,
     handleSubmit: validateInputs,
@@ -103,7 +103,6 @@ const SiteForm = ({ isNewSite }) => {
       .then(({ data: { site_name } }) => {
         setIsSubmitting(false)
         toast.success(language.success.getCreateThingSuccessMessage(site_name))
-        console.log(site_name, form)
         resetSiteForm()
         navigate('/sites')
       })

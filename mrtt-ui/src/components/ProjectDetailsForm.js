@@ -10,7 +10,7 @@ import turfConvex from '@turf/convex'
 
 import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
-import { mapDataForApi } from '../library/mapDataForApi'
+import { mapDataForApi, mapAllDataForApi } from '../library/mapDataForApi'
 import { projectDetails, projectDetails as questions } from '../data/questions'
 import { questionMapping } from '../data/questionMapping'
 import { StickyFormLabel, FormPageHeader, FormQuestionDiv, FormLayout } from '../styles/forms'
@@ -52,10 +52,6 @@ function ProjectDetailsForm() {
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
 
-  // const holi = useRegistrationAnswers(form, apiAnswersUrl, { enabled: !!apiAnswersUrl })
-  // console.log(questionMapping.projectDetails, 'default values', form.getValues())
-  // const { defaultValues: holi } = form
-
   let watchHasProjectEndDate = form.watch('hasProjectEndDate', false)
   /* showEndDateInput is a hack because MUI follows native html and casts values to strings.
    The api casts them to boolean so we support both */
@@ -84,7 +80,7 @@ function ProjectDetailsForm() {
       console.error(e)
     }
   }
-
+  console.log('project dtails')
   const onSiteAreaFeatureCollectionChange = (field, featureCollection) => {
     field.onChange(featureCollection)
 
@@ -95,8 +91,8 @@ function ProjectDetailsForm() {
 
   const handleSubmit = async (formData) => {
     const fields = Object.keys(questionMapping['projectDetails'])
+    console.log(fields, 'fields')
     const ok = await form.trigger(fields, { shouldFocus: true })
-    console.log(ok)
     if (!ok) {
       setIsError(true)
       toast.error(language.error.validation)
@@ -104,7 +100,38 @@ function ProjectDetailsForm() {
     }
     setIsSubmitting(true)
     setIsError(false)
+    console.log(formData, 'form data')
     if (!formData) return
+
+    const payload = {
+      // answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
+      answers: mapAllDataForApi({
+        projectDetails: { ...formData },
+        siteBackground: { ...formData },
+        restorationAims: { ...formData },
+        causesOfDecline: { ...formData },
+        preRestorationAssessment: { ...formData },
+        siteInterventions: { ...formData },
+        costs: { ...formData },
+        managementStatusAndEffectiveness: { ...formData },
+        socioeconomicAndGovernanceStatusAndOutcomes: { ...formData },
+        ecologicalStatusAndOutcomes: { ...formData }
+      })
+    }
+
+    axios
+      .get(apiAnswersUrl, mapDataForApi(payload))
+      .then((data) => {
+        console.log(data, '*******')
+        setIsError(false)
+        setIsSubmitting(false)
+        toast.success(language.success.submit)
+      })
+      .catch(() => {
+        setIsError(true)
+        setIsSubmitting(false)
+        toast.error(language.error.submit)
+      })
 
     axios
       .patch(apiAnswersUrl, mapDataForApi('projectDetails', formData))
@@ -119,7 +146,7 @@ function ProjectDetailsForm() {
         toast.error(language.error.submit)
       })
   }
-  console.log(apiAnswersUrl, 'sites')
+
   return (
     <ContentWrapper>
       <FormPageHeader>
@@ -146,7 +173,6 @@ function ProjectDetailsForm() {
             name='projectStartDate'
             control={form.control}
             render={({ field }) => {
-              console.log(field.value, 'field value')
               return <DatePickerUtcMui id='start-date' label='date' field={field} />
             }}
           />

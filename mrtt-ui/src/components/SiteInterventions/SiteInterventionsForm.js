@@ -71,7 +71,7 @@ function SiteInterventionsForm() {
     remove: mangroveSpeciesUsedRemove,
     update: mangroveSpeciesUsedUpdate
   } = useFieldArray({ name: 'mangroveSpeciesUsed', control })
-  console.log(mangroveSpeciesUsedFields, 'mangrove species used fields')
+
   const {
     fields: mangroveAssociatedSpeciesFields,
     append: mangroveAssociatedSpeciesAppend,

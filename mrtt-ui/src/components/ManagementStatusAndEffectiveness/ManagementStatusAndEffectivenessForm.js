@@ -103,7 +103,7 @@ const ManagementStatusAndEffectivenessForm = () => {
       form_type: formType,
       answers: mapDataForApi('managementStatusAndEffectiveness', formData)
     }
-    console.log(isEditMode, 'edit mode')
+
     if (isEditMode) {
       editMonitoringForm(payload)
     } else {

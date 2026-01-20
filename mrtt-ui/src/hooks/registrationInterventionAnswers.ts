@@ -23,7 +23,6 @@ export function useRegistrationAnswers(
     let cancelled = false
 
     const fetchAnswers = async () => {
-      console.log('fetch', apiUrl)
       setIsLoading(true)
       setIsError(false)
 

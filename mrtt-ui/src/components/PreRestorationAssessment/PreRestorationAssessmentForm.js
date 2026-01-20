@@ -132,7 +132,7 @@ function PreRestorationAssessmentForm() {
   const handleSubmit = async (formData) => {
     const fields = Object.keys(questionMapping['preRestorationAssessment'])
     const ok = await form.trigger(fields, { shouldFocus: true })
-    console.log(ok)
+
     if (!ok) {
       setIsError(true)
       toast.error(language.error.validation)

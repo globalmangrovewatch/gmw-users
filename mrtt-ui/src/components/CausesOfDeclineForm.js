@@ -216,7 +216,7 @@ function CausesOfDeclineForm() {
   const onSubmit = async (data) => {
     const fields = Object.keys(questionMapping['causesOfDecline'])
     const ok = await form.trigger(fields, { shouldFocus: true })
-    console.log('handle')
+
     if (!ok) {
       setIsError(true)
       toast.error(language.error.validation)
