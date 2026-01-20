@@ -1,4 +1,4 @@
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useFormContext } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -37,6 +37,9 @@ const SiteForm = ({ isNewSite }) => {
   const navigate = useNavigate()
   const sitesUrl = `${process.env.REACT_APP_API_URL}/sites`
   const siteUrl = `${sitesUrl}/${siteId}`
+
+  const siteForm = useFormContext()
+  const { reset: resetSiteForm, getValues: siteFormValues } = siteForm
 
   const {
     control: formControl,
@@ -100,6 +103,7 @@ const SiteForm = ({ isNewSite }) => {
       .then(({ data: { site_name } }) => {
         setIsSubmitting(false)
         toast.success(language.success.getCreateThingSuccessMessage(site_name))
+        resetSiteForm()
         navigate('/sites')
       })
       .catch(() => {

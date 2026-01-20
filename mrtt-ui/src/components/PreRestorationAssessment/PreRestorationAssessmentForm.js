@@ -83,7 +83,7 @@ function PreRestorationAssessmentForm() {
   const mangroveRestorationAttemptedWatcher = watchForm('mangroveRestorationAttempted')
   const siteAssessmentBeforeProjectWatcher = watchForm('siteAssessmentBeforeProject')
   const speciesCompositionWatcher = watchForm('speciesComposition')
-  const [isSubmitting, setisSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [mangroveSpeciesList, setMangroveSpeciesList] = useState([])
@@ -130,20 +130,27 @@ function PreRestorationAssessmentForm() {
   })
 
   const handleSubmit = async (formData) => {
-    setisSubmitting(true)
-    setIsError(false)
+    const fields = Object.keys(questionMapping['preRestorationAssessment'])
+    const ok = await form.trigger(fields, { shouldFocus: true })
 
+    if (!ok) {
+      setIsError(true)
+      toast.error(language.error.validation)
+      return
+    }
+    setIsSubmitting(true)
+    setIsError(false)
     if (!formData) return
 
     axios
       .patch(apiAnswersUrl, mapDataForApi('preRestorationAssessment', formData))
       .then(() => {
-        setisSubmitting(false)
+        setIsSubmitting(false)
         toast.success(language.success.submit)
       })
       .catch(() => {
         setIsError(true)
-        setisSubmitting(false)
+        setIsSubmitting(false)
         toast.error(language.error.submit)
       })
   }
@@ -207,7 +214,7 @@ function PreRestorationAssessmentForm() {
       <QuestionNav
         isFormSaving={isSubmitting}
         isFormSaveError={isError}
-        onFormSave={validateInputs(handleSubmit)}
+        onFormSave={() => handleSubmit(form.getValues())}
         currentSection='pre-restoration-assessment'
       />
       <FormValidationMessageIfErrors formErrors={errors} />

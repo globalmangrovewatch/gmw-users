@@ -51,7 +51,7 @@ function CausesOfDeclineForm() {
   } = useFieldArray({ name: 'causesOfDecline', control })
   const lossKnownWatcher = watch('lossKnown')
 
-  const [isSubmitting, setisSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
   const [causesOfDeclineTypesChecked, setCausesOfDeclineTypesChecked] = useState([])
   const { siteId } = useParams()
@@ -214,20 +214,27 @@ function CausesOfDeclineForm() {
   }
 
   const onSubmit = async (data) => {
-    setisSubmitting(true)
-    setIsError(false)
+    const fields = Object.keys(questionMapping['causesOfDecline'])
+    const ok = await form.trigger(fields, { shouldFocus: true })
 
+    if (!ok) {
+      setIsError(true)
+      toast.error(language.error.validation)
+      return
+    }
+    setIsSubmitting(true)
+    setIsError(false)
     if (!data) return
 
     axios
       .patch(apiAnswersUrl, mapDataForApi('causesOfDecline', data))
       .then(() => {
-        setisSubmitting(false)
+        setIsSubmitting(false)
         toast.success(language.success.submit)
       })
       .catch(() => {
         setIsError(true)
-        setisSubmitting(false)
+        setIsSubmitting(false)
         toast.error(language.error.apiLoad)
       })
   }

@@ -69,19 +69,21 @@ function Sites() {
 
   const open = Boolean(downloadOptionsAnchorEl)
 
-  const sitesList = sites
-    .sort((siteA, siteB) => {
-      const siteALastUpdatedDate = siteA.section_last_updated
-      const siteBLastUpdatedDate = siteB.section_last_updated
+  const orderedSitesTesting = sites.sort((a, b) => a.site_name.localeCompare(b.site_name)).reverse()
 
-      if (siteALastUpdatedDate > siteBLastUpdatedDate || !siteALastUpdatedDate) {
-        return -1
-      }
-      if (siteALastUpdatedDate < siteBLastUpdatedDate) {
-        return 1
-      }
-      return 0
-    })
+  const sitesList = orderedSitesTesting
+    // .sort((siteA, siteB) => {
+    //   const siteALastUpdatedDate = siteA.section_last_updated
+    //   const siteBLastUpdatedDate = siteB.section_last_updated
+
+    //   if (siteALastUpdatedDate > siteBLastUpdatedDate || !siteALastUpdatedDate) {
+    //     return -1
+    //   }
+    //   if (siteALastUpdatedDate < siteBLastUpdatedDate) {
+    //     return 1
+    //   }
+    //   return 0
+    // })
     .map(({ site_name, landscape_name, id, section_last_updated }) => {
       const anySectionLastEditedString = new Date(section_last_updated).toLocaleDateString(
         undefined,

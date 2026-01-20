@@ -13,5 +13,18 @@ const SECTION_NAMES = [
   'ecological-status-and-outcomes'
 ]
 
+export const SECTION_NAMES_DICTIONARY = {
+  'project-details': 'projectDetails',
+  'site-background': 'siteBackground',
+  'restoration-aims': 'restorationAims',
+  'causes-of-decline': 'causesOfDecline',
+  'pre-restoration-assessment': 'preRestorationAssessment',
+  'site-interventions': 'siteInterventions',
+  costs: 'costs',
+  'management-status-and-effectiveness': 'managementStatusAndEffectiveness',
+  'socioeconomic-and-governance-status': 'socioeconomicAndGovernanceStatusAndOutcomes',
+  'ecological-status-and-outcomes': 'ecologicalStatusAndOutcomes'
+}
+
 Object.freeze(SECTION_NAMES)
 export default SECTION_NAMES

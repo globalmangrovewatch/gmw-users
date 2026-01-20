@@ -27,7 +27,7 @@ const getStakeholders = (registrationAnswersFromServer) =>
 const RestorationAimsForm = () => {
   const form = useFormContext()
   const [isLoading, setIsLoading] = useState(false)
-  const [isSubmitError, setIsSubmitError] = useState(false)
+  const [isError, setIsError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [stakeholders, setStakeholders] = useState(form.getValues('stakeholders') || [])
   const { site_name } = useSiteInfo()
@@ -53,9 +53,17 @@ const RestorationAimsForm = () => {
     successCallback: loadStakeholdersFromServerData
   })
 
-  const handleSubmit = (formData) => {
+  const handleSubmit = async (formData) => {
+    const fields = Object.keys(questionMapping['restorationAims'])
+    const ok = await form.trigger(fields, { shouldFocus: true })
+    if (!ok) {
+      setIsError(true)
+      toast.error(language.error.validation)
+      return
+    }
     setIsSubmitting(true)
-    setIsSubmitError(false)
+    setIsError(false)
+    if (!formData) return
 
     axios
       .patch(apiAnswersUrl, mapDataForApi('restorationAims', formData))
@@ -65,7 +73,7 @@ const RestorationAimsForm = () => {
       })
       .catch(() => {
         setIsSubmitting(false)
-        setIsSubmitError(true)
+        setIsError(true)
         toast.error(language.error.submit)
       })
   }
@@ -73,6 +81,9 @@ const RestorationAimsForm = () => {
   const noStakeholdersWarning = (
     <Alert severity='info'>{language.pages.restorationAims.missingStakeholdersWarning}</Alert>
   )
+
+  const fields = Object.keys(questionMapping['restorationAims'])
+  const restorationAmisErrors = fields.filter((field) => errors[field])
 
   return isLoading ? (
     <LoadingIndicator />
@@ -84,12 +95,12 @@ const RestorationAimsForm = () => {
       </FormPageHeader>
       <QuestionNav
         isFormSaving={isSubmitting}
-        isFormSaveError={isSubmitError}
-        onFormSave={validateInputs(handleSubmit)}
+        isFormSaveError={isError}
+        onFormSave={() => handleSubmit(form.getValues())}
         currentSection='restoration-aims'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
-      <FormLayout onSubmit={validateInputs(handleSubmit)}>
+      <FormLayout onSubmit={() => handleSubmit(form.getValues())}>
         <FormQuestionDiv>
           {!areThereStakeholders ? noStakeholdersWarning : null}
           <RestorationAimsCheckboxGroupWithLabel

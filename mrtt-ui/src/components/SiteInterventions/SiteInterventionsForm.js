@@ -88,7 +88,7 @@ function SiteInterventionsForm() {
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitError, setIsSubmitError] = useState(false)
+  const [isError, setIsError] = useState(false)
   const [mangroveSpeciesForCountriesSelected, setMangroveSpeciesForCountriesSelected] = useState([])
   const [mangroveSpeciesUsedChecked, setMangroveSpeciesUsedChecked] = useState([])
   const [whichStakeholdersInvolvedTypesChecked, setWhichStakeholdersInvolvedTypesChecked] =
@@ -129,10 +129,16 @@ function SiteInterventionsForm() {
     successCallback: loadServerData
   })
 
-  const handleSubmit = (formData) => {
+  const handleSubmit = async (formData) => {
+    const fields = Object.keys(questionMapping['siteInterventions'])
+    const ok = await form.trigger(fields, { shouldFocus: true })
+    if (!ok) {
+      setIsError(true)
+      toast.error(language.error.validation)
+      return
+    }
     setIsSubmitting(true)
-    setIsSubmitError(false)
-
+    setIsError(false)
     if (!formData) return
 
     axios
@@ -143,7 +149,7 @@ function SiteInterventionsForm() {
       })
       .catch(() => {
         setIsSubmitting(false)
-        setIsSubmitError(true)
+        setIsError(true)
         toast.error(language.error.submit)
       })
   }
@@ -254,8 +260,8 @@ function SiteInterventionsForm() {
       </FormPageHeader>
       <QuestionNav
         isFormSaving={isSubmitting}
-        isFormSaveError={isSubmitError}
-        onFormSave={validateInputs(handleSubmit)}
+        isFormSaveError={isError}
+        onFormSave={() => handleSubmit(form.getValues())}
         currentSection='site-interventions'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
