@@ -10,7 +10,7 @@ import { TextSmall } from '../styles/typography'
 import language from '../language'
 
 const DatePickerUtcMui = (props) => {
-  const value = props.field?.value ? DateTime.fromISO(props.field?.value).setZone('UTC+0') : null
+  const value = DateTime.fromISO(props.field?.value)
   return (
     <LocalizationProvider dateAdapter={AdapterLuxon}>
       <Stack spacing={3}>
@@ -30,7 +30,7 @@ const DatePickerUtcMui = (props) => {
 }
 
 DatePickerUtcMui.propTypes = {
-  field: PropTypes.shape({ onChange: PropTypes.func, value: PropTypes.string })
+  field: PropTypes.shape({ onChange: PropTypes.func, value: PropTypes.instanceOf(DateTime) })
 }
 
 export default DatePickerUtcMui

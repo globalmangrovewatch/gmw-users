@@ -141,7 +141,7 @@ function App() {
                     element={<EcologicalStatusAndOutcomesForm />}
                   />
                   <Route
-                    path='/sites/:siteId/form/project-details/'
+                    path='/sites/:siteId/form/project-details'
                     element={<ProjectDetailsForm />}
                   />
                   <Route

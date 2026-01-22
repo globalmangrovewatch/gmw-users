@@ -11,6 +11,14 @@ import language from '../../language'
 
 const siteAreaError = 'Please provide a site area'
 
+import { DateTime } from 'luxon'
+
+const toDate = (value, originalValue) => {
+  if (originalValue == null || originalValue === '') return null
+  const d = new Date(originalValue)
+  return Number.isNaN(d.getTime()) ? null : d
+}
+
 export const validationSchema = yup.object().shape({
   // project details
   projectStartDate: yup.date().required('Select a start date'),
@@ -84,7 +92,7 @@ export const validationSchema = yup.object().shape({
         mainCauseAnswers: yup.array().of(
           yup.object().shape({
             mainCauseAnswer: yup.string(),
-            levelOfDegredation: yup.string().required()
+            levelOfDegradation: yup.string().required()
           })
         ),
         subCauses: yup.array().of(
@@ -93,7 +101,7 @@ export const validationSchema = yup.object().shape({
             subCauseAnswers: yup.array().of(
               yup.object().shape({
                 subCauseAnswer: yup.string(),
-                levelOfDegredation: yup.string().required()
+                levelOfDegradation: yup.string().required()
               })
             )
           })
@@ -164,10 +172,11 @@ export const validationSchema = yup.object().shape({
     .default([]),
   biophysicalInterventionsUsed: multiselectWithOtherValidation,
   biophysicalInterventionDuration: yup.object().shape({
-    startDate: yup.string().nullable(),
+    startDate: yup.date().nullable().transform(toDate),
     endDate: yup
-      .string()
+      .date()
       .nullable()
+      .transform(toDate)
       .min(yup.ref('startDate'), "End date can't be before start date")
   }),
   mangroveSpeciesUsed: yup
@@ -335,9 +344,9 @@ export const validationSchema = yup.object().shape({
 
 export const defaultValues = {
   // project details - Site Details and Location
-  projectStartDate: null,
+  projectStartDate: DateTime.now(),
   hasProjectEndDate: false,
-  projectEndDate: null,
+  projectEndDate: DateTime.now(),
   countries: undefined,
   siteArea: emptyFeatureCollection,
 

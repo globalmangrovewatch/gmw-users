@@ -18,16 +18,22 @@ import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '../language'
 import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
-import { useInitializeQuestionMappedForm } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
+import {
+  useInitializeQuestionMappedForm,
+  useSaveRegistrationSection
+} from '../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
+
+import { useWatch } from 'react-hook-form'
 
 const SiteBackgroundForm = () => {
   const form = useFormContext()
   const [isError, setIsError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [stakeholderTypesChecked, setStakeholderTypesChecked] = useState(
-    form.getValues('stakeholders')?.map((s) => s.stakeholderType) || []
-  )
+
+  // const [stakeholderTypesChecked, setStakeholderTypesChecked] = useState(
+  //   form.getValues('stakeholders')?.map((s) => s.stakeholderType) || []
+  // )
   const { site_name } = useSiteInfo()
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
@@ -38,69 +44,90 @@ const SiteBackgroundForm = () => {
     remove: stakeholdersRemove
   } = useFieldArray({ name: 'stakeholders', control: form.control })
 
-  const setInitialStakeholderTypesFromServerData = useCallback((serverResponse) => {
-    const initialStakeholders =
-      serverResponse?.data.find((dataItem) => dataItem.question_id === '2.1')?.answer_value ?? []
+  // const setInitialStakeholderTypesFromServerData = useCallback((serverResponse) => {
+  //   const initialStakeholders =
+  //     serverResponse?.data.find((dataItem) => dataItem.question_id === '2.1')?.answer_value ?? []
 
-    const initialStakeholderTypesChecked = initialStakeholders?.map(
-      (stakeholder) => stakeholder.stakeholderType
-    )
-    setStakeholderTypesChecked(initialStakeholderTypesChecked)
-  }, [])
+  //   const initialStakeholderTypesChecked = initialStakeholders?.map(
+  //     (stakeholder) => stakeholder.stakeholderType
+  //   )
+  //   setStakeholderTypesChecked(initialStakeholderTypesChecked)
+  // }, [])
 
-  useInitializeQuestionMappedForm({
+  const { data, isLoading } = useInitializeQuestionMappedForm({
+    key: 'siteBackground',
     apiUrl: apiAnswersUrl,
-    questionMapping: questionMapping.siteBackground,
     resetForm: form.reset,
-    successCallback: setInitialStakeholderTypesFromServerData
+    questionMapping
+    // successCallback: setInitialStakeholderTypesFromServerData
   })
 
-  const handleSubmit = async (formData) => {
-    const fields = Object.keys(questionMapping['siteBackground'])
-    const ok = await form.trigger(fields, { shouldFocus: true })
-    if (!ok) {
-      setIsError(true)
-      toast.error(language.error.validation)
-      return
-    }
-    setIsSubmitting(true)
-    setIsError(false)
-    if (!formData) return
+  // const saveMutation = useSaveRegistrationSection(siteId)
 
-    axios
-      .patch(apiAnswersUrl, mapDataForApi('siteBackground', formData))
-      .then(() => {
-        setIsSubmitting(false)
-        toast.success(language.success.submit)
-      })
-      .catch(() => {
-        setIsError(true)
-        setIsSubmitting(false)
-        toast.error(language.error.submit)
-      })
-  }
+  // const handleSubmit = async (formData) => {
+  //   const fields = Object.keys(questionMapping['siteBackground'])
+
+  //   const ok = await form.trigger(fields, { shouldFocus: true })
+  //   if (!ok) {
+  //     setIsError(true)
+  //     toast.error(language.error.validation)
+  //     return
+  //   }
+  //   setIsSubmitting(true)
+  //   setIsError(false)
+
+  //   if (!formData) return
+
+  //   axios
+  //     .patch(apiAnswersUrl, mapDataForApi('siteBackground', formData))
+  //     .then(() => {
+  //       setIsError(false)
+  //       setIsSubmitting(false)
+  //       toast.success(language.success.submit)
+  //     })
+  //     .catch(() => {
+  //       setIsError(true)
+  //       setIsSubmitting(false)
+  //       toast.error(language.error.submit)
+  //     })
+  // }
+
+  // const handleStakeholdersOnChange = (_event, stakeholder) => {
+  //   setStakeholderTypesChecked((prev) => {
+  //     const isChecked = prev.includes(stakeholder)
+  //     const next = isChecked ? prev.filter((t) => t !== stakeholder) : [...prev, stakeholder]
+
+  //     if (isChecked) {
+  //       const fieldIndex = stakeholdersFields.findIndex(
+  //         (field) => field.stakeholderType === stakeholder
+  //       )
+  //       if (fieldIndex !== -1) stakeholdersRemove(fieldIndex)
+  //     } else {
+  //       const exists = stakeholdersFields.some((f) => f.stakeholderType === stakeholder)
+  //       if (!exists) stakeholdersAppend({ stakeholderType: stakeholder })
+  //     }
+
+  //     return next
+  //   })
+  // }
 
   const handleStakeholdersOnChange = (_event, stakeholder) => {
-    setStakeholderTypesChecked((prev) => {
-      const isChecked = prev.includes(stakeholder)
-      const next = isChecked ? prev.filter((t) => t !== stakeholder) : [...prev, stakeholder]
+    const isChecked = stakeholderTypesChecked.includes(stakeholder)
 
-      if (isChecked) {
-        const fieldIndex = stakeholdersFields.findIndex(
-          (field) => field.stakeholderType === stakeholder
-        )
-        if (fieldIndex !== -1) stakeholdersRemove(fieldIndex)
-      } else {
-        const exists = stakeholdersFields.some((f) => f.stakeholderType === stakeholder)
-        if (!exists) stakeholdersAppend({ stakeholderType: stakeholder })
-      }
-
-      return next
-    })
+    if (isChecked) {
+      const idx = stakeholdersFields.findIndex((f) => f.stakeholderType === stakeholder)
+      if (idx !== -1) stakeholdersRemove(idx)
+    } else {
+      const exists = stakeholdersFields.some((f) => f.stakeholderType === stakeholder)
+      if (!exists) stakeholdersAppend({ stakeholderType: stakeholder })
+    }
   }
 
+  const watchedStakeholders = useWatch({ control: form.control, name: 'stakeholders' }) ?? []
+  const stakeholderTypesChecked = watchedStakeholders.map((s) => s.stakeholderType)
+
   const getStakeholder = (stakeholder) =>
-    stakeholdersFields.find((field) => field.stakeholderType === stakeholder)
+    watchedStakeholders.find((s) => s.stakeholderType === stakeholder)
 
   return (
     <ContentWrapper>
@@ -111,7 +138,6 @@ const SiteBackgroundForm = () => {
       <QuestionNav
         isFormSaving={isSubmitting}
         isFormSaveError={isError}
-        onFormSave={() => handleSubmit(form.getValues())}
         currentSection='site-background'
       />
       <FormValidationMessageIfErrors formErrors={form.errors} />
@@ -124,24 +150,26 @@ const SiteBackgroundForm = () => {
           </StickyFormLabel>
           <List>
             {siteBackground.stakeholders.options?.map((stakeholder, index) => {
+              const stakeholderIndex = watchedStakeholders.findIndex(
+                (s) => s.stakeholderType === stakeholder
+              )
+
               return (
                 <ListItem key={index}>
                   <Box>
                     <Box>
                       <Checkbox
                         value={stakeholder}
-                        checked={stakeholderTypesChecked?.includes(stakeholder)}
+                        checked={stakeholderTypesChecked.includes(stakeholder)}
                         onChange={(event) => {
                           handleStakeholdersOnChange(event, stakeholder)
                         }}></Checkbox>
                       <Typography variant='subtitle'>{stakeholder}</Typography>
                     </Box>
                     <Box>
-                      {getStakeholder(stakeholder) && stakeholder !== 'Unknown' ? (
+                      {stakeholderIndex !== -1 && stakeholder !== 'Unknown' ? (
                         <Controller
-                          name={`stakeholders.${stakeholdersFields.findIndex(
-                            (field) => field.stakeholderType === stakeholder
-                          )}.stakeholderName`}
+                          name={`stakeholders.${stakeholderIndex}.stakeholderName`}
                           control={form.control}
                           defaultValue=''
                           render={({ field }) => (

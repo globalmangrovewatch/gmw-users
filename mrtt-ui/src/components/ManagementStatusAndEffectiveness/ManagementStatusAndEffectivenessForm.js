@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { Box, MenuItem, TextField } from '@mui/material'
 
 import { FormLayout, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
@@ -23,10 +23,14 @@ import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import DatePickerUtcMui from '../DatePickerUtcMui'
 import RequiredIndicator from '../RequiredIndicator'
 
+import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
+import LoadingIndicator from '../LoadingIndicator'
+
 const formType = MONITORING_FORM_CONSTANTS.managementStatusAndEffectiveness.payloadType
 
 const ManagementStatusAndEffectivenessForm = () => {
-  const { monitoringFormId } = useParams()
+  const { monitoringFormId, siteId } = useParams()
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const isEditMode = !!monitoringFormId
   const navigate = useNavigate()
   const { site_name } = useSiteInfo()
@@ -34,28 +38,31 @@ const ManagementStatusAndEffectivenessForm = () => {
   const form = useFormContext()
 
   const {
-    handleSubmit: validateInputs,
+    // handleSubmit: validateInputs,
     formState: { errors },
-    control,
-    watch: watchForm
+    control
   } = form
 
-  const { siteId } = useParams()
   const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
   const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
-  const managementStatusChangesWatcher = watchForm('managementStatusChanges')
-  const projectStatusChangeWatcher = watchForm('projectStatusChange')
-  const financeForCiteManagementWatcher = watchForm('financeForCiteManagement')
+  const managementStatusChangesWatcher = useWatch({ control, name: 'managementStatusChanges' })
+  const projectStatusChangeWatcher = useWatch({ control, name: 'projectStatusChange' })
+  const financeForCiteManagementWatcher = useWatch({ control, name: 'financeForCiteManagement' })
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
 
-  useInitializeMonitoringForm({
-    apiUrl: monitoringFormSingularUrl,
-    formType,
-    isEditMode,
-    questionMapping: questionMapping.managementStatusAndEffectiveness
+  const { data, isLoading } = useInitializeQuestionMappedForm({
+    key: 'managementStatusAndEffectiveness',
+    apiUrl: apiAnswersUrl,
+    resetForm: form.reset,
+    questionMapping,
+    queryOptions: {
+      refetchOnMount: 'always',
+      staleTime: 0,
+      refetchOnWindowFocus: false
+    }
   })
 
   const createNewMonitoringForm = (payload) => {
@@ -87,29 +94,29 @@ const ManagementStatusAndEffectivenessForm = () => {
       })
   }
 
-  const handleSubmit = async (formData) => {
-    const fields = Object.keys(questionMapping['managementStatusAndEffectiveness'])
-    const ok = await form.trigger(fields, { shouldFocus: true })
-    if (!ok) {
-      setIsError(true)
-      toast.error(language.error.validation)
-      return
-    }
-    setIsSubmitting(true)
-    setIsError(false)
-    if (!formData) return
+  // const handleSubmit = async (formData) => {
+  //   const fields = Object.keys(questionMapping['managementStatusAndEffectiveness'])
+  //   const ok = await form.trigger(fields, { shouldFocus: true })
+  //   if (!ok) {
+  //     setIsError(true)
+  //     toast.error(language.error.validation)
+  //     return
+  //   }
+  //   setIsSubmitting(true)
+  //   setIsError(false)
+  //   if (!formData) return
 
-    const payload = {
-      form_type: formType,
-      answers: mapDataForApi('managementStatusAndEffectiveness', formData)
-    }
+  //   const payload = {
+  //     form_type: formType,
+  //     answers: mapDataForApi('managementStatusAndEffectiveness', formData)
+  //   }
 
-    if (isEditMode) {
-      editMonitoringForm(payload)
-    } else {
-      createNewMonitoringForm(payload)
-    }
-  }
+  //   if (isEditMode) {
+  //     editMonitoringForm(payload)
+  //   } else {
+  //     createNewMonitoringForm(payload)
+  //   }
+  // }
 
   const handleDeleteConfirm = () => {
     setIsDeleting(true)
@@ -130,7 +137,9 @@ const ManagementStatusAndEffectivenessForm = () => {
     setIsDeleteConfirmPromptOpen(true)
   }
 
-  return (
+  return isLoading ? (
+    <LoadingIndicator />
+  ) : (
     <ContentWrapper>
       <FormPageHeader>
         <PageTitle>
@@ -141,7 +150,6 @@ const ManagementStatusAndEffectivenessForm = () => {
       <QuestionNav
         isFormSaving={isSubmitting}
         isFormSaveError={isError}
-        onFormSave={() => handleSubmit(form.getValues())}
         currentSection='management-status-and-effectiveness'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
@@ -155,9 +163,8 @@ const ManagementStatusAndEffectivenessForm = () => {
           <Controller
             name='dateOfAssessment'
             control={control}
-            defaultValue={''}
             render={({ field }) => (
-              <DatePickerUtcMui id='date-of-assessment' label='date' field={field} />
+              <DatePickerUtcMui id='dateOfAssessment' label='date' field={field} />
             )}
           />
           <ErrorText>{errors.dateOfAssessment?.message}</ErrorText>

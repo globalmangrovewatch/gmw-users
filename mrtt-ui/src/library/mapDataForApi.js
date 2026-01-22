@@ -7,6 +7,7 @@ export const mapDataForApi = (formTitle, data) => {
 
   for (const [fieldName, uiAnswer] of Object.entries(data)) {
     const apiQuestionId = questionMapping[formTitle]?.[fieldName]
+
     if (apiQuestionId) {
       preppedData.push({
         question_id: apiQuestionId,
@@ -14,6 +15,7 @@ export const mapDataForApi = (formTitle, data) => {
       })
     }
   }
+
   return preppedData
 }
 

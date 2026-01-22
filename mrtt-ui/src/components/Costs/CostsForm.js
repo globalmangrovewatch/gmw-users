@@ -50,9 +50,19 @@ const CostsForm = () => {
   const { site_name } = useSiteInfo()
 
   const form = useFormContext()
+  const { siteId } = useParams()
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+
+  const { data, isLoading } = useInitializeQuestionMappedForm({
+    key: 'costs',
+    apiUrl: apiAnswersUrl,
+    resetForm: form.reset,
+    questionMapping
+    // successCallback: loadServerData
+  })
 
   const {
-    handleSubmit: validateInputs,
+    // handleSubmit: validateInputs,
     formState: { errors },
     control,
     watch: watchForm
@@ -77,8 +87,6 @@ const CostsForm = () => {
     update: percentageSplitOfActivitiesUpdate
   } = useFieldArray({ name: 'percentageSplitOfActivities', control })
 
-  const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const projectInterventionFundingWatcher = watchForm('projectInterventionFunding')
@@ -145,12 +153,6 @@ const CostsForm = () => {
     },
     [breakdownOfCostReplace, percentageSplitOfActivitiesReplace]
   )
-
-  useInitializeQuestionMappedForm({
-    apiUrl: apiAnswersUrl,
-    questionMapping: questionMapping.costs,
-    successCallback: loadServerData
-  })
 
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
@@ -228,7 +230,6 @@ const CostsForm = () => {
       <QuestionNav
         isFormSaving={isSubmitting}
         isFormSaveError={isSubmitError}
-        onFormSave={validateInputs(handleSubmit)}
         currentSection='costs'
       />
       <FormValidationMessageIfErrors formErrors={errors} />

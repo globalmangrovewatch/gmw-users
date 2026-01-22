@@ -85,7 +85,6 @@ function PreRestorationAssessmentForm() {
   const speciesCompositionWatcher = watchForm('speciesComposition')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isError, setIsError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [mangroveSpeciesList, setMangroveSpeciesList] = useState([])
   const [mangroveSpeciesTypesChecked, setMangroveSpeciesTypesChecked] = useState([])
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
@@ -121,11 +120,11 @@ function PreRestorationAssessmentForm() {
     [physicalMeasurementsTakenReplace]
   )
 
-  useInitializeQuestionMappedForm({
+  const { data, isLoading } = useInitializeQuestionMappedForm({
+    key: 'preRestorationAssessment',
     apiUrl: apiAnswersUrl,
-    questionMapping: questionMapping.preRestorationAssessment,
+    questionMapping: questionMapping,
     resetForm,
-    setIsLoading,
     successCallback: loadServerData
   })
 
@@ -214,7 +213,6 @@ function PreRestorationAssessmentForm() {
       <QuestionNav
         isFormSaving={isSubmitting}
         isFormSaveError={isError}
-        onFormSave={() => handleSubmit(form.getValues())}
         currentSection='pre-restoration-assessment'
       />
       <FormValidationMessageIfErrors formErrors={errors} />

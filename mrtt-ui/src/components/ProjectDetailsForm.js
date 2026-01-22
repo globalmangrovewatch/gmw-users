@@ -3,18 +3,18 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { useState } from 'react'
 
 import Autocomplete from '@mui/material/Autocomplete'
-import axios from 'axios'
+// import axios from 'axios'
 import turfBbox from '@turf/bbox'
 import turfBboxPolygon from '@turf/bbox-polygon'
 import turfConvex from '@turf/convex'
 
 import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
-import { mapDataForApi, mapAllDataForApi } from '../library/mapDataForApi'
+// import { mapDataForApi } from '../library/mapDataForApi'
 import { projectDetails as questions } from '../data/questions'
 import { questionMapping } from '../data/questionMapping'
 import { StickyFormLabel, FormPageHeader, FormQuestionDiv, FormLayout } from '../styles/forms'
-import { toast } from 'react-toastify'
+// import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '../language'
@@ -26,6 +26,7 @@ import RequiredIndicator from './RequiredIndicator'
 import { useInitializeQuestionMappedForm } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
 import DatePickerUtcMui from './DatePickerUtcMui'
+import { useSectionQuestions } from '../library/question-mapped-form/sections-hook'
 
 export const siteAreaError = 'Please provide a site area'
 
@@ -39,26 +40,28 @@ const countriesGeojson = mangroveCountries.features.sort(sortCountries)
 
 function ProjectDetailsForm() {
   const form = useFormContext()
-  const [isLoading, setIsLoading] = useState(false)
-  const errors = form.errors
+  const errors = form.formState.errors
 
   const [mapExtent, setMapExtent] = useState()
   const [isError, setIsError] = useState(false)
+  // const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { site_name } = useSiteInfo()
 
+  // const { errors } = form.formState
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
-
   let watchHasProjectEndDate = form.watch('hasProjectEndDate', false)
   /* showEndDateInput is a hack because MUI follows native html and casts values to strings.
    The api casts them to boolean so we support both */
   const showEndDateInput = watchHasProjectEndDate === 'true' || watchHasProjectEndDate === true
 
-  useInitializeQuestionMappedForm({
+  const { data, isLoading } = useInitializeQuestionMappedForm({
+    key: 'projectDetails',
     apiUrl: apiAnswersUrl,
     resetForm: form.reset,
-    questionMapping: questionMapping.projectDetails
+    questionMapping,
+    setIsLoading: () => {}
   })
 
   const onCountriesChange = (field, features) => {
@@ -87,62 +90,24 @@ function ProjectDetailsForm() {
     }
   }
 
-  const handleSubmit = async (formData) => {
-    const fields = Object.keys(questionMapping['projectDetails'])
+  // const handleSubmit = async (formData) => {
+  //   setIsSubmitting(true)
+  //   setIsError(false)
 
-    const ok = await form.trigger(fields, { shouldFocus: true })
-    if (!ok) {
-      setIsError(true)
-      toast.error(language.error.validation)
-      return
-    }
-    setIsSubmitting(true)
-    setIsError(false)
+  //   axios
+  //     .patch(apiAnswersUrl, mapDataForApi('projectDetails', formData))
+  //     .then(() => {
+  //       setIsSubmitting(false)
+  //       toast.success(language.success.submit)
+  //     })
+  //     .catch(() => {
+  //       setIsError(true)
+  //       setIsSubmitting(false)
+  //       toast.error(language.error.submit)
+  //     })
+  // }
 
-    if (!formData) return
-
-    const payload = {
-      // answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
-      answers: mapAllDataForApi({
-        projectDetails: { ...formData },
-        siteBackground: { ...formData },
-        restorationAims: { ...formData },
-        causesOfDecline: { ...formData },
-        preRestorationAssessment: { ...formData },
-        siteInterventions: { ...formData },
-        costs: { ...formData },
-        managementStatusAndEffectiveness: { ...formData },
-        socioeconomicAndGovernanceStatusAndOutcomes: { ...formData },
-        ecologicalStatusAndOutcomes: { ...formData }
-      })
-    }
-
-    axios
-      .get(apiAnswersUrl, mapDataForApi(payload))
-      .then(() => {
-        setIsError(false)
-        setIsSubmitting(false)
-        toast.success(language.success.submit)
-      })
-      .catch(() => {
-        setIsError(true)
-        setIsSubmitting(false)
-        toast.error(language.error.submit)
-      })
-
-    axios
-      .patch(apiAnswersUrl, mapDataForApi('projectDetails', formData))
-      .then(() => {
-        setIsError(false)
-        setIsSubmitting(false)
-        toast.success(language.success.submit)
-      })
-      .catch(() => {
-        setIsError(true)
-        setIsSubmitting(false)
-        toast.error(language.error.submit)
-      })
-  }
+  const { sectionKeys } = useSectionQuestions('project-details')
 
   return (
     <ContentWrapper>
@@ -153,7 +118,6 @@ function ProjectDetailsForm() {
       <QuestionNav
         isFormSaving={isSubmitting}
         isFormSaveError={isError}
-        onFormSave={() => handleSubmit(form.getValues())}
         currentSection='project-details'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
@@ -169,9 +133,7 @@ function ProjectDetailsForm() {
           <Controller
             name='projectStartDate'
             control={form.control}
-            render={({ field }) => {
-              return <DatePickerUtcMui id='start-date' label='date' field={field} />
-            }}
+            render={({ field }) => <DatePickerUtcMui id='start-date' label='date' field={field} />}
           />
           <ErrorText>{errors?.projectStartDate?.message}</ErrorText>
         </FormQuestionDiv>
