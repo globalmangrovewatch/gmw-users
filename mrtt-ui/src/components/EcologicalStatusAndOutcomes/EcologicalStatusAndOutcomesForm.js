@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Controller, useFormContext, useFieldArray } from 'react-hook-form'
+import { Controller, useFormContext, useFieldArray, useWatch } from 'react-hook-form'
 import {
   Box,
   Checkbox,
@@ -47,6 +47,9 @@ import DatePickerUtcMui from '../DatePickerUtcMui'
 import { unitOptions } from '../../data/ecologicalOptions'
 import RequiredIndicator from '../RequiredIndicator'
 
+import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
+import LoadingIndicator from '../LoadingIndicator'
+
 const getEcologicalAims = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '3.1') ?? []
 
@@ -79,13 +82,15 @@ const EcologicalStatusAndOutcomesForm = () => {
     fields: monitoringIndicatorsFields,
     append: monitoringIndicatorsAppend,
     remove: monitoringIndicatorsRemove,
-    update: monitoringIndicatorsUpdate
+    update: monitoringIndicatorsUpdate,
+    replace: monitoringIndicatorsReplace
   } = useFieldArray({ name: 'monitoringIndicators', control })
 
   const {
     fields: ecologicalMonitoringStakeholdersFields,
     append: ecologicalMonitoringStakeholdersAppend,
-    remove: ecologicalMonitoringStakeholdersRemove
+    remove: ecologicalMonitoringStakeholdersRemove,
+    replace: ecologicalMonitoringStakeholdersReplace
   } = useFieldArray({ name: 'ecologicalMonitoringStakeholders', control })
 
   const { siteId } = useParams()
@@ -95,12 +100,16 @@ const EcologicalStatusAndOutcomesForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [biophysicalInterventions, setBiophysicalInterventions] = useState([])
-  const mangroveAreaIncreaseWatcher = watchForm('mangroveAreaIncrease')
+
+  const mangroveAreaIncreaseWatcher = useWatch({ control, name: 'mangroveAreaIncrease' })
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
-  const monitoringIndicatorsWatcher = watchForm('monitoringIndicators')
+  const monitoringIndicatorsWatcher = useWatch({ name: 'monitoringIndicators', control })
   const [ecologicalAims, setEcologicalAims] = useState([])
-  const preAndPostRestorationActivitiesWatcher = watchForm('preAndPostRestorationActivities')
+  const preAndPostRestorationActivitiesWatcher = useWatch({
+    name: 'preAndPostRestorationActivities',
+    control
+  })
   const [
     ecologicalMonitoringStakeholdersTypesChecked,
     setEcologicalMonitoringStakeholdersTypesChecked
@@ -166,11 +175,28 @@ const EcologicalStatusAndOutcomesForm = () => {
     [monitoringFormSingularUrl, isEditMode]
   )
 
-  useInitializeMonitoringForm({
-    apiUrl: monitoringFormSingularUrl,
-    formType,
-    isEditMode,
-    questionMapping: questionMapping.ecologicalStatusAndOutcomes
+  const onLoaded = () => {
+    const v = form.getValues()
+    monitoringIndicatorsReplace(v.monitoringIndicators ?? [])
+    ecologicalMonitoringStakeholdersReplace(v.ecologicalMonitoringStakeholders ?? [])
+    setEcologicalMonitoringStakeholdersTypesChecked(
+      (v.ecologicalMonitoringStakeholders ?? []).map((s) => s?.stakeholder).filter(Boolean)
+    )
+  }
+
+  // useInitializeMonitoringForm({
+  //   apiUrl: monitoringFormSingularUrl,
+  //   formType,
+  //   isEditMode,
+  //   questionMapping: questionMapping.ecologicalStatusAndOutcomes
+  // })
+
+  const { data, isLoading } = useInitializeQuestionMappedForm({
+    key: 'ecologicalStatusAndOutcomes',
+    apiUrl: registrationInterventionFormsUrl,
+    resetForm: form.reset,
+    questionMapping,
+    successCallback: onLoaded
   })
 
   const createNewMonitoringForm = (payload) => {
@@ -203,45 +229,45 @@ const EcologicalStatusAndOutcomesForm = () => {
       })
   }
 
-  const handleSubmit = (formData) => {
-    setIsSubmitting(true)
-    setIsSubmitError(false)
+  // const handleSubmit = (formData) => {
+  //   setIsSubmitting(true)
+  //   setIsSubmitError(false)
 
-    const payload = {
-      form_type: formType,
-      answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
-      // answers: mapAllDataForApi({
-      //   projectDetails: { ...formData },
-      //   siteBackground: { ...formData },
-      //   restorationAims: { ...formData },
-      //   causesOfDecline: { ...formData },
-      //   preRestorationAssessment: { ...formData },
-      //   siteInterventions: { ...formData },
-      //   costs: { ...formData },
-      //   managementStatusAndEffectiveness: { ...formData },
-      //   socioeconomicAndGovernanceStatusAndOutcomes: { ...formData },
-      //   ecologicalStatusAndOutcomes: { ...formData }
-      // })
-    }
-    if (isEditMode) {
-      editMonitoringForm(payload)
-    } else {
-      createNewMonitoringForm(payload)
-      axios
-        .post(registrationInterventionFormsUrl, payload)
-        .then(({ data }) => {
-          setIsSubmitting(false)
-          toast.success(language.success.getCreateThingSuccessMessage('This form'))
-          resetForm()
-          navigate(data.id)
-        })
-        .catch(() => {
-          setIsSubmitting(false)
-          setIsSubmitError(true)
-          toast.error(language.error.submit)
-        })
-    }
-  }
+  //   const payload = {
+  //     form_type: formType,
+  //     answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
+  //     // answers: mapAllDataForApi({
+  //     //   projectDetails: { ...formData },
+  //     //   siteBackground: { ...formData },
+  //     //   restorationAims: { ...formData },
+  //     //   causesOfDecline: { ...formData },
+  //     //   preRestorationAssessment: { ...formData },
+  //     //   siteInterventions: { ...formData },
+  //     //   costs: { ...formData },
+  //     //   managementStatusAndEffectiveness: { ...formData },
+  //     //   socioeconomicAndGovernanceStatusAndOutcomes: { ...formData },
+  //     //   ecologicalStatusAndOutcomes: { ...formData }
+  //     // })
+  //   }
+  //   if (isEditMode) {
+  //     editMonitoringForm(payload)
+  //   } else {
+  //     createNewMonitoringForm(payload)
+  //     axios
+  //       .post(registrationInterventionFormsUrl, payload)
+  //       .then(({ data }) => {
+  //         setIsSubmitting(false)
+  //         toast.success(language.success.getCreateThingSuccessMessage('This form'))
+  //         resetForm()
+  //         navigate(data.id)
+  //       })
+  //       .catch(() => {
+  //         setIsSubmitting(false)
+  //         setIsSubmitError(true)
+  //         toast.error(language.error.submit)
+  //       })
+  //   }
+  // }
 
   const handleDeleteConfirm = () => {
     setIsDeleting(true)
@@ -338,7 +364,9 @@ const EcologicalStatusAndOutcomesForm = () => {
   const getWhichStakeholderInvolved = (stakeholder) =>
     ecologicalMonitoringStakeholdersFields.find((field) => field.stakeholder === stakeholder)
 
-  return (
+  return isLoading ? (
+    <LoadingIndicator />
+  ) : (
     <ContentWrapper>
       <FormPageHeader>
         <PageTitle>
@@ -349,7 +377,6 @@ const EcologicalStatusAndOutcomesForm = () => {
       <QuestionNav
         isFormSaving={isSubmitting}
         isFormSaveError={isSubmitError}
-        onFormSave={validateInputs(handleSubmit)}
         currentSection='ecological-status-and-outcomes'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
@@ -363,10 +390,9 @@ const EcologicalStatusAndOutcomesForm = () => {
           <Controller
             name='monitoringStartDate'
             control={control}
-            defaultValue={null}
             render={({ field }) => (
               <DatePickerUtcMui
-                id='monitoring-start-date'
+                id='monitoringStartDate'
                 label='Monitoring start date'
                 field={field}
               />
@@ -377,10 +403,9 @@ const EcologicalStatusAndOutcomesForm = () => {
             <Controller
               name='monitoringEndDate'
               control={control}
-              defaultValue={null}
               render={({ field }) => (
                 <DatePickerUtcMui
-                  id='monitoring-end-date'
+                  id='monitoringEndDate'
                   label='Monitoring end date'
                   field={field}
                 />
@@ -413,7 +438,6 @@ const EcologicalStatusAndOutcomesForm = () => {
                               (field) => field.stakeholder === stakeholder
                             )}.stakeholderType`}
                             control={control}
-                            defaultValue=''
                             render={({ field }) => (
                               <TextField
                                 {...field}

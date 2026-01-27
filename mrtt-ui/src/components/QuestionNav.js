@@ -2,19 +2,24 @@ import { ArrowBack, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material
 import { css, styled } from '@mui/system'
 import { Stack } from '@mui/material'
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+
+import { mapDataForApi } from '../library/mapDataForApi'
 
 import { ErrorText, LinkLooksLikeButtonSecondary } from '../styles/typography'
 import ButtonSave from './ButtonSave'
 import language from '../language'
 import LoadingIndicatorOverlay from './LoadingIndicatorOverlay'
-import SECTION_NAMES from '../constants/sectionNames'
+import SECTION_NAMES, { SECTION_NAMES_DICTIONARY } from '../constants/sectionNames'
 import theme from '../styles/theme'
 import themeMui from '../styles/themeMui'
 import PRIVACY_VALUES from '../constants/privacyValues'
+import { useFormContext } from 'react-hook-form'
+
+import { useSaveRegistrationSection } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
 
 const componentLanguage = language.questionNav
 
@@ -80,7 +85,7 @@ const NavSubWrapper = styled('div')`
   gap: ${themeMui.spacing(2)};
 `
 
-const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection }) => {
+const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   const [isPrivacySaveError, setIsPrivacySaveError] = useState(false)
   const [isPrivacySaving, setIsPrivacySaving] = useState(false)
   const [sectionPrivacy, setSectionPrivacy] = useState()
@@ -92,6 +97,18 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection
   const previousSection = SECTION_NAMES[currentSectionNameIndex - 1]
   const sectionIdForApi = currentSectionNameIndex + 1
   const siteUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}`
+  const form = useFormContext()
+
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const sectionFromUrl = pathname.split('/').pop()
+
+  const { save, query, mutation } = useSaveRegistrationSection({
+    siteId,
+    currentSection,
+    form,
+    section: SECTION_NAMES_DICTIONARY[sectionFromUrl]
+  })
 
   useEffect(
     function getSiteInfoToUseWithAPutRequestToUpdateSitePrivacySincePatchDoesntWork() {
@@ -135,24 +152,62 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection
     }
   }
 
+  const { handleSubmit: validateInputs } = form
+
+  const handleInterventionFormSave = async (e) => {
+    e?.preventDefault?.()
+    const saved = await save(SECTION_NAMES_DICTIONARY[sectionFromUrl])
+    if (saved && sectionFromUrl === 'ecological-status-and-outcomes') navigate('/sites')
+  }
+
+  const handleNavigateWithSave = useCallback(
+    (to, direction) => async (e) => {
+      e.preventDefault()
+
+      if (direction === 'previous') {
+        navigate(to)
+        return
+      }
+
+      const saved = await save(SECTION_NAMES_DICTIONARY[sectionFromUrl])
+
+      if (saved) navigate(to)
+    },
+    [sectionFromUrl, navigate, save]
+  )
+
   return (
     <>
       <LoadingIndicatorOverlay isVisible={isPrivacySaving} />
       <StickyStack>
         <NavWrapper>
           <NavSubWrapper>
+            {/* back to sites overview */}
             <LinkLooksLikeButtonSecondary to={`/sites/${siteId}/overview`}>
               <ArrowBack /> <NavButtonText>{componentLanguage.returnToSite}</NavButtonText>
             </LinkLooksLikeButtonSecondary>
+            {/* previous and next section buttons */}
+            {/* previous  */}
             <LinkLooksLikeButtonSecondary
               to={!previousSection ? '#' : `/sites/${siteId}/form/${previousSection}`}
-              disabled={!previousSection}>
+              disabled={!previousSection}
+              onClick={
+                !previousSection
+                  ? undefined
+                  : handleNavigateWithSave(`/sites/${siteId}/form/${previousSection}`, 'previous')
+              }>
               <ArrowBackIosNew />
               <NavButtonText>{componentLanguage.previousSection}</NavButtonText>
             </LinkLooksLikeButtonSecondary>
+            {/* next */}
             <LinkLooksLikeButtonSecondary
               to={!nextSection ? '#' : `/sites/${siteId}/form/${nextSection}`}
-              disabled={!nextSection}>
+              disabled={!nextSection}
+              onClick={
+                !nextSection
+                  ? undefined
+                  : handleNavigateWithSave(`/sites/${siteId}/form/${nextSection}`, 'next')
+              }>
               <NavButtonText>{componentLanguage.nextSection}</NavButtonText>
               <ArrowForwardIos />
             </LinkLooksLikeButtonSecondary>
@@ -170,7 +225,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection
               <option value={PRIVACY_VALUES.private}>{language.sectionPrivacy.private}</option>
               <option value={PRIVACY_VALUES.public}>{language.sectionPrivacy.public}</option>
             </PrivacySelect>
-            <ButtonSave isSaving={isFormSaving} onClick={onFormSave} />
+            <ButtonSave isSaving={isFormSaving} onClick={handleInterventionFormSave} />
           </NavSubWrapper>
         </NavWrapper>
         {isFormSaveError ? <ErrorText>{language.error.submit}</ErrorText> : null}
@@ -183,8 +238,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, onFormSave, currentSection
 QuestionNav.propTypes = {
   currentSection: PropTypes.string.isRequired,
   isFormSaving: PropTypes.bool.isRequired,
-  isFormSaveError: PropTypes.bool.isRequired,
-  onFormSave: PropTypes.func.isRequired
+  isFormSaveError: PropTypes.bool.isRequired
 }
 
 export default QuestionNav

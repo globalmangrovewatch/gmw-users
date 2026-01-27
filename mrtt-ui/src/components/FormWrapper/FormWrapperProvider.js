@@ -5,8 +5,14 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { defaultValues, validationSchema } from './FormSchemaValidation'
+import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 
 function FormWrapperProvider({ children }) {
+  // fetch api data, merge defaultValues
+  // fix date
+  // initialize form with data
+  // remove save from steps use just navigation buttons
+  // validate by step
   const form = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues

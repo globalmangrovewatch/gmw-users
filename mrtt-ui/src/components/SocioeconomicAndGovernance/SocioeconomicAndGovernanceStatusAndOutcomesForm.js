@@ -35,6 +35,8 @@ import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import DatePickerUtcMui from '../DatePickerUtcMui'
 import RequiredIndicator from '../RequiredIndicator'
 
+import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
+
 const getSocioeconomicAims = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '3.2') ?? []
 
@@ -103,12 +105,12 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     [registrationInterventionFormsUrl]
   )
 
-  useInitializeMonitoringForm({
-    apiUrl: monitoringFormSingularUrl,
-    formType,
-    isEditMode,
-    questionMapping: questionMapping.socioeconomicAndGovernanceStatusAndOutcomes,
-    setIsLoading: setIsMainFormDataLoading
+  const { data, isLoading } = useInitializeQuestionMappedForm({
+    key: 'socioeconomicAndGovernanceStatusAndOutcomes',
+    apiUrl: registrationInterventionFormsUrl,
+    resetForm: form.reset,
+    questionMapping,
+    setIsLoading: () => {}
   })
 
   const createNewMonitoringForm = (payload) => {
@@ -235,7 +237,6 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
       <QuestionNav
         isFormSaving={isSubmitting}
         isFormSaveError={isSubmitError}
-        onFormSave={validateInputs(handleSubmit)}
         currentSection='socioeconomic-and-governance-status'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
@@ -249,9 +250,8 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
           <Controller
             name='dateOfOutcomesAssessment'
             control={control}
-            defaultValue={null}
             render={({ field }) => (
-              <DatePickerUtcMui id='date-of-outcomes-assessment' label='date' field={field} />
+              <DatePickerUtcMui id='dateOfOutcomesAssessment' label='date' field={field} />
             )}
           />
           <ErrorText>{errors.dateOfOutcomesAssessment?.message}</ErrorText>
