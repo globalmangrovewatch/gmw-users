@@ -7,9 +7,10 @@ import { mapDataForApi } from '../../library/mapDataForApi'
 
 import { formatApiAnswersForFormByKey } from '../formatApiAnswersForForm'
 import { questionMapping } from '../../data/questionMapping'
-import { useParams } from 'react-router-dom'
+
 import { defaultValues } from '../../components/FormWrapper/FormSchemaValidation'
-import { SECTION_NAMES_DICTIONARY } from '../../constants/sectionNames'
+import { FORM_NAMES_DICTIONARY } from '../../constants/sectionNames'
+import { toast } from 'react-toastify'
 
 type ApiAnswerItem = {
   question_id: string
@@ -33,8 +34,6 @@ type Params<TSelected = FormattedResponse> = {
     'queryKey' | 'queryFn' | 'enabled'
   >
 }
-
-type ApiAnswer = { question_id: string; answer_value: any }
 
 const queryOptionsDefault = {
   retry: false,
@@ -104,7 +103,14 @@ export function useSaveRegistrationSection({
   const save = async (section: string) => {
     const fields = Object.keys(questionMapping[section] ?? {})
     const ok = await form.trigger(fields, { shouldFocus: true })
-    if (!ok) return false
+    if (!ok) {
+      toast.error(
+        `Cannot save "${
+          FORM_NAMES_DICTIONARY[section] || section
+        }". Please fix the errors indicated on the form.`
+      )
+      return false
+    }
 
     const all = form.getValues()
     const sectionValues = Object.fromEntries(fields.map((k) => [k, all[k]]))
