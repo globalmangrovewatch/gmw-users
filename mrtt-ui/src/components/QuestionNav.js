@@ -164,11 +164,6 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
     (to, direction) => async (e) => {
       e.preventDefault()
 
-      if (direction === 'previous') {
-        navigate(to)
-        return
-      }
-
       const saved = await save(SECTION_NAMES_DICTIONARY[sectionFromUrl])
 
       if (saved) navigate(to)
