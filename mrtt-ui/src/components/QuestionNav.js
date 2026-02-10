@@ -166,7 +166,10 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
 
       const saved = await save(SECTION_NAMES_DICTIONARY[sectionFromUrl])
 
-      if (saved) navigate(to)
+      if (saved) {
+        toast.success('Section saved')
+        navigate(to)
+      }
     },
     [sectionFromUrl, navigate, save]
   )
