@@ -11,6 +11,7 @@ import { questionMapping } from '../../data/questionMapping'
 import { defaultValues } from '../../components/FormWrapper/FormSchemaValidation'
 import { FORM_NAMES_DICTIONARY } from '../../constants/sectionNames'
 import { toast } from 'react-toastify'
+import { de } from 'date-fns/locale'
 
 type ApiAnswerItem = {
   question_id: string
@@ -25,6 +26,7 @@ export type FormattedResponse = {
 type Params<TSelected = FormattedResponse> = {
   key: 'projectDetails' | 'siteBackground'
   apiUrl: string
+  siteId: string
   questionMapping: unknown
   resetForm: (values: unknown) => void
   successCallback?: (response: AxiosResponse<ApiAnswerItem[]>) => void
@@ -45,6 +47,7 @@ const queryOptionsDefault = {
 export function useInitializeQuestionMappedForm<TSelected = FormattedResponse>({
   key,
   apiUrl,
+  siteId,
   resetForm,
   questionMapping,
   successCallback,
@@ -52,10 +55,8 @@ export function useInitializeQuestionMappedForm<TSelected = FormattedResponse>({
   queryOptions = queryOptionsDefault
 }: Params<TSelected>): UseQueryResult<TSelected, Error> {
   return useQuery<FormattedResponse, Error, TSelected>({
-    queryKey: ['question-mapped-form', key, apiUrl],
+    queryKey: ['question-mapped-form', key, apiUrl, siteId],
     enabled: Boolean(enabled && key && apiUrl && !apiUrl.includes('undefined')),
-    ...(queryOptionsDefault as any),
-    ...(queryOptions ?? {}),
     queryFn: async (): Promise<FormattedResponse> => {
       const response = await axios.get<ApiAnswerItem[]>(apiUrl)
 
@@ -67,7 +68,6 @@ export function useInitializeQuestionMappedForm<TSelected = FormattedResponse>({
         ...defaultValues,
         ...formattedData[key]
       })
-
       successCallback?.(response)
 
       return { response, formattedData }
