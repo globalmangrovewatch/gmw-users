@@ -28,8 +28,7 @@ export function useSignInMutation() {
           headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json'
-          },
-          withCredentials: true
+          }
         }
       )
 
