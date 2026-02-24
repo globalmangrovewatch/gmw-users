@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -12,6 +13,8 @@ import { Alert } from '@mui/material'
 import { RowFlexEnd } from '../../styles/containers'
 import { ErrorText, Link as ExternalLink } from '../../styles/typography'
 import { useAuth } from '../../hooks/useAuth'
+import { useSignInMutation } from '../../hooks/sign-in'
+import { useCheckSession } from '../../hooks/check-session'
 import language from '../../language'
 import LoadingIndicator from '../../components/LoadingIndicator'
 import {
@@ -38,6 +41,7 @@ import LandingHeaderMobile from '../../components/landing/header-mobile'
 import { useTheme } from '@mui/styles'
 import { useMediaQuery } from '@mui/system'
 import { Button } from '@mui/material'
+import { is } from 'date-fns/locale'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),
@@ -51,43 +55,49 @@ const pageLanguage = language.pages.login
 const LoginForm = ({ isUserNew }) => {
   const [isLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-  const navigate = useNavigate()
 
   const authUrl = `${process.env.REACT_APP_AUTH_URL}/users/sign_in`
 
-  const { login } = useAuth()
+  const signInMutation = useSignInMutation()
 
   const {
     control: formControl,
     handleSubmit: validateInputs,
     formState: { errors }
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: formDefaultValues
+  })
 
-  const options = {
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json'
+  const { isChecking, user } = useCheckSession()
+  const { login } = useAuth()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!isChecking && user) {
+      if (user.token) {
+        login(user.token)
+      }
+
+      navigate('/sites', { replace: true })
     }
-  }
-
-  const signIn = (formData) => {
-    axios
-      .post(authUrl, { user: formData }, options)
-      .then(({ data }) => {
-        if (data.token) {
-          login(data.token)
-          navigate('/sites')
-        }
-      })
-      .catch((error) => {
-        setIsSubmitError(true)
-        toast.error(error.response.data.error)
-      })
-  }
+  }, [isChecking, user, login, navigate])
 
   const handleSubmit = (formData) => {
     setIsSubmitError(false)
-    signIn(formData)
+
+    signInMutation.mutate(formData, {
+      onSuccess: (data) => {
+        if (data?.token) {
+          login(data.token)
+          navigate('/sites')
+        }
+      },
+      onError: (error) => {
+        setIsSubmitError(true)
+        toast.error(error?.response?.data?.error ?? 'Login failed')
+      }
+    })
   }
 
   const theme = useTheme()
@@ -167,7 +177,7 @@ const LoginForm = ({ isUserNew }) => {
     </Base>
   )
 
-  return isLoading ? <LoadingIndicator /> : form
+  return isLoading || isChecking ? <LoadingIndicator /> : form
 }
 
 LoginForm.propTypes = {
