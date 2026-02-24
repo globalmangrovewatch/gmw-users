@@ -13,13 +13,14 @@ import { ErrorText, LinkLooksLikeButtonSecondary } from '../styles/typography'
 import ButtonSave from './ButtonSave'
 import language from '../language'
 import LoadingIndicatorOverlay from './LoadingIndicatorOverlay'
-import SECTION_NAMES, { SECTION_NAMES_DICTIONARY } from '../constants/sectionNames'
+import SECTION_NAMES, { SECTION_NAMES_DICTIONARY_INTERVENTIONS } from '../constants/sectionNames'
 import theme from '../styles/theme'
 import themeMui from '../styles/themeMui'
 import PRIVACY_VALUES from '../constants/privacyValues'
 import { useFormContext } from 'react-hook-form'
 
 import { useSaveRegistrationSection } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
+import { useGetSectionTarget } from '../library/question-mapped-form/sections-hook'
 
 const componentLanguage = language.questionNav
 
@@ -85,6 +86,13 @@ const NavSubWrapper = styled('div')`
   gap: ${themeMui.spacing(2)};
 `
 
+const SAVE_TARGET_BY_SECTION = {
+  overview: 'sites',
+  details: 'sites',
+  monitoring: 'monitors',
+  alerts: 'monitors'
+}
+
 const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   const [isPrivacySaveError, setIsPrivacySaveError] = useState(false)
   const [isPrivacySaving, setIsPrivacySaving] = useState(false)
@@ -102,12 +110,14 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const sectionFromUrl = pathname.split('/').pop()
+  const sectionTarget = useGetSectionTarget(sectionFromUrl)
 
   const { save, query, mutation } = useSaveRegistrationSection({
     siteId,
     currentSection,
     form,
-    section: SECTION_NAMES_DICTIONARY[sectionFromUrl]
+    section: SECTION_NAMES_DICTIONARY_INTERVENTIONS[sectionFromUrl],
+    sectionTarget
   })
 
   useEffect(
@@ -156,7 +166,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
 
   const handleInterventionFormSave = async (e) => {
     e?.preventDefault?.()
-    const saved = await save(SECTION_NAMES_DICTIONARY[sectionFromUrl])
+    const saved = await save(SECTION_NAMES_DICTIONARY_INTERVENTIONS[sectionFromUrl])
     if (saved && sectionFromUrl === 'ecological-status-and-outcomes') navigate('/sites')
   }
 
@@ -164,7 +174,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
     (to, direction) => async (e) => {
       e.preventDefault()
 
-      const saved = await save(SECTION_NAMES_DICTIONARY[sectionFromUrl])
+      const saved = await save(SECTION_NAMES_DICTIONARY_INTERVENTIONS[sectionFromUrl])
 
       if (saved) {
         toast.success('Section saved')

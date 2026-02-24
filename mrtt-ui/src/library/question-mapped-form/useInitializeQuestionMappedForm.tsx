@@ -9,7 +9,7 @@ import { formatApiAnswersForFormByKey } from '../formatApiAnswersForForm'
 import { questionMapping } from '../../data/questionMapping'
 
 import { defaultValues } from '../../components/FormWrapper/FormSchemaValidation'
-import { FORM_NAMES_DICTIONARY } from '../../constants/sectionNames'
+import { FORM_NAMES_DICTIONARY_INTERVENTIONS } from '../../constants/sectionNames'
 import { toast } from 'react-toastify'
 import { de } from 'date-fns/locale'
 
@@ -84,19 +84,24 @@ export function useInitializeQuestionMappedForm<TSelected = FormattedResponse>({
 export function useSaveRegistrationSection({
   siteId,
   form,
-  section
+  section,
+  sectionTarget
 }: {
   siteId: string
   form: any
   section: string
+  sectionTarget: 'interventions' | 'monitors'
 }) {
-  const apiUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const apiUrl = {
+    interventions: `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`,
+    monitors: `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
+  }
 
   const mutation = useMutation({
     mutationKey: ['save-registration-section', siteId, section],
     mutationFn: async ({ formData }: { formData: any }) => {
       if (!siteId) throw new Error('Missing siteId')
-      return axios.patch(apiUrl, mapDataForApi(section, formData))
+      return axios.patch(apiUrl[sectionTarget], mapDataForApi(section, formData))
     }
   })
 
@@ -106,7 +111,7 @@ export function useSaveRegistrationSection({
     if (!ok) {
       toast.error(
         `Cannot save "${
-          FORM_NAMES_DICTIONARY[section] || section
+          FORM_NAMES_DICTIONARY_INTERVENTIONS[section] || section
         }". Please fix the errors indicated on the form.`
       )
       return false
