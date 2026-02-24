@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import axios from 'axios'
 import PropTypes from 'prop-types'
 
 import { Alert } from '@mui/material'
@@ -41,7 +40,6 @@ import LandingHeaderMobile from '../../components/landing/header-mobile'
 import { useTheme } from '@mui/styles'
 import { useMediaQuery } from '@mui/system'
 import { Button } from '@mui/material'
-import { is } from 'date-fns/locale'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),
@@ -55,8 +53,6 @@ const pageLanguage = language.pages.login
 const LoginForm = ({ isUserNew }) => {
   const [isLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-
-  const authUrl = `${process.env.REACT_APP_AUTH_URL}/users/sign_in`
 
   const signInMutation = useSignInMutation()
 

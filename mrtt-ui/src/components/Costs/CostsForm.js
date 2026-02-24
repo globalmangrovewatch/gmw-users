@@ -209,7 +209,7 @@ const CostsForm = () => {
 
   const isSumOfBreakdownLessOrEqualToTotalCost = () => {
     const totalCost = Number(costOfProjectActivitiesWatcher?.cost)
-    const costs = breakdownOfCostWatcher.map((item) => Number(item.cost))
+    const costs = breakdownOfCostWatcher?.map((item) => Number(item.cost))
     const sum = costs.reduce((previousValue, currentValue) => previousValue + currentValue, 0)
     return sum <= totalCost ? true : false
   }
