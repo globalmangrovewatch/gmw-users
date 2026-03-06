@@ -7,19 +7,21 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { mapDataForApi } from '../library/mapDataForApi'
-
 import { ErrorText, LinkLooksLikeButtonSecondary } from '../styles/typography'
 import ButtonSave from './ButtonSave'
 import language from '../language'
 import LoadingIndicatorOverlay from './LoadingIndicatorOverlay'
-import SECTION_NAMES, { SECTION_NAMES_DICTIONARY } from '../constants/sectionNames'
+import SECTION_NAMES, {
+  SECTION_NAMES_DICTIONARY_INTERVENTIONS,
+  SECTION_NAMES_DICTIONARY_MONITORS
+} from '../constants/sectionNames'
 import theme from '../styles/theme'
 import themeMui from '../styles/themeMui'
 import PRIVACY_VALUES from '../constants/privacyValues'
 import { useFormContext } from 'react-hook-form'
 
 import { useSaveRegistrationSection } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
+import { useGetSectionTarget } from '../library/question-mapped-form/sections-hook'
 
 const componentLanguage = language.questionNav
 
@@ -90,7 +92,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   const [isPrivacySaving, setIsPrivacySaving] = useState(false)
   const [sectionPrivacy, setSectionPrivacy] = useState()
   const [siteFromApi, setSiteFromApi] = useState()
-  const { siteId } = useParams()
+  const { siteId, monitoringFormId } = useParams()
   const currentSectionNameIndex = SECTION_NAMES.indexOf(currentSection)
   const isFormPrivacyDisabled = currentSection === 'project-details'
   const nextSection = SECTION_NAMES[currentSectionNameIndex + 1]
@@ -98,16 +100,26 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   const sectionIdForApi = currentSectionNameIndex + 1
   const siteUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}`
   const form = useFormContext()
-
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const sectionFromUrl = pathname.split('/').pop()
 
-  const { save, query, mutation } = useSaveRegistrationSection({
+  const pathParts = pathname.split('/').filter(Boolean)
+
+  const sectionFromUrl = monitoringFormId
+    ? pathParts[pathParts.length - 2]
+    : pathParts[pathParts.length - 1]
+  const sectionTarget = useGetSectionTarget(sectionFromUrl, monitoringFormId)
+  const sectionPayload =
+    sectionTarget === 'interventions'
+      ? SECTION_NAMES_DICTIONARY_INTERVENTIONS[sectionFromUrl]
+      : SECTION_NAMES_DICTIONARY_MONITORS[sectionFromUrl]
+  const { save } = useSaveRegistrationSection({
     siteId,
     currentSection,
     form,
-    section: SECTION_NAMES_DICTIONARY[sectionFromUrl]
+    section: sectionPayload,
+    sectionTarget,
+    monitorId: monitoringFormId
   })
 
   useEffect(
@@ -152,26 +164,28 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
     }
   }
 
-  const { handleSubmit: validateInputs } = form
-
   const handleInterventionFormSave = async (e) => {
     e?.preventDefault?.()
-    const saved = await save(SECTION_NAMES_DICTIONARY[sectionFromUrl])
+    const saved = await save(sectionPayload)
     if (saved && sectionFromUrl === 'ecological-status-and-outcomes') navigate('/sites')
   }
 
   const handleNavigateWithSave = useCallback(
-    (to, direction) => async (e) => {
+    (to) => async (e) => {
       e.preventDefault()
+      const saved = await save(sectionPayload)
 
-      const saved = await save(SECTION_NAMES_DICTIONARY[sectionFromUrl])
-
+      // // if (!saved) {
+      // //   toast.error(sectionPayload)
+      // // }
       if (saved) {
         toast.success('Section saved')
-        navigate(to)
+        if (monitoringFormId && sectionFromUrl !== 'management-status-and-effectiveness') {
+          navigate(`${to}/${monitoringFormId}`)
+        } else navigate(to)
       }
     },
-    [sectionFromUrl, navigate, save]
+    [navigate, save, sectionPayload, monitoringFormId, sectionFromUrl]
   )
 
   return (

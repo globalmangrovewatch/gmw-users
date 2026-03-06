@@ -78,7 +78,7 @@ export const questionMapping = {
     equitableSharingOfSiteBenefits: '8.9',
     climateChangeAdaptation: '8.10'
   },
-  socioeconomicAndGovernanceStatusAndOutcomes: {
+  socioeconomicGovernanceStatusAndOutcomes: {
     dateOfOutcomesAssessment: '9.1',
     changeInGovernance: '9.2',
     currentGovenance: '9.2a',

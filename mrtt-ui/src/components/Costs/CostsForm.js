@@ -215,7 +215,7 @@ const CostsForm = () => {
   }
 
   const sumOfBreakdownActivties = () => {
-    const costs = breakdownOfCostWatcher.map((item) => Number(item.cost))
+    const costs = breakdownOfCostWatcher?.map((item) => Number(item.cost))
     return costs
       .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
       .toLocaleString()
@@ -252,7 +252,7 @@ const CostsForm = () => {
             defaultValue=''
             render={({ field }) => (
               <TextField {...field} select value={field.value} label='select'>
-                {questions.projectInterventionFunding.options.map((item, index) => (
+                {questions.projectInterventionFunding.options?.map((item, index) => (
                   <MenuItem key={index} value={item}>
                     {item}
                   </MenuItem>
@@ -280,7 +280,7 @@ const CostsForm = () => {
             <FormQuestionDiv>
               <StickyFormLabel>{questions.projectFunderNames.question}</StickyFormLabel>
               {projectFunderNamesFields?.length > 0
-                ? projectFunderNamesFields.map((item, itemIndex) => (
+                ? projectFunderNamesFields?.map((item, itemIndex) => (
                     <ProjectFunderNamesRow
                       key={itemIndex}
                       label={item.funderName}
@@ -329,7 +329,7 @@ const CostsForm = () => {
                       sx={{ width: '8em', marginLeft: '1em' }}
                       value={field.value}
                       label='currency'>
-                      {currencies.map((currency, index) => (
+                      {currencies?.map((currency, index) => (
                         <MenuItem key={index} value={currency.code}>
                           {currency.code}
                         </MenuItem>

@@ -47,7 +47,7 @@ import DatePickerUtcMui from '../DatePickerUtcMui'
 import { unitOptions } from '../../data/ecologicalOptions'
 import RequiredIndicator from '../RequiredIndicator'
 
-import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedFormMonitors } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 import LoadingIndicator from '../LoadingIndicator'
 
 const getEcologicalAims = (registrationAnswersFromServer) =>
@@ -191,9 +191,9 @@ const EcologicalStatusAndOutcomesForm = () => {
   //   questionMapping: questionMapping.ecologicalStatusAndOutcomes
   // })
 
-  const { data, isLoading } = useInitializeQuestionMappedForm({
+  const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
     key: 'ecologicalStatusAndOutcomes',
-    apiUrl: registrationInterventionFormsUrl,
+    apiUrl: monitoringFormSingularUrl,
     resetForm: form.reset,
     questionMapping,
     successCallback: onLoaded
@@ -245,7 +245,7 @@ const EcologicalStatusAndOutcomesForm = () => {
   //     //   siteInterventions: { ...formData },
   //     //   costs: { ...formData },
   //     //   managementStatusAndEffectiveness: { ...formData },
-  //     //   socioeconomicAndGovernanceStatusAndOutcomes: { ...formData },
+  //     //   socioeconomicGovernanceStatusAndOutcomes: { ...formData },
   //     //   ecologicalStatusAndOutcomes: { ...formData }
   //     // })
   //   }

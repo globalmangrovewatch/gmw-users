@@ -47,7 +47,7 @@ export const sectionsRegistry = {
     questions: managementStatusAndEffectiveness
   },
   socioeconomicGovernanceStatusOutcomes: {
-    mapping: questionMapping.socioeconomicAndGovernanceStatusAndOutcomes,
+    mapping: questionMapping.socioeconomicGovernanceStatusAndOutcomes,
     questions: socioeconomicGovernanceStatusOutcomes
   },
   ecologicalStatusOutcomes: {
