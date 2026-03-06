@@ -2,7 +2,7 @@ import { questionMapping } from '../data/questionMapping'
 
 // set up data structure for api using question_id and answer_value object
 // ensure formTitle is the same is title in questionMapping
-export const mapDataForApi = (formTitle, data) => {
+export const mapDataForApi = (formTitle, data, sectionTarget) => {
   const preppedData = []
 
   for (const [fieldName, uiAnswer] of Object.entries(data)) {
@@ -13,6 +13,12 @@ export const mapDataForApi = (formTitle, data) => {
         question_id: apiQuestionId,
         answer_value: uiAnswer
       })
+    }
+  }
+  if (sectionTarget === 'monitors') {
+    return {
+      form_type: formTitle,
+      answers: preppedData
     }
   }
 

@@ -50,6 +50,9 @@ const SiteForm = ({ isNewSite }) => {
 
   useEffect(
     function loadApiData() {
+      if (isNewSite) {
+        resetForm()
+      }
       if (resetForm && sitesUrl && landscapesUrl) {
         setIsLoading(true)
 

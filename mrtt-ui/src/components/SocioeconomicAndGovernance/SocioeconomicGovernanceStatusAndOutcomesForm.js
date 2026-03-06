@@ -28,21 +28,20 @@ import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndCon
 import { socioIndicators } from '../../data/socioIndicators'
 import { findRegistationDataItem } from '../../library/findDataItems'
 import SocioeconomicOutcomesRow from './SocioeconomicOutcomesRow'
-import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import DatePickerUtcMui from '../DatePickerUtcMui'
 import RequiredIndicator from '../RequiredIndicator'
 
-import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedFormMonitors } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 
 const getSocioeconomicAims = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '3.2') ?? []
 
 const formType = MONITORING_FORM_CONSTANTS.socioeconomicGovernanceStatusAndOutcomes.payloadType
 
-const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
+const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
   const navigate = useNavigate()
   const { monitoringFormId } = useParams()
   const isEditMode = !!monitoringFormId
@@ -51,7 +50,6 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   const form = useFormContext()
 
   const {
-    handleSubmit: validateInputs,
     formState: { errors },
     control,
     watch: watchForm
@@ -105,9 +103,9 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
     [registrationInterventionFormsUrl]
   )
 
-  const { data, isLoading } = useInitializeQuestionMappedForm({
-    key: 'socioeconomicAndGovernanceStatusAndOutcomes',
-    apiUrl: registrationInterventionFormsUrl,
+  const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
+    key: 'socioeconomicGovernanceStatusAndOutcomes',
+    apiUrl: monitoringFormSingularUrl,
     resetForm: form.reset,
     questionMapping,
     setIsLoading: () => {}
@@ -148,7 +146,7 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
 
     const payload = {
       form_type: formType,
-      answers: mapDataForApi('socioeconomicAndGovernanceStatusAndOutcomes', formData)
+      answers: mapDataForApi('socioeconomicGovernanceStatusAndOutcomes', formData)
     }
 
     if (isEditMode) {
@@ -419,4 +417,4 @@ const SocioeconomicAndGovernanceStatusAndOutcomesForm = () => {
   )
 }
 
-export default SocioeconomicAndGovernanceStatusAndOutcomesForm
+export default SocioeconomicGovernanceStatusAndOutcomesForm

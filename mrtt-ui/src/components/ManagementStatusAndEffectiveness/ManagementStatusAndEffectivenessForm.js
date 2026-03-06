@@ -11,7 +11,6 @@ import { managementStatusAndEffectiveness as questions } from '../../data/questi
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
-import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import language from '../../language'
 import { mapDataForApi } from '../../library/mapDataForApi'
@@ -23,7 +22,7 @@ import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import DatePickerUtcMui from '../DatePickerUtcMui'
 import RequiredIndicator from '../RequiredIndicator'
 
-import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedFormMonitors } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 import LoadingIndicator from '../LoadingIndicator'
 
 const formType = MONITORING_FORM_CONSTANTS.managementStatusAndEffectiveness.payloadType
@@ -38,7 +37,6 @@ const ManagementStatusAndEffectivenessForm = () => {
   const form = useFormContext()
 
   const {
-    // handleSubmit: validateInputs,
     formState: { errors },
     control
   } = form
@@ -53,9 +51,9 @@ const ManagementStatusAndEffectivenessForm = () => {
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
 
-  const { data, isLoading } = useInitializeQuestionMappedForm({
+  const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
     key: 'managementStatusAndEffectiveness',
-    apiUrl: apiAnswersUrl,
+    apiUrl: monitoringFormSingularUrl,
     resetForm: form.reset,
     questionMapping,
     queryOptions: {
@@ -93,30 +91,6 @@ const ManagementStatusAndEffectivenessForm = () => {
         toast.error(language.error.submit)
       })
   }
-
-  // const handleSubmit = async (formData) => {
-  //   const fields = Object.keys(questionMapping['managementStatusAndEffectiveness'])
-  //   const ok = await form.trigger(fields, { shouldFocus: true })
-  //   if (!ok) {
-  //     setIsError(true)
-  //     toast.error(language.error.validation)
-  //     return
-  //   }
-  //   setIsSubmitting(true)
-  //   setIsError(false)
-  //   if (!formData) return
-
-  //   const payload = {
-  //     form_type: formType,
-  //     answers: mapDataForApi('managementStatusAndEffectiveness', formData)
-  //   }
-
-  //   if (isEditMode) {
-  //     editMonitoringForm(payload)
-  //   } else {
-  //     createNewMonitoringForm(payload)
-  //   }
-  // }
 
   const handleDeleteConfirm = () => {
     setIsDeleting(true)

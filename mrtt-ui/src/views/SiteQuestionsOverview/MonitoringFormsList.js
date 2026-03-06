@@ -11,8 +11,8 @@ const MonitoringFormsList = ({ monitoringFormsSortedByDate, siteId }) => {
     <TableAlertnatingRows>
       <tbody>
         {monitoringFormsSortedByDate.map(({ id: formId, form_type, monitoring_date }) => {
-          const formLabel = MONITORING_FORM_CONSTANTS[form_type].label
-          const formUrl = `/sites/${siteId}/form/${MONITORING_FORM_CONSTANTS[form_type].urlSegment}/${formId}`
+          const formLabel = MONITORING_FORM_CONSTANTS[form_type]?.label
+          const formUrl = `/sites/${siteId}/form/${MONITORING_FORM_CONSTANTS[form_type]?.urlSegment}/${formId}`
           return (
             <tr key={formId}>
               <WideTh>

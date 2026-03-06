@@ -35,5 +35,11 @@ export function useSectionQuestions(section: SectionKey) {
   }, [section])
 }
 
-export const useGetSectionTarget = (slug: string): SectionTarget | null =>
-  (SECTION_REGISTRY as any)[slug]?.target ?? null
+export function useGetSectionTarget(
+  sectionFromUrl: string | undefined,
+  monitorId?: string | null
+): SectionTarget {
+  if (monitorId) return 'monitors'
+
+  return (SECTION_REGISTRY as any)[sectionFromUrl ?? '']?.target ?? null
+}

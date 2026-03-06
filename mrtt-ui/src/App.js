@@ -29,7 +29,7 @@ import SiteForm from './views/SiteForm'
 import SiteInterventionsForm from './components/SiteInterventions/SiteInterventionsForm'
 import SiteQuestionsOverview from './views/SiteQuestionsOverview/SiteQuestionsOverview'
 import Sites from './views/Sites'
-import SocioeconomicAndGovernanceStatusAndOutcomesForm from './components/SocioeconomicAndGovernance/SocioeconomicAndGovernanceStatusAndOutcomesForm'
+import SocioeconomicGovernanceStatusAndOutcomesForm from './components/SocioeconomicAndGovernance/SocioeconomicGovernanceStatusAndOutcomesForm'
 import themeMui from './styles/themeMui'
 import FormWrapperProvider from './components/FormWrapper/FormWrapperProvider'
 
@@ -126,11 +126,11 @@ function App() {
                   />
                   <Route
                     path='/sites/:siteId/form/socioeconomic-and-governance-status'
-                    element={<SocioeconomicAndGovernanceStatusAndOutcomesForm />}
+                    element={<SocioeconomicGovernanceStatusAndOutcomesForm />}
                   />
                   <Route
                     path='/sites/:siteId/form/socioeconomic-and-governance-status/:monitoringFormId'
-                    element={<SocioeconomicAndGovernanceStatusAndOutcomesForm />}
+                    element={<SocioeconomicGovernanceStatusAndOutcomesForm />}
                   />
                   <Route
                     path='/sites/:siteId/form/ecological-status-and-outcomes'

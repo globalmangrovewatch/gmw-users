@@ -32,16 +32,20 @@ export const FORM_NAMES_DICTIONARY_INTERVENTIONS = {
   siteInterventions: 'Site Interventions',
   costs: 'Costs'
 }
-
 export const SECTION_NAMES_DICTIONARY_MONITORS = {
   'management-status-and-effectiveness': 'managementStatusAndEffectiveness',
-  'socioeconomic-and-governance-status': 'socioeconomicAndGovernanceStatusAndOutcomes',
+  'socioeconomic-and-governance-status': 'socioeconomicGovernanceStatusAndOutcomes',
   'ecological-status-and-outcomes': 'ecologicalStatusAndOutcomes'
 }
 
-export const FORM_NAMES_DICTIONARY_MONITORS = {
+export const FORM_NAMES_DICTIONARY_MONITORS: {
+  [key in
+    | 'managementStatusAndEffectiveness'
+    | 'socioeconomicGovernanceStatusAndOutcomes'
+    | 'ecologicalStatusAndOutcomes']: string
+} = {
   managementStatusAndEffectiveness: 'Management Status and Effectiveness',
-  socioeconomicAndGovernanceStatusAndOutcomes: 'Socioeconomic and Governance Status and Outcomes',
+  socioeconomicGovernanceStatusAndOutcomes: 'Socioeconomic and Governance Status and Outcomes',
   ecologicalStatusAndOutcomes: 'Ecological Status and Outcomes'
 }
 
@@ -89,7 +93,7 @@ export const SECTION_REGISTRY = {
   },
   'socioeconomic-and-governance-status': {
     target: 'monitors',
-    id: 'socioeconomicAndGovernanceStatusAndOutcomes',
+    id: 'socioeconomicGovernanceStatusAndOutcomes',
     label: 'Socioeconomic and Governance Status and Outcomes'
   },
   'ecological-status-and-outcomes': {
