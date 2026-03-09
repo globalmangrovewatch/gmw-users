@@ -50,7 +50,6 @@ const SiteOverview = () => {
     }
     return 0
   })
-
   useEffect(
     function loadDataFromServer() {
       if (siteId) {

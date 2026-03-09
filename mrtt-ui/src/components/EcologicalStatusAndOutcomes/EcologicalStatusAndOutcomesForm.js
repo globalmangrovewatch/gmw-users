@@ -193,10 +193,13 @@ const EcologicalStatusAndOutcomesForm = () => {
 
   const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
     key: 'ecologicalStatusAndOutcomes',
-    apiUrl: monitoringFormSingularUrl,
+    apiUrl: isEditMode ? monitoringFormSingularUrl : null,
     resetForm: form.reset,
     questionMapping,
-    successCallback: onLoaded
+    successCallback: onLoaded,
+    queryOptions: {
+      enabled: isEditMode
+    }
   })
 
   const createNewMonitoringForm = (payload) => {
