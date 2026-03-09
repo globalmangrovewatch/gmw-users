@@ -41,6 +41,8 @@ const ManagementStatusAndEffectivenessForm = () => {
     control
   } = form
 
+  const monitorId = isEditMode ? monitoringFormId : null
+
   const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
   const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -53,13 +55,11 @@ const ManagementStatusAndEffectivenessForm = () => {
 
   const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
     key: 'managementStatusAndEffectiveness',
-    apiUrl: monitoringFormSingularUrl,
+    apiUrl: isEditMode ? monitoringFormSingularUrl : null,
     resetForm: form.reset,
     questionMapping,
     queryOptions: {
-      refetchOnMount: 'always',
-      staleTime: 0,
-      refetchOnWindowFocus: false
+      enabled: isEditMode
     }
   })
 

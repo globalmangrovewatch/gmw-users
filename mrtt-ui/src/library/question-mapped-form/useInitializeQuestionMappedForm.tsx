@@ -129,12 +129,14 @@ export function useInitializeQuestionMappedFormMonitors<TSelected = FormattedMon
   enabled = true,
   queryOptions
 }: ParamsMonitors<TSelected>): UseQueryResult<TSelected, Error> {
+  const isQueryEnabled =
+    Boolean(enabled) && Boolean(key) && Boolean(apiUrl) && !apiUrl.includes('undefined')
+
   return useQuery<FormattedMonitorsResponse, Error, TSelected>({
     queryKey: ['question-mapped-form-monitors', key, apiUrl, siteId],
-    enabled: Boolean(enabled && key && apiUrl && !apiUrl.includes('undefined')),
+    enabled: isQueryEnabled,
     queryFn: async (): Promise<FormattedMonitorsResponse> => {
       const response = await axios.get<ApiMonitorsFormResponse>(apiUrl)
-
       const formattedData = await formatApiAnswersForFormByKey({
         apiAnswers: response.data.answers,
         questionMapping

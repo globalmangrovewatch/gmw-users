@@ -46,20 +46,21 @@ const getOtherActivitiesImplemented = (registrationAnswersFromServer) =>
 const getPercentageSplitOfActivities = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '7.5a') ?? []
 
+const defaultProjectActivities = [
+  { costType: 'Project planning & management', cost: 0 },
+  { costType: 'Biophysical interventions', cost: 0 },
+  { costType: 'Community activities', cost: 0 },
+  { costType: 'Site maintenance', cost: 0 },
+  { costType: 'Monitoring', cost: 0 },
+  { costType: 'Other costs', cost: 0 }
+]
+
 const CostsForm = () => {
   const { site_name } = useSiteInfo()
 
   const form = useFormContext()
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
-
-  const { data, isLoading } = useInitializeQuestionMappedForm({
-    key: 'costs',
-    apiUrl: apiAnswersUrl,
-    resetForm: form.reset,
-    questionMapping
-    // successCallback: loadServerData
-  })
 
   const {
     // handleSubmit: validateInputs,
@@ -100,15 +101,6 @@ const CostsForm = () => {
     (serverResponse) => {
       const endDateResponse = getEndDate(serverResponse)
       if (endDateResponse) setHasEndDate(true)
-
-      const defaultProjectActivities = [
-        { costType: 'Project planning & management', cost: 0 },
-        { costType: 'Biophysical interventions', cost: 0 },
-        { costType: 'Community activities', cost: 0 },
-        { costType: 'Site maintenance', cost: 0 },
-        { costType: 'Monitoring', cost: 0 },
-        { costType: 'Other costs', cost: 0 }
-      ]
 
       const breakdownOfCostInitialVal = getBreakdownOfCost(serverResponse)
 
@@ -153,6 +145,14 @@ const CostsForm = () => {
     },
     [breakdownOfCostReplace, percentageSplitOfActivitiesReplace]
   )
+
+  const { data, isLoading } = useInitializeQuestionMappedForm({
+    key: 'costs',
+    apiUrl: apiAnswersUrl,
+    resetForm: form.reset,
+    questionMapping,
+    successCallback: loadServerData
+  })
 
   const handleSubmit = (formData) => {
     setIsSubmitting(true)

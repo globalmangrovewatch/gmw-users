@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import PropTypes from 'prop-types'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useMemo } from 'react'
 
 import { ErrorText, LinkLooksLikeButtonSecondary } from '../styles/typography'
 import ButtonSave from './ButtonSave'
@@ -22,6 +22,7 @@ import { useFormContext } from 'react-hook-form'
 
 import { useSaveRegistrationSection } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
 import { useGetSectionTarget } from '../library/question-mapped-form/sections-hook'
+import { useGetMonitorForm } from '../library/question-mapped-form/monitors'
 
 const componentLanguage = language.questionNav
 
@@ -122,6 +123,22 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
     monitorId: monitoringFormId
   })
 
+  const { data } = useGetMonitorForm({
+    siteId,
+    key: sectionFromUrl,
+    queryOptions: {
+      enabled: !!monitoringFormId && sectionTarget === 'monitors'
+    }
+  })
+
+  const monitorId = useMemo(
+    () =>
+      data?.find(
+        (monitor) => monitor?.form_type === SECTION_NAMES_DICTIONARY_MONITORS[sectionFromUrl]
+      )?.id || monitoringFormId,
+    [monitoringFormId, data, sectionFromUrl]
+  )
+
   useEffect(
     function getSiteInfoToUseWithAPutRequestToUpdateSitePrivacySincePatchDoesntWork() {
       // A tech debt ticket has been created to have the api accept a patch for section privacy,
@@ -171,7 +188,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   }
 
   const handleNavigateWithSave = useCallback(
-    (to) => async (e) => {
+    (to, direction) => async (e) => {
       e.preventDefault()
       const saved = await save(sectionPayload)
 
@@ -180,12 +197,15 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
       // // }
       if (saved) {
         toast.success('Section saved')
-        if (monitoringFormId && sectionFromUrl !== 'management-status-and-effectiveness') {
-          navigate(`${to}/${monitoringFormId}`)
+        if (
+          monitorId &&
+          (sectionFromUrl !== 'ecological-status-and-outcomes' || direction === 'previous')
+        ) {
+          navigate(`${to}/${monitorId}`)
         } else navigate(to)
       }
     },
-    [navigate, save, sectionPayload, monitoringFormId, sectionFromUrl]
+    [navigate, save, sectionPayload, monitorId, sectionFromUrl]
   )
 
   return (
@@ -202,6 +222,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
             {/* previous  */}
             <LinkLooksLikeButtonSecondary
               to={!previousSection ? '#' : `/sites/${siteId}/form/${previousSection}`}
+              direction='previous'
               disabled={!previousSection}
               onClick={
                 !previousSection
@@ -214,6 +235,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
             {/* next */}
             <LinkLooksLikeButtonSecondary
               to={!nextSection ? '#' : `/sites/${siteId}/form/${nextSection}`}
+              direction='next'
               disabled={!nextSection}
               onClick={
                 !nextSection
