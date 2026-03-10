@@ -78,10 +78,8 @@ type ParamsMonitors<TSelected = FormattedMonitorsResponse> = Omit<
 }
 
 const queryOptionsDefault = {
-  retry: false,
-  refetchOnWindowFocus: false,
-  refetchOnReconnect: false,
-  refetchOnMount: false
+  refetchOnMount: 'always',
+  staleTime: 0
 } as const
 
 export function useInitializeQuestionMappedForm<TSelected = FormattedResponse>({
