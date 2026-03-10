@@ -74,8 +74,7 @@ const EcologicalStatusAndOutcomesForm = () => {
     handleSubmit: validateInputs,
     formState: { errors },
     control,
-    watch: watchForm,
-    reset: resetForm
+    watch: watchForm
   } = form
 
   const {
@@ -194,7 +193,7 @@ const EcologicalStatusAndOutcomesForm = () => {
   const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
     key: 'ecologicalStatusAndOutcomes',
     apiUrl: isEditMode ? monitoringFormSingularUrl : null,
-    resetForm: form.reset,
+    form,
     questionMapping,
     successCallback: onLoaded,
     queryOptions: {

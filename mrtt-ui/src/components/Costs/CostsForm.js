@@ -149,7 +149,7 @@ const CostsForm = () => {
   const { data, isLoading } = useInitializeQuestionMappedForm({
     key: 'costs',
     apiUrl: apiAnswersUrl,
-    resetForm: form.reset,
+    form,
     questionMapping,
     successCallback: loadServerData
   })

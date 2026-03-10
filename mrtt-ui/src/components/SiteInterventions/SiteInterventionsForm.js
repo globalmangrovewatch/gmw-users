@@ -157,13 +157,9 @@ function SiteInterventionsForm() {
   const { isLoading } = useInitializeQuestionMappedForm({
     key: 'siteInterventions',
     apiUrl: apiAnswersUrl,
-    resetForm: form.reset,
+    form,
     questionMapping,
-    successCallback: onLoaded,
-    queryOptions: {
-      refetchOnMount: 'always',
-      staleTime: 0
-    }
+    successCallback: onLoaded
   })
 
   useEffect(() => {

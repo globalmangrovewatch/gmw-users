@@ -57,7 +57,7 @@ const SiteBackgroundForm = () => {
   const { data, isLoading } = useInitializeQuestionMappedForm({
     key: 'siteBackground',
     apiUrl: apiAnswersUrl,
-    resetForm: form.reset,
+    form,
     questionMapping
     // successCallback: setInitialStakeholderTypesFromServerData
   })

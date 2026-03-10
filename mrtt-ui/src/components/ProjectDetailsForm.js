@@ -60,9 +60,8 @@ function ProjectDetailsForm() {
     siteId,
     key: 'projectDetails',
     apiUrl: apiAnswersUrl,
-    resetForm: form.reset,
-    questionMapping,
-    setIsLoading: () => {}
+    form,
+    questionMapping
   })
 
   const onCountriesChange = (field, features) => {
