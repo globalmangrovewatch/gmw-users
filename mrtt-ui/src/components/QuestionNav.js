@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import PropTypes from 'prop-types'
-import React, { useCallback, useEffect, useState, useMemo } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { ErrorText, LinkLooksLikeButtonSecondary } from '../styles/typography'
 import ButtonSave from './ButtonSave'
@@ -25,6 +25,12 @@ import { useGetSectionTarget } from '../library/question-mapped-form/sections-ho
 import { useGetMonitorsForms } from '../library/question-mapped-form/monitors'
 
 const componentLanguage = language.questionNav
+
+const MONITOR_DATE_FIELDS = {
+  'management-status-and-effectiveness': 'dateOfAssessment',
+  'socioeconomic-and-governance-status': 'dateOfOutcomesAssessment',
+  'ecological-status-and-outcomes': 'dateOfEcologicalMonitoring'
+}
 
 const getMobileNavButtonSecondaryCss = (props) => css`
   align-items: center;
@@ -124,6 +130,8 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
     monitorId: monitorIdUrl
   })
 
+  const monitorId = monitorIdUrl
+
   const { data: monitorForms } = useGetMonitorsForms({
     siteId,
     key: sectionFromUrl,
@@ -132,41 +140,21 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
     }
   })
 
-  const monitorType = SECTION_NAMES_DICTIONARY_MONITORS[sectionFromUrl]
+  useEffect(() => {
+    if (sectionTarget !== 'monitors') return
 
-  const { lastMonitoringFormId, currentMonitorId } = useMemo(() => {
-    if (!monitorForms?.length) {
-      return {
-        lastMonitoringFormId: undefined,
-        currentMonitorId: undefined
+    const dateField = MONITOR_DATE_FIELDS[sectionFromUrl]
+    if (!dateField) return
+
+    if (monitorIdUrl && monitorForms?.length) {
+      const monitor = monitorForms.find((m) => m.id === monitorIdUrl)
+      if (monitor?.monitoring_date) {
+        form.setValue(dateField, monitor.monitoring_date, { shouldDirty: false })
       }
+    } else if (!monitorIdUrl) {
+      form.setValue(dateField, new Date().toISOString(), { shouldDirty: false })
     }
-
-    const formsOfType = monitorForms.filter((monitor) => monitor.form_type === monitorType)
-
-    const lastMonitoringForm = formsOfType.reduce((latest, monitor) => {
-      if (!latest) return monitor
-
-      return new Date(monitor.monitoring_date) > new Date(latest.monitoring_date) ? monitor : latest
-    }, undefined)
-
-    const monitorFromUrl = monitorForms.find((monitor) => monitor.id === monitorIdUrl)
-
-    const currentMonitor =
-      monitorFromUrl &&
-      monitorForms.find(
-        (monitor) =>
-          monitor.form_type === monitorType &&
-          monitor.monitoring_date === monitorFromUrl.monitoring_date
-      )
-
-    return {
-      lastMonitoringFormId: lastMonitoringForm?.id,
-      currentMonitorId: currentMonitor?.id
-    }
-  }, [monitorForms, monitorIdUrl, monitorType])
-
-  const monitorId = currentMonitorId ?? lastMonitoringFormId
+  }, [sectionTarget, sectionFromUrl, monitorIdUrl, monitorForms]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(
     function getSiteInfoToUseWithAPutRequestToUpdateSitePrivacySincePatchDoesntWork() {

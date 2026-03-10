@@ -29,7 +29,7 @@ const RestorationAimsForm = () => {
   const { data, isLoading } = useInitializeQuestionMappedForm({
     key: 'restorationAims',
     apiUrl: apiAnswersUrl,
-    resetForm: form.reset,
+    form,
     questionMapping
   })
 

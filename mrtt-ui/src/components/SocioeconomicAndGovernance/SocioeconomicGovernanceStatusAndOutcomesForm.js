@@ -106,9 +106,8 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
   const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
     key: 'socioeconomicGovernanceStatusAndOutcomes',
     apiUrl: isEditMode ? monitoringFormSingularUrl : null,
-    resetForm: form.reset,
+    form,
     questionMapping,
-    setIsLoading: () => {},
     queryOptions: {
       enabled: !!isEditMode
     }

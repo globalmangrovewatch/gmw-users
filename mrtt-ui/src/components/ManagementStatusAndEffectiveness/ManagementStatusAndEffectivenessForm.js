@@ -56,7 +56,7 @@ const ManagementStatusAndEffectivenessForm = () => {
   const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
     key: 'managementStatusAndEffectiveness',
     apiUrl: isEditMode ? monitoringFormSingularUrl : null,
-    resetForm: form.reset,
+    form,
     questionMapping,
     queryOptions: {
       enabled: isEditMode

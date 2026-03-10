@@ -1,6 +1,6 @@
 import { Checkbox, FormControlLabel, FormGroup, Stack, TextField } from '@mui/material'
 import PropTypes from 'prop-types'
-import { forwardRef, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import language from '../../language'
 import { makeValidClassName } from '../../library/strings/makeValidClassName'
 
@@ -44,6 +44,12 @@ const CheckboxGroup = forwardRef(
       value?.selectedValues ?? []
     )
     const [otherInputValue, setOtherInputValue] = useState(value?.otherValue ?? '')
+
+    useEffect(() => {
+      setNonOtherSelectedValues(value?.selectedValues ?? [])
+      setIsOtherChecked(!!value?.isOtherChecked)
+      setOtherInputValue(value?.otherValue ?? '')
+    }, [value?.selectedValues, value?.isOtherChecked, value?.otherValue])
 
     const handleOtherCheckboxChange = (event) => {
       const isOtherCheckedNewState = !isOtherChecked

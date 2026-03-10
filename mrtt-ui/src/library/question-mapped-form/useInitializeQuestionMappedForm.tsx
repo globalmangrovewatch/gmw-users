@@ -1,10 +1,16 @@
-import { useQuery, UseQueryResult, UseQueryOptions, useMutation } from '@tanstack/react-query'
+import {
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+  UseQueryOptions,
+  useMutation
+} from '@tanstack/react-query'
 import axios, { AxiosResponse } from 'axios'
+import { useEffect, useRef } from 'react'
 
 import { mapDataForApi } from '../../library/mapDataForApi'
 import { formatApiAnswersForFormByKey } from '../formatApiAnswersForForm'
 import { questionMapping } from '../../data/questionMapping'
-import { defaultValues } from '../../components/FormWrapper/FormSchemaValidation'
 import { FORM_NAMES_DICTIONARY_INTERVENTIONS } from '../../constants/sectionNames'
 import { toast } from 'react-toastify'
 
@@ -31,7 +37,7 @@ type ApiAnswerItem = {
 
 export type FormattedResponse = {
   response: AxiosResponse<ApiAnswerItem[]>
-  formattedData: unknown
+  formattedData: Record<string, Record<string, unknown>>
 }
 
 type ApiAnswerMonitorsItem = {
@@ -48,17 +54,20 @@ type ApiMonitorsFormResponse = {
 
 export type FormattedMonitorsResponse = {
   response: AxiosResponse<ApiMonitorsFormResponse>
-  formattedData: unknown
+  formattedData: Record<string, Record<string, unknown>>
 }
 
 type Params<TSelected = FormattedResponse> = {
-  key: 'projectDetails' | 'siteBackground'
+  key: string
   apiUrl: string
-  siteId: string
-  targetKey: 'interventions' | 'monitors'
+  siteId?: string
+  form: UseFormReturn<any>
   questionMapping: unknown
-  resetForm: (values: unknown) => void
-  successCallback?: (response: AxiosResponse<ApiAnswerItem[]>) => void
+  successCallback?: (
+    response: AxiosResponse<ApiAnswerItem[]>,
+    sectionData: Record<string, unknown>,
+    allSectionsData: Record<string, Record<string, unknown>>
+  ) => void
   enabled?: boolean
   queryOptions?: Omit<
     UseQueryOptions<FormattedResponse, Error, TSelected, readonly unknown[]>,
@@ -70,7 +79,11 @@ type ParamsMonitors<TSelected = FormattedMonitorsResponse> = Omit<
   Params<any>,
   'successCallback' | 'queryOptions'
 > & {
-  successCallback?: (response: AxiosResponse<ApiMonitorsFormResponse>) => void
+  successCallback?: (
+    response: AxiosResponse<ApiMonitorsFormResponse>,
+    sectionData: Record<string, unknown>,
+    allSectionsData: Record<string, Record<string, unknown>>
+  ) => void
   queryOptions?: Omit<
     UseQueryOptions<FormattedMonitorsResponse, Error, TSelected, readonly unknown[]>,
     'queryKey' | 'queryFn' | 'enabled'
@@ -78,85 +91,105 @@ type ParamsMonitors<TSelected = FormattedMonitorsResponse> = Omit<
 }
 
 const queryOptionsDefault = {
-  refetchOnMount: 'always',
-  staleTime: 0
+  refetchOnMount: false,
+  staleTime: Infinity
 } as const
 
 export function useInitializeQuestionMappedForm<TSelected = FormattedResponse>({
   key,
   apiUrl,
   siteId,
-  resetForm,
+  form,
   questionMapping,
   successCallback,
   enabled = true,
   queryOptions
 }: Params<TSelected>): UseQueryResult<TSelected, Error> {
-  return useQuery<FormattedResponse, Error, TSelected>({
+  const lastPopulatedAt = useRef(0)
+
+  const query = useQuery<FormattedResponse, Error, TSelected>({
     queryKey: ['question-mapped-form', key, apiUrl, siteId],
     enabled: Boolean(enabled && key && apiUrl && !apiUrl.includes('undefined')),
     queryFn: async (): Promise<FormattedResponse> => {
       const response = await axios.get<ApiAnswerItem[]>(apiUrl)
 
-      const formattedData = await formatApiAnswersForFormByKey({
+      const formattedData = formatApiAnswersForFormByKey({
         apiAnswers: response.data,
         questionMapping
-      })
-
-      resetForm({
-        ...defaultValues,
-        ...formattedData[key]
-      })
-
-      successCallback?.(response)
+      }) as Record<string, Record<string, unknown>>
 
       return { response, formattedData }
     },
     ...queryOptionsDefault,
     ...queryOptions
   })
+
+  useEffect(() => {
+    if (!query.data || query.dataUpdatedAt === lastPopulatedAt.current) return
+    lastPopulatedAt.current = query.dataUpdatedAt
+
+    const data = query.data as unknown as FormattedResponse
+    const sectionData = data.formattedData[key] ?? {}
+    Object.entries(sectionData).forEach(([fieldKey, value]) => {
+      form.setValue(fieldKey, value, { shouldDirty: false })
+    })
+
+    successCallback?.(data.response, sectionData, data.formattedData)
+  }, [query.data, query.dataUpdatedAt]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  return query
 }
 
 export function useInitializeQuestionMappedFormMonitors<TSelected = FormattedMonitorsResponse>({
   key,
   apiUrl,
   siteId,
-  resetForm,
+  form,
   questionMapping,
   successCallback,
   enabled = true,
   queryOptions
 }: ParamsMonitors<TSelected>): UseQueryResult<TSelected, Error> {
+  const lastPopulatedAt = useRef(0)
   const isQueryEnabled =
     Boolean(enabled) && Boolean(key) && Boolean(apiUrl) && !apiUrl.includes('undefined')
 
-  return useQuery<FormattedMonitorsResponse, Error, TSelected>({
+  const query = useQuery<FormattedMonitorsResponse, Error, TSelected>({
     queryKey: ['question-mapped-form-monitors', key, apiUrl, siteId],
     enabled: isQueryEnabled,
     queryFn: async (): Promise<FormattedMonitorsResponse> => {
       const response = await axios.get<ApiMonitorsFormResponse>(apiUrl)
-      const formattedData = await formatApiAnswersForFormByKey({
+      const formattedData = formatApiAnswersForFormByKey({
         apiAnswers: response.data.answers,
         questionMapping
-      })
-
-      resetForm({
-        ...defaultValues,
-        ...formattedData[key]
-      })
-
-      successCallback?.(response)
+      }) as Record<string, Record<string, unknown>>
 
       return { response, formattedData }
     },
     ...queryOptionsDefault,
     ...queryOptions
   })
+
+  useEffect(() => {
+    if (!query.data || query.dataUpdatedAt === lastPopulatedAt.current) return
+    lastPopulatedAt.current = query.dataUpdatedAt
+
+    const data = query.data as unknown as FormattedMonitorsResponse
+    const sectionData = data.formattedData[key] ?? {}
+    Object.entries(sectionData).forEach(([fieldKey, value]) => {
+      form.setValue(fieldKey, value, { shouldDirty: false })
+    })
+
+    successCallback?.(data.response, sectionData, data.formattedData)
+  }, [query.data, query.dataUpdatedAt]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  return query
 }
 
 export function useSaveRegistrationSection<
   TFormValues extends Record<string, unknown> = Record<string, unknown>
 >({ siteId, form, section, sectionTarget, monitorId }: SaveRegistrationSectionParams<TFormValues>) {
+  const queryClient = useQueryClient()
   const apiUrl: Record<SectionTarget, string> = {
     interventions: `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`,
     monitors: `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers${
@@ -180,6 +213,10 @@ export function useSaveRegistrationSection<
       }
 
       return axios.post(apiUrl.monitors, payload)
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['question-mapped-form'] })
+      await queryClient.invalidateQueries({ queryKey: ['question-mapped-form-monitors'] })
     }
   })
 

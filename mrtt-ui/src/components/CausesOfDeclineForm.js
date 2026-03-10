@@ -96,7 +96,7 @@ function CausesOfDeclineForm() {
   const { data, isLoading } = useInitializeQuestionMappedForm({
     key: 'causesOfDecline',
     apiUrl: apiAnswersUrl,
-    resetForm: form.reset,
+    form,
     questionMapping
     // successCallback: setInitialCausesOfDeclineTypesFromServerData
   })

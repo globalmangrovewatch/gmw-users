@@ -59,7 +59,6 @@ function PreRestorationAssessmentForm() {
     handleSubmit: validateInputs,
     formState: { errors },
     control,
-    reset: resetForm,
     setValue: setFormValue,
     watch: watchForm
   } = form
@@ -124,7 +123,7 @@ function PreRestorationAssessmentForm() {
     key: 'preRestorationAssessment',
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping,
-    resetForm,
+    form,
     successCallback: loadServerData
   })
 
