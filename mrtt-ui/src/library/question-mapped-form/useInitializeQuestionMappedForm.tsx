@@ -65,7 +65,8 @@ type Params<TSelected = FormattedResponse> = {
   questionMapping: unknown
   successCallback?: (
     response: AxiosResponse<ApiAnswerItem[]>,
-    sectionData: Record<string, unknown>
+    sectionData: Record<string, unknown>,
+    allSectionsData: Record<string, Record<string, unknown>>
   ) => void
   enabled?: boolean
   queryOptions?: Omit<
@@ -80,7 +81,8 @@ type ParamsMonitors<TSelected = FormattedMonitorsResponse> = Omit<
 > & {
   successCallback?: (
     response: AxiosResponse<ApiMonitorsFormResponse>,
-    sectionData: Record<string, unknown>
+    sectionData: Record<string, unknown>,
+    allSectionsData: Record<string, Record<string, unknown>>
   ) => void
   queryOptions?: Omit<
     UseQueryOptions<FormattedMonitorsResponse, Error, TSelected, readonly unknown[]>,
@@ -132,7 +134,7 @@ export function useInitializeQuestionMappedForm<TSelected = FormattedResponse>({
       form.setValue(fieldKey, value, { shouldDirty: false })
     })
 
-    successCallback?.(data.response, sectionData)
+    successCallback?.(data.response, sectionData, data.formattedData)
   }, [query.data, query.dataUpdatedAt]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return query
@@ -178,7 +180,7 @@ export function useInitializeQuestionMappedFormMonitors<TSelected = FormattedMon
       form.setValue(fieldKey, value, { shouldDirty: false })
     })
 
-    successCallback?.(data.response, sectionData)
+    successCallback?.(data.response, sectionData, data.formattedData)
   }, [query.data, query.dataUpdatedAt]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return query

@@ -137,7 +137,7 @@ function SiteInterventionsForm() {
   const updateTabularInputDisplay = (boolean) => setShowAddTabularInputRow(boolean)
 
   const onLoaded = useCallback(
-    (_response, sectionValues) => {
+    (_response, sectionValues, allSections) => {
       const v = sectionValues ?? {}
 
       queueMicrotask(() => {
@@ -146,12 +146,20 @@ function SiteInterventionsForm() {
         mangroveAssociatedSpeciesReplace(v.mangroveAssociatedSpecies ?? [])
       })
 
-      const countries = v.countries ?? []
+      const countries = allSections?.projectDetails?.countries ?? []
+      if (countries.length) {
+        form.setValue('countries', countries, { shouldDirty: false })
+      }
       setMangroveSpeciesForCountriesSelected(
         countries.length ? organizeMangroveSpeciesList(countries) : []
       )
     },
-    [whichStakeholdersInvolvedReplace, mangroveSpeciesUsedReplace, mangroveAssociatedSpeciesReplace]
+    [
+      form,
+      whichStakeholdersInvolvedReplace,
+      mangroveSpeciesUsedReplace,
+      mangroveAssociatedSpeciesReplace
+    ]
   )
 
   const { isLoading } = useInitializeQuestionMappedForm({
