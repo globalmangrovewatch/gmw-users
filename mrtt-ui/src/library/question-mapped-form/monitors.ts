@@ -6,17 +6,17 @@ type MonitorFormKey =
   | 'ecologicalStatusAndOutcomes'
   | 'socioeconomicGovernanceStatusAndOutcomes'
 
-type ApiAnswerMonitorsItem = {
+type MonitorsItem = {
   id: string
   form_type: MonitorFormKey
   monitoring_date: string
 }
 
-type Params<TSelected = ApiAnswerMonitorsItem[]> = {
+type Params<TSelected = MonitorsItem[]> = {
   key: MonitorFormKey
   siteId: string
   queryOptions?: Omit<
-    UseQueryOptions<ApiAnswerMonitorsItem[], Error, TSelected, readonly unknown[]>,
+    UseQueryOptions<MonitorsItem[], Error, TSelected, readonly unknown[]>,
     'queryKey' | 'queryFn' | 'enabled'
   >
 }
@@ -28,15 +28,15 @@ const queryOptionsDefault = {
   refetchOnMount: false
 } as const
 
-export function useGetMonitorForm<TSelected = ApiAnswerMonitorsItem[]>({
+export function useGetMonitorsForms<TSelected = MonitorsItem[]>({
   key,
   siteId,
   queryOptions
 }: Params<TSelected>): UseQueryResult<TSelected, Error> {
-  return useQuery<ApiAnswerMonitorsItem[], Error, TSelected>({
+  return useQuery<MonitorsItem[], Error, TSelected>({
     queryKey: ['question-mapped-form-monitors', key, siteId],
-    queryFn: async (): Promise<ApiAnswerMonitorsItem[]> => {
-      const response = await axios.get<ApiAnswerMonitorsItem[]>(
+    queryFn: async (): Promise<MonitorsItem[]> => {
+      const response = await axios.get<MonitorsItem[]>(
         `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
       )
 

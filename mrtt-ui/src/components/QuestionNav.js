@@ -22,7 +22,7 @@ import { useFormContext } from 'react-hook-form'
 
 import { useSaveRegistrationSection } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
 import { useGetSectionTarget } from '../library/question-mapped-form/sections-hook'
-import { useGetMonitorForm } from '../library/question-mapped-form/monitors'
+import { useGetMonitorsForms } from '../library/question-mapped-form/monitors'
 
 const componentLanguage = language.questionNav
 
@@ -93,7 +93,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   const [isPrivacySaving, setIsPrivacySaving] = useState(false)
   const [sectionPrivacy, setSectionPrivacy] = useState()
   const [siteFromApi, setSiteFromApi] = useState()
-  const { siteId, monitoringFormId } = useParams()
+  const { siteId, monitoringFormId: monitorIdUrl } = useParams()
   const currentSectionNameIndex = SECTION_NAMES.indexOf(currentSection)
   const isFormPrivacyDisabled = currentSection === 'project-details'
   const nextSection = SECTION_NAMES[currentSectionNameIndex + 1]
@@ -106,38 +106,67 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
 
   const pathParts = pathname.split('/').filter(Boolean)
 
-  const sectionFromUrl = monitoringFormId
+  const sectionFromUrl = monitorIdUrl
     ? pathParts[pathParts.length - 2]
     : pathParts[pathParts.length - 1]
-  const sectionTarget = useGetSectionTarget(sectionFromUrl, monitoringFormId)
+  const sectionTarget = useGetSectionTarget(sectionFromUrl, monitorIdUrl)
   const sectionPayload =
     sectionTarget === 'interventions'
       ? SECTION_NAMES_DICTIONARY_INTERVENTIONS[sectionFromUrl]
       : SECTION_NAMES_DICTIONARY_MONITORS[sectionFromUrl]
+
   const { save } = useSaveRegistrationSection({
     siteId,
     currentSection,
     form,
     section: sectionPayload,
     sectionTarget,
-    monitorId: monitoringFormId
+    monitorId: monitorIdUrl
   })
 
-  const { data } = useGetMonitorForm({
+  const { data: monitorForms } = useGetMonitorsForms({
     siteId,
     key: sectionFromUrl,
     queryOptions: {
-      enabled: !!monitoringFormId && sectionTarget === 'monitors'
+      enabled: sectionTarget === 'monitors'
     }
   })
 
-  const monitorId = useMemo(
-    () =>
-      data?.find(
-        (monitor) => monitor?.form_type === SECTION_NAMES_DICTIONARY_MONITORS[sectionFromUrl]
-      )?.id || monitoringFormId,
-    [monitoringFormId, data, sectionFromUrl]
-  )
+  const monitorType = SECTION_NAMES_DICTIONARY_MONITORS[sectionFromUrl]
+
+  const { lastMonitoringFormId, currentMonitorId } = useMemo(() => {
+    if (!monitorForms?.length) {
+      return {
+        lastMonitoringFormId: undefined,
+        currentMonitorId: undefined
+      }
+    }
+
+    const formsOfType = monitorForms.filter((monitor) => monitor.form_type === monitorType)
+
+    const lastMonitoringForm = formsOfType.reduce((latest, monitor) => {
+      if (!latest) return monitor
+
+      return new Date(monitor.monitoring_date) > new Date(latest.monitoring_date) ? monitor : latest
+    }, undefined)
+
+    const monitorFromUrl = monitorForms.find((monitor) => monitor.id === monitorIdUrl)
+
+    const currentMonitor =
+      monitorFromUrl &&
+      monitorForms.find(
+        (monitor) =>
+          monitor.form_type === monitorType &&
+          monitor.monitoring_date === monitorFromUrl.monitoring_date
+      )
+
+    return {
+      lastMonitoringFormId: lastMonitoringForm?.id,
+      currentMonitorId: currentMonitor?.id
+    }
+  }, [monitorForms, monitorIdUrl, monitorType])
+
+  const monitorId = currentMonitorId ?? lastMonitoringFormId
 
   useEffect(
     function getSiteInfoToUseWithAPutRequestToUpdateSitePrivacySincePatchDoesntWork() {
