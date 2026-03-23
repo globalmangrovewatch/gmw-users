@@ -63,7 +63,7 @@ function SiteInterventionsForm() {
 
   // ---------- Field arrays ----------
   const {
-    fields: mangroveSpeciesUsedFields,
+    // fields: mangroveSpeciesUsedFields,
     append: mangroveSpeciesUsedAppend,
     remove: mangroveSpeciesUsedRemove,
     update: mangroveSpeciesUsedUpdate,

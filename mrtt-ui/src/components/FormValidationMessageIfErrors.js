@@ -1,9 +1,5 @@
 import { Alert, AlertTitle } from '@mui/material'
 import PropTypes from 'prop-types'
-import { useEffect } from 'react'
-import { toast } from 'react-toastify'
-
-import { questionMapping } from '../data/questionMapping'
 
 import language from '../language'
 

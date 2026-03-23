@@ -1,15 +1,13 @@
 import { Box, Checkbox, List, ListItem, MenuItem, TextField, Typography } from '@mui/material'
-import { toast } from 'react-toastify'
+// import { toast } from 'react-toastify'
 import { useFieldArray, Controller, useFormContext } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
-import { useState, useCallback, useMemo } from 'react'
-
-import axios from 'axios'
+import { useState } from 'react'
 
 import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { FormLayout, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
-import { mapDataForApi } from '../library/mapDataForApi'
+// import { mapDataForApi } from '../library/mapDataForApi'
 
 import { questionMapping } from '../data/questionMapping'
 import { siteBackground } from '../data/questions'
@@ -18,10 +16,10 @@ import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '../language'
 import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
-import {
-  useInitializeQuestionMappedForm,
-  useSaveRegistrationSection
-} from '../library/question-mapped-form/useInitializeQuestionMappedForm'
+// import {
+//   useInitializeQuestionMappedForm,
+//    useSaveRegistrationSection
+// } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
 
 import { useWatch } from 'react-hook-form'
@@ -54,13 +52,13 @@ const SiteBackgroundForm = () => {
   //   setStakeholderTypesChecked(initialStakeholderTypesChecked)
   // }, [])
 
-  const { data, isLoading } = useInitializeQuestionMappedForm({
-    key: 'siteBackground',
-    apiUrl: apiAnswersUrl,
-    form,
-    questionMapping
-    // successCallback: setInitialStakeholderTypesFromServerData
-  })
+  // const { data, isLoading } = useInitializeQuestionMappedForm({
+  //   key: 'siteBackground',
+  //   apiUrl: apiAnswersUrl,
+  //   form,
+  //   questionMapping
+  //   // successCallback: setInitialStakeholderTypesFromServerData
+  // })
 
   // const saveMutation = useSaveRegistrationSection(siteId)
 
