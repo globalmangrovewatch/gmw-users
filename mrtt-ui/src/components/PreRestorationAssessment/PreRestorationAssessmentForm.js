@@ -9,12 +9,10 @@ import {
   TextField,
   Typography
 } from '@mui/material'
-import { toast } from 'react-toastify'
 import { useFieldArray, Controller, useFormContext } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { useState, useCallback } from 'react'
 
-import axios from 'axios'
 import { styled } from '@mui/material/styles'
 
 import {
@@ -27,7 +25,6 @@ import {
 import { ContentWrapper } from '../../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import { findRegistationDataItem } from '../../library/findDataItems'
-import { mapDataForApi } from '../../library/mapDataForApi'
 import { preRestorationAssessment as questions } from '../../data/questions'
 import { questionMapping } from '../../data/questionMapping'
 import AddPhysicalMeasurementRow from './AddPhysicalMeasurementRow'
@@ -56,7 +53,7 @@ function PreRestorationAssessmentForm() {
   const form = useFormContext()
 
   const {
-    handleSubmit: validateInputs,
+    // handleSubmit: validateInputs,
     formState: { errors },
     control,
     setValue: setFormValue,
@@ -82,8 +79,8 @@ function PreRestorationAssessmentForm() {
   const mangroveRestorationAttemptedWatcher = watchForm('mangroveRestorationAttempted')
   const siteAssessmentBeforeProjectWatcher = watchForm('siteAssessmentBeforeProject')
   const speciesCompositionWatcher = watchForm('speciesComposition')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isError, setIsError] = useState(false)
+  const [isSubmitting] = useState(false)
+  const [isError] = useState(false)
   const [mangroveSpeciesList, setMangroveSpeciesList] = useState([])
   const [mangroveSpeciesTypesChecked, setMangroveSpeciesTypesChecked] = useState([])
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
@@ -119,7 +116,7 @@ function PreRestorationAssessmentForm() {
     [physicalMeasurementsTakenReplace]
   )
 
-  const { data, isLoading } = useInitializeQuestionMappedForm({
+  const { isLoading } = useInitializeQuestionMappedForm({
     key: 'preRestorationAssessment',
     apiUrl: apiAnswersUrl,
     questionMapping: questionMapping,
@@ -127,31 +124,31 @@ function PreRestorationAssessmentForm() {
     successCallback: loadServerData
   })
 
-  const handleSubmit = async (formData) => {
-    const fields = Object.keys(questionMapping['preRestorationAssessment'])
-    const ok = await form.trigger(fields, { shouldFocus: true })
+  // const handleSubmit = async (formData) => {
+  //   const fields = Object.keys(questionMapping['preRestorationAssessment'])
+  //   const ok = await form.trigger(fields, { shouldFocus: true })
 
-    if (!ok) {
-      setIsError(true)
-      toast.error(language.error.validation)
-      return
-    }
-    setIsSubmitting(true)
-    setIsError(false)
-    if (!formData) return
+  //   if (!ok) {
+  //     setIsError(true)
+  //     toast.error(language.error.validation)
+  //     return
+  //   }
+  //   setIsSubmitting(true)
+  //   setIsError(false)
+  //   if (!formData) return
 
-    axios
-      .patch(apiAnswersUrl, mapDataForApi('preRestorationAssessment', formData))
-      .then(() => {
-        setIsSubmitting(false)
-        toast.success(language.success.submit)
-      })
-      .catch(() => {
-        setIsError(true)
-        setIsSubmitting(false)
-        toast.error(language.error.submit)
-      })
-  }
+  //   axios
+  //     .patch(apiAnswersUrl, mapDataForApi('preRestorationAssessment', formData))
+  //     .then(() => {
+  //       setIsSubmitting(false)
+  //       toast.success(language.success.submit)
+  //     })
+  //     .catch(() => {
+  //       setIsError(true)
+  //       setIsSubmitting(false)
+  //       toast.error(language.error.submit)
+  //     })
+  // }
 
   const handleMangroveSpeciesPresentOnChange = (event, specie) => {
     const mangroveSpeciesTypesCheckedCopy = [...mangroveSpeciesTypesChecked]

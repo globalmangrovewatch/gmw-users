@@ -103,15 +103,15 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
     [registrationInterventionFormsUrl]
   )
 
-  const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
-    key: 'socioeconomicGovernanceStatusAndOutcomes',
-    apiUrl: isEditMode ? monitoringFormSingularUrl : null,
-    form,
-    questionMapping,
-    queryOptions: {
-      enabled: !!isEditMode
-    }
-  })
+  // const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
+  //   key: 'socioeconomicGovernanceStatusAndOutcomes',
+  //   apiUrl: isEditMode ? monitoringFormSingularUrl : null,
+  //   form,
+  //   questionMapping,
+  //   queryOptions: {
+  //     enabled: !!isEditMode
+  //   }
+  // })
 
   const createNewMonitoringForm = (payload) => {
     axios
@@ -142,21 +142,21 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
       })
   }
 
-  const handleSubmit = (formData) => {
-    setIsSubmitting(true)
-    setIsSubmitError(false)
+  // const handleSubmit = (formData) => {
+  //   setIsSubmitting(true)
+  //   setIsSubmitError(false)
 
-    const payload = {
-      form_type: formType,
-      answers: mapDataForApi('socioeconomicGovernanceStatusAndOutcomes', formData)
-    }
+  //   const payload = {
+  //     form_type: formType,
+  //     answers: mapDataForApi('socioeconomicGovernanceStatusAndOutcomes', formData)
+  //   }
 
-    if (isEditMode) {
-      editMonitoringForm(payload)
-    } else {
-      createNewMonitoringForm(payload)
-    }
-  }
+  //   if (isEditMode) {
+  //     editMonitoringForm(payload)
+  //   } else {
+  //     createNewMonitoringForm(payload)
+  //   }
+  // }
 
   const handleDeleteConfirm = () => {
     setIsDeleting(true)
