@@ -8,14 +8,17 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import PropTypes from 'prop-types'
 
-import { Alert } from '@mui/material'
-import { RowFlexEnd } from '../../styles/containers'
-import { ErrorText, Link as ExternalLink } from '../../styles/typography'
-import { useAuth } from '../../hooks/useAuth'
-import { useSignInMutation } from '../../hooks/sign-in'
-import { useCheckSession } from '../../hooks/check-session'
-import language from '../../language'
-import LoadingIndicator from '../../components/LoadingIndicator'
+import { Alert, Button } from '@mui/material'
+import { useTheme } from '@mui/styles'
+import { useMediaQuery } from '@mui/system'
+
+import { RowFlexEnd } from 'styles/containers'
+import { ErrorText, Link as ExternalLink } from 'styles/typography'
+import { useAuth } from 'hooks/useAuth'
+import { useSignInMutation } from 'hooks/sign-in'
+import { syncSession } from 'hooks/sso'
+import language from 'language'
+import LoadingIndicator from 'components/LoadingIndicator'
 import {
   Hero,
   HeroContent,
@@ -30,16 +33,13 @@ import {
   LogoContainer,
   Logo,
   LandingHeaderContainer
-} from '../../styles/v2/containers/landing'
-import { Paragraph, StyledLink } from '../../styles/v2/ui/typography'
-import { Divider } from '../../styles/v2/ui/divider'
-import { FormInput } from '../../components/Form/FormInput'
+} from 'styles/v2/containers/landing'
+import { Paragraph, StyledLink } from 'styles/v2/ui/typography'
+import { Divider } from 'styles/v2/ui/divider'
+import { FormInput } from 'components/Form/FormInput'
 
-import LandingHeaderDesktop from '../../components/landing/header-desktop'
-import LandingHeaderMobile from '../../components/landing/header-mobile'
-import { useTheme } from '@mui/styles'
-import { useMediaQuery } from '@mui/system'
-import { Button } from '@mui/material'
+import LandingHeaderDesktop from 'components/landing/header-desktop'
+import LandingHeaderMobile from 'components/landing/header-mobile'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),
@@ -51,9 +51,7 @@ const formDefaultValues = { email: '', password: '' }
 const pageLanguage = language.pages.login
 
 const LoginForm = ({ isUserNew }) => {
-  const [isLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-
   const signInMutation = useSignInMutation()
 
   const {
@@ -65,29 +63,29 @@ const LoginForm = ({ isUserNew }) => {
     defaultValues: formDefaultValues
   })
 
-  const { isChecking, user } = useCheckSession()
-  const { login } = useAuth()
+  const { isChecking, isLoggedIn, login } = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!isChecking && user) {
-      if (user.token) {
-        login(user.token)
-      }
-
+    if (!isChecking && isLoggedIn) {
       navigate('/sites', { replace: true })
     }
-  }, [isChecking, user, login, navigate])
+  }, [isChecking, isLoggedIn, navigate])
 
   const handleSubmit = (formData) => {
     setIsSubmitError(false)
 
     signInMutation.mutate(formData, {
-      onSuccess: (data) => {
-        if (data?.token) {
-          login(data.token)
-          navigate('/sites')
+      onSuccess: async (data) => {
+        if (!data?.token) return
+        const user = {
+          email: formData.email,
+          name: data.username,
+          organization: data.organization
         }
+        await syncSession(data.token)
+        login(data.token, user)
+        navigate('/sites')
       },
       onError: (error) => {
         setIsSubmitError(true)
@@ -99,7 +97,9 @@ const LoginForm = ({ isUserNew }) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
-  const form = (
+  if (isChecking) return <LoadingIndicator />
+
+  return (
     <Base>
       <LandingHeaderContainer>
         <LogoContainer draggable='false'>
@@ -172,8 +172,6 @@ const LoginForm = ({ isUserNew }) => {
       </Main>
     </Base>
   )
-
-  return isLoading || isChecking ? <LoadingIndicator /> : form
 }
 
 LoginForm.propTypes = {

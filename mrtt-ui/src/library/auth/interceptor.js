@@ -1,12 +1,22 @@
 import axios from 'axios'
 
+let _token = null
+
+export function setAuthToken(token) {
+  _token = token
+}
+
+export function getAuthToken() {
+  return _token
+}
+
 function initializeAxiosAuthenticationInterceptor() {
   axios.interceptors.request.use((request) => {
-    const token = localStorage.getItem('token')
-    const isApiUrl = request.url.startsWith(`${process.env.REACT_APP_API_URL}`)
+    const apiUrl = process.env.REACT_APP_API_URL
+    const isApiUrl = apiUrl && request.url && request.url.startsWith(apiUrl)
 
-    if (token && isApiUrl) {
-      request.headers.common.Authorization = `Bearer ${token}`
+    if (_token && isApiUrl) {
+      request.headers.common.Authorization = `Bearer ${_token}`
     }
     return request
   })
