@@ -1,15 +1,12 @@
 import { Box, Checkbox, List, ListItem, MenuItem, TextField, Typography } from '@mui/material'
 // import { toast } from 'react-toastify'
 import { useFieldArray, Controller, useFormContext } from 'react-hook-form'
-import { useParams } from 'react-router-dom'
-import { useState } from 'react'
 
 import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { FormLayout, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
 // import { mapDataForApi } from '../library/mapDataForApi'
 
-import { questionMapping } from '../data/questionMapping'
 import { siteBackground } from '../data/questions'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
@@ -26,15 +23,11 @@ import { useWatch } from 'react-hook-form'
 
 const SiteBackgroundForm = () => {
   const form = useFormContext()
-  const [isError, setIsError] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // const [stakeholderTypesChecked, setStakeholderTypesChecked] = useState(
   //   form.getValues('stakeholders')?.map((s) => s.stakeholderType) || []
   // )
   const { site_name } = useSiteInfo()
-  const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
 
   const {
     fields: stakeholdersFields,
@@ -124,20 +117,13 @@ const SiteBackgroundForm = () => {
   const watchedStakeholders = useWatch({ control: form.control, name: 'stakeholders' }) ?? []
   const stakeholderTypesChecked = watchedStakeholders.map((s) => s.stakeholderType)
 
-  const getStakeholder = (stakeholder) =>
-    watchedStakeholders.find((s) => s.stakeholderType === stakeholder)
-
   return (
     <ContentWrapper>
       <FormPageHeader>
         <PageTitle>{language.pages.siteQuestionsOverview.formName.siteBackground}</PageTitle>
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
-      <QuestionNav
-        isFormSaving={isSubmitting}
-        isFormSaveError={isError}
-        currentSection='site-background'
-      />
+      <QuestionNav isFormSaving={false} isFormSaveError={false} currentSection='site-background' />
       <FormValidationMessageIfErrors formErrors={form.errors} />
 
       {/* Select Stakeholders */}

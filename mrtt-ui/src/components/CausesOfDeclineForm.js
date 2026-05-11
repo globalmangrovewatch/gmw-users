@@ -9,11 +9,9 @@ import {
   TextField,
   Typography
 } from '@mui/material'
-import { toast } from 'react-toastify'
-import { useFieldArray, Controller, FormProvider, useFormContext } from 'react-hook-form'
+import { useFieldArray, Controller, useFormContext } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
-import { useState, useCallback, useMemo } from 'react'
-import axios from 'axios'
+import { useState, useMemo } from 'react'
 
 import {
   FormLayout,
@@ -27,7 +25,6 @@ import { causesOfDecline } from '../data/questions'
 import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
 import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
-import { mapDataForApi } from '../library/mapDataForApi'
 import { questionMapping } from '../data/questionMapping'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '../language'
@@ -41,7 +38,7 @@ function CausesOfDeclineForm() {
   const form = useFormContext()
 
   // get functions to build form with useForm() hook
-  const { control, formState, watch, handleSubmit } = form
+  const { control, formState, watch } = form
   const { errors } = formState
   const {
     fields: causesOfDeclineFields,
@@ -51,54 +48,15 @@ function CausesOfDeclineForm() {
   } = useFieldArray({ name: 'causesOfDecline', control })
   const lossKnownWatcher = watch('lossKnown')
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isError, setIsError] = useState(false)
   const [causesOfDeclineTypesChecked, setCausesOfDeclineTypesChecked] = useState([])
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
 
-  const setInitialCausesOfDeclineTypesFromServerData = useCallback((serverResponse) => {
-    // get answers for 4.2 if they exist
-    const initialCausesOfDecline =
-      serverResponse?.data.find((dataItem) => dataItem.question_id === '4.2')?.answer_value ?? []
-
-    const initialCausesOfDeclineTypesChecked = []
-
-    // function that adds `${cause}-${causeAnswer}` to initialCausesOfDeclineTypes array, to simplify
-    // isChecked lookups (as opposed to searching through deeply nested values every time)
-    initialCausesOfDecline?.forEach((cause) => {
-      // map types for mainCause options
-      if (cause.mainCauseAnswers) {
-        const mainCauseAnswers = cause.mainCauseAnswers?.map((answer) => answer.mainCauseAnswer)
-        const label = cause.mainCauseLabel
-        // adding maincause label appended to answer to avoid situations
-        // where we have the same answers for different causes
-        mainCauseAnswers.forEach((answer) =>
-          initialCausesOfDeclineTypesChecked.push(`${label}-${answer}`)
-        )
-      }
-      // map types for subCase options
-      else {
-        // adding subcase label appended to subcase answer since
-        // there are subcauses that have some of the same answers (ex: 'other')
-        cause.subCauses?.map((subCause) => {
-          const label = subCause.subCauseLabel
-          const answers = subCause.subCauseAnswers
-          answers.forEach((answer) => {
-            initialCausesOfDeclineTypesChecked.push(`${label}-${answer.subCauseAnswer}`)
-          })
-        })
-      }
-    })
-    setCausesOfDeclineTypesChecked(initialCausesOfDeclineTypesChecked)
-  }, [])
-
-  const { data, isLoading } = useInitializeQuestionMappedForm({
+  useInitializeQuestionMappedForm({
     key: 'causesOfDecline',
     apiUrl: apiAnswersUrl,
     form,
     questionMapping
-    // successCallback: setInitialCausesOfDeclineTypesFromServerData
   })
 
   // big function with many different cases for Q4.2 due to the nesting involved in this question type
@@ -257,8 +215,8 @@ function CausesOfDeclineForm() {
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
-        isFormSaving={isSubmitting}
-        isFormSaveError={isError}
+        isFormSaving={false}
+        isFormSaveError={false}
         currentSection='causes-of-decline'
       />
       <FormValidationMessageIfErrors formErrors={errors} />

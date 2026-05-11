@@ -2,7 +2,6 @@ import express from 'express'
 import { Resend } from 'resend'
 
 const router = express.Router()
-const recipients = []
 interface ContactEmailProps {
   name: string
   email: string

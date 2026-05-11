@@ -29,16 +29,10 @@ import language from '../../language'
 import { ContentWrapper } from '../../styles/containers'
 import { questionMapping } from '../../data/questionMapping'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
-import {
-  // mapAllDataForApi,
-  mapDataForApi
-} from '../../library/mapDataForApi'
 import { ecologicalStatusOutcomes as questions } from '../../data/questions'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
-import useInitializeMonitoringForm from '../../library/useInitializeMonitoringForm'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { findRegistationDataItem, findMonitoringDataItem } from '../../library/findDataItems'
-import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import { monitoringIndicators } from '../../data/monitoringIndicators'
 import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
@@ -59,8 +53,6 @@ const getBiophysicalInterventions = (registrationAnswersFromServer) =>
 const getEcologicalMonitoringStakeholders = (registrationAnswersFromServer) =>
   findMonitoringDataItem(registrationAnswersFromServer, '10.2') ?? []
 
-const formType = MONITORING_FORM_CONSTANTS.ecologicalStatusAndOutcomes.payloadType
-
 const EcologicalStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
   const { monitoringFormId } = useParams()
@@ -71,10 +63,8 @@ const EcologicalStatusAndOutcomesForm = () => {
   const form = useFormContext()
 
   const {
-    handleSubmit: validateInputs,
     formState: { errors },
-    control,
-    watch: watchForm
+    control
   } = form
 
   const {
@@ -96,8 +86,6 @@ const EcologicalStatusAndOutcomesForm = () => {
   const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
   const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
   const registrationInterventionFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitError, setIsSubmitError] = useState(false)
   const [biophysicalInterventions, setBiophysicalInterventions] = useState([])
 
   const mangroveAreaIncreaseWatcher = useWatch({ control, name: 'mangroveAreaIncrease' })
@@ -190,7 +178,7 @@ const EcologicalStatusAndOutcomesForm = () => {
   //   questionMapping: questionMapping.ecologicalStatusAndOutcomes
   // })
 
-  const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
+  const { isLoading } = useInitializeQuestionMappedFormMonitors({
     key: 'ecologicalStatusAndOutcomes',
     apiUrl: isEditMode ? monitoringFormSingularUrl : null,
     form,
@@ -200,36 +188,6 @@ const EcologicalStatusAndOutcomesForm = () => {
       enabled: isEditMode
     }
   })
-
-  const createNewMonitoringForm = (payload) => {
-    axios
-      .post(monitoringFormsUrl, payload)
-      .then(({ data }) => {
-        setIsSubmitting(false)
-        toast.success(language.success.getCreateThingSuccessMessage('This form'))
-        // resetForm()
-        navigate(data.id)
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(language.error.submit)
-      })
-  }
-
-  const editMonitoringForm = (payload) => {
-    axios
-      .put(monitoringFormSingularUrl, payload)
-      .then(() => {
-        setIsSubmitting(false)
-        toast.success(language.success.getEditThingSuccessMessage('This form'))
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(language.error.submit)
-      })
-  }
 
   // const handleSubmit = (formData) => {
   //   setIsSubmitting(true)
@@ -377,8 +335,8 @@ const EcologicalStatusAndOutcomesForm = () => {
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
-        isFormSaving={isSubmitting}
-        isFormSaveError={isSubmitError}
+        isFormSaving={false}
+        isFormSaveError={false}
         currentSection='ecological-status-and-outcomes'
       />
       <FormValidationMessageIfErrors formErrors={errors} />

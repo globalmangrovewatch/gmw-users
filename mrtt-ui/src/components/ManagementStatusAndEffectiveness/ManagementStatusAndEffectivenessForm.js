@@ -13,10 +13,8 @@ import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
 import language from '../../language'
-import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
-import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import DatePickerUtcMui from '../DatePickerUtcMui'
@@ -25,11 +23,8 @@ import RequiredIndicator from '../RequiredIndicator'
 import { useInitializeQuestionMappedFormMonitors } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 import LoadingIndicator from '../LoadingIndicator'
 
-const formType = MONITORING_FORM_CONSTANTS.managementStatusAndEffectiveness.payloadType
-
 const ManagementStatusAndEffectivenessForm = () => {
   const { monitoringFormId, siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const isEditMode = !!monitoringFormId
   const navigate = useNavigate()
   const { site_name } = useSiteInfo()
@@ -41,19 +36,14 @@ const ManagementStatusAndEffectivenessForm = () => {
     control
   } = form
 
-  const monitorId = isEditMode ? monitoringFormId : null
-
-  const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
-  const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isError, setIsError] = useState(false)
+  const monitoringFormSingularUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers/${monitoringFormId}`
   const managementStatusChangesWatcher = useWatch({ control, name: 'managementStatusChanges' })
   const projectStatusChangeWatcher = useWatch({ control, name: 'projectStatusChange' })
   const financeForCiteManagementWatcher = useWatch({ control, name: 'financeForCiteManagement' })
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
 
-  const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
+  const { isLoading } = useInitializeQuestionMappedFormMonitors({
     key: 'managementStatusAndEffectiveness',
     apiUrl: isEditMode ? monitoringFormSingularUrl : null,
     form,
@@ -62,35 +52,6 @@ const ManagementStatusAndEffectivenessForm = () => {
       enabled: isEditMode
     }
   })
-
-  const createNewMonitoringForm = (payload) => {
-    axios
-      .post(monitoringFormsUrl, payload)
-      .then(({ data }) => {
-        setIsSubmitting(false)
-        toast.success(language.success.getCreateThingSuccessMessage('This form'))
-        navigate(data.id)
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        setIsError(true)
-        toast.error(language.error.submit)
-      })
-  }
-
-  const editMonitoringForm = (payload) => {
-    axios
-      .put(monitoringFormSingularUrl, payload)
-      .then(() => {
-        setIsSubmitting(false)
-        toast.success(language.success.getEditThingSuccessMessage('This form'))
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        setIsError(true)
-        toast.error(language.error.submit)
-      })
-  }
 
   const handleDeleteConfirm = () => {
     setIsDeleting(true)
@@ -122,8 +83,8 @@ const ManagementStatusAndEffectivenessForm = () => {
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
-        isFormSaving={isSubmitting}
-        isFormSaveError={isError}
+        isFormSaving={false}
+        isFormSaveError={false}
         currentSection='management-status-and-effectiveness'
       />
       <FormValidationMessageIfErrors formErrors={errors} />

@@ -1,10 +1,13 @@
+const path = require('path')
 const webpack = require('webpack')
+
 module.exports = function override(config) {
   const fallback = config.resolve.fallback || {}
   Object.assign(fallback, {
     buffer: require.resolve('buffer/')
   })
   config.resolve.fallback = fallback
+  config.resolve.modules = [path.resolve(__dirname, 'src'), 'node_modules']
   config.plugins = (config.plugins || []).concat([
     new webpack.ProvidePlugin({
       process: 'process/browser',

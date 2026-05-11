@@ -24,6 +24,7 @@ import ProtectedRoutes from './components/Auth/ProtectedRoutes'
 import ResetPasswordForm from './views/Auth/ResetPasswordForm'
 import RestorationAimsForm from './components/RestorationAimsForm/RestorationAimsForm'
 import SignupForm from './views/Auth/SignupForm'
+import SsoSilentCallback from './views/Auth/SsoSilentCallback'
 import SiteBackgroundForm from './components/SiteBackgroundForm'
 import SiteForm from './views/SiteForm'
 import SiteInterventionsForm from './components/SiteInterventions/SiteInterventionsForm'
@@ -162,6 +163,7 @@ function App() {
                 <Route path='/auth/login/newUser' element={<LoginForm isUserNew={true} />} />
                 <Route path='auth/password/forgot-password' element={<ForgotPasswordForm />} />
                 <Route path='auth/password/reset/' element={<ResetPasswordForm />} />
+                <Route path='/auth/sso-silent' element={<SsoSilentCallback />} />
                 <Route path='*' element={<PageNotFound />} />
               </Routes>
             </FormWrapperProvider>
