@@ -1,8 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 
-import axios from 'axios'
-import { toast } from 'react-toastify'
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
 import { Alert, Box, Button, MenuItem, TextField, Typography } from '@mui/material'
 
@@ -17,10 +15,9 @@ import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
 import language from '../../language'
 import { ContentWrapper } from '../../styles/containers'
-import { costs as questions, siteInterventions } from '../../data/questions'
+import { costs as questions } from '../../data/questions'
 import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
-import { mapDataForApi } from '../../library/mapDataForApi'
 import { questionMapping } from '../../data/questionMapping'
 import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
 import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
@@ -88,8 +85,6 @@ const CostsForm = () => {
     update: percentageSplitOfActivitiesUpdate
   } = useFieldArray({ name: 'percentageSplitOfActivities', control })
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitError, setIsSubmitError] = useState(false)
   const projectInterventionFundingWatcher = watchForm('projectInterventionFunding')
   const supportForActivitiesWatcher = watchForm('supportForActivities')
   const [showAddTabularInputRow, setShowAddTabularInputRow] = useState(false)
@@ -146,30 +141,13 @@ const CostsForm = () => {
     [breakdownOfCostReplace, percentageSplitOfActivitiesReplace]
   )
 
-  const { data, isLoading } = useInitializeQuestionMappedForm({
+  useInitializeQuestionMappedForm({
     key: 'costs',
     apiUrl: apiAnswersUrl,
     form,
     questionMapping,
     successCallback: loadServerData
   })
-
-  const handleSubmit = (formData) => {
-    setIsSubmitting(true)
-    setIsSubmitError(false)
-
-    axios
-      .patch(apiAnswersUrl, mapDataForApi('costs', formData))
-      .then(() => {
-        setIsSubmitting(false)
-        toast.success(language.success.submit)
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(language.error.submit)
-      })
-  }
 
   const updateTabularInputDisplay = (boolean) => {
     return setShowAddTabularInputRow(boolean)
@@ -227,11 +205,7 @@ const CostsForm = () => {
         <PageTitle>{language.pages.siteQuestionsOverview.formName.costs}</PageTitle>
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
-      <QuestionNav
-        isFormSaving={isSubmitting}
-        isFormSaveError={isSubmitError}
-        currentSection='costs'
-      />
+      <QuestionNav isFormSaving={false} isFormSaveError={false} currentSection='costs' />
       <FormValidationMessageIfErrors formErrors={errors} />
       <FormLayout>
         <FormQuestionDiv>

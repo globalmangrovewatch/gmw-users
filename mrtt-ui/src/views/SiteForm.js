@@ -39,7 +39,7 @@ const SiteForm = ({ isNewSite }) => {
   const siteUrl = `${sitesUrl}/${siteId}`
 
   const siteForm = useFormContext()
-  const { reset: resetSiteForm, getValues: siteFormValues } = siteForm
+  const { reset: resetSiteForm } = siteForm
 
   const {
     control: formControl,

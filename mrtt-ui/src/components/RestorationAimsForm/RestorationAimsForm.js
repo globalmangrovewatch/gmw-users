@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
@@ -18,8 +18,7 @@ import { Alert } from '@mui/material'
 
 const RestorationAimsForm = () => {
   const form = useFormContext()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [stakeholders, setStakeholders] = useState(form.getValues('stakeholders') || [])
+  const stakeholders = form.getValues('stakeholders') || []
   const { site_name } = useSiteInfo()
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
@@ -116,7 +115,7 @@ const RestorationAimsForm = () => {
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
-        isFormSaving={isSubmitting}
+        isFormSaving={false}
         isFormSaveError={form.formState.errors['restorationAims']}
         currentSection='restoration-aims'
       />

@@ -18,9 +18,7 @@ import QuestionNav from '../QuestionNav'
 import useSiteInfo from '../../library/useSiteInfo'
 import language from '../../language'
 import { ContentWrapper } from '../../styles/containers'
-import { questionMapping } from '../../data/questionMapping'
 import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
-import { mapDataForApi } from '../../library/mapDataForApi'
 import { socioeconomicGovernanceStatusOutcomes as questions } from '../../data/questions'
 import LoadingIndicator from '../LoadingIndicator'
 import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
@@ -28,18 +26,13 @@ import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndCon
 import { socioIndicators } from '../../data/socioIndicators'
 import { findRegistationDataItem } from '../../library/findDataItems'
 import SocioeconomicOutcomesRow from './SocioeconomicOutcomesRow'
-import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
 import ButtonDeleteForm from '../ButtonDeleteForm'
 import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
 import DatePickerUtcMui from '../DatePickerUtcMui'
 import RequiredIndicator from '../RequiredIndicator'
 
-import { useInitializeQuestionMappedFormMonitors } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
-
 const getSocioeconomicAims = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '3.2') ?? []
-
-const formType = MONITORING_FORM_CONSTANTS.socioeconomicGovernanceStatusAndOutcomes.payloadType
 
 const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
   const navigate = useNavigate()
@@ -63,17 +56,13 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
   } = useFieldArray({ name: 'socioeconomicOutcomes', control })
 
   const { siteId } = useParams()
-  const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
-  const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
+  const monitoringFormSingularUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers/${monitoringFormId}`
   const registrationInterventionFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitError, setIsSubmitError] = useState(false)
   const changeInGovernanceWatcher = watchForm('changeInGovernance')
   const changeInTenureArrangementWatcher = watchForm('changeInTenureArrangement')
   const socioeconomicOutcomesWatcher = watchForm('socioeconomicOutcomes')
   const [socioeconomicAims, setSocioeconomicAims] = useState([])
-  const [isMainFormDataLoading, setIsMainFormDataLoading] = useState(false)
   const [areSociologicalAimsLoading, setAreSociologicalAimsLoading] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
@@ -112,35 +101,6 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
   //     enabled: !!isEditMode
   //   }
   // })
-
-  const createNewMonitoringForm = (payload) => {
-    axios
-      .post(monitoringFormsUrl, payload)
-      .then(({ data }) => {
-        setIsSubmitting(false)
-        toast.success(language.success.getCreateThingSuccessMessage('This form'))
-        navigate(data.id)
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(language.error.submit)
-      })
-  }
-
-  const editMonitoringForm = (payload) => {
-    axios
-      .put(monitoringFormSingularUrl, payload)
-      .then(() => {
-        setIsSubmitting(false)
-        toast.success(language.success.getEditThingSuccessMessage('This form'))
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(language.error.submit)
-      })
-  }
 
   // const handleSubmit = (formData) => {
   //   setIsSubmitting(true)
@@ -224,7 +184,7 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
     socioeconomicOutcomesUpdate(index, currentItem)
   }
 
-  return isMainFormDataLoading || areSociologicalAimsLoading ? (
+  return areSociologicalAimsLoading ? (
     <LoadingIndicator />
   ) : (
     <ContentWrapper>
@@ -235,8 +195,8 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
       <QuestionNav
-        isFormSaving={isSubmitting}
-        isFormSaveError={isSubmitError}
+        isFormSaving={false}
+        isFormSaveError={false}
         currentSection='socioeconomic-and-governance-status'
       />
       <FormValidationMessageIfErrors formErrors={errors} />

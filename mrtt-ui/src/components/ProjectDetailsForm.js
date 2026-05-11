@@ -26,7 +26,6 @@ import RequiredIndicator from './RequiredIndicator'
 import { useInitializeQuestionMappedForm } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
 import DatePickerUtcMui from './DatePickerUtcMui'
-import { useSectionQuestions } from '../library/question-mapped-form/sections-hook'
 
 export const siteAreaError = 'Please provide a site area'
 
@@ -43,9 +42,7 @@ function ProjectDetailsForm() {
   const errors = form.formState.errors
 
   const [mapExtent, setMapExtent] = useState()
-  const [isError, setIsError] = useState(false)
   // const [isLoading, setIsLoading] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const { site_name } = useSiteInfo()
 
   // const { errors } = form.formState
@@ -56,7 +53,7 @@ function ProjectDetailsForm() {
    The api casts them to boolean so we support both */
   const showEndDateInput = watchHasProjectEndDate === 'true' || watchHasProjectEndDate === true
 
-  const { data, isLoading } = useInitializeQuestionMappedForm({
+  useInitializeQuestionMappedForm({
     siteId,
     key: 'projectDetails',
     apiUrl: apiAnswersUrl,
@@ -107,19 +104,13 @@ function ProjectDetailsForm() {
   //     })
   // }
 
-  const { sectionKeys } = useSectionQuestions('project-details')
-
   return (
     <ContentWrapper>
       <FormPageHeader>
         <PageTitle>{language.pages.siteQuestionsOverview.formName.siteDetails}</PageTitle>
         <PageSubtitle>{site_name}</PageSubtitle>
       </FormPageHeader>
-      <QuestionNav
-        isFormSaving={isSubmitting}
-        isFormSaveError={isError}
-        currentSection='project-details'
-      />
+      <QuestionNav isFormSaving={false} isFormSaveError={false} currentSection='project-details' />
       <FormValidationMessageIfErrors formErrors={errors} />
       {/* <FormWrapperProvider> */}
       {/* <FormProvider {...form}> */}
