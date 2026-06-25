@@ -61,7 +61,7 @@ type Params<TSelected = FormattedResponse> = {
   key: string
   apiUrl: string
   siteId?: string
-  form: UseFormReturn<any>
+  form: UseFormReturn
   questionMapping: unknown
   successCallback?: (
     response: AxiosResponse<ApiAnswerItem[]>,
@@ -76,7 +76,7 @@ type Params<TSelected = FormattedResponse> = {
 }
 
 type ParamsMonitors<TSelected = FormattedMonitorsResponse> = Omit<
-  Params<any>,
+  Params,
   'successCallback' | 'queryOptions'
 > & {
   successCallback?: (
