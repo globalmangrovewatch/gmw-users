@@ -75,6 +75,9 @@ const LandingHeaderMobile = () => {
               style={{ textDecoration: 'none' }}>
               <StyledLabel>User Guide</StyledLabel>
             </a>
+            <a href='/privacy-notice.pdf' download style={{ textDecoration: 'none' }}>
+              <StyledLabel>Privacy Notice</StyledLabel>
+            </a>
             <AboutDialogContent isOpen={isOpenAbout} setIsOpen={setIsOpenAbout} />
             <ContactForm isOpen={isOpen} setIsOpen={setIsOpen} />
           </Stack>

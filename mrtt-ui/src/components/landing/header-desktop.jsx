@@ -47,6 +47,9 @@ const LandingHeaderDesktop = () => {
           style={{ textDecoration: 'none' }}>
           <MenuStyledLabel> User guide</MenuStyledLabel>
         </a>
+        <a href='/privacy-notice.pdf' download style={{ textDecoration: 'none' }}>
+          <MenuStyledLabel>Privacy Notice</MenuStyledLabel>
+        </a>
         <LanguagePicker />
       </Stack>
 
