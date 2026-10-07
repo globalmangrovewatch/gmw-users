@@ -41,5 +41,9 @@ export function useGetSectionTarget(
 ): SectionTarget {
   if (monitorId) return 'monitors'
 
-  return (SECTION_REGISTRY as any)[sectionFromUrl ?? '']?.target ?? null
+  return (
+    (SECTION_REGISTRY as Record<string, { target: SectionTarget; id: string; label: string }>)[
+      sectionFromUrl ?? ''
+    ]?.target ?? null
+  )
 }
