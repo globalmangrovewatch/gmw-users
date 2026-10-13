@@ -19,37 +19,37 @@ Total ≈ **45–65 dev-days** (one developer). Track 1 overlaps the spike.
 
 ## 1. Decisions (2026-10-13)
 
-| Topic | Decision |
-| --- | --- |
-| Framework | Spike both Next.js (Radar Adopt) and TanStack Start (Radar Trial, RC). Decide with the rubric in §4.1. |
-| Hosting | **Heroku stays production.** Vercel (Radar Adopt) is **added** for preview/staging deploys. Heroku is not removed. |
-| Auth | Custom route handlers / server functions, no auth library (NextAuth = Hold, Better Auth = Trial). Server-side SSO exchange, backend bearer in an httpOnly cookie, API calls through a same-origin proxy route. |
-| UI | Tailwind 4 + shadcn/ui, migrated **after** the framework move. |
-| Storybook | Dropped (3 stories, v6 EOL). |
-| React | 18 → 19 inside this migration (teardown task). |
-| i18n | Transifex `live.js` kept as-is (loaded after hydration). |
-| Offline | Designs in `docs/planning/OFFLINE_*` kept; re-based in Track 4. |
+| Topic     | Decision                                                                                                                                                                                                       |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework | Spike both Next.js (Radar Adopt) and TanStack Start (Radar Trial, RC). Decide with the rubric in §4.1.                                                                                                         |
+| Hosting   | **Heroku stays production.** Vercel (Radar Adopt) is **added** for preview/staging deploys. Heroku is not removed.                                                                                             |
+| Auth      | Custom route handlers / server functions, no auth library (NextAuth = Hold, Better Auth = Trial). Server-side SSO exchange, backend bearer in an httpOnly cookie, API calls through a same-origin proxy route. |
+| UI        | Tailwind 4 + shadcn/ui, migrated **after** the framework move.                                                                                                                                                 |
+| Storybook | Dropped (3 stories, v6 EOL).                                                                                                                                                                                   |
+| React     | 18 → 19 inside this migration (teardown task).                                                                                                                                                                 |
+| i18n      | Transifex `live.js` kept as-is (loaded after hydration).                                                                                                                                                       |
+| Offline   | Designs in `docs/planning/OFFLINE_*` kept; re-based in Track 4.                                                                                                                                                |
 
 ## 2. Tech Radar alignment
 
-| Area | Current | Radar | Target |
-| --- | --- | --- | --- |
-| Framework | CRA 5 + react-app-rewired | not listed | Next.js (Adopt) / TanStack Start (Trial) — spike |
-| Hosting | Heroku | Hold | Heroku (prod, kept) + Vercel (Adopt, previews) |
-| Language | ~6 % TS, loose tsconfig | TypeScript Adopt | strict TS |
-| Lint / format | ESLint 8 + Prettier 2 | Hold (ADR 001) | oxlint + oxfmt (Adopt) |
-| UI | MUI 5/7 + emotion + styled-components | sc = Hold; MUI unlisted | Tailwind CSS + shadcn/ui (Adopt) |
-| Forms | react-hook-form + yup | yup unlisted | react-hook-form + Zod (Adopt) |
-| HTTP | axios 0.27 | Hold | native `fetch` |
-| Data | TanStack Query 5 (3 files) | Adopt | TanStack Query everywhere |
-| Dates | luxon 2 | unlisted | date-fns 4 (Adopt) |
-| Maps | mapbox-gl 2, react-map-gl 7, turf 6 | Adopt | same libs, bumped (Mapbox kept for GMW parity) |
-| Auth | custom SSO bridge, in-memory token | NextAuth Hold | custom route handlers + httpOnly cookie |
-| Env | raw `process.env.REACT_APP_*` | @t3-oss/env-nextjs Adopt | validated env module |
-| Tests | none | Vitest / Playwright Adopt | Vitest + Playwright |
-| Toasts | react-toastify | unlisted | sonner (unlisted; sister-app parity) — flagged |
-| Icons | @mui/icons-material | react-icons Adopt | react-icons |
-| Git hooks / CI / deps | none | Husky, GitHub Actions, Dependabot Adopt | all added |
+| Area                  | Current                               | Radar                                   | Target                                           |
+| --------------------- | ------------------------------------- | --------------------------------------- | ------------------------------------------------ |
+| Framework             | CRA 5 + react-app-rewired             | not listed                              | Next.js (Adopt) / TanStack Start (Trial) — spike |
+| Hosting               | Heroku                                | Hold                                    | Heroku (prod, kept) + Vercel (Adopt, previews)   |
+| Language              | ~6 % TS, loose tsconfig               | TypeScript Adopt                        | strict TS                                        |
+| Lint / format         | ESLint 8 + Prettier 2                 | Hold (ADR 001)                          | oxlint + oxfmt (Adopt)                           |
+| UI                    | MUI 5/7 + emotion + styled-components | sc = Hold; MUI unlisted                 | Tailwind CSS + shadcn/ui (Adopt)                 |
+| Forms                 | react-hook-form + yup                 | yup unlisted                            | react-hook-form + Zod (Adopt)                    |
+| HTTP                  | axios 0.27                            | Hold                                    | native `fetch`                                   |
+| Data                  | TanStack Query 5 (3 files)            | Adopt                                   | TanStack Query everywhere                        |
+| Dates                 | luxon 2                               | unlisted                                | date-fns 4 (Adopt)                               |
+| Maps                  | mapbox-gl 2, react-map-gl 7, turf 6   | Adopt                                   | same libs, bumped (Mapbox kept for GMW parity)   |
+| Auth                  | custom SSO bridge, in-memory token    | NextAuth Hold                           | custom route handlers + httpOnly cookie          |
+| Env                   | raw `process.env.REACT_APP_*`         | @t3-oss/env-nextjs Adopt                | validated env module                             |
+| Tests                 | none                                  | Vitest / Playwright Adopt               | Vitest + Playwright                              |
+| Toasts                | react-toastify                        | unlisted                                | sonner (unlisted; sister-app parity) — flagged   |
+| Icons                 | @mui/icons-material                   | react-icons Adopt                       | react-icons                                      |
+| Git hooks / CI / deps | none                                  | Husky, GitHub Actions, Dependabot Adopt | all added                                        |
 
 **Not on the Radar, kept or introduced (need sign-off):** `@tmcw/togeojson`, `shpjs`, `sonner`, `jose` (JWE for the session cookie), `react-day-picker`, `cmdk`, `@radix-ui/*` (shadcn internals), and for offline `@tanstack/react-query-persist-client` + `idb`.
 
@@ -86,14 +86,14 @@ Files: `src/hooks/contact.tsx` (Express + Resend router inside the client tree),
 
 Endpoints to build in mrtt:
 
-| Endpoint | Does |
-| --- | --- |
-| `GET /auth/sso-silent?code=` | server exchange → set session cookie → tiny HTML that `parent.postMessage({ type: 'mrtt-sso', status })` |
-| `GET /api/auth/sso/callback?code=&returnTo=` | optional top-level variant: exchange → cookie → 302 to a relative `returnTo` |
-| `GET /api/auth/session` | unseal cookie → `{ user }`; 401 + clear if invalid; `?verify=1` re-validates |
-| `POST /api/auth/login` | password flow: validate token server-side, seal, set cookie |
-| `POST /api/auth/logout` | clear cookie; best-effort backend sign_out |
-| `/api/proxy/[...path]` | unseal cookie → forward to `${API_URL}` with `Authorization: Bearer`, stream body (xlsx blobs + Content-Disposition); upstream 401 → clear cookie + 401 |
+| Endpoint                                     | Does                                                                                                                                                    |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /auth/sso-silent?code=`                 | server exchange → set session cookie → tiny HTML that `parent.postMessage({ type: 'mrtt-sso', status })`                                                |
+| `GET /api/auth/sso/callback?code=&returnTo=` | optional top-level variant: exchange → cookie → 302 to a relative `returnTo`                                                                            |
+| `GET /api/auth/session`                      | unseal cookie → `{ user }`; 401 + clear if invalid; `?verify=1` re-validates                                                                            |
+| `POST /api/auth/login`                       | password flow: validate token server-side, seal, set cookie                                                                                             |
+| `POST /api/auth/logout`                      | clear cookie; best-effort backend sign_out                                                                                                              |
+| `/api/proxy/[...path]`                       | unseal cookie → forward to `${API_URL}` with `Authorization: Bearer`, stream body (xlsx blobs + Content-Disposition); upstream 401 → clear cookie + 401 |
 
 Shared lib: `src/lib/auth/session.ts` (`jose` EncryptJWT, secret `MRTT_SESSION_SECRET`), `src/lib/auth/gmw.ts` (server exchange / validate), `src/lib/auth/sso-client.ts` (browser iframe check, sync, logout). Cookie `__Host-mrtt-session` (prod) / `mrtt-session` (dev), `HttpOnly; Secure; SameSite=Lax; Path=/`, Max-Age 30 d.
 
@@ -143,25 +143,25 @@ Both models in `docs/planning/OFFLINE_*` stay valid; the decision point (always-
 
 ## 8. Sequencing and effort (1 dev, dev-days)
 
-| Task | Jira | Days | Depends on | Parallel with spike |
-| --- | --- | --- | --- | --- |
-| Dead code + unused deps | GMW-1111 | 0.5–1 | — | yes |
-| Tooling | GMW-1112 | 1.5–2 | 1111 | yes |
-| Safety-net tests | GMW-1113 | 2–3 | 1112 | yes |
-| TS baseline | GMW-1114 | 2–3 | 1113 | yes |
-| fetch + TanStack Query | GMW-1115 | 3–4 | 1114 | yes |
-| luxon → date-fns | GMW-1116 | 0.5 | 1114 | yes |
-| yup → zod | GMW-1117 | 3–4 | 1113, 1116 | yes |
-| Framework spike | GMW-1118 | ≤6 | — | — |
-| Framework migration | GMW-1119 | 5–8 | 1118 | no |
-| Vercel project | GMW-1120 | 0.5–1 | 1119 | no |
-| Tailwind + shadcn scaffold | GMW-1121 | 2–3 | 1119 | no |
-| Shared layer | GMW-1122 | 4–6 | 1121 | no |
-| Section forms (5 PRs) | GMW-1123 | 8–12 | 1122 | no |
-| Views + auth + landing | GMW-1124 | 5–7 | 1122 | no |
-| Teardown + React 19 | GMW-1125 | 1–2 | 1123, 1124 | no |
-| Playwright | GMW-1126 | 2–3 | 1119 | partially |
-| Offline re-base | GMW-1127 | 1–2 (design) | 1125 | no |
+| Task                       | Jira     | Days         | Depends on | Parallel with spike |
+| -------------------------- | -------- | ------------ | ---------- | ------------------- |
+| Dead code + unused deps    | GMW-1111 | 0.5–1        | —          | yes                 |
+| Tooling                    | GMW-1112 | 1.5–2        | 1111       | yes                 |
+| Safety-net tests           | GMW-1113 | 2–3          | 1112       | yes                 |
+| TS baseline                | GMW-1114 | 2–3          | 1113       | yes                 |
+| fetch + TanStack Query     | GMW-1115 | 3–4          | 1114       | yes                 |
+| luxon → date-fns           | GMW-1116 | 0.5          | 1114       | yes                 |
+| yup → zod                  | GMW-1117 | 3–4          | 1113, 1116 | yes                 |
+| Framework spike            | GMW-1118 | ≤6           | —          | —                   |
+| Framework migration        | GMW-1119 | 5–8          | 1118       | no                  |
+| Vercel project             | GMW-1120 | 0.5–1        | 1119       | no                  |
+| Tailwind + shadcn scaffold | GMW-1121 | 2–3          | 1119       | no                  |
+| Shared layer               | GMW-1122 | 4–6          | 1121       | no                  |
+| Section forms (5 PRs)      | GMW-1123 | 8–12         | 1122       | no                  |
+| Views + auth + landing     | GMW-1124 | 5–7          | 1122       | no                  |
+| Teardown + React 19        | GMW-1125 | 1–2          | 1123, 1124 | no                  |
+| Playwright                 | GMW-1126 | 2–3          | 1119       | partially           |
+| Offline re-base            | GMW-1127 | 1–2 (design) | 1125       | no                  |
 
 Track 1 ≈ 13–18 d; Track 2 ≈ 8–12 d (+ spike); Track 3 ≈ 22–33 d. Critical path: spike → migration → scaffold → shared layer → forms.
 
