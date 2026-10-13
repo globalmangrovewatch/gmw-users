@@ -48,3 +48,8 @@ These instructions assume familarity with React and Create React App
 ## Deploying the app
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+## Planning docs
+
+- [`docs/REFACTOR_PLAN.md`](docs/REFACTOR_PLAN.md) — refactor and framework migration plan (Jira GMW-1110).
+- [`docs/planning/`](docs/planning/) — earlier upgrade and offline-support proposals kept for reference.
