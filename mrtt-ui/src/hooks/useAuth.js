@@ -1,6 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { setAuthToken } from 'library/auth/interceptor'
+import {
+  clearStoredSession,
+  loadStoredSession,
+  saveStoredSession
+} from 'library/auth/storedSession'
 import { exchangeCode, readAndStripCode, silentSsoCheck } from 'hooks/sso'
 
 const AuthContext = createContext(null)
@@ -15,12 +20,14 @@ export const AuthProvider = ({ children }) => {
     setAuthToken(nextToken)
     setTokenState(nextToken)
     setCurrentUser(nextUser ?? null)
+    saveStoredSession({ token: nextToken, user: nextUser })
   }, [])
 
   const clearSession = useCallback(() => {
     setAuthToken(null)
     setTokenState(null)
     setCurrentUser(null)
+    clearStoredSession()
   }, [])
 
   useEffect(() => {
@@ -48,13 +55,25 @@ export const AuthProvider = ({ children }) => {
         // page only needs to postMessage to its parent window).
         if (window.top !== window.self) return
 
+        // 1. Explicit SSO redirect back to us: exchange the code.
         const codeFromUrl = readAndStripCode()
         if (codeFromUrl) {
           await tryExchange(codeFromUrl)
-        } else {
-          const silentCode = await silentSsoCheck()
-          if (silentCode) await tryExchange(silentCode)
+          return
         }
+
+        // 2. Session persisted from a previous login on this browser: restore
+        //    it immediately so a reload does not log the user out (and does not
+        //    wait for the silent SSO timeout).
+        const stored = loadStoredSession()
+        if (stored) {
+          applySession(stored.token, stored.user)
+          return
+        }
+
+        // 3. Nothing local: ask GMW whether it has a session for this user.
+        const silentCode = await silentSsoCheck()
+        if (silentCode) await tryExchange(silentCode)
       } catch (error) {
         // e.g. REACT_APP_GMW_URL missing: fall back to the regular login form.
         console.warn('SSO bootstrap failed', error)
