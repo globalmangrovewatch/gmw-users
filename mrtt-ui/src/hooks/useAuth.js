@@ -24,43 +24,46 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   useEffect(() => {
+    // Run the bootstrap exactly once for the lifetime of the provider.
+    // React 18 StrictMode mounts, unmounts and re-mounts effects in dev; the
+    // ref guard makes the second run a no-op. The first run must therefore
+    // always be allowed to finish and clear `isChecking`, which is why there
+    // is deliberately no "cancelled" flag here (a previous version had one and
+    // left the app on the loading spinner forever in development).
     if (bootstrappedRef.current) return
     bootstrappedRef.current = true
-
-    let cancelled = false
 
     const tryExchange = async (code) => {
       try {
         const data = await exchangeCode(code)
-        if (!cancelled) applySession(data.token, data.user)
+        applySession(data.token, data.user)
       } catch (error) {
-        if (!cancelled) console.warn('SSO code exchange failed', error)
+        console.warn('SSO code exchange failed', error)
       }
     }
 
     const bootstrap = async () => {
-      // Inside the silent-SSO iframe, skip bootstrap entirely (the callback
-      // page only needs to postMessage to its parent window).
-      if (window.top !== window.self) {
-        if (!cancelled) setIsChecking(false)
-        return
-      }
+      try {
+        // Inside the silent-SSO iframe, skip bootstrap entirely (the callback
+        // page only needs to postMessage to its parent window).
+        if (window.top !== window.self) return
 
-      const codeFromUrl = readAndStripCode()
-      if (codeFromUrl) {
-        await tryExchange(codeFromUrl)
-      } else {
-        const silentCode = await silentSsoCheck()
-        if (silentCode) await tryExchange(silentCode)
+        const codeFromUrl = readAndStripCode()
+        if (codeFromUrl) {
+          await tryExchange(codeFromUrl)
+        } else {
+          const silentCode = await silentSsoCheck()
+          if (silentCode) await tryExchange(silentCode)
+        }
+      } catch (error) {
+        // e.g. REACT_APP_GMW_URL missing: fall back to the regular login form.
+        console.warn('SSO bootstrap failed', error)
+      } finally {
+        setIsChecking(false)
       }
-      if (!cancelled) setIsChecking(false)
     }
 
     bootstrap()
-
-    return () => {
-      cancelled = true
-    }
   }, [applySession])
 
   const value = useMemo(
