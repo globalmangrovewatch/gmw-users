@@ -1,22 +1,21 @@
 import { Box, Checkbox, List, ListItem, MenuItem, TextField, Typography } from '@mui/material'
 // import { toast } from 'react-toastify'
 import { useFieldArray, Controller, useFormContext } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
 
 import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { FormLayout, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
 // import { mapDataForApi } from '../library/mapDataForApi'
 
+import { questionMapping } from '../data/questionMapping'
 import { siteBackground } from '../data/questions'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '../language'
 import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
-// import {
-//   useInitializeQuestionMappedForm,
-//    useSaveRegistrationSection
-// } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
+import { useInitializeQuestionMappedForm } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '../library/useSiteInfo'
 
 import { useWatch } from 'react-hook-form'
@@ -28,6 +27,16 @@ const SiteBackgroundForm = () => {
   //   form.getValues('stakeholders')?.map((s) => s.stakeholderType) || []
   // )
   const { site_name } = useSiteInfo()
+  const { siteId } = useParams()
+  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+
+  useInitializeQuestionMappedForm({
+    siteId,
+    key: 'siteBackground',
+    apiUrl: apiAnswersUrl,
+    form,
+    questionMapping
+  })
 
   const {
     fields: stakeholdersFields,
@@ -44,14 +53,6 @@ const SiteBackgroundForm = () => {
   //   )
   //   setStakeholderTypesChecked(initialStakeholderTypesChecked)
   // }, [])
-
-  // const { data, isLoading } = useInitializeQuestionMappedForm({
-  //   key: 'siteBackground',
-  //   apiUrl: apiAnswersUrl,
-  //   form,
-  //   questionMapping
-  //   // successCallback: setInitialStakeholderTypesFromServerData
-  // })
 
   // const saveMutation = useSaveRegistrationSection(siteId)
 
