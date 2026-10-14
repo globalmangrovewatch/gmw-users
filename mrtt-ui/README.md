@@ -51,5 +51,5 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## Planning docs
 
-- [`docs/REFACTOR_PLAN.md`](docs/REFACTOR_PLAN.md) — refactor and framework migration plan (Jira GMW-1110).
+- [`docs/REFACTOR_PLAN.md`](docs/REFACTOR_PLAN.md) — refactor and Next.js migration plan (Jira GMW-1143).
 - [`docs/planning/`](docs/planning/) — earlier upgrade and offline-support proposals kept for reference.

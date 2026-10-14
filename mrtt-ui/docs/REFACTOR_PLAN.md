@@ -1,6 +1,6 @@
 # mrtt-ui — Refactor & Next.js Migration Plan
 
-> Jira: [GMW-1110](https://vizzuality.atlassian.net/browse/GMW-1110) (story) + sub-tasks GMW-1111 … GMW-1127.
+> Jira: [GMW-1143](https://vizzuality.atlassian.net/browse/GMW-1143) "Refactor and Modernize MRTT Platform" (story, epic Phase 9) + sub-tasks GMW-1111 … GMW-1127. (GMW-1110 was the earlier draft story, now declined as a duplicate.)
 > Written 2026-10-13. Supersedes `docs/planning/UPGRADE_PLAN.md` (June 2026); re-bases `docs/planning/OFFLINE_*_PLAN.md`.
 > Tech Radar consulted 2026-10-13 (`vizzuality-engineering-handbook/decisions/tech-radar/*`).
 
