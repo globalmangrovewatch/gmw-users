@@ -45,6 +45,33 @@ These instructions assume familarity with React and Create React App
 
 - If a browser doesnt automatically open, you can view the app at [http://localhost:3000](http://localhost:3000).
 
+### Keeping the session across reloads (local SSO with GMW)
+
+MRTT keeps the API bearer token **in memory only**. It is never written to `localStorage`, `sessionStorage` or a cookie the app can read. After a page reload the session is restored through the Global Mangrove Watch app (`mangrove-atlas`), which holds the token in a 30-day `httpOnly` cookie on `.globalmangrovewatch.org`:
+
+1. `AuthProvider` loads `${REACT_APP_GMW_URL}/api/auth/sso/authorize` in a hidden iframe.
+2. If GMW has a session it redirects back to `/auth/sso-silent?code=…` with a short-lived code, which the iframe posts to the parent window.
+3. MRTT exchanges the code at `/api/auth/sso/exchange` and keeps the token in memory.
+
+After an email/password login MRTT also pushes the token to GMW (`/api/auth/sso/sync`), so the next reload is restored the same way. If GMW is not reachable the silent check gives up after 4 seconds and the login form is shown.
+
+**Consequence for local development:** if `REACT_APP_GMW_URL` points at an instance of GMW that is not running, or at MRTT itself (`http://localhost:3000`), every reload logs you out. To keep the session locally, give MRTT a real GMW to talk to:
+
+**Option A: run GMW locally**
+
+1. Clone and run [`mangrove-atlas`](https://github.com/Vizzuality/mangrove-atlas) (`pnpm dev`, port 3000). In its `.env`:
+   - `AUTH_API_URL` must be the same backend as MRTT's `REACT_APP_AUTH_URL`.
+   - `NEXTAUTH_URL=http://localhost:3000`
+   - `SSO_ALLOWED_ORIGINS=http://localhost:3001` (the MRTT origin; it feeds `frame-ancestors`, the `redirect_uri` allowlist and CORS on the SSO endpoints).
+2. Run MRTT on another port: `PORT=3001 pnpm start`, with `REACT_APP_GMW_URL=http://localhost:3000` in MRTT's `.env`.
+3. Log in to MRTT (or to GMW) and reload: you stay logged in.
+
+**Option B: use the staging GMW**
+
+Set `REACT_APP_GMW_URL` to the staging GMW URL and ask the GMW maintainers to add your MRTT origin (for example `http://localhost:3001`) to the `SSO_ALLOWED_ORIGINS` config var of that deployment. The browser must allow third-party cookies for the GMW origin for the iframe handshake to work.
+
+Do not "fix" this by persisting the token in web storage: that re-exposes it to any script running on the MRTT origin and cannot see logouts done on the GMW side. See GMW-1149.
+
 ## Deploying the app
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
