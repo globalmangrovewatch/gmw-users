@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -7,6 +7,7 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 
 import SiteBackgroundForm from './SiteBackgroundForm'
+import FormWrapperProvider from './FormWrapper/FormWrapperProvider'
 
 jest.mock('axios')
 jest.mock('./QuestionNav', () => () => null)
@@ -22,22 +23,17 @@ const FormWrapper = ({ children }) => {
 
 FormWrapper.propTypes = { children: PropTypes.node.isRequired }
 
-const renderSiteBackgroundForm = () => {
+const renderSiteBackgroundForm = ({ Provider = FormWrapper } = {}) => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
 
   return render(
     <QueryClientProvider client={queryClient}>
       <MemoryRouter initialEntries={[`/sites/${SITE_ID}/site-background`]}>
-        <Routes>
-          <Route
-            path='/sites/:siteId/site-background'
-            element={
-              <FormWrapper>
-                <SiteBackgroundForm />
-              </FormWrapper>
-            }
-          />
-        </Routes>
+        <Provider>
+          <Routes>
+            <Route path='/sites/:siteId/site-background' element={<SiteBackgroundForm />} />
+          </Routes>
+        </Provider>
       </MemoryRouter>
     </QueryClientProvider>
   )
@@ -57,7 +53,19 @@ describe('SiteBackgroundForm', () => {
                 { stakeholderType: 'Unknown' }
               ]
             },
-            { question_id: '2.2', answer_value: 'Protected informally at a local level' }
+            { question_id: '2.2', answer_value: 'Protected informally at a local level' },
+            {
+              question_id: '2.5',
+              answer_value: {
+                selectedValues: ['Partial protection', 'Sustainable use'],
+                isOtherChecked: true,
+                otherValue: 'Seasonal closure'
+              }
+            },
+            {
+              question_id: '2.8',
+              answer_value: { selectedValues: ['Communal'], isOtherChecked: false }
+            }
           ]
         })
       }
@@ -76,11 +84,38 @@ describe('SiteBackgroundForm', () => {
 
     const checkboxes = screen.getAllByRole('checkbox')
     const checkedTypes = checkboxes.filter((c) => c.checked).map((c) => c.value)
-    expect(checkedTypes).toEqual(['Local leaders', 'Unknown'])
+    expect(checkedTypes).toEqual(expect.arrayContaining(['Local leaders', 'Unknown']))
+    expect(checkedTypes).not.toContain('Local community representatives')
 
     // 2.2 (managementStatus) is a MUI Select: its value lives in a hidden input
     expect(screen.getByDisplayValue('Protected informally at a local level')).toBeInTheDocument()
 
     expect(axios.get).toHaveBeenCalledWith(ANSWERS_URL)
+  })
+
+  it('marks the multi-select checkbox groups (2.5, 2.8) through the real FormWrapperProvider', async () => {
+    renderSiteBackgroundForm({ Provider: FormWrapperProvider })
+
+    await screen.findByDisplayValue('Jane Doe')
+
+    // CheckboxGroup mirrors the controller value into local state in an
+    // effect, so the checked state lands one render after the form value.
+    await waitFor(() => {
+      const checkedValues = screen
+        .getAllByRole('checkbox')
+        .filter((c) => c.checked)
+        .map((c) => c.value)
+
+      expect(checkedValues).toEqual(
+        expect.arrayContaining([
+          'Local leaders',
+          'Unknown',
+          'Partial protection',
+          'Sustainable use',
+          'Communal'
+        ])
+      )
+    })
+    expect(screen.getByDisplayValue('Seasonal closure')).toBeInTheDocument()
   })
 })

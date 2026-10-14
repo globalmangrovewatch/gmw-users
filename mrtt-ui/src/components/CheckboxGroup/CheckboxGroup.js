@@ -1,6 +1,6 @@
 import { Checkbox, FormControlLabel, FormGroup, Stack, TextField } from '@mui/material'
 import PropTypes from 'prop-types'
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef } from 'react'
 import language from '../../language'
 import { makeValidClassName } from '../../library/strings/makeValidClassName'
 
@@ -39,21 +39,15 @@ const CheckboxGroup = forwardRef(
     },
     ref
   ) => {
-    const [isOtherChecked, setIsOtherChecked] = useState(!!value?.isOtherChecked)
-    const [nonOtherSelectedValues, setNonOtherSelectedValues] = useState(
-      value?.selectedValues ?? []
-    )
-    const [otherInputValue, setOtherInputValue] = useState(value?.otherValue ?? '')
-
-    useEffect(() => {
-      setNonOtherSelectedValues(value?.selectedValues ?? [])
-      setIsOtherChecked(!!value?.isOtherChecked)
-      setOtherInputValue(value?.otherValue ?? '')
-    }, [value?.selectedValues, value?.isOtherChecked, value?.otherValue])
+    // Fully controlled: everything shown derives from `value`, which the form
+    // owns. No local mirror of it, so there is no extra render (or stale copy)
+    // between the form value changing and the checkboxes reflecting it.
+    const isOtherChecked = !!value?.isOtherChecked
+    const nonOtherSelectedValues = value?.selectedValues ?? []
+    const otherInputValue = value?.otherValue ?? ''
 
     const handleOtherCheckboxChange = (event) => {
       const isOtherCheckedNewState = !isOtherChecked
-      setIsOtherChecked(isOtherCheckedNewState)
       onChange(
         getValueToReturn({
           nonOtherSelectedValues,
@@ -66,13 +60,12 @@ const CheckboxGroup = forwardRef(
     }
     const handleOtherTextInputChange = (event) => {
       const {
-        target: { value }
+        target: { value: otherValue }
       } = event
-      setOtherInputValue(value)
       onChange(
         getValueToReturn({
           nonOtherSelectedValues,
-          otherInputValue: value,
+          otherInputValue: otherValue,
           isOtherChecked,
           shouldReturnEvent,
           event
@@ -89,7 +82,6 @@ const CheckboxGroup = forwardRef(
         updateNonOtherSelectedValues.push(itemValue)
       }
 
-      setNonOtherSelectedValues(updateNonOtherSelectedValues)
       onChange(
         getValueToReturn({
           nonOtherSelectedValues: updateNonOtherSelectedValues,
