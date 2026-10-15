@@ -22,12 +22,6 @@ export const SILENT_CALLBACK_PATH = '/auth/sso-silent'
 const SSO_MESSAGE_TYPE = 'mrtt-sso-code'
 const SILENT_TIMEOUT_MS = 4000
 
-export function redirectToAuthorize(returnUrl: string = window.location.href): void {
-  const authorize = new URL(`${gmwUrl()}/api/auth/sso/authorize`)
-  authorize.searchParams.set('redirect_uri', returnUrl)
-  window.location.replace(authorize.toString())
-}
-
 export async function exchangeCode(code: string): Promise<SSOExchangeResponse> {
   const { data } = await axios.post<SSOExchangeResponse>(
     `${gmwUrl()}/api/auth/sso/exchange`,

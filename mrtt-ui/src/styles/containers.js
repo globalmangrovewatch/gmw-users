@@ -61,11 +61,6 @@ const TitleAndActionContainer = styled('div')`
   justify-content: space-between;
   align-items: center;
 `
-const PaddedPageTopSection = styled(Stack)`
-  padding: ${themeMui.spacing(2)};
-  border-bottom: ${theme.border.primary};
-`
-
 const PaddedSection = styled(Stack)`
   padding: ${themeMui.spacing(2)};
 `
@@ -87,7 +82,6 @@ export {
   ContentWrapper,
   LinkCard,
   LoadingWrapper,
-  PaddedPageTopSection,
   PaddedSection,
   PagePadding,
   QuestionWrapper,

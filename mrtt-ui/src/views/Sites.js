@@ -14,7 +14,6 @@ import {
 } from '../styles/containers'
 import { ItemTitle, ItemSubTitle, PageTitle } from '../styles/typography'
 import language from '../language'
-import { useForm } from 'react-hook-form'
 
 const sitesUrl = `${process.env.REACT_APP_API_URL}/sites/`
 
@@ -23,21 +22,15 @@ function Sites() {
   const [sites, setSites] = useState([])
   const [downloadOptionsAnchorEl, setDownloadOptionsAnchorEl] = React.useState(null)
 
-  const form = useForm()
-
-  useEffect(
-    function loadSitesData() {
-      axios
-        .get(sitesUrl)
-        .then(({ data }) => {
-          form.reset()
-          setIsLoading(false)
-          setSites(data)
-        })
-        .catch(() => toast.error(language.error.apiLoad))
-    },
-    [form]
-  )
+  useEffect(function loadSitesData() {
+    axios
+      .get(sitesUrl)
+      .then(({ data }) => {
+        setIsLoading(false)
+        setSites(data)
+      })
+      .catch(() => toast.error(language.error.apiLoad))
+  }, [])
 
   const handleDownloadButtonClick = (event) => {
     setDownloadOptionsAnchorEl(event.currentTarget)
