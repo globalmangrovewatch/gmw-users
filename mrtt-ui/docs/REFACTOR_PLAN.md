@@ -21,6 +21,8 @@ Total ≈ **45–65 dev-days** (one developer). Track 1 overlaps the proof of co
 
 ## 1. Decisions (2026-10-13)
 
+Each decision with a real reversal cost is recorded as an ADR in [`docs/adr/`](adr/README.md) (001 framework, 002 hosting, 003 auth, 004 UI, 005 data layer, 006 validation, 007 dates, 008 toolchain). This table is the summary; the ADRs hold context, alternatives and consequences.
+
 | Topic     | Decision                                                                                                                                                                                    |
 | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Framework | **Next.js App Router** (Radar Adopt; parity with `mangrove-atlas`). No alternative framework evaluated.                                                                                     |
