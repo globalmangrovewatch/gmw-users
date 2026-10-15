@@ -171,13 +171,6 @@ const EcologicalStatusAndOutcomesForm = () => {
     )
   }
 
-  // useInitializeMonitoringForm({
-  //   apiUrl: monitoringFormSingularUrl,
-  //   formType,
-  //   isEditMode,
-  //   questionMapping: questionMapping.ecologicalStatusAndOutcomes
-  // })
-
   const { isLoading } = useInitializeQuestionMappedFormMonitors({
     key: 'ecologicalStatusAndOutcomes',
     apiUrl: isEditMode ? monitoringFormSingularUrl : null,
@@ -188,46 +181,6 @@ const EcologicalStatusAndOutcomesForm = () => {
       enabled: isEditMode
     }
   })
-
-  // const handleSubmit = (formData) => {
-  //   setIsSubmitting(true)
-  //   setIsSubmitError(false)
-
-  //   const payload = {
-  //     form_type: formType,
-  //     answers: mapDataForApi('ecologicalStatusAndOutcomes', formData)
-  //     // answers: mapAllDataForApi({
-  //     //   projectDetails: { ...formData },
-  //     //   siteBackground: { ...formData },
-  //     //   restorationAims: { ...formData },
-  //     //   causesOfDecline: { ...formData },
-  //     //   preRestorationAssessment: { ...formData },
-  //     //   siteInterventions: { ...formData },
-  //     //   costs: { ...formData },
-  //     //   managementStatusAndEffectiveness: { ...formData },
-  //     //   socioeconomicGovernanceStatusAndOutcomes: { ...formData },
-  //     //   ecologicalStatusAndOutcomes: { ...formData }
-  //     // })
-  //   }
-  //   if (isEditMode) {
-  //     editMonitoringForm(payload)
-  //   } else {
-  //     createNewMonitoringForm(payload)
-  //     axios
-  //       .post(registrationInterventionFormsUrl, payload)
-  //       .then(({ data }) => {
-  //         setIsSubmitting(false)
-  //         toast.success(language.success.getCreateThingSuccessMessage('This form'))
-  //         resetForm()
-  //         navigate(data.id)
-  //       })
-  //       .catch(() => {
-  //         setIsSubmitting(false)
-  //         setIsSubmitError(true)
-  //         toast.error(language.error.submit)
-  //       })
-  //   }
-  // }
 
   const handleDeleteConfirm = () => {
     setIsDeleting(true)

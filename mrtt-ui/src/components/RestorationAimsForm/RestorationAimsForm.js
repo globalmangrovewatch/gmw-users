@@ -32,69 +32,6 @@ const RestorationAimsForm = () => {
     questionMapping
   })
 
-  // const getStakeholders = useMemo(
-  //   () => (registrationAnswersFromServer) =>
-  //     registrationAnswersFromServer?.data.find((dataItem) => dataItem.question_id === '2.1')
-  //       ?.answer_value ?? [],
-  //   []
-  // )
-
-  // const loadStakeholdersFromServerData = useCallback(
-  //   (serverResponse) => {
-  //     return setStakeholders(getStakeholders(serverResponse))
-  //   },
-  //   [getStakeholders]
-  // )
-  // const { data, isError, error } = useInitializeQuestionMappedForm({
-  //   apiUrl: apiAnswersUrl,
-  //   resetForm: form.reset,
-  //   questionMapping: questionMapping.restorationAims,
-  //   successCallback: loadStakeholdersFromServerData,
-  //   queryOptions: {
-  //     select: ({ response, formattedData }) => {
-  //       const stakeholders =
-  //         response.data.find((item) => item.question_id === '2.1')?.answer_value ?? []
-
-  //       return {
-  //         response,
-  //         formattedData,
-  //         stakeholders
-  //       }
-  //     }
-  //   }
-  // })
-
-  // const areThereStakeholders = !!data?.stakeholders.length
-
-  // const handleSubmit = async (values: any) => {
-  //   const fields = Object.keys(questionMapping.restorationAims)
-  //   const ok = await form.trigger(fields, { shouldFocus: true })
-  //   if (!ok) {
-  //     setIsSubmitError(true)
-  //     toast.error(language.error.validation)
-  //     return
-  //   }
-  //   setIsSubmitting(true)
-  //   setIsSubmitError(false)
-
-  //   if (!values) return
-
-  //   const payload = mapDataForApi('restorationAims', values)
-
-  //   axios
-  //     .patch(apiAnswersUrl, payload)
-  //     .then(() => {
-  //       setIsSubmitError(false)
-  //       setIsSubmitting(false)
-  //       toast.success(language.success.submit)
-  //     })
-  //     .catch(() => {
-  //       setIsSubmitting(false)
-  //       setIsSubmitError(true)
-  //       toast.error(language.error.submit)
-  //     })
-  // }
-
   // TO DO
   // helper to get sections, if any, with errors questions, answers, errors
   const noStakeholdersWarning = (
