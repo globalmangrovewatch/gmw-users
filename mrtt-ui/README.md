@@ -16,7 +16,8 @@ The project board for this work can be found [here](https://github.com/Vizzualit
 - React-toastify
 - React Hook Form
 - Yup for form validation
-- Eslint, Prettier, and Husky to manage git hooks
+- oxlint (linting), oxfmt (formatting), Husky + lint-staged (git hooks)
+- Vitest + Testing Library (unit tests)
 - Mapbox to draw mangrove site locations.
 - [The Global Mangrove Watch API](https://github.com/globalmangrovewatch/gmw-api) to handle data on the server side
 - Transifex for user language translation.
@@ -37,13 +38,33 @@ The project board for this work can be found [here](https://github.com/Vizzualit
 
 ## Setting Up and Running a Development Environment
 
-These instructions assume familarity with React and Create React App
+These instructions assume familiarity with React and Create React App.
 
-1. Create a file called `.env` in the root folder (the same folder as this readme). Copy the keys from `env.sample`. Values for `.env` will need to be obtained from the repo custodian.
-1. Run `npm install`
-1. Run `npm start`. This should open a browser at in development mode.
+**Requirements:** Node `22.15.0` exactly (see `.nvmrc`; `engine-strict` rejects other versions) and pnpm (the version is pinned in `package.json#packageManager`; `corepack enable` picks it up).
 
-- If a browser doesnt automatically open, you can view the app at [http://localhost:3000](http://localhost:3000).
+1. `nvm use` (or install Node 22.15.0 another way).
+1. Create a file called `.env` in this folder (`mrtt-ui/`). Copy the keys from `.env.sample`. Values will need to be obtained from the repo custodian.
+1. `pnpm install`. This also installs the git hooks (Husky) for the whole repository.
+1. `pnpm dev`. This opens the app in development mode at [http://localhost:3000](http://localhost:3000).
+
+### Scripts
+
+| Script                    | What it does                                               |
+| ------------------------- | ---------------------------------------------------------- |
+| `pnpm dev`                | Development server                                         |
+| `pnpm build`              | Production build into `build/`                             |
+| `pnpm start`              | Serves `build/` with Express (what Heroku runs)            |
+| `pnpm lint`               | oxlint (`pnpm lint:fix` applies safe fixes)                |
+| `pnpm format`             | oxfmt, writes changes (`pnpm format:check` only reports)   |
+| `pnpm check-types`        | `tsc --noEmit`                                             |
+| `pnpm test:unit`          | Vitest, single run (`pnpm test:unit:watch` for watch mode) |
+| `pnpm test:unit:coverage` | Vitest with coverage into `coverage/`                      |
+
+### Git hooks and CI
+
+- **pre-commit** runs oxlint `--fix` and oxfmt on the staged files (lint-staged).
+- **pre-push** runs `pnpm lint` and `pnpm test:unit`.
+- **CI** (`.github/workflows/ci.yml`) runs lint, format check, typecheck, unit tests with coverage and the build on every pull request that touches `mrtt-ui/`, then sends the coverage to SonarQube Cloud. Typecheck runs only in CI while the codebase moves from JS to TS.
 
 ### Keeping the session across reloads (local SSO with GMW)
 
@@ -63,7 +84,7 @@ After an email/password login MRTT also pushes the token to GMW (`/api/auth/sso/
    - `AUTH_API_URL` must be the same backend as MRTT's `REACT_APP_AUTH_URL`.
    - `NEXTAUTH_URL=http://localhost:3000`
    - `SSO_ALLOWED_ORIGINS=http://localhost:3001` (the MRTT origin; it feeds `frame-ancestors`, the `redirect_uri` allowlist and CORS on the SSO endpoints).
-2. Run MRTT on another port: `PORT=3001 pnpm start`, with `REACT_APP_GMW_URL=http://localhost:3000` in MRTT's `.env`.
+2. Run MRTT on another port: `PORT=3001 pnpm dev`, with `REACT_APP_GMW_URL=http://localhost:3000` in MRTT's `.env`.
 3. Log in to MRTT (or to GMW) and reload: you stay logged in.
 
 **Option B: use the staging GMW**
