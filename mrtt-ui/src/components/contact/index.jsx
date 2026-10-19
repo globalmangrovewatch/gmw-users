@@ -17,8 +17,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
-const isDev = process.env.NODE_ENV === 'development'
-
 const TOPICS = [
   { label: 'General', value: 'general' },
   { label: 'Datasets', value: 'datasets' },
@@ -36,9 +34,7 @@ const schema = yup.object().shape({
     .oneOf(TOPICS.map((t) => t.value))
     .required('Topic is required'),
   message: yup.string().min(2).required('Message is required'),
-  privacyPolicy: isDev
-    ? yup.boolean().oneOf([true], 'You must accept the Privacy Policy')
-    : yup.boolean().optional()
+  privacyPolicy: yup.boolean().oneOf([true], 'You must accept the Privacy Notice')
 })
 
 const defaultValues = {
@@ -47,7 +43,7 @@ const defaultValues = {
   email: '',
   topic: '',
   message: '',
-  privacyPolicy: true
+  privacyPolicy: false
 }
 
 const ContactForm = ({ isOpen, setIsOpen }) => {
@@ -69,7 +65,6 @@ const ContactForm = ({ isOpen, setIsOpen }) => {
   }
 
   const onSubmit = async (values) => {
-    console.info(values)
     setStatus('loading')
     try {
       const res = await fetch('https://www.globalmangrovewatch.org/api/send', {
@@ -84,8 +79,7 @@ const ContactForm = ({ isOpen, setIsOpen }) => {
       }
       setStatus('success')
       reset()
-    } catch (error) {
-      console.error('Error submitting form:', error)
+    } catch {
       setStatus('error')
     }
   }
@@ -180,26 +174,24 @@ const ContactForm = ({ isOpen, setIsOpen }) => {
               )}
             />
 
-            {isDev && (
-              <Controller
-                name='privacyPolicy'
-                control={control}
-                render={({ field }) => (
-                  <FormControl error={!!errors.privacyPolicy}>
-                    <Box display='flex' alignItems='center' gap={1}>
-                      <Checkbox {...field} checked={field.value} />
-                      <FormLabel sx={{ margin: 0 }}>
-                        I agree with the{' '}
-                        <a href='/' target='_blank' rel='noopener noreferrer'>
-                          Privacy Policy
-                        </a>
-                      </FormLabel>
-                    </Box>
-                    <FormHelperText>{errors.privacyPolicy?.message}</FormHelperText>
-                  </FormControl>
-                )}
-              />
-            )}
+            <Controller
+              name='privacyPolicy'
+              control={control}
+              render={({ field }) => (
+                <FormControl error={!!errors.privacyPolicy}>
+                  <Box display='flex' alignItems='center' gap={1}>
+                    <Checkbox {...field} checked={field.value} />
+                    <FormLabel sx={{ margin: 0 }}>
+                      I agree with the{' '}
+                      <a href='/privacy-notice.pdf' target='_blank' rel='noopener noreferrer'>
+                        Privacy Notice
+                      </a>
+                    </FormLabel>
+                  </Box>
+                  <FormHelperText>{errors.privacyPolicy?.message}</FormHelperText>
+                </FormControl>
+              )}
+            />
 
             {status === 'success' && (
               <Typography color='success.main'>Email sent successfully!</Typography>

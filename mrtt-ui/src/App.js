@@ -116,7 +116,6 @@ function App() {
                     path='/sites/:siteId/form/causes-of-decline'
                     element={<CausesOfDeclineForm />}
                   />
-                  <Route path='/sites/:siteId/form/costs' element={<CostsForm />} />
                   <Route
                     path='/sites/:siteId/form/management-status-and-effectiveness'
                     element={<ManagementStatusAndEffectivenessForm />}

@@ -173,32 +173,6 @@ function CausesOfDeclineForm() {
     setCausesOfDeclineTypesChecked(causesOfDeclineTypesCheckedCopy)
   }
 
-  // const onSubmit = async (data) => {
-  //   const fields = Object.keys(questionMapping['causesOfDecline'])
-  //   const ok = await form.trigger(fields, { shouldFocus: true })
-
-  //   if (!ok) {
-  //     setIsError(true)
-  //     toast.error(language.error.validation)
-  //     return
-  //   }
-  //   setIsSubmitting(true)
-  //   setIsError(false)
-  //   if (!data) return
-
-  //   axios
-  //     .patch(apiAnswersUrl, mapDataForApi('causesOfDecline', data))
-  //     .then(() => {
-  //       setIsSubmitting(false)
-  //       toast.success(language.success.submit)
-  //     })
-  //     .catch(() => {
-  //       setIsError(true)
-  //       setIsSubmitting(false)
-  //       toast.error(language.error.apiLoad)
-  //     })
-  // }
-
   const causesOfDeclineChecked = useMemo(() => {
     const causes = form.getValues('causesOfDecline') ?? []
     return causes.flatMap((cause) => {
@@ -220,7 +194,6 @@ function CausesOfDeclineForm() {
         currentSection='causes-of-decline'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
-      {/* <FormProvider> */}
       <FormLayout>
         <FormQuestionDiv>
           <StickyFormLabel>{causesOfDecline.lossKnown.question}</StickyFormLabel>
@@ -406,7 +379,6 @@ function CausesOfDeclineForm() {
           </FormQuestionDiv>
         ) : null}
       </FormLayout>
-      {/* </FormProvider> */}
     </ContentWrapper>
   )
 }

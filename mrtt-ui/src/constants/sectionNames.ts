@@ -38,17 +38,6 @@ export const SECTION_NAMES_DICTIONARY_MONITORS = {
   'ecological-status-and-outcomes': 'ecologicalStatusAndOutcomes'
 }
 
-export const FORM_NAMES_DICTIONARY_MONITORS: {
-  [key in
-    | 'managementStatusAndEffectiveness'
-    | 'socioeconomicGovernanceStatusAndOutcomes'
-    | 'ecologicalStatusAndOutcomes']: string
-} = {
-  managementStatusAndEffectiveness: 'Management Status and Effectiveness',
-  socioeconomicGovernanceStatusAndOutcomes: 'Socioeconomic and Governance Status and Outcomes',
-  ecologicalStatusAndOutcomes: 'Ecological Status and Outcomes'
-}
-
 export const SECTION_REGISTRY = {
   'project-details': {
     target: 'interventions',

@@ -41,16 +41,18 @@ const getMobileNavButtonSecondaryCss = (props) => css`
   display: inline-flex;
   padding: ${themeMui.spacing(1)} ${themeMui.spacing(3)};
   width: 100%;
-  ${props.disabled
-    ? css`
-        background-color: ${theme.color.bodyBackground};
-        border: solid thin ${theme.color.lightGreen};
-        color: ${theme.color.lightGreen};
-      `
-    : theme.hoverState(css`
-        background-color: ${theme.color.primary};
-        color: ${theme.color.white};
-      `)};
+  ${
+    props.disabled
+      ? css`
+          background-color: ${theme.color.bodyBackground};
+          border: solid thin ${theme.color.lightGreen};
+          color: ${theme.color.lightGreen};
+        `
+      : theme.hoverState(css`
+          background-color: ${theme.color.primary};
+          color: ${theme.color.white};
+        `)
+  };
 `
 const PrivacySelect = styled('select')`
   ${(props) => getMobileNavButtonSecondaryCss(props)}

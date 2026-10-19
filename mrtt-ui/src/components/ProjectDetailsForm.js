@@ -74,8 +74,8 @@ function ProjectDetailsForm() {
       } else {
         setMapExtent(undefined)
       }
-    } catch (e) {
-      console.error(e)
+    } catch {
+      // invalid geometry: keep the current map extent
     }
   }
 

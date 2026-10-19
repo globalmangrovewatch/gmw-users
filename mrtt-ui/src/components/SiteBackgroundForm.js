@@ -1,12 +1,10 @@
 import { Box, Checkbox, List, ListItem, MenuItem, TextField, Typography } from '@mui/material'
-// import { toast } from 'react-toastify'
 import { useFieldArray, Controller, useFormContext } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 
 import { ContentWrapper } from '../styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
 import { FormLayout, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../styles/forms'
-// import { mapDataForApi } from '../library/mapDataForApi'
 
 import { questionMapping } from '../data/questionMapping'
 import { siteBackground } from '../data/questions'
@@ -23,9 +21,6 @@ import { useWatch } from 'react-hook-form'
 const SiteBackgroundForm = () => {
   const form = useFormContext()
 
-  // const [stakeholderTypesChecked, setStakeholderTypesChecked] = useState(
-  //   form.getValues('stakeholders')?.map((s) => s.stakeholderType) || []
-  // )
   const { site_name } = useSiteInfo()
   const { siteId } = useParams()
   const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
@@ -43,65 +38,6 @@ const SiteBackgroundForm = () => {
     append: stakeholdersAppend,
     remove: stakeholdersRemove
   } = useFieldArray({ name: 'stakeholders', control: form.control })
-
-  // const setInitialStakeholderTypesFromServerData = useCallback((serverResponse) => {
-  //   const initialStakeholders =
-  //     serverResponse?.data.find((dataItem) => dataItem.question_id === '2.1')?.answer_value ?? []
-
-  //   const initialStakeholderTypesChecked = initialStakeholders?.map(
-  //     (stakeholder) => stakeholder.stakeholderType
-  //   )
-  //   setStakeholderTypesChecked(initialStakeholderTypesChecked)
-  // }, [])
-
-  // const saveMutation = useSaveRegistrationSection(siteId)
-
-  // const handleSubmit = async (formData) => {
-  //   const fields = Object.keys(questionMapping['siteBackground'])
-
-  //   const ok = await form.trigger(fields, { shouldFocus: true })
-  //   if (!ok) {
-  //     setIsError(true)
-  //     toast.error(language.error.validation)
-  //     return
-  //   }
-  //   setIsSubmitting(true)
-  //   setIsError(false)
-
-  //   if (!formData) return
-
-  //   axios
-  //     .patch(apiAnswersUrl, mapDataForApi('siteBackground', formData))
-  //     .then(() => {
-  //       setIsError(false)
-  //       setIsSubmitting(false)
-  //       toast.success(language.success.submit)
-  //     })
-  //     .catch(() => {
-  //       setIsError(true)
-  //       setIsSubmitting(false)
-  //       toast.error(language.error.submit)
-  //     })
-  // }
-
-  // const handleStakeholdersOnChange = (_event, stakeholder) => {
-  //   setStakeholderTypesChecked((prev) => {
-  //     const isChecked = prev.includes(stakeholder)
-  //     const next = isChecked ? prev.filter((t) => t !== stakeholder) : [...prev, stakeholder]
-
-  //     if (isChecked) {
-  //       const fieldIndex = stakeholdersFields.findIndex(
-  //         (field) => field.stakeholderType === stakeholder
-  //       )
-  //       if (fieldIndex !== -1) stakeholdersRemove(fieldIndex)
-  //     } else {
-  //       const exists = stakeholdersFields.some((f) => f.stakeholderType === stakeholder)
-  //       if (!exists) stakeholdersAppend({ stakeholderType: stakeholder })
-  //     }
-
-  //     return next
-  //   })
-  // }
 
   const handleStakeholdersOnChange = (_event, stakeholder) => {
     const isChecked = stakeholderTypesChecked.includes(stakeholder)

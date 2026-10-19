@@ -41,7 +41,7 @@ describe('CheckboxGroup', () => {
   })
 
   it('reports the next value through onChange without keeping local state', () => {
-    const onChange = jest.fn()
+    const onChange = vi.fn()
     render(
       <CheckboxGroup
         id='q'

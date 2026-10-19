@@ -1,8 +1,8 @@
-
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
+# Load nvm and the project's Node (mrtt-ui/.nvmrc) so hooks also work from GUI git clients.
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+cd mrtt-ui || exit 1
+command -v nvm >/dev/null 2>&1 && nvm use --silent >/dev/null 2>&1
 
-cd ./mrtt-ui &&  npm run prettier  
+# `pnpm exec` (unlike `pnpm run`) does not enforce engine-strict, so a nearby Node still works.
+pnpm exec lint-staged

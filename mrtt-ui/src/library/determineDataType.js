@@ -5,10 +5,7 @@ function verifyJsonFormat(file) {
     .then(() => {
       return 'geojson'
     })
-    .catch(() => {
-      console.error('Unknown JSON format')
-      return ''
-    })
+    .catch(() => '')
 }
 
 /**

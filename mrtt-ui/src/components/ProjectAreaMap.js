@@ -74,7 +74,6 @@ const ProjectAreaMap = ({
         mapRef.current.zoomTo(0, animationProps)
       }
     } catch (e) {
-      console.error(e)
       setError(e.message)
     }
   }, [extent])
