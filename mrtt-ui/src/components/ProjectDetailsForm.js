@@ -62,20 +62,23 @@ function ProjectDetailsForm() {
   })
 
   const onCountriesChange = (field, features) => {
+    field.onChange(features)
+
+    if (features.length === 0) {
+      setMapExtent(undefined)
+      return
+    }
+
+    // Only the map framing can fail (a country without a usable bbox). The selection above is
+    // already saved, so keep the current map extent and report the problem.
     try {
-      field.onChange(features)
-      if (features.length > 0) {
-        const bboxFeatureCollection = {
-          features: features.map((feature) => turfBboxPolygon(feature.bbox)),
-          type: 'FeatureCollection'
-        }
-        const totalBbox = turfBbox(turfConvex(bboxFeatureCollection))
-        setMapExtent(totalBbox)
-      } else {
-        setMapExtent(undefined)
+      const bboxFeatureCollection = {
+        features: features.map((feature) => turfBboxPolygon(feature.bbox)),
+        type: 'FeatureCollection'
       }
-    } catch {
-      // invalid geometry: keep the current map extent
+      setMapExtent(turfBbox(turfConvex(bboxFeatureCollection)))
+    } catch (error) {
+      console.error('Could not fit the map to the selected countries', error)
     }
   }
 
