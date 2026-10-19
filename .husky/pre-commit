@@ -1,5 +1,8 @@
-# Load nvm so hooks run with the project's Node in GUI git clients too.
+# Load nvm and the project's Node (mrtt-ui/.nvmrc) so hooks also work from GUI git clients.
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+cd mrtt-ui || exit 1
+command -v nvm >/dev/null 2>&1 && nvm use --silent >/dev/null 2>&1
 
-cd mrtt-ui && pnpm exec lint-staged
+# `pnpm exec` (unlike `pnpm run`) does not enforce engine-strict, so a nearby Node still works.
+pnpm exec lint-staged
