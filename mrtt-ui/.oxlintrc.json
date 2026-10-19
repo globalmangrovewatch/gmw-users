@@ -14,7 +14,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
     // React Compiler rules from the correctness category. The current code breaks them in the
-    // section forms and views that GMW-1123 / GMW-1124 rewrite, so they warn until then.
+    // section forms and views due for a rewrite, so they warn until then.
     "react/set-state-in-effect": "warn",
     "react/immutability": "warn",
     "react/globals": "warn",

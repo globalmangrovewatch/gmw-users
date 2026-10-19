@@ -91,7 +91,7 @@ After an email/password login MRTT also pushes the token to GMW (`/api/auth/sso/
 
 Set `REACT_APP_GMW_URL` to the staging GMW URL and ask the GMW maintainers to add your MRTT origin (for example `http://localhost:3001`) to the `SSO_ALLOWED_ORIGINS` config var of that deployment. The browser must allow third-party cookies for the GMW origin for the iframe handshake to work.
 
-Do not "fix" this by persisting the token in web storage: that re-exposes it to any script running on the MRTT origin and cannot see logouts done on the GMW side. See GMW-1149.
+Do not "fix" this by persisting the token in web storage: that re-exposes it to any script running on the MRTT origin and cannot see logouts done on the GMW side.
 
 ## Deploying the app
 
