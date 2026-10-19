@@ -64,7 +64,7 @@ These instructions assume familiarity with React and Create React App.
 
 - **pre-commit** runs oxlint `--fix` and oxfmt on the staged files (lint-staged).
 - **pre-push** runs `pnpm lint` and `pnpm test:unit`.
-- **CI** (`.github/workflows/ci.yml`) runs lint, format check, typecheck, unit tests with coverage and the build on every pull request that touches `mrtt-ui/`, then sends the coverage to SonarQube Cloud. Typecheck runs only in CI while the codebase moves from JS to TS.
+- **CI** (`.github/workflows/ci.yml`) runs lint, format check, typecheck, unit tests with coverage and the build on every pull request that touches `mrtt-ui/`. Typecheck runs only in CI while the codebase moves from JS to TS.
 
 ### Keeping the session across reloads (local SSO with GMW)
 

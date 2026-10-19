@@ -42,7 +42,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reportsDirectory: 'coverage',
-      reporter: ['text', 'text-summary', 'html', 'lcov'],
+      reporter: ['text', 'text-summary', 'html'],
       include: ['src/**/*.{js,jsx,ts,tsx}'],
       exclude: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}', 'src/index.js', 'src/**/*.d.ts']
     }
