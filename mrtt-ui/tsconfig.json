@@ -1,9 +1,22 @@
 {
   "compilerOptions": {
+    "target": "es2020",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
     "allowJs": true,
     "checkJs": false,
-    "jsx": "react",
-    "baseUrl": "src"
+    "strict": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "baseUrl": "src",
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom"]
   },
   "include": ["src"]
 }

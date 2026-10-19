@@ -1,8 +1,5 @@
-
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
+# Load nvm so hooks run with the project's Node in GUI git clients too.
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-cd ./mrtt-ui &&  npm run prettier  
+cd mrtt-ui && pnpm exec lint-staged

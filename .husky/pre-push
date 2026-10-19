@@ -1,4 +1,4 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-cd ./mrtt-ui &&  npm run lint:fix && npm test -- --watchAll=false
+cd mrtt-ui && pnpm lint && pnpm test:unit

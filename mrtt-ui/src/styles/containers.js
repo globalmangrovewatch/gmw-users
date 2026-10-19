@@ -42,7 +42,7 @@ const LinkCard = styled(Link)`
     border-color: ${theme.color.primary};
     border-width: 2px;
   `)}
-  @media(hover: none) {
+  @media (hover: none) {
     border-color: ${theme.color.primary};
   }
 `
