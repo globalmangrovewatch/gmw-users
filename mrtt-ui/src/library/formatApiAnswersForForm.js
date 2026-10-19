@@ -1,4 +1,4 @@
-import { defaultValues } from '../components/FormWrapper/FormSchemaValidation'
+import { defaultValues } from '@/components/FormWrapper/FormSchemaValidation'
 export const formatApiAnswersForForm = ({ apiAnswers, questionMapping }) => {
   // questionMapping type is an object with one level of properties with string values
 

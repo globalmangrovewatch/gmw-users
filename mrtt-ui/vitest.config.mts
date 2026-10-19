@@ -1,5 +1,3 @@
-import { readdirSync } from 'node:fs'
-import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import react from '@vitejs/plugin-react'
@@ -8,18 +6,14 @@ import { defineConfig } from 'vitest/config'
 
 const srcDir = fileURLToPath(new URL('./src', import.meta.url))
 
-// CRA resolves bare imports from `src` (tsconfig `baseUrl: "src"`), e.g. `hooks/sso` or
-// `language`. Mirror that for every top-level entry in src.
-const srcAliases = readdirSync(srcDir, { withFileTypes: true }).map((entry) => {
-  const name = entry.isDirectory() ? entry.name : entry.name.replace(/\.[jt]sx?$/, '')
-  return { find: new RegExp(`^${name}(?=/|$)`), replacement: resolve(srcDir, name) }
-})
-
-// Test-only alias, mirrored in tests/tsconfig.json.
-const fixturesAlias = {
-  find: /^fixtures(?=\/|$)/,
-  replacement: fileURLToPath(new URL('./tests/fixtures', import.meta.url))
-}
+// Mirrors `paths` in tsconfig.json and tests/tsconfig.json.
+const aliases = [
+  { find: /^@\//, replacement: `${srcDir}/` },
+  {
+    find: /^fixtures(?=\/|$)/,
+    replacement: fileURLToPath(new URL('./tests/fixtures', import.meta.url))
+  }
+]
 
 // CRA allows JSX in `.js` files; Vite's Oxc transform only parses JSX in `.jsx`/`.tsx`.
 // Compile `src/**/*.js` as JSX first so the rest of the pipeline sees plain JS.
@@ -39,7 +33,7 @@ const jsxInJs = (): Plugin => ({
 
 export default defineConfig({
   plugins: [jsxInJs(), react()],
-  resolve: { alias: [...srcAliases, fixturesAlias] },
+  resolve: { alias: aliases },
   test: {
     environment: 'jsdom',
     globals: true,

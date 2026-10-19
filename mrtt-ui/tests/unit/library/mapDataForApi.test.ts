@@ -1,7 +1,7 @@
-import { defaultValues } from 'components/FormWrapper/FormSchemaValidation'
-import { questionMapping } from 'data/questionMapping'
-import { formatApiAnswersForFormByKey } from 'library/formatApiAnswersForForm'
-import { mapDataForApi } from 'library/mapDataForApi'
+import { defaultValues } from '@/components/FormWrapper/FormSchemaValidation'
+import { questionMapping } from '@/data/questionMapping'
+import { formatApiAnswersForFormByKey } from '@/library/formatApiAnswersForForm'
+import { mapDataForApi } from '@/library/mapDataForApi'
 
 import {
   monitoringSections,

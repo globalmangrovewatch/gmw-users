@@ -9,7 +9,7 @@ import {
   PaddedSection,
   RowSpaceBetween,
   TitleAndActionContainer
-} from '../styles/containers'
+} from '@/styles/containers'
 import {
   H4,
   ItemTitle,
@@ -17,11 +17,11 @@ import {
   LinkLooksLikeButtonPrimary,
   PageTitle,
   SmallUpperCase
-} from '../styles/typography'
-import { UlUndecorated } from '../styles/lists'
-import EditLink from '../components/EditLink'
-import language from '../language'
-import LoadingIndicator from '../components/LoadingIndicator'
+} from '@/styles/typography'
+import { UlUndecorated } from '@/styles/lists'
+import EditLink from '@/components/EditLink'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
 import React, { useEffect, useState } from 'react'
 
 const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes/`

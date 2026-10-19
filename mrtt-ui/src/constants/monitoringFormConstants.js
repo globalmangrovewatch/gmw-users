@@ -1,4 +1,4 @@
-import language from '../language'
+import language from '@/language'
 
 const { formName: formNames } = language.pages.siteQuestionsOverview
 

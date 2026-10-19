@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-import determineDataType from 'library/determineDataType'
-import handleFileLoadEvent from 'library/handleFileLoadEvent'
-import { KML, Shp } from 'library/transformer'
+import determineDataType from '@/library/determineDataType'
+import handleFileLoadEvent from '@/library/handleFileLoadEvent'
+import { KML, Shp } from '@/library/transformer'
 
 // Vitest runs from the project root; import.meta.url is not a file URL under jsdom.
 const fixture = (name: string) => readFileSync(resolve(process.cwd(), 'tests/fixtures', name))

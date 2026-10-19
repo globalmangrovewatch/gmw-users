@@ -15,9 +15,9 @@ import GeoPropTypes from 'geojson-prop-types'
 import PropTypes from 'prop-types'
 import turfBbox from '@turf/bbox'
 
-import emptyFeatureCollection from '../data/emptyFeatureCollection'
-import handleFileLoadEvent from '../library/handleFileLoadEvent'
-import language from '../language'
+import emptyFeatureCollection from '@/data/emptyFeatureCollection'
+import handleFileLoadEvent from '@/library/handleFileLoadEvent'
+import language from '@/language'
 import MapDrawControl, { drawControlRef } from './MapDrawControl'
 import MapDrawInfo from './MapDrawInfo'
 

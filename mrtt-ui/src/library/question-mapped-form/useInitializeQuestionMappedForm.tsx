@@ -8,10 +8,10 @@ import {
 import axios, { AxiosResponse } from 'axios'
 import { useEffect, useRef } from 'react'
 
-import { mapDataForApi } from '../../library/mapDataForApi'
-import { formatApiAnswersForFormByKey } from '../formatApiAnswersForForm'
-import { questionMapping } from '../../data/questionMapping'
-import { FORM_NAMES_DICTIONARY_INTERVENTIONS } from '../../constants/sectionNames'
+import { mapDataForApi } from '@/library/mapDataForApi'
+import { formatApiAnswersForFormByKey } from '@/library/formatApiAnswersForForm'
+import { questionMapping } from '@/data/questionMapping'
+import { FORM_NAMES_DICTIONARY_INTERVENTIONS } from '@/constants/sectionNames'
 import { toast } from 'react-toastify'
 
 import { UseFormReturn, Path } from 'react-hook-form'

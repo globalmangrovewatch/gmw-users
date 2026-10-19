@@ -6,15 +6,15 @@ import * as yup from 'yup'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
-import { ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
+import { ButtonCancel, ButtonSubmit } from '@/styles/buttons'
+import { ButtonContainer, ContentWrapper, RowFlexEnd } from '@/styles/containers'
 import { Controller, useForm } from 'react-hook-form'
-import { ErrorText, Link, PageTitle } from '../styles/typography'
-import { FormLayout } from '../styles/forms'
+import { ErrorText, Link, PageTitle } from '@/styles/typography'
+import { FormLayout } from '@/styles/forms'
 import { FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material'
-import language from '../language'
-import LoadingIndicator from '../components/LoadingIndicator'
-import RequiredIndicator from '../components/RequiredIndicator'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import RequiredIndicator from '@/components/RequiredIndicator'
 
 const pageLanguage = language.pages.newOrganizationUser
 

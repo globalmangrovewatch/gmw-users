@@ -1,9 +1,10 @@
 {
-  // Separate from the root tsconfig because CRA strips `paths` from it on start.
+  // Adds the test-only `fixtures/*` alias; `paths` here replaces the root one, so `@/*` is repeated.
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "fixtures/*": ["../tests/fixtures/*"]
+      "@/*": ["../src/*"],
+      "fixtures/*": ["./fixtures/*"]
     }
   },
   "include": ["."]

@@ -1,4 +1,4 @@
-import { mangroveSpeciesPerCountryList } from '../data/mangroveSpeciesPerCountry'
+import { mangroveSpeciesPerCountryList } from '@/data/mangroveSpeciesPerCountry'
 
 // mangroveSpeciesPresent list should display country specific species at the top, with all
 // species below the country specific list, removing duplicates from the second list

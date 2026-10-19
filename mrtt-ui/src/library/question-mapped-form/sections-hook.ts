@@ -1,9 +1,6 @@
 import { useMemo } from 'react'
 import { sectionsRegistry, SectionKey } from './sections'
-import {
-  SECTION_NAMES_DICTIONARY_INTERVENTIONS,
-  SECTION_REGISTRY
-} from '../../constants/sectionNames'
+import { SECTION_NAMES_DICTIONARY_INTERVENTIONS, SECTION_REGISTRY } from '@/constants/sectionNames'
 
 type SectionTarget = 'interventions' | 'monitors'
 

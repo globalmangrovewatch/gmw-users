@@ -7,19 +7,19 @@ import axios from 'axios'
 import fileDownload from 'js-file-download'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonSecondary } from '../../styles/buttons'
+import { ButtonSecondary } from '@/styles/buttons'
 import {
   ButtonContainer,
   ContentWrapper,
   RowCenterCenter,
   TitleAndActionContainer
-} from '../../styles/containers'
-import { ItemSubTitle, ItemTitle, Link } from '../../styles/typography'
-import { TableAlertnatingRows, WideTh } from '../../styles/table'
+} from '@/styles/containers'
+import { ItemSubTitle, ItemTitle, Link } from '@/styles/typography'
+import { TableAlertnatingRows, WideTh } from '@/styles/table'
 import AddMonitoringSectionMenu from './AddMonitoringSectionMenu'
-import ItemDoesntExist from '../../components/ItemDoesntExist'
-import language from '../../language'
-import LoadingIndicator from '../../components/LoadingIndicator'
+import ItemDoesntExist from '@/components/ItemDoesntExist'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
 import MonitoringFormsList from './MonitoringFormsList'
 
 const pageLanguage = language.pages.siteQuestionsOverview

@@ -7,12 +7,12 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 
-import { ButtonContainer, RowFlexEnd, ContentWrapper } from '../../styles/containers'
-import { ButtonSubmit } from '../../styles/buttons'
-import { ErrorText, PageTitle } from '../../styles/typography'
-import { FormLayout } from '../../styles/forms'
-import language from '../../language'
-import RequiredIndicator from '../../components/RequiredIndicator'
+import { ButtonContainer, RowFlexEnd, ContentWrapper } from '@/styles/containers'
+import { ButtonSubmit } from '@/styles/buttons'
+import { ErrorText, PageTitle } from '@/styles/typography'
+import { FormLayout } from '@/styles/forms'
+import language from '@/language'
+import RequiredIndicator from '@/components/RequiredIndicator'
 
 const pageLanguage = language.pages.resetPassword
 

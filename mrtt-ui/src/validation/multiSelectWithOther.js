@@ -1,4 +1,4 @@
-import language from '../language'
+import language from '@/language'
 import * as yup from 'yup'
 
 export const otherIsCheckedButInputIsEmptyValidation = (schema) =>

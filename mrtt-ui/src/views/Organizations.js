@@ -1,4 +1,4 @@
-import { ButtonPrimary, ButtonSecondary } from '../styles/buttons'
+import { ButtonPrimary, ButtonSecondary } from '@/styles/buttons'
 import React, { useEffect, useState } from 'react'
 import { Menu, MenuItem } from '@mui/material'
 
@@ -9,15 +9,15 @@ import {
   PaddedSection,
   RowSpaceBetween,
   TitleAndActionContainer
-} from '../styles/containers'
-import { H2, LinkLooksLikeButtonSecondary, PageTitle } from '../styles/typography'
+} from '@/styles/containers'
+import { H2, LinkLooksLikeButtonSecondary, PageTitle } from '@/styles/typography'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { UlAlternating, UlUndecorated } from '../styles/lists'
+import { UlAlternating, UlUndecorated } from '@/styles/lists'
 import axios from 'axios'
-import language from '../language'
-import LoadingIndicator from '../components/LoadingIndicator'
-import USER_ROLES from '../constants/userRoles'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import USER_ROLES from '@/constants/userRoles'
 
 const organizationsUrl = `${process.env.REACT_APP_API_URL}/organizations`
 

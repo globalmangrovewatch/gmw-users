@@ -1,7 +1,7 @@
 import { Box, FormLabel, TextField } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import themeMui from './themeMui'
-import theme from '../styles/theme'
+import theme from '@/styles/theme'
 
 export const FormPageHeader = styled('div')`
   padding: ${themeMui.spacing(2)} 0;

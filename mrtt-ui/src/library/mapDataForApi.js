@@ -1,4 +1,4 @@
-import { questionMapping } from '../data/questionMapping'
+import { questionMapping } from '@/data/questionMapping'
 
 // set up data structure for api using question_id and answer_value object
 // ensure formTitle is the same is title in questionMapping

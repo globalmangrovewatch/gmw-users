@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { setAuthToken } from 'library/auth/interceptor'
-import { exchangeCode, readAndStripCode, silentSsoCheck } from 'hooks/sso'
+import { setAuthToken } from '@/library/auth/interceptor'
+import { exchangeCode, readAndStripCode, silentSsoCheck } from '@/hooks/sso'
 
 const AuthContext = createContext(null)
 

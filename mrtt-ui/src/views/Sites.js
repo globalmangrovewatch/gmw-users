@@ -2,18 +2,18 @@ import { Link } from 'react-router-dom'
 import { Menu, MenuItem, Stack } from '@mui/material'
 import { toast } from 'react-toastify'
 import axios from 'axios'
-import LoadingIndicator from '../components/LoadingIndicator'
+import LoadingIndicator from '@/components/LoadingIndicator'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonPrimary, ButtonSecondary } from '../styles/buttons'
+import { ButtonPrimary, ButtonSecondary } from '@/styles/buttons'
 import {
   LinkCard,
   ContentWrapper,
   TitleAndActionContainer,
   ButtonContainer
-} from '../styles/containers'
-import { ItemTitle, ItemSubTitle, PageTitle } from '../styles/typography'
-import language from '../language'
+} from '@/styles/containers'
+import { ItemTitle, ItemSubTitle, PageTitle } from '@/styles/typography'
+import language from '@/language'
 
 const sitesUrl = `${process.env.REACT_APP_API_URL}/sites/`
 

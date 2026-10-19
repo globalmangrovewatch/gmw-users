@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import language from '../language'
+import language from '@/language'
 
 const SubmitErrorWithExtraErrorContent = ({ extraErrorContent }) => {
   return (

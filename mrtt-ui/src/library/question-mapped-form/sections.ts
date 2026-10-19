@@ -9,9 +9,9 @@ import {
   managementStatusAndEffectiveness,
   socioeconomicGovernanceStatusOutcomes,
   ecologicalStatusOutcomes
-} from '../../data/questions'
+} from '@/data/questions'
 
-import { questionMapping } from '../../data/questionMapping'
+import { questionMapping } from '@/data/questionMapping'
 
 export const sectionsRegistry = {
   projectDetails: {

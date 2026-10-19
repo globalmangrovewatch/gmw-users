@@ -3,7 +3,7 @@ import {
   postSilentCallbackResult,
   readAndStripCode,
   silentSsoCheck
-} from 'hooks/sso'
+} from '@/hooks/sso'
 
 const GMW_URL = 'https://gmw.test'
 const MESSAGE_TYPE = 'mrtt-sso-code'

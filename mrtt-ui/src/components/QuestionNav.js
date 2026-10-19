@@ -7,22 +7,22 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { ErrorText, LinkLooksLikeButtonSecondary } from '../styles/typography'
+import { ErrorText, LinkLooksLikeButtonSecondary } from '@/styles/typography'
 import ButtonSave from './ButtonSave'
-import language from '../language'
+import language from '@/language'
 import LoadingIndicatorOverlay from './LoadingIndicatorOverlay'
 import SECTION_NAMES, {
   SECTION_NAMES_DICTIONARY_INTERVENTIONS,
   SECTION_NAMES_DICTIONARY_MONITORS
-} from '../constants/sectionNames'
-import theme from '../styles/theme'
-import themeMui from '../styles/themeMui'
-import PRIVACY_VALUES from '../constants/privacyValues'
+} from '@/constants/sectionNames'
+import theme from '@/styles/theme'
+import themeMui from '@/styles/themeMui'
+import PRIVACY_VALUES from '@/constants/privacyValues'
 import { useFormContext } from 'react-hook-form'
 
-import { useSaveRegistrationSection } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
-import { useGetSectionTarget } from '../library/question-mapped-form/sections-hook'
-import { useGetMonitorsForms } from '../library/question-mapped-form/monitors'
+import { useSaveRegistrationSection } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
+import { useGetSectionTarget } from '@/library/question-mapped-form/sections-hook'
+import { useGetMonitorsForms } from '@/library/question-mapped-form/monitors'
 
 const componentLanguage = language.questionNav
 
