@@ -9,8 +9,8 @@ import PropTypes from 'prop-types'
 import SiteBackgroundForm from './SiteBackgroundForm'
 import FormWrapperProvider from './FormWrapper/FormWrapperProvider'
 
-jest.mock('axios')
-jest.mock('./QuestionNav', () => () => null)
+vi.mock('axios')
+vi.mock('./QuestionNav', () => ({ default: () => null }))
 
 const API_URL = 'http://api.test'
 const SITE_ID = '42'
@@ -74,7 +74,7 @@ describe('SiteBackgroundForm', () => {
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('loads saved stakeholders (2.1) from the API into the form on mount', async () => {

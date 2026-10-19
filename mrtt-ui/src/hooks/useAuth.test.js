@@ -5,10 +5,10 @@ import { render, screen } from '@testing-library/react'
 import { AuthProvider, useAuth } from './useAuth'
 import { exchangeCode, readAndStripCode, silentSsoCheck } from 'hooks/sso'
 
-jest.mock('hooks/sso', () => ({
-  exchangeCode: jest.fn(),
-  readAndStripCode: jest.fn(),
-  silentSsoCheck: jest.fn()
+vi.mock('hooks/sso', () => ({
+  exchangeCode: vi.fn(),
+  readAndStripCode: vi.fn(),
+  silentSsoCheck: vi.fn()
 }))
 
 const AuthStatus = () => {
@@ -34,7 +34,7 @@ describe('AuthProvider bootstrap', () => {
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('clears the checking state under StrictMode when there is no SSO session', async () => {
@@ -58,7 +58,7 @@ describe('AuthProvider bootstrap', () => {
   })
 
   it('falls back to logged out when the SSO bootstrap throws', async () => {
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
     silentSsoCheck.mockRejectedValue(new Error('REACT_APP_GMW_URL is not set'))
 
     renderInStrictMode()
