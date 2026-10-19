@@ -2,7 +2,7 @@ import { ValidationError } from 'yup'
 
 import { validationSchema } from 'components/FormWrapper/FormSchemaValidation'
 
-import { validationCases } from '../../fixtures/validationCases'
+import { validationCases } from 'fixtures/validationCases'
 
 // Mirrors how the forms validate: the resolver checks the whole form, and saving a section
 // only looks at the errors of that section's fields. A field's error is the first message

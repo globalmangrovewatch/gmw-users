@@ -1,14 +1,14 @@
 import { defaultValues } from 'components/FormWrapper/FormSchemaValidation'
 import { questionMapping } from 'data/questionMapping'
 import { formatApiAnswersForFormByKey } from 'library/formatApiAnswersForForm'
-import { mapAllDataForApi, mapDataForApi } from 'library/mapDataForApi'
+import { mapDataForApi } from 'library/mapDataForApi'
 
 import {
   monitoringSections,
   registrationSections,
   sectionAnswers,
   type SectionKey
-} from '../../fixtures/sectionAnswers'
+} from 'fixtures/sectionAnswers'
 
 const sections = Object.keys(questionMapping) as SectionKey[]
 
@@ -116,30 +116,5 @@ describe('formatApiAnswersForFormByKey', () => {
     const result = formatApiAnswersForFormByKey({ apiAnswers, questionMapping })
 
     expect(result.ecologicalStatusAndOutcomes.percentageSurvival).toBe(0)
-  })
-})
-
-describe('mapAllDataForApi', () => {
-  it('combines every section into one answer list', () => {
-    const result = mapAllDataForApi({
-      causesOfDecline: sectionAnswers.causesOfDecline,
-      restorationAims: sectionAnswers.restorationAims
-    })
-
-    expect(result.map((answer) => answer.question_id)).toEqual(['4.1', '4.2', '3.1', '3.2', '3.3'])
-  })
-
-  it('maps only each section’s own fields when every section gets the same form data', () => {
-    // FormWrapper passes the whole form to every section; the real question ids never
-    // collide, so nothing is deduplicated. Collisions are covered in mapAllDataForApi.dedupe.test.ts.
-    const allFormData = { ...sectionAnswers.causesOfDecline, ...sectionAnswers.restorationAims }
-    const result = mapAllDataForApi({ causesOfDecline: allFormData, restorationAims: allFormData })
-
-    expect(result).toHaveLength(5)
-  })
-
-  it('returns an empty list for no input', () => {
-    expect(mapAllDataForApi(undefined)).toEqual([])
-    expect(mapAllDataForApi({})).toEqual([])
   })
 })

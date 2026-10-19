@@ -15,6 +15,12 @@ const srcAliases = readdirSync(srcDir, { withFileTypes: true }).map((entry) => {
   return { find: new RegExp(`^${name}(?=/|$)`), replacement: resolve(srcDir, name) }
 })
 
+// Test-only alias, mirrored in tests/tsconfig.json.
+const fixturesAlias = {
+  find: /^fixtures(?=\/|$)/,
+  replacement: fileURLToPath(new URL('./tests/fixtures', import.meta.url))
+}
+
 // CRA allows JSX in `.js` files; Vite's Oxc transform only parses JSX in `.jsx`/`.tsx`.
 // Compile `src/**/*.js` as JSX first so the rest of the pipeline sees plain JS.
 const jsxInJs = (): Plugin => ({
@@ -33,7 +39,7 @@ const jsxInJs = (): Plugin => ({
 
 export default defineConfig({
   plugins: [jsxInJs(), react()],
-  resolve: { alias: srcAliases },
+  resolve: { alias: [...srcAliases, fixturesAlias] },
   test: {
     environment: 'jsdom',
     globals: true,
