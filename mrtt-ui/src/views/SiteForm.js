@@ -17,6 +17,7 @@ import language from '@/language'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import RequiredIndicator from '@/components/RequiredIndicator'
 import PRIVACY_VALUES from '@/constants/privacyValues'
+import { env } from '@/lib/env'
 
 const validationSchema = yup.object({
   site_name: yup.string().required(language.pages.siteform.validation.nameRequired),
@@ -33,9 +34,9 @@ const SiteForm = ({ isNewSite }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [landscapes, setLandscapes] = useState([])
   const { siteId } = useParams()
-  const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes`
+  const landscapesUrl = `${env.API_URL}/landscapes`
   const navigate = useNavigate()
-  const sitesUrl = `${process.env.REACT_APP_API_URL}/sites`
+  const sitesUrl = `${env.API_URL}/sites`
   const siteUrl = `${sitesUrl}/${siteId}`
 
   const siteForm = useFormContext()

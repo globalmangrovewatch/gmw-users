@@ -859,4 +859,4 @@ export const monitoringIndicators = [
       }
     ]
   }
-]
+] as const

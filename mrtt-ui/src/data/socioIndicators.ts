@@ -195,4 +195,4 @@ export const socioIndicators = [
       'Cultural festivals and events'
     ]
   }
-]
+] as const

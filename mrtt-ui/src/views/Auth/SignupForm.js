@@ -14,6 +14,7 @@ import { Checkbox, Link, FormControlLabel, FormLabel, TextField } from '@mui/mat
 import language from '@/language'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import RequiredIndicator from '@/components/RequiredIndicator'
+import { env } from '@/lib/env'
 
 const signUpFormLanguage = language.pages.userSignUp
 
@@ -50,7 +51,7 @@ const SignupForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
 
-  const authUrl = `${process.env.REACT_APP_AUTH_URL}/users`
+  const authUrl = `${env.AUTH_URL}/users`
 
   const {
     control: formControl,

@@ -15,13 +15,14 @@ import RestorationAimsCheckboxGroupWithLabel from './RestorationAimsCheckboxGrou
 import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '@/library/useSiteInfo'
 import { Alert } from '@mui/material'
+import { env } from '@/lib/env'
 
 const RestorationAimsForm = () => {
   const form = useFormContext()
   const stakeholders = form.getValues('stakeholders') || []
   const { site_name } = useSiteInfo()
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
 
   const errors = form.errors
 

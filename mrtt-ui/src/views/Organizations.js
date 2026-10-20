@@ -18,8 +18,9 @@ import axios from 'axios'
 import language from '@/language'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import USER_ROLES from '@/constants/userRoles'
+import { env } from '@/lib/env'
 
-const organizationsUrl = `${process.env.REACT_APP_API_URL}/organizations`
+const organizationsUrl = `${env.API_URL}/organizations`
 
 function Organizations() {
   const [yourOrganizations, setYourOrganizations] = useState([])
@@ -53,7 +54,7 @@ function Organizations() {
   const handleDownloadOptionSelect = ({ publicOnly }) => {
     setDownloadOptionsAnchorEl(null)
     axios({
-      url: `${process.env.REACT_APP_API_URL}/report/answers_as_xlsx?organization_id=${targetOrganization}&public_only=${publicOnly}`,
+      url: `${env.API_URL}/report/answers_as_xlsx?organization_id=${targetOrganization}&public_only=${publicOnly}`,
       method: 'GET',
       responseType: 'blob'
     }).then((response) => {

@@ -1061,4 +1061,4 @@ export const currencies = [
     code: 'ZMK',
     name_plural: 'Zambian kwachas'
   }
-]
+] as const

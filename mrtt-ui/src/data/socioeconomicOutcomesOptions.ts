@@ -1,6 +1,6 @@
-export const TypeOptions = ['Observed', 'Quantitative']
+export const TypeOptions = ['Observed', 'Quantitative'] as const satisfies readonly string[]
 
-export const TrendOptions = ['Positive', 'Stable', 'Negative']
+export const TrendOptions = ['Positive', 'Stable', 'Negative'] as const satisfies readonly string[]
 
 export const ComparisonOptions = [
   'None',
@@ -8,4 +8,4 @@ export const ComparisonOptions = [
   'Comparison Site',
   'Literature Value',
   'International Standard'
-]
+] as const satisfies readonly string[]

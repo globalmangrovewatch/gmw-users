@@ -14,7 +14,7 @@ const projectDetails = {
   siteArea: {
     question: '1.3 What is the overall site area?'
   }
-}
+} as const
 
 const siteBackground = {
   stakeholders: {
@@ -106,7 +106,7 @@ const siteBackground = {
     question: '2.9 Are customary rights to land within the site recognised in national law?',
     options: ['Yes', 'No', 'Partially']
   }
-}
+} as const
 
 const restorationAims = {
   nestedStakeholderBenefitsRanking: {
@@ -174,7 +174,7 @@ const restorationAims = {
       'None'
     ]
   }
-}
+} as const
 
 const causesOfDecline = {
   lossKnown: {
@@ -188,7 +188,7 @@ const causesOfDecline = {
       '4.3 Rate the magnitude of impact of the cause(s) of decline selected in the previous question, on mangrove loss and degradation - High, Moderate, Low',
     options: ['High', 'Moderate', 'Low']
   }
-}
+} as const
 
 const preRestorationAssessment = {
   mangrovesPreviouslyOccured: {
@@ -307,7 +307,7 @@ const preRestorationAssessment = {
       'Unknown'
     ]
   }
-}
+} as const
 
 const siteInterventions = {
   whichStakeholdersInvolved: {
@@ -416,7 +416,7 @@ const siteInterventions = {
       'None'
     ]
   }
-}
+} as const
 
 const costs = {
   supportForActivities: {
@@ -497,7 +497,7 @@ const costs = {
       '7.6 What non-monetised contributions were made to the project activities at the site?',
     options: ['Volunteer labour', 'Knowledge or expertise', 'Equipment ', 'Land', 'Unknown']
   }
-}
+} as const
 
 const managementStatusAndEffectiveness = {
   dateOfAssessment: {
@@ -626,7 +626,7 @@ const managementStatusAndEffectiveness = {
       'Unknown'
     ]
   }
-}
+} as const
 
 const socioeconomicGovernanceStatusOutcomes = {
   dateOfOutcomesAssessment: {
@@ -686,7 +686,7 @@ const socioeconomicGovernanceStatusOutcomes = {
       'The socio-economic aims were fully achieved'
     ]
   }
-}
+} as const
 
 const ecologicalStatusOutcomes = {
   dateOfEcologicalMonitoring: {
@@ -782,7 +782,7 @@ const ecologicalStatusOutcomes = {
       'The ecological aims were fully achieved'
     ]
   }
-}
+} as const
 
 export {
   restorationAims,

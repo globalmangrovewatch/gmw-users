@@ -3,11 +3,13 @@ import { mangroveSpeciesPerCountryList } from '@/data/mangroveSpeciesPerCountry'
 // mangroveSpeciesPresent list should display country specific species at the top, with all
 // species below the country specific list, removing duplicates from the second list
 
-const organizeMangroveSpeciesList = (siteCountriesResponse) => {
+type SiteCountry = { properties: { country: string } }
+
+const organizeMangroveSpeciesList = (siteCountriesResponse: readonly SiteCountry[]): string[] => {
   const countriesList = siteCountriesResponse.map((countryItem) => countryItem.properties.country)
-  const allSpecies = []
-  const countrySelectedSpecies = []
-  let countrySelectedSpeciesWithAllSpecies = []
+  const allSpecies: string[] = []
+  const countrySelectedSpecies: string[] = []
+  let countrySelectedSpeciesWithAllSpecies: string[] = []
 
   countriesList.forEach((countrySelected) => {
     mangroveSpeciesPerCountryList.forEach((countryItem) => {

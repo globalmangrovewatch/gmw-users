@@ -23,6 +23,7 @@ import { useFormContext } from 'react-hook-form'
 import { useSaveRegistrationSection } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import { useGetSectionTarget } from '@/library/question-mapped-form/sections-hook'
 import { useGetMonitorsForms } from '@/library/question-mapped-form/monitors'
+import { env } from '@/lib/env'
 
 const componentLanguage = language.questionNav
 
@@ -107,7 +108,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   const nextSection = SECTION_NAMES[currentSectionNameIndex + 1]
   const previousSection = SECTION_NAMES[currentSectionNameIndex - 1]
   const sectionIdForApi = currentSectionNameIndex + 1
-  const siteUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}`
+  const siteUrl = `${env.API_URL}/sites/${siteId}`
   const form = useFormContext()
   const navigate = useNavigate()
   const { pathname } = useLocation()

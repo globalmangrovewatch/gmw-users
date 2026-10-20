@@ -20,8 +20,9 @@ import handleFileLoadEvent from '@/library/handleFileLoadEvent'
 import language from '@/language'
 import MapDrawControl, { drawControlRef } from './MapDrawControl'
 import MapDrawInfo from './MapDrawInfo'
+import { env } from '@/lib/env'
 
-const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
+const MAPBOX_TOKEN = env.MAPBOX_ACCESS_TOKEN
 
 const acceptedFileMimeTypes = [
   'application/json',

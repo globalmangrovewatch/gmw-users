@@ -1,17 +1,36 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode
+} from 'react'
 import { setAuthToken } from '@/library/auth/interceptor'
-import { exchangeCode, readAndStripCode, silentSsoCheck } from '@/hooks/sso'
+import { exchangeCode, readAndStripCode, silentSsoCheck, type SSOUser } from '@/hooks/sso'
 
-const AuthContext = createContext(null)
+export type AuthUser = SSOUser
 
-export const AuthProvider = ({ children }) => {
-  const [token, setTokenState] = useState(null)
-  const [currentUser, setCurrentUser] = useState(null)
+type AuthContextValue = {
+  token: string | null
+  currentUser: AuthUser | null
+  isLoggedIn: boolean
+  isChecking: boolean
+  login: (token: string, user?: AuthUser | null) => void
+  logout: () => void
+}
+
+const AuthContext = createContext<AuthContextValue | null>(null)
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [token, setTokenState] = useState<string | null>(null)
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null)
   const [isChecking, setIsChecking] = useState(true)
   const bootstrappedRef = useRef(false)
 
-  const applySession = useCallback((nextToken, nextUser) => {
+  const applySession = useCallback((nextToken: string, nextUser?: AuthUser | null) => {
     setAuthToken(nextToken)
     setTokenState(nextToken)
     setCurrentUser(nextUser ?? null)
@@ -33,7 +52,7 @@ export const AuthProvider = ({ children }) => {
     if (bootstrappedRef.current) return
     bootstrappedRef.current = true
 
-    const tryExchange = async (code) => {
+    const tryExchange = async (code: string) => {
       try {
         const data = await exchangeCode(code)
         applySession(data.token, data.user)
@@ -66,7 +85,7 @@ export const AuthProvider = ({ children }) => {
     bootstrap()
   }, [applySession])
 
-  const value = useMemo(
+  const value = useMemo<AuthContextValue>(
     () => ({
       token,
       currentUser,
@@ -79,10 +98,6 @@ export const AuthProvider = ({ children }) => {
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-AuthProvider.propTypes = {
-  children: PropTypes.node.isRequired
 }
 
 export const useAuth = () => {

@@ -38,6 +38,13 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
+    // src/lib/env.ts validates these at import time.
+    env: {
+      REACT_APP_API_URL: 'http://api.test',
+      REACT_APP_AUTH_URL: 'http://auth.test',
+      REACT_APP_MAPBOX_ACCESS_TOKEN: 'test-mapbox-token',
+      REACT_APP_GMW_URL: 'https://gmw.test'
+    },
     include: [
       'src/**/*.{test,spec}.{js,jsx,ts,tsx}',
       'tests/unit/**/*.{test,spec}.{js,jsx,ts,tsx}'

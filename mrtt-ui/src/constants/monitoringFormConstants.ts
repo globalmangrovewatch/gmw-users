@@ -18,7 +18,7 @@ const MONITORING_FORM_CONSTANTS = {
     label: formNames.socioeconomicGovernanceStatusOutcomes,
     urlSegment: 'socioeconomic-and-governance-status'
   }
-}
+} as const
 
 Object.freeze(MONITORING_FORM_CONSTANTS)
 

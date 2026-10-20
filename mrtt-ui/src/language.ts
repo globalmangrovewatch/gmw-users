@@ -1,18 +1,20 @@
+type UserAndOrganization = { userName: string; organizationName: string }
+
 const error = {
   apiLoad: 'Loading data from the api failed. Please try again.',
   delete: 'Deleting that item failed. Please try again.',
-  getItemDoesntExistMessage: (item) => `That ${item} doesnt exist.`,
+  getItemDoesntExistMessage: (item: string) => `That ${item} doesnt exist.`,
   generic: 'Something went wrong. Please try again.',
   submit: 'Saving failed. Please try again.'
-}
+} as const
 
 const success = {
-  getCreateThingSuccessMessage: (thing) => `${thing}, has been created.`,
-  getDeleteThingSuccessMessage: (thing) => `${thing} has been deleted.`,
-  getEditThingSuccessMessage: (thing) => `${thing} has been edited.`,
+  getCreateThingSuccessMessage: (thing: string) => `${thing}, has been created.`,
+  getDeleteThingSuccessMessage: (thing: string) => `${thing} has been deleted.`,
+  getEditThingSuccessMessage: (thing: string) => `${thing} has been edited.`,
   signup: 'Please check your email for verification instructions.',
   submit: 'The data has been saved.'
-}
+} as const
 const form = {
   checkboxGroupOtherInputPlaceholder: 'If other, please state.',
   checkboxGroupOtherLabel: 'Other',
@@ -41,14 +43,14 @@ const form = {
     buttonText: 'Yes, delete this form'
   },
   dateUtc: 'Dates are UTC'
-}
+} as const
 
 const multiselectWithOtherFormQuestion = {
   validation: {
     selectAtleastOneItem: 'Please select at least one item.',
     clairfyOther: 'Please clarify other item.'
   }
-}
+} as const
 
 const pages = {
   pageNotFound: { title: 'Page Not Found' },
@@ -174,7 +176,7 @@ const pages = {
     delete: 'Delete this user',
     deletePrompt: {
       title: 'Delete Organization User',
-      getPromptText: ({ userName, organizationName }) =>
+      getPromptText: ({ userName, organizationName }: UserAndOrganization) =>
         `Are you sure you want to delete ${userName} from ${organizationName}?`,
       buttonText: 'Yes, delete this user'
     },
@@ -192,10 +194,10 @@ const pages = {
     backToUsers: 'Back to users',
     description: 'Only users that have signed up can be added to organizations.',
     email: "New user's email address",
-    getTitle: (organization) => `New User for ${organization}`,
-    getUserAdded: ({ userName, organizationName }) =>
+    getTitle: (organization: string) => `New User for ${organization}`,
+    getUserAdded: ({ userName, organizationName }: UserAndOrganization) =>
       `The user, ${userName}, has been added to ${organizationName}`,
-    getUserDoesntExist: (userName) => `The user, ${userName}, is not registered.`,
+    getUserDoesntExist: (userName: string) => `The user, ${userName}, is not registered.`,
     orgAdmin: 'Admin',
     orgUser: 'User',
     role: 'Role'
@@ -224,7 +226,7 @@ const pages = {
     addMonitoringSectionButton: 'Add Monitoring Section',
     noMonitoringSections: "You don't have any monitoring sections for this site yet."
   }
-}
+} as const
 
 const buttons = {
   cancel: 'Cancel',
@@ -234,9 +236,10 @@ const buttons = {
   saving: 'Saving...',
   submit: 'Submit',
   submitting: 'Submitting...'
-}
+} as const
 
-const maybePluralize = (count, noun, suffix = 's') => `${count} ${noun}${count !== 1 ? suffix : ''}`
+const maybePluralize = (count: number, noun: string, suffix = 's') =>
+  `${count} ${noun}${count !== 1 ? suffix : ''}`
 
 const projectAreaMap = {
   dropzoneText:
@@ -246,7 +249,7 @@ const projectAreaMap = {
     'Draw the site area on the map or upload from file. Uploaded geometry can be edited. Only polygon geometry from uploaded files will be included. Lines and points will be ignored. ',
   uploadErrorPrefix:
     'Please check that your uploaded file contains valid geometry. An error occured uploading site area',
-  getLineAndPointCounts: (lineCount, pointCount) => {
+  getLineAndPointCounts: (lineCount: number, pointCount: number) => {
     const fileContains = 'Uploaded file contains'
     const notIncluded = 'which will not be included in the site area'
 
@@ -265,11 +268,11 @@ const projectAreaMap = {
       return `${fileContains} ${maybePluralize(pointCount, 'point')} ${notIncluded}.`
     }
   }
-}
+} as const
 
 const header = {
   logout: 'Logout'
-}
+} as const
 
 const questionNav = {
   nextSection: 'Next Section',
@@ -278,12 +281,12 @@ const questionNav = {
   privacySavingSuccess: success.getEditThingSuccessMessage("This section's privacy"),
   privacySelectUndefined: 'Select Privacy',
   returnToSite: 'Return to Site Form Overview'
-}
+} as const
 
 const sectionPrivacy = {
   private: 'Private',
   public: 'Public'
-}
+} as const
 
 export default {
   buttons,

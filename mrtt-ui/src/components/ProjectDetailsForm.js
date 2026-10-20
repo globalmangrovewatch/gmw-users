@@ -26,6 +26,7 @@ import RequiredIndicator from './RequiredIndicator'
 import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '@/library/useSiteInfo'
 import DatePickerUtcMui from './DatePickerUtcMui'
+import { env } from '@/lib/env'
 
 export const siteAreaError = 'Please provide a site area'
 
@@ -47,7 +48,7 @@ function ProjectDetailsForm() {
 
   // const { errors } = form.formState
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
   let watchHasProjectEndDate = form.watch('hasProjectEndDate', false)
   /* showEndDateInput is a hack because MUI follows native html and casts values to strings.
    The api casts them to boolean so we support both */

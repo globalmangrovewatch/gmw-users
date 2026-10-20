@@ -103,4 +103,11 @@ export const questionMapping = {
     monitoringIndicators: '10.7',
     achievementOfEcologicalAims: '10.8'
   }
-}
+} as const
+
+export type QuestionMapping = typeof questionMapping
+export type SectionKey = keyof QuestionMapping
+export type FieldKey<S extends SectionKey> = keyof QuestionMapping[S]
+export type QuestionId = { [S in SectionKey]: QuestionMapping[S][FieldKey<S>] }[SectionKey]
+
+export const isSectionKey = (value: string): value is SectionKey => value in questionMapping

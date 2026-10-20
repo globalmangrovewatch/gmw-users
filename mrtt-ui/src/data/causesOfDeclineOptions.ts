@@ -168,4 +168,4 @@ export const causesOfDeclineOptions = [
     label: 'Other options',
     children: ['Other threat']
   }
-]
+] as const

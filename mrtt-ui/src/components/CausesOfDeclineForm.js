@@ -32,6 +32,7 @@ import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
 import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '@/library/useSiteInfo'
+import { env } from '@/lib/env'
 
 function CausesOfDeclineForm() {
   const { site_name } = useSiteInfo()
@@ -50,7 +51,7 @@ function CausesOfDeclineForm() {
 
   const [causesOfDeclineTypesChecked, setCausesOfDeclineTypesChecked] = useState([])
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
 
   useInitializeQuestionMappedForm({
     key: 'causesOfDecline',

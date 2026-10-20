@@ -22,6 +22,7 @@ import RequiredIndicator from '@/components/RequiredIndicator'
 
 import { useInitializeQuestionMappedFormMonitors } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import LoadingIndicator from '@/components/LoadingIndicator'
+import { env } from '@/lib/env'
 
 const ManagementStatusAndEffectivenessForm = () => {
   const { monitoringFormId, siteId } = useParams()
@@ -36,7 +37,7 @@ const ManagementStatusAndEffectivenessForm = () => {
     control
   } = form
 
-  const monitoringFormSingularUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers/${monitoringFormId}`
+  const monitoringFormSingularUrl = `${env.API_URL}/sites/${siteId}/monitoring_answers/${monitoringFormId}`
   const managementStatusChangesWatcher = useWatch({ control, name: 'managementStatusChanges' })
   const projectStatusChangeWatcher = useWatch({ control, name: 'projectStatusChange' })
   const financeForCiteManagementWatcher = useWatch({ control, name: 'financeForCiteManagement' })

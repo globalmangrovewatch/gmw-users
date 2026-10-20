@@ -23,8 +23,9 @@ import EditLink from '@/components/EditLink'
 import language from '@/language'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import React, { useEffect, useState } from 'react'
+import { env } from '@/lib/env'
 
-const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes/`
+const landscapesUrl = `${env.API_URL}/landscapes/`
 function Landscapes() {
   const [isLoading, setIsLoading] = useState(true)
   const [landscapes, setLandscapes] = useState([])

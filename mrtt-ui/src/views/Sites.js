@@ -14,8 +14,9 @@ import {
 } from '@/styles/containers'
 import { ItemTitle, ItemSubTitle, PageTitle } from '@/styles/typography'
 import language from '@/language'
+import { env } from '@/lib/env'
 
-const sitesUrl = `${process.env.REACT_APP_API_URL}/sites/`
+const sitesUrl = `${env.API_URL}/sites/`
 
 function Sites() {
   const [isLoading, setIsLoading] = useState(true)
@@ -43,7 +44,7 @@ function Sites() {
   const handleDownloadOptionSelect = ({ publicOnly }) => {
     setDownloadOptionsAnchorEl(null)
     axios({
-      url: `${process.env.REACT_APP_API_URL}/report/answers_as_xlsx?&public_only=${publicOnly}`,
+      url: `${env.API_URL}/report/answers_as_xlsx?&public_only=${publicOnly}`,
       method: 'GET',
       responseType: 'blob'
     }).then((response) => {

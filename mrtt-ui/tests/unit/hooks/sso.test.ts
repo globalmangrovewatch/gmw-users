@@ -4,8 +4,18 @@ import {
   readAndStripCode,
   silentSsoCheck
 } from '@/hooks/sso'
+import { env } from '@/lib/env'
 
 const GMW_URL = 'https://gmw.test'
+
+// `env` is parsed once at import; make it writable so each test can set GMW_URL.
+vi.mock('@/lib/env', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/env')>()
+  return { env: { ...actual.env } }
+})
+const setGmwUrl = (url: string | undefined) => {
+  ;(env as { GMW_URL?: string }).GMW_URL = url
+}
 const MESSAGE_TYPE = 'mrtt-sso-code'
 const TIMEOUT_MS = 4000
 
@@ -90,12 +100,11 @@ describe('postSilentCallbackResult', () => {
 describe('silentSsoCheck', () => {
   beforeEach(() => {
     vi.useFakeTimers()
-    vi.stubEnv('REACT_APP_GMW_URL', `${GMW_URL}/`)
+    setGmwUrl(`${GMW_URL}/`)
   })
 
   afterEach(() => {
     vi.useRealTimers()
-    vi.unstubAllEnvs()
     document.body.replaceChildren()
   })
 
@@ -158,7 +167,7 @@ describe('silentSsoCheck', () => {
   })
 
   it('rejects when REACT_APP_GMW_URL is not set, without adding an iframe', async () => {
-    vi.stubEnv('REACT_APP_GMW_URL', '')
+    setGmwUrl(undefined)
 
     await expect(silentSsoCheck()).rejects.toThrow('REACT_APP_GMW_URL is not set')
     expect(document.querySelectorAll('iframe')).toHaveLength(0)

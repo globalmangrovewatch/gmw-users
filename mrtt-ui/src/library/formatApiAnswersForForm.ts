@@ -1,29 +1,33 @@
 import { defaultValues } from '@/components/FormWrapper/FormSchemaValidation'
-export const formatApiAnswersForForm = ({ apiAnswers, questionMapping }) => {
-  // questionMapping type is an object with one level of properties with string values
+import type { RegistrationAnswer } from '@/types/api'
 
-  const questionIdEntries = Object.entries(questionMapping)
+/** Section name to { form field: question id }, like `questionMapping`. */
+export type SectionMappings = Record<string, Record<string, string>>
 
-  const answersForUiFormEntries = questionIdEntries.map((question) => {
-    const [frontEndAnswerId, apiAnswerId] = question
-    const apiAnswer = apiAnswers.find((apiAnswer) => apiAnswer.question_id === apiAnswerId)
-
-    return [frontEndAnswerId, apiAnswer?.answer_value || defaultValues[frontEndAnswerId]]
-  })
-
-  return Object.fromEntries(answersForUiFormEntries, defaultValues)
+export type FormValuesBySection<M extends SectionMappings> = {
+  [S in keyof M]: Record<keyof M[S], unknown>
 }
 
-export const formatApiAnswersForFormByKey = ({ apiAnswers, questionMapping }) => {
-  const answersById = Object.fromEntries(apiAnswers.map((a) => [a.question_id, a.answer_value]))
+const defaultValueFor = (fieldKey: string): unknown =>
+  (defaultValues as Record<string, unknown>)[fieldKey]
 
-  const result = {}
+export const formatApiAnswersForFormByKey = <M extends SectionMappings>({
+  apiAnswers,
+  questionMapping
+}: {
+  apiAnswers: RegistrationAnswer[]
+  questionMapping: M
+}): FormValuesBySection<M> => {
+  const answersById = new Map(apiAnswers.map((a) => [a.question_id, a.answer_value]))
+
+  const result: Record<string, Record<string, unknown>> = {}
 
   Object.entries(questionMapping).forEach(([sectionKey, sectionMapping]) => {
-    result[sectionKey] = {}
+    const section: Record<string, unknown> = {}
+    result[sectionKey] = section
 
     Object.entries(sectionMapping).forEach(([fieldKey, questionId]) => {
-      let apiValue = answersById[questionId]
+      let apiValue = answersById.get(questionId)
 
       // MUI specific: cast 'true'/'false' strings to boolean
       if (apiValue === 'true') apiValue = true
@@ -34,10 +38,8 @@ export const formatApiAnswersForFormByKey = ({ apiAnswers, questionMapping }) =>
         apiValue !== null &&
         !(typeof apiValue === 'string' && apiValue.trim() === '')
 
-      result[sectionKey][fieldKey] = hasValue ? apiValue : defaultValues[fieldKey]
+      section[fieldKey] = hasValue ? apiValue : defaultValueFor(fieldKey)
     })
   })
-  return result
+  return result as FormValuesBySection<M>
 }
-
-export default formatApiAnswersForForm

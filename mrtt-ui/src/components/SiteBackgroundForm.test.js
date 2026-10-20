@@ -12,6 +12,7 @@ import FormWrapperProvider from './FormWrapper/FormWrapperProvider'
 vi.mock('axios')
 vi.mock('./QuestionNav', () => ({ default: () => null }))
 
+// Matches REACT_APP_API_URL in vitest.config.mts.
 const API_URL = 'http://api.test'
 const SITE_ID = '42'
 const ANSWERS_URL = `${API_URL}/sites/${SITE_ID}/registration_intervention_answers`
@@ -41,7 +42,6 @@ const renderSiteBackgroundForm = ({ Provider = FormWrapper } = {}) => {
 
 describe('SiteBackgroundForm', () => {
   beforeEach(() => {
-    process.env.REACT_APP_API_URL = API_URL
     axios.get.mockImplementation((url) => {
       if (url === ANSWERS_URL) {
         return Promise.resolve({

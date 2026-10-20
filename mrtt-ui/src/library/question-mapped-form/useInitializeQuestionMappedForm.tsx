@@ -9,14 +9,16 @@ import axios, { AxiosResponse } from 'axios'
 import { useEffect, useRef } from 'react'
 
 import { mapDataForApi } from '@/library/mapDataForApi'
-import { formatApiAnswersForFormByKey } from '@/library/formatApiAnswersForForm'
-import { questionMapping } from '@/data/questionMapping'
-import { FORM_NAMES_DICTIONARY_INTERVENTIONS } from '@/constants/sectionNames'
+import {
+  formatApiAnswersForFormByKey,
+  type SectionMappings
+} from '@/library/formatApiAnswersForForm'
+import { isSectionKey, questionMapping } from '@/data/questionMapping'
+import { FORM_NAMES_DICTIONARY_INTERVENTIONS, type SectionTarget } from '@/constants/sectionNames'
 import { toast } from 'react-toastify'
 
 import { UseFormReturn, Path } from 'react-hook-form'
-
-type SectionTarget = 'interventions' | 'monitors'
+import { env } from '@/lib/env'
 
 type SaveRegistrationSectionParams<TFormValues extends Record<string, unknown>> = {
   siteId: string
@@ -62,7 +64,7 @@ type Params<TSelected = FormattedResponse> = {
   apiUrl: string
   siteId?: string
   form: UseFormReturn
-  questionMapping: unknown
+  questionMapping: SectionMappings
   successCallback?: (
     response: AxiosResponse<ApiAnswerItem[]>,
     sectionData: Record<string, unknown>,
@@ -191,10 +193,8 @@ export function useSaveRegistrationSection<
 >({ siteId, form, section, sectionTarget, monitorId }: SaveRegistrationSectionParams<TFormValues>) {
   const queryClient = useQueryClient()
   const apiUrl: Record<SectionTarget, string> = {
-    interventions: `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`,
-    monitors: `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers${
-      monitorId ? `/${monitorId}` : ''
-    }`
+    interventions: `${env.API_URL}/sites/${siteId}/registration_intervention_answers`,
+    monitors: `${env.API_URL}/sites/${siteId}/monitoring_answers${monitorId ? `/${monitorId}` : ''}`
   }
 
   const mutation = useMutation<ApiResponse, Error, MutationPayload>({
@@ -221,14 +221,18 @@ export function useSaveRegistrationSection<
   })
 
   const save = async (currentSection: string): Promise<boolean> => {
-    const fields = Object.keys(questionMapping[currentSection] ?? {}) as Array<keyof TFormValues>
+    const fields = (
+      isSectionKey(currentSection) ? Object.keys(questionMapping[currentSection]) : []
+    ) as Array<keyof TFormValues>
 
     const ok = await form.trigger(fields as Path<TFormValues>[], { shouldFocus: true })
 
     if (!ok) {
       toast.error(
         `Cannot save "${
-          FORM_NAMES_DICTIONARY_INTERVENTIONS[currentSection] || currentSection
+          (FORM_NAMES_DICTIONARY_INTERVENTIONS as Record<string, string | undefined>)[
+            currentSection
+          ] || currentSection
         }". Please fix the errors indicated on the form.`
       )
       return false

@@ -30,6 +30,7 @@ import ButtonDeleteForm from '@/components/ButtonDeleteForm'
 import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
 import DatePickerUtcMui from '@/components/DatePickerUtcMui'
 import RequiredIndicator from '@/components/RequiredIndicator'
+import { env } from '@/lib/env'
 
 const getSocioeconomicAims = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '3.2') ?? []
@@ -56,8 +57,8 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
   } = useFieldArray({ name: 'socioeconomicOutcomes', control })
 
   const { siteId } = useParams()
-  const monitoringFormSingularUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers/${monitoringFormId}`
-  const registrationInterventionFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const monitoringFormSingularUrl = `${env.API_URL}/sites/${siteId}/monitoring_answers/${monitoringFormId}`
+  const registrationInterventionFormsUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
 
   const changeInGovernanceWatcher = watchForm('changeInGovernance')
   const changeInTenureArrangementWatcher = watchForm('changeInTenureArrangement')

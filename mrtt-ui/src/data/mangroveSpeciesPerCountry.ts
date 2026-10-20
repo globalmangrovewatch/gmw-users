@@ -2233,4 +2233,4 @@ export const mangroveSpeciesPerCountryList = [
     },
     species: ['Avicennia marina', 'Rhizophora mucronata']
   }
-]
+] as const

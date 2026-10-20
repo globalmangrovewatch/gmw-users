@@ -37,6 +37,7 @@ import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/
 import useSiteInfo from '@/library/useSiteInfo'
 import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
 import organizeMangroveSpeciesList from '@/library/organizeMangroveSpeciesList'
+import { env } from '@/lib/env'
 
 const getSiteCountries = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '1.2') ?? []
@@ -75,7 +76,7 @@ function PreRestorationAssessmentForm() {
   } = useFieldArray({ name: 'physicalMeasurementsTaken', control })
 
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
   const mangroveRestorationAttemptedWatcher = watchForm('mangroveRestorationAttempted')
   const siteAssessmentBeforeProjectWatcher = watchForm('siteAssessmentBeforeProject')
   const speciesCompositionWatcher = watchForm('speciesComposition')

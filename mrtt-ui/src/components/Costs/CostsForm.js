@@ -27,6 +27,7 @@ import PercentageSplitOfActivitiesRow from './PercentageSplitOfActivitiesRow'
 import { currencies } from '@/data/currencies'
 import { findRegistationDataItem } from '@/library/findDataItems'
 import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
+import { env } from '@/lib/env'
 
 const getEndDate = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '1.1b') ?? ''
@@ -57,7 +58,7 @@ const CostsForm = () => {
 
   const form = useFormContext()
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
 
   const {
     // handleSubmit: validateInputs,

@@ -1,22 +1,18 @@
 import getStringFromFile from './getStringFromFile'
 
-function verifyJsonFormat(file) {
+export type DataType = 'geojson' | 'shp' | 'kml'
+
+function verifyJsonFormat(file: File): Promise<DataType | ''> {
   return getStringFromFile(file)
-    .then(() => {
-      return 'geojson'
-    })
-    .catch(() => '')
+    .then((): DataType => 'geojson')
+    .catch(() => '' as const)
 }
 
-/**
- * Determines which file type is being used
- * @function
- * @param {Object} file - A file buffer
- * @returns {String} - The type of the file
- */
+/** Picks the parser for an uploaded site area file from its extension (case sensitive). */
+export async function determineDataType(file: File | undefined): Promise<DataType | ''> {
+  if (!file) throw new Error('Unknown file format')
 
-export async function determineDataType(file) {
-  const extension = file?.name?.split('.').slice(-1)[0]
+  const extension = file.name.split('.').slice(-1)[0]
   switch (extension) {
     case 'geojson':
       return 'geojson'

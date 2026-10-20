@@ -12,6 +12,7 @@ import { ErrorText, LinkLooksLikeButtonSecondary, PageTitle } from '@/styles/typ
 import { FormLayout } from '@/styles/forms'
 import language from '@/language'
 import RequiredIndicator from '@/components/RequiredIndicator'
+import { env } from '@/lib/env'
 
 const validationSchema = yup.object({
   email: yup.string().email().required(language.form.required)
@@ -19,7 +20,7 @@ const validationSchema = yup.object({
 
 const formDefaultValues = { email: '' }
 
-const passwordUrl = `${process.env.REACT_APP_AUTH_URL}/users/password`
+const passwordUrl = `${env.AUTH_URL}/users/password`
 
 const pageLanguage = language.pages.forgotPassword
 

@@ -7,5 +7,5 @@
       "fixtures/*": ["./fixtures/*"]
     }
   },
-  "include": ["."]
+  "include": [".", "../src/types"]
 }

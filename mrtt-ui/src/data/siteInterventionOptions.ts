@@ -2,7 +2,7 @@ export const propaguleOptions = [
   'Collected from mangrove areas and/or riverbank',
   'Unknown',
   'Other'
-]
+] as const satisfies readonly string[]
 
 export const seedlingOptions = [
   'From a nursery',
@@ -10,9 +10,9 @@ export const seedlingOptions = [
   'Transplanted - with roots and soil',
   'Unknown',
   'Other'
-]
+] as const satisfies readonly string[]
 
-export const sourceOptions = ['Nursery', 'Wild', 'Both']
+export const sourceOptions = ['Nursery', 'Wild', 'Both'] as const satisfies readonly string[]
 
 export const purposeOptions = [
   'Coastal defence',
@@ -21,4 +21,4 @@ export const purposeOptions = [
   'Traditional medicines',
   'Other',
   'Not applicable'
-]
+] as const satisfies readonly string[]

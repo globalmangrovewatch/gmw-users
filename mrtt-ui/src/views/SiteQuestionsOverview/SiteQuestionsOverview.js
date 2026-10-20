@@ -21,6 +21,7 @@ import ItemDoesntExist from '@/components/ItemDoesntExist'
 import language from '@/language'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import MonitoringFormsList from './MonitoringFormsList'
+import { env } from '@/lib/env'
 
 const pageLanguage = language.pages.siteQuestionsOverview
 
@@ -53,8 +54,8 @@ const SiteOverview = () => {
   useEffect(
     function loadDataFromServer() {
       if (siteId) {
-        const sitesDataUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}`
-        const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes`
+        const sitesDataUrl = `${env.API_URL}/sites/${siteId}`
+        const landscapesUrl = `${env.API_URL}/landscapes`
         const monitoringUrl = `${sitesDataUrl}/monitoring_answers`
 
         Promise.all([axios.get(sitesDataUrl), axios.get(landscapesUrl), axios.get(monitoringUrl)])
@@ -87,7 +88,7 @@ const SiteOverview = () => {
 
   const handleDownloadOptionSelect = ({ publicOnly }) => {
     setDownloadOptionsAnchorEl(null)
-    const siteDownloadUrl = `${process.env.REACT_APP_API_URL}/report/answers_as_pdf/${siteId}?&public_only=${publicOnly}`
+    const siteDownloadUrl = `${env.API_URL}/report/answers_as_pdf/${siteId}?&public_only=${publicOnly}`
     axios.get(siteDownloadUrl, { responseType: 'blob' }).then((response) => {
       fileDownload(response.data, `${site.site_name}.pdf`)
     })

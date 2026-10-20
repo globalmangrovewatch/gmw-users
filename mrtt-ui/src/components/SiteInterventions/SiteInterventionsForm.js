@@ -43,6 +43,7 @@ import useSiteInfo from '@/library/useSiteInfo'
 import organizeMangroveSpeciesList from '@/library/organizeMangroveSpeciesList'
 
 import LoadingIndicator from '@/components/LoadingIndicator'
+import { env } from '@/lib/env'
 
 function SiteInterventionsForm() {
   const { site_name } = useSiteInfo()
@@ -53,7 +54,7 @@ function SiteInterventionsForm() {
   } = form
 
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
 
   const [isSubmitting] = useState(false)
   const [isError] = useState(false)

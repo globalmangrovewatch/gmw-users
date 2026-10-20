@@ -15,6 +15,7 @@ import { FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/
 import language from '@/language'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import RequiredIndicator from '@/components/RequiredIndicator'
+import { env } from '@/lib/env'
 
 const pageLanguage = language.pages.newOrganizationUser
 
@@ -32,7 +33,7 @@ const NewOrganizationUser = () => {
   const [organizationName, setOrganizationName] = useState()
   const { organizationId } = useParams()
   const navigate = useNavigate()
-  const organizationUrl = `${process.env.REACT_APP_API_URL}/organizations/${organizationId}`
+  const organizationUrl = `${env.API_URL}/organizations/${organizationId}`
   const organizationUsersUrl = `${organizationUrl}/users`
 
   const {

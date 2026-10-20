@@ -1,14 +1,12 @@
 import language from '@/language'
 import * as yup from 'yup'
 
-export const otherIsCheckedButInputIsEmptyValidation = (schema) =>
+export const otherIsCheckedButInputIsEmptyValidation = <S extends yup.AnySchema>(schema: S) =>
   schema.test({
     name: 'isOtherCheckedAndEmpty',
     message: language.multiselectWithOtherFormQuestion.validation.clairfyOther,
-    test: (value, context) => {
-      const {
-        parent: { otherValue }
-      } = context
+    test: (_value, context) => {
+      const { otherValue } = context.parent as { otherValue?: string }
       return otherValue !== undefined && otherValue !== ''
     }
   })

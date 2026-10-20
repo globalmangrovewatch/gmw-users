@@ -43,6 +43,7 @@ import RequiredIndicator from '@/components/RequiredIndicator'
 
 import { useInitializeQuestionMappedFormMonitors } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import LoadingIndicator from '@/components/LoadingIndicator'
+import { env } from '@/lib/env'
 
 const getEcologicalAims = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '3.1') ?? []
@@ -83,9 +84,9 @@ const EcologicalStatusAndOutcomesForm = () => {
   } = useFieldArray({ name: 'ecologicalMonitoringStakeholders', control })
 
   const { siteId } = useParams()
-  const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
+  const monitoringFormsUrl = `${env.API_URL}/sites/${siteId}/monitoring_answers`
   const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
-  const registrationInterventionFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const registrationInterventionFormsUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
   const [biophysicalInterventions, setBiophysicalInterventions] = useState([])
 
   const mangroveAreaIncreaseWatcher = useWatch({ control, name: 'mangroveAreaIncrease' })
