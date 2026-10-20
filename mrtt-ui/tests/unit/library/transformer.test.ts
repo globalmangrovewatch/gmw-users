@@ -8,8 +8,14 @@ import { KML, Shp } from '@/library/transformer'
 // Vitest runs from the project root; import.meta.url is not a file URL under jsdom.
 const fixture = (name: string) => readFileSync(resolve(process.cwd(), 'tests/fixtures', name))
 
-const toArrayBuffer = (buffer: Buffer) =>
-  buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength)
+const toArrayBuffer = (buffer: Buffer): ArrayBuffer => new Uint8Array(buffer).buffer
+
+// The loaders can return several layers; these fixtures hold exactly one.
+const single = <T>(result: T | T[] | undefined): T => {
+  if (result === undefined || Array.isArray(result))
+    throw new Error('Expected one FeatureCollection')
+  return result
+}
 
 const square = [
   [100, 1],
@@ -64,7 +70,7 @@ describe('KML transformer', () => {
 
 describe('Shapefile transformer', () => {
   it('turns a zipped shapefile into a GeoJSON FeatureCollection of polygons', async () => {
-    const geojson = await new Shp(toArrayBuffer(fixture('site-area.zip'))).geojson()
+    const geojson = single(await new Shp(toArrayBuffer(fixture('site-area.zip'))).geojson())
 
     expect(geojson.type).toBe('FeatureCollection')
     expect(geojson.features).toHaveLength(1)
@@ -125,7 +131,7 @@ describe('handleFileLoadEvent', () => {
   it('reads a KML file into GeoJSON', async () => {
     const file = new File([fixture('site-area.kml')], 'site-area.kml')
 
-    const geojson = await handleFileLoadEvent([file])
+    const geojson = single(await handleFileLoadEvent([file]))
 
     expect(geojson.features[0].geometry).toEqual({
       type: 'Polygon',
@@ -136,7 +142,7 @@ describe('handleFileLoadEvent', () => {
   it('reads a zipped shapefile into GeoJSON', async () => {
     const file = new File([fixture('site-area.zip')], 'site-area.zip')
 
-    const geojson = await handleFileLoadEvent([file])
+    const geojson = single(await handleFileLoadEvent([file]))
 
     expect(geojson.features[0].geometry).toMatchObject({
       type: 'Polygon',

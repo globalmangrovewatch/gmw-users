@@ -10,19 +10,13 @@ module.exports = {
     return { ...paths, appTsConfig: path.resolve(__dirname, 'tsconfig.cra.json') }
   },
   webpack(config) {
-    const fallback = config.resolve.fallback || {}
-    Object.assign(fallback, {
-      buffer: require.resolve('buffer/')
-    })
-    config.resolve.fallback = fallback
     config.resolve.alias = { ...config.resolve.alias, '@': path.resolve(__dirname, 'src') }
     // Linting is oxlint's job (`pnpm lint`), so drop CRA's built-in ESLint pass.
     config.plugins = (config.plugins || [])
       .filter((plugin) => plugin.constructor.name !== 'ESLintWebpackPlugin')
       .concat([
         new webpack.ProvidePlugin({
-          process: 'process/browser',
-          Buffer: ['buffer', 'Buffer']
+          process: 'process/browser'
         })
       ])
     // Type-check against the real tsconfig, not the stub react-scripts is pointed at.
