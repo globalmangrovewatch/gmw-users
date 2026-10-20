@@ -7,12 +7,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 
-import { ButtonContainer, RowFlexEnd, ContentWrapper } from '../../styles/containers'
-import { ButtonSubmit } from '../../styles/buttons'
-import { ErrorText, PageTitle } from '../../styles/typography'
-import { FormLayout } from '../../styles/forms'
-import language from '../../language'
-import RequiredIndicator from '../../components/RequiredIndicator'
+import { ButtonContainer, RowFlexEnd, ContentWrapper } from '@/styles/containers'
+import { ButtonSubmit } from '@/styles/buttons'
+import { ErrorText, PageTitle } from '@/styles/typography'
+import { FormLayout } from '@/styles/forms'
+import language from '@/language'
+import RequiredIndicator from '@/components/RequiredIndicator'
+import { env } from '@/lib/env'
 
 const pageLanguage = language.pages.resetPassword
 
@@ -29,7 +30,7 @@ const validationSchema = yup.object({
 
 const formDefaultValues = { password: '', confirmationPassword: '' }
 
-const passwordUrl = `${process.env.REACT_APP_AUTH_URL}/users/password`
+const passwordUrl = `${env.AUTH_URL}/users/password`
 
 const ResetPasswordForm = () => {
   const [searchParams] = useSearchParams()

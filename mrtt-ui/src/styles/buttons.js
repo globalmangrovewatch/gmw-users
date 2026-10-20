@@ -3,8 +3,8 @@ import { styled } from '@mui/system'
 import { Button as ButtonBase } from '@mui/base'
 
 import PropTypes from 'prop-types'
-import ButtonSecondaryWithLoader from '../components/ButtonSecondaryWithLoader'
-import language from '../language'
+import ButtonSecondaryWithLoader from '@/components/ButtonSecondaryWithLoader'
+import language from '@/language'
 import theme from './theme'
 
 const ButtonPrimary = styled(Button)``

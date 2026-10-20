@@ -4,8 +4,8 @@
 //
 // Kept free of yup so the same table can run against a replacement schema.
 
-import { questionMapping } from 'data/questionMapping'
-import language from 'language'
+import { questionMapping } from '@/data/questionMapping'
+import language from '@/language'
 import { sectionAnswers, type SectionKey } from './sectionAnswers'
 
 export type ValidationCase = {

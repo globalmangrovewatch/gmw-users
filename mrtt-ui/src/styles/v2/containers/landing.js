@@ -1,6 +1,6 @@
 import { styled } from '@mui/system'
 import { Typography } from '@mui/material'
-import { H1 } from '../ui/typography'
+import { H1 } from '@/styles/v2/ui/typography'
 
 export const Base = styled('div')(
   ({ theme }) => `

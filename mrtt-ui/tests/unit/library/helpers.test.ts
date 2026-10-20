@@ -1,7 +1,7 @@
-import { mangroveSpeciesPerCountryList } from 'data/mangroveSpeciesPerCountry'
-import { findMonitoringDataItem, findRegistationDataItem } from 'library/findDataItems'
-import getOptionsValuesAndLabels from 'library/getOptionsValuesAndLabels'
-import organizeMangroveSpeciesList from 'library/organizeMangroveSpeciesList'
+import { mangroveSpeciesPerCountryList } from '@/data/mangroveSpeciesPerCountry'
+import { findMonitoringDataItem, findRegistationDataItem } from '@/library/findDataItems'
+import getOptionsValuesAndLabels from '@/library/getOptionsValuesAndLabels'
+import organizeMangroveSpeciesList from '@/library/organizeMangroveSpeciesList'
 
 describe('findRegistationDataItem', () => {
   const response = {

@@ -8,16 +8,17 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonCancel, ButtonCaution, ButtonSubmit } from '../styles/buttons'
-import { ButtonContainer, PaddedSection, RowFlexEnd, ContentWrapper } from '../styles/containers'
-import { ErrorText, PageTitle } from '../styles/typography'
-import { FormLayout } from '../styles/forms'
-import ConfirmPrompt from '../components/ConfirmPrompt/ConfirmPrompt'
-import ItemDoesntExist from '../components/ItemDoesntExist'
-import language from '../language'
-import LoadingIndicator from '../components/LoadingIndicator'
-import RequiredIndicator from '../components/RequiredIndicator'
-import SubmitErrorWithExtraErrorContent from '../components/SubmitErrorWithExtraErrorContent'
+import { ButtonCancel, ButtonCaution, ButtonSubmit } from '@/styles/buttons'
+import { ButtonContainer, PaddedSection, RowFlexEnd, ContentWrapper } from '@/styles/containers'
+import { ErrorText, PageTitle } from '@/styles/typography'
+import { FormLayout } from '@/styles/forms'
+import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
+import ItemDoesntExist from '@/components/ItemDoesntExist'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import RequiredIndicator from '@/components/RequiredIndicator'
+import SubmitErrorWithExtraErrorContent from '@/components/SubmitErrorWithExtraErrorContent'
+import { env } from '@/lib/env'
 
 const validationSchema = yup.object({
   landscape_name: yup.string().required(language.pages.landscapeForm.validation.nameRequired),
@@ -42,10 +43,10 @@ const LandscapeForm = ({ isNewLandscape }) => {
   const [landscapeName, setLandscapeName] = useState()
   const [organizationOptions, setOrganizationOptions] = useState([])
   const { landscapeId } = useParams()
-  const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes`
+  const landscapesUrl = `${env.API_URL}/landscapes`
   const landscapeUrl = `${landscapesUrl}/${landscapeId}`
   const navigate = useNavigate()
-  const organizationsUrl = `${process.env.REACT_APP_API_URL}/organizations`
+  const organizationsUrl = `${env.API_URL}/organizations`
 
   const {
     control: formControl,

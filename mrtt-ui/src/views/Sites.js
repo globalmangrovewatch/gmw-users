@@ -2,20 +2,21 @@ import { Link } from 'react-router-dom'
 import { Menu, MenuItem, Stack } from '@mui/material'
 import { toast } from 'react-toastify'
 import axios from 'axios'
-import LoadingIndicator from '../components/LoadingIndicator'
+import LoadingIndicator from '@/components/LoadingIndicator'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonPrimary, ButtonSecondary } from '../styles/buttons'
+import { ButtonPrimary, ButtonSecondary } from '@/styles/buttons'
 import {
   LinkCard,
   ContentWrapper,
   TitleAndActionContainer,
   ButtonContainer
-} from '../styles/containers'
-import { ItemTitle, ItemSubTitle, PageTitle } from '../styles/typography'
-import language from '../language'
+} from '@/styles/containers'
+import { ItemTitle, ItemSubTitle, PageTitle } from '@/styles/typography'
+import language from '@/language'
+import { env } from '@/lib/env'
 
-const sitesUrl = `${process.env.REACT_APP_API_URL}/sites/`
+const sitesUrl = `${env.API_URL}/sites/`
 
 function Sites() {
   const [isLoading, setIsLoading] = useState(true)
@@ -43,7 +44,7 @@ function Sites() {
   const handleDownloadOptionSelect = ({ publicOnly }) => {
     setDownloadOptionsAnchorEl(null)
     axios({
-      url: `${process.env.REACT_APP_API_URL}/report/answers_as_xlsx?&public_only=${publicOnly}`,
+      url: `${env.API_URL}/report/answers_as_xlsx?&public_only=${publicOnly}`,
       method: 'GET',
       responseType: 'blob'
     }).then((response) => {

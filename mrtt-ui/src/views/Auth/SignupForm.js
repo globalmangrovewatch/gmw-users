@@ -6,14 +6,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 
-import { ButtonCancel, ButtonSubmit } from '../../styles/buttons'
-import { ButtonContainer, PagePadding, RowFlexEnd } from '../../styles/containers'
-import { ErrorText, PageTitle } from '../../styles/typography'
-import { FormLayout, MainFormDiv } from '../../styles/forms'
+import { ButtonCancel, ButtonSubmit } from '@/styles/buttons'
+import { ButtonContainer, PagePadding, RowFlexEnd } from '@/styles/containers'
+import { ErrorText, PageTitle } from '@/styles/typography'
+import { FormLayout, MainFormDiv } from '@/styles/forms'
 import { Checkbox, Link, FormControlLabel, FormLabel, TextField } from '@mui/material'
-import language from '../../language'
-import LoadingIndicator from '../../components/LoadingIndicator'
-import RequiredIndicator from '../../components/RequiredIndicator'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import RequiredIndicator from '@/components/RequiredIndicator'
+import { env } from '@/lib/env'
 
 const signUpFormLanguage = language.pages.userSignUp
 
@@ -50,7 +51,7 @@ const SignupForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
 
-  const authUrl = `${process.env.REACT_APP_AUTH_URL}/users`
+  const authUrl = `${env.AUTH_URL}/users`
 
   const {
     control: formControl,

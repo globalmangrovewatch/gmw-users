@@ -6,12 +6,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import axios from 'axios'
 
-import { ButtonContainer, ContentWrapper, RowFlexEnd } from '../../styles/containers'
-import { ButtonSubmit } from '../../styles/buttons'
-import { ErrorText, LinkLooksLikeButtonSecondary, PageTitle } from '../../styles/typography'
-import { FormLayout } from '../../styles/forms'
-import language from '../../language'
-import RequiredIndicator from '../../components/RequiredIndicator'
+import { ButtonContainer, ContentWrapper, RowFlexEnd } from '@/styles/containers'
+import { ButtonSubmit } from '@/styles/buttons'
+import { ErrorText, LinkLooksLikeButtonSecondary, PageTitle } from '@/styles/typography'
+import { FormLayout } from '@/styles/forms'
+import language from '@/language'
+import RequiredIndicator from '@/components/RequiredIndicator'
+import { env } from '@/lib/env'
 
 const validationSchema = yup.object({
   email: yup.string().email().required(language.form.required)
@@ -19,7 +20,7 @@ const validationSchema = yup.object({
 
 const formDefaultValues = { email: '' }
 
-const passwordUrl = `${process.env.REACT_APP_AUTH_URL}/users/password`
+const passwordUrl = `${env.AUTH_URL}/users/password`
 
 const pageLanguage = language.pages.forgotPassword
 

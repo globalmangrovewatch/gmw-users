@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { MenuItem } from '@mui/material'
 import { Delete } from '@mui/icons-material'
-import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
-import language from '../../language'
+import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
+import language from '@/language'
 
 import {
   LeftColumnDiv,
@@ -11,8 +11,8 @@ import {
   TabularInputSection,
   TabularLabel,
   VerticalTabularBox
-} from '../../styles/forms'
-import { purposeOptions, sourceOptions } from '../../data/siteInterventionOptions'
+} from '@/styles/forms'
+import { purposeOptions, sourceOptions } from '@/data/siteInterventionOptions'
 
 const MangroveAssociatedSpeciesRow = ({
   type,

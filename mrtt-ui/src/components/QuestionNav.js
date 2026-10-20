@@ -7,22 +7,23 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { ErrorText, LinkLooksLikeButtonSecondary } from '../styles/typography'
+import { ErrorText, LinkLooksLikeButtonSecondary } from '@/styles/typography'
 import ButtonSave from './ButtonSave'
-import language from '../language'
+import language from '@/language'
 import LoadingIndicatorOverlay from './LoadingIndicatorOverlay'
 import SECTION_NAMES, {
   SECTION_NAMES_DICTIONARY_INTERVENTIONS,
   SECTION_NAMES_DICTIONARY_MONITORS
-} from '../constants/sectionNames'
-import theme from '../styles/theme'
-import themeMui from '../styles/themeMui'
-import PRIVACY_VALUES from '../constants/privacyValues'
+} from '@/constants/sectionNames'
+import theme from '@/styles/theme'
+import themeMui from '@/styles/themeMui'
+import PRIVACY_VALUES from '@/constants/privacyValues'
 import { useFormContext } from 'react-hook-form'
 
-import { useSaveRegistrationSection } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
-import { useGetSectionTarget } from '../library/question-mapped-form/sections-hook'
-import { useGetMonitorsForms } from '../library/question-mapped-form/monitors'
+import { useSaveRegistrationSection } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
+import { useGetSectionTarget } from '@/library/question-mapped-form/sections-hook'
+import { useGetMonitorsForms } from '@/library/question-mapped-form/monitors'
+import { env } from '@/lib/env'
 
 const componentLanguage = language.questionNav
 
@@ -107,7 +108,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   const nextSection = SECTION_NAMES[currentSectionNameIndex + 1]
   const previousSection = SECTION_NAMES[currentSectionNameIndex - 1]
   const sectionIdForApi = currentSectionNameIndex + 1
-  const siteUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}`
+  const siteUrl = `${env.API_URL}/sites/${siteId}`
   const form = useFormContext()
   const navigate = useNavigate()
   const { pathname } = useLocation()

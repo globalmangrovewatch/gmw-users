@@ -2,7 +2,7 @@ import { Controller } from 'react-hook-form'
 import { FormLabel } from '@mui/material'
 import { styled } from '@mui/system'
 import PropTypes from 'prop-types'
-import { Input } from '../../styles/v2/ui/input'
+import { Input } from '@/styles/v2/ui/input'
 
 const RequiredIndicator = styled('span')`
   color: red;
