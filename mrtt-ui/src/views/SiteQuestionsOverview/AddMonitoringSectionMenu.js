@@ -1,9 +1,9 @@
 import React from 'react'
 import { Menu, MenuItem, Stack, styled } from '@mui/material'
-import { ButtonPrimary } from '../../styles/buttons'
-import language from '../../language'
+import { ButtonPrimary } from '@/styles/buttons'
+import language from '@/language'
 import { ArrowDropDown } from '@mui/icons-material'
-import { Link } from '../../styles/typography'
+import { Link } from '@/styles/typography'
 import PropTypes from 'prop-types'
 
 const pageLanguage = language.pages.siteQuestionsOverview

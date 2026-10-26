@@ -8,9 +8,9 @@ import {
   TabularSectionDiv,
   TabularLabel,
   TabularInputSection
-} from '../../styles/forms'
-import { comparisonOptions } from '../../data/ecologicalOptions'
-import { ErrorText } from '../../styles/typography'
+} from '@/styles/forms'
+import { comparisonOptions } from '@/data/ecologicalOptions'
+import { ErrorText } from '@/styles/typography'
 
 const EcologicalOutcomesRow = ({
   index,

@@ -3,17 +3,18 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonSecondary } from '../styles/buttons'
-import { ContentWrapper, TitleAndActionContainer } from '../styles/containers'
-import { LinkLooksLikeButtonPrimary, PageSubtitle, PageTitle } from '../styles/typography'
-import { TableAlertnatingRows, TdCenter, ThCenter } from '../styles/table'
+import { ButtonSecondary } from '@/styles/buttons'
+import { ContentWrapper, TitleAndActionContainer } from '@/styles/containers'
+import { LinkLooksLikeButtonPrimary, PageSubtitle, PageTitle } from '@/styles/typography'
+import { TableAlertnatingRows, TdCenter, ThCenter } from '@/styles/table'
 import { toast } from 'react-toastify'
-import { useAuth } from '../hooks/useAuth'
-import ConfirmPrompt from '../components/ConfirmPrompt/ConfirmPrompt'
-import language from '../language'
-import LoadingIndicator from '../components/LoadingIndicator'
-import LoadingIndicatorOverlay from '../components/LoadingIndicatorOverlay'
-import USER_ROLES from '../constants/userRoles'
+import { useAuth } from '@/hooks/useAuth'
+import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import LoadingIndicatorOverlay from '@/components/LoadingIndicatorOverlay'
+import USER_ROLES from '@/constants/userRoles'
+import { env } from '@/lib/env'
 
 const pageLanguage = language.pages.manageOrganizationUsers
 
@@ -26,7 +27,7 @@ const ManageOrganizationUsers = () => {
   const { currentUser } = useAuth()
   const { organizationId } = useParams()
   const isDeleteConfirmPromptOpen = !!userToDelete
-  const organizationUrl = `${process.env.REACT_APP_API_URL}/organizations/${organizationId}`
+  const organizationUrl = `${env.API_URL}/organizations/${organizationId}`
   const organizationUsersUrl = `${organizationUrl}/users`
 
   const clearUserToDelete = () => setUserToDelete(null)

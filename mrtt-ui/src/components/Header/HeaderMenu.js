@@ -5,17 +5,17 @@ import React, { useCallback } from 'react'
 import styled from '@emotion/styled'
 import { StyledLabel } from './styles'
 
-import { ButtonSecondary } from 'styles/buttons'
-import { PaddedSection } from 'styles/containers'
-import theme from 'styles/theme'
-import language from 'language'
+import { ButtonSecondary } from '@/styles/buttons'
+import { PaddedSection } from '@/styles/containers'
+import theme from '@/styles/theme'
+import language from '@/language'
 
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from 'hooks/useAuth'
-import { ssoLogout } from 'hooks/sso'
-import ContactForm from 'components/contact'
-import { ContactUsButton } from 'components/contact/styles'
-import LanguagePicker from 'components/language-selector'
+import { useAuth } from '@/hooks/useAuth'
+import { ssoLogout } from '@/hooks/sso'
+import ContactForm from '@/components/contact'
+import { ContactUsButton } from '@/components/contact/styles'
+import LanguagePicker from '@/components/language-selector'
 
 const CustomButton = styled(Button)`
   margin: 0;

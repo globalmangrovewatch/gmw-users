@@ -8,24 +8,25 @@ import turfBbox from '@turf/bbox'
 import turfBboxPolygon from '@turf/bbox-polygon'
 import turfConvex from '@turf/convex'
 
-import { ContentWrapper } from '../styles/containers'
-import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
-// import { mapDataForApi } from '../library/mapDataForApi'
-import { projectDetails as questions } from '../data/questions'
-import { questionMapping } from '../data/questionMapping'
-import { StickyFormLabel, FormPageHeader, FormQuestionDiv, FormLayout } from '../styles/forms'
+import { ContentWrapper } from '@/styles/containers'
+import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
+// import { mapDataForApi } from '@/library/mapDataForApi'
+import { projectDetails as questions } from '@/data/questions'
+import { questionMapping } from '@/data/questionMapping'
+import { StickyFormLabel, FormPageHeader, FormQuestionDiv, FormLayout } from '@/styles/forms'
 // import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
-import language from '../language'
+import language from '@/language'
 // import LoadingIndicator from './LoadingIndicator'
-import mangroveCountries from '../data/mangrove_countries.json'
+import mangroveCountries from '@/data/mangrove_countries.json'
 import ProjectAreaMap from './ProjectAreaMap'
 import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
-import { useInitializeQuestionMappedForm } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
-import useSiteInfo from '../library/useSiteInfo'
+import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
+import useSiteInfo from '@/library/useSiteInfo'
 import DatePickerUtcMui from './DatePickerUtcMui'
+import { env } from '@/lib/env'
 
 export const siteAreaError = 'Please provide a site area'
 
@@ -47,7 +48,7 @@ function ProjectDetailsForm() {
 
   // const { errors } = form.formState
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
   let watchHasProjectEndDate = form.watch('hasProjectEndDate', false)
   /* showEndDateInput is a hack because MUI follows native html and casts values to strings.
    The api casts them to boolean so we support both */

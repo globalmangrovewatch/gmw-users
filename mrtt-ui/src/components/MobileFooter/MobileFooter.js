@@ -6,8 +6,8 @@ import {
   Language as LandscapesIcon,
   PeopleOutline as OrganizationsIcon
 } from '@mui/icons-material'
-import theme from '../../styles/theme'
-import themeMui from '../../styles/themeMui'
+import theme from '@/styles/theme'
+import themeMui from '@/styles/themeMui'
 
 const StyledFooter = styled('footer')`
   display: flex;

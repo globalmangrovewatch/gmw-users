@@ -11,13 +11,9 @@ import {
   Typography
 } from '@mui/material'
 
-import { TabularSectionDiv, TabularLabel, TabularInputSection } from '../../styles/forms'
-import {
-  ComparisonOptions,
-  TrendOptions,
-  TypeOptions
-} from '../../data/socioeconomicOutcomesOptions'
-import language from '../../language'
+import { TabularSectionDiv, TabularLabel, TabularInputSection } from '@/styles/forms'
+import { ComparisonOptions, TrendOptions, TypeOptions } from '@/data/socioeconomicOutcomesOptions'
+import language from '@/language'
 
 const SocioeconomicOutcomesRow = ({
   outcome,

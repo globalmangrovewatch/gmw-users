@@ -1,8 +1,8 @@
 import React from 'react'
-import language from '../language'
+import language from '@/language'
 import { styled } from '@mui/system'
-import theme from '../styles/theme'
-import themeMui from '../styles/themeMui'
+import theme from '@/styles/theme'
+import themeMui from '@/styles/themeMui'
 
 const RequiredIndicatorWrapper = styled('span')`
   color: ${theme.form.requiredIndicatorColor};

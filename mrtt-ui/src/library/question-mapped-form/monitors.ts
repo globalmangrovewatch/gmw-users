@@ -1,5 +1,6 @@
 import { useQuery, UseQueryResult, UseQueryOptions } from '@tanstack/react-query'
 import axios from 'axios'
+import { env } from '@/lib/env'
 
 type MonitorFormKey =
   | 'managementStatusAndEffectiveness'
@@ -37,7 +38,7 @@ export function useGetMonitorsForms<TSelected = MonitorsItem[]>({
     queryKey: ['question-mapped-form-monitors', key, siteId],
     queryFn: async (): Promise<MonitorsItem[]> => {
       const response = await axios.get<MonitorsItem[]>(
-        `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
+        `${env.API_URL}/sites/${siteId}/monitoring_answers`
       )
 
       return response.data
