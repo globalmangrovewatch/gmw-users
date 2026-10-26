@@ -5,23 +5,24 @@ import { toast } from 'react-toastify'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { Box, MenuItem, TextField } from '@mui/material'
 
-import { FormLayout, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '../../styles/forms'
-import { ContentWrapper } from '../../styles/containers'
-import { managementStatusAndEffectiveness as questions } from '../../data/questions'
-import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import QuestionNav from '../QuestionNav'
-import useSiteInfo from '../../library/useSiteInfo'
-import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
-import language from '../../language'
-import { questionMapping } from '../../data/questionMapping'
-import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
-import ButtonDeleteForm from '../ButtonDeleteForm'
-import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
-import DatePickerUtcMui from '../DatePickerUtcMui'
-import RequiredIndicator from '../RequiredIndicator'
+import { FormLayout, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '@/styles/forms'
+import { ContentWrapper } from '@/styles/containers'
+import { managementStatusAndEffectiveness as questions } from '@/data/questions'
+import CheckboxGroupWithLabelAndController from '@/components/CheckboxGroupWithLabelAndController'
+import QuestionNav from '@/components/QuestionNav'
+import useSiteInfo from '@/library/useSiteInfo'
+import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
+import language from '@/language'
+import { questionMapping } from '@/data/questionMapping'
+import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
+import ButtonDeleteForm from '@/components/ButtonDeleteForm'
+import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
+import DatePickerUtcMui from '@/components/DatePickerUtcMui'
+import RequiredIndicator from '@/components/RequiredIndicator'
 
-import { useInitializeQuestionMappedFormMonitors } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
-import LoadingIndicator from '../LoadingIndicator'
+import { useInitializeQuestionMappedFormMonitors } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import { env } from '@/lib/env'
 
 const ManagementStatusAndEffectivenessForm = () => {
   const { monitoringFormId, siteId } = useParams()
@@ -36,7 +37,7 @@ const ManagementStatusAndEffectivenessForm = () => {
     control
   } = form
 
-  const monitoringFormSingularUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers/${monitoringFormId}`
+  const monitoringFormSingularUrl = `${env.API_URL}/sites/${siteId}/monitoring_answers/${monitoringFormId}`
   const managementStatusChangesWatcher = useWatch({ control, name: 'managementStatusChanges' })
   const projectStatusChangeWatcher = useWatch({ control, name: 'projectStatusChange' })
   const financeForCiteManagementWatcher = useWatch({ control, name: 'financeForCiteManagement' })

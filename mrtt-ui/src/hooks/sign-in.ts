@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import axios, { AxiosError } from 'axios'
+import { env } from '@/lib/env'
 
 type SignInInput = {
   email: string
@@ -17,7 +18,7 @@ type SignInError = {
 }
 
 export function useSignInMutation() {
-  const authUrl = `${process.env.REACT_APP_AUTH_URL}/users/sign_in`
+  const authUrl = `${env.AUTH_URL}/users/sign_in`
 
   return useMutation<SignInResponse, AxiosError<SignInError>, SignInInput>({
     mutationFn: async (input) => {

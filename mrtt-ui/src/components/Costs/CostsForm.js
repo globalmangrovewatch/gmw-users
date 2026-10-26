@@ -10,23 +10,24 @@ import {
   FormQuestionDiv,
   QuestionSubSection,
   StickyFormLabel
-} from '../../styles/forms'
-import QuestionNav from '../QuestionNav'
-import useSiteInfo from '../../library/useSiteInfo'
-import language from '../../language'
-import { ContentWrapper } from '../../styles/containers'
-import { costs as questions } from '../../data/questions'
-import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
-import { questionMapping } from '../../data/questionMapping'
-import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
+} from '@/styles/forms'
+import QuestionNav from '@/components/QuestionNav'
+import useSiteInfo from '@/library/useSiteInfo'
+import language from '@/language'
+import { ContentWrapper } from '@/styles/containers'
+import { costs as questions } from '@/data/questions'
+import CheckboxGroupWithLabelAndController from '@/components/CheckboxGroupWithLabelAndController'
+import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
+import { questionMapping } from '@/data/questionMapping'
+import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
 import ProjectFunderNamesRow from './ProjectFunderNamesRow'
 import BreakdownOfCostRow from './BreakdownOfCostRow'
 import PercentageSplitOfActivitiesRow from './PercentageSplitOfActivitiesRow'
-import { currencies } from '../../data/currencies'
-import { findRegistationDataItem } from '../../library/findDataItems'
-import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
+import { currencies } from '@/data/currencies'
+import { findRegistationDataItem } from '@/library/findDataItems'
+import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
+import { env } from '@/lib/env'
 
 const getEndDate = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '1.1b') ?? ''
@@ -57,7 +58,7 @@ const CostsForm = () => {
 
   const form = useFormContext()
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
 
   const {
     // handleSubmit: validateInputs,

@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom'
-import { useAuth } from 'hooks/useAuth'
-import LoadingIndicator from 'components/LoadingIndicator'
+import { useAuth } from '@/hooks/useAuth'
+import LoadingIndicator from '@/components/LoadingIndicator'
 
 function ProtectedRoutes() {
   const { isLoggedIn, isChecking } = useAuth()

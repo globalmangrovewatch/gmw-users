@@ -1,13 +1,13 @@
 import * as yup from 'yup'
 
-import emptyFeatureCollection from '../../data/emptyFeatureCollection'
+import emptyFeatureCollection from '@/data/emptyFeatureCollection'
 
 import {
   multiselectWithOtherValidation,
   multiselectWithOtherValidationNoMinimum
-} from '../../validation/multiSelectWithOther'
+} from '@/validation/multiSelectWithOther'
 
-import language from '../../language'
+import language from '@/language'
 
 const siteAreaError = 'Please provide a site area'
 

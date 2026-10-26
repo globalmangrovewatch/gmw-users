@@ -41,7 +41,6 @@ const renderSiteBackgroundForm = ({ Provider = FormWrapper } = {}) => {
 
 describe('SiteBackgroundForm', () => {
   beforeEach(() => {
-    process.env.REACT_APP_API_URL = API_URL
     axios.get.mockImplementation((url) => {
       if (url === ANSWERS_URL) {
         return Promise.resolve({

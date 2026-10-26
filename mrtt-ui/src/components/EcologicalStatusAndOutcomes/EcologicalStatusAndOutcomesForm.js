@@ -22,27 +22,28 @@ import {
   NestedLabel1,
   QuestionSubSection,
   StickyFormLabel
-} from '../../styles/forms'
-import QuestionNav from '../QuestionNav'
-import useSiteInfo from '../../library/useSiteInfo'
-import language from '../../language'
-import { ContentWrapper } from '../../styles/containers'
-import { questionMapping } from '../../data/questionMapping'
-import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
-import { ecologicalStatusOutcomes as questions } from '../../data/questions'
-import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
-import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import { findRegistationDataItem, findMonitoringDataItem } from '../../library/findDataItems'
-import { monitoringIndicators } from '../../data/monitoringIndicators'
-import ButtonDeleteForm from '../ButtonDeleteForm'
-import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
+} from '@/styles/forms'
+import QuestionNav from '@/components/QuestionNav'
+import useSiteInfo from '@/library/useSiteInfo'
+import language from '@/language'
+import { ContentWrapper } from '@/styles/containers'
+import { questionMapping } from '@/data/questionMapping'
+import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
+import { ecologicalStatusOutcomes as questions } from '@/data/questions'
+import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
+import CheckboxGroupWithLabelAndController from '@/components/CheckboxGroupWithLabelAndController'
+import { findRegistationDataItem, findMonitoringDataItem } from '@/library/findDataItems'
+import { monitoringIndicators } from '@/data/monitoringIndicators'
+import ButtonDeleteForm from '@/components/ButtonDeleteForm'
+import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
 import EcologicalOutcomesRow from './EcologicalOutcomesRow'
-import DatePickerUtcMui from '../DatePickerUtcMui'
-import { unitOptions } from '../../data/ecologicalOptions'
-import RequiredIndicator from '../RequiredIndicator'
+import DatePickerUtcMui from '@/components/DatePickerUtcMui'
+import { unitOptions } from '@/data/ecologicalOptions'
+import RequiredIndicator from '@/components/RequiredIndicator'
 
-import { useInitializeQuestionMappedFormMonitors } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
-import LoadingIndicator from '../LoadingIndicator'
+import { useInitializeQuestionMappedFormMonitors } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import { env } from '@/lib/env'
 
 const getEcologicalAims = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '3.1') ?? []
@@ -83,9 +84,9 @@ const EcologicalStatusAndOutcomesForm = () => {
   } = useFieldArray({ name: 'ecologicalMonitoringStakeholders', control })
 
   const { siteId } = useParams()
-  const monitoringFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers`
+  const monitoringFormsUrl = `${env.API_URL}/sites/${siteId}/monitoring_answers`
   const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
-  const registrationInterventionFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const registrationInterventionFormsUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
   const [biophysicalInterventions, setBiophysicalInterventions] = useState([])
 
   const mangroveAreaIncreaseWatcher = useWatch({ control, name: 'mangroveAreaIncrease' })

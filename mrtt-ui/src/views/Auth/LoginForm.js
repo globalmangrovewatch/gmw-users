@@ -12,13 +12,13 @@ import { Alert, Button } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import { useMediaQuery } from '@mui/system'
 
-import { RowFlexEnd } from 'styles/containers'
-import { ErrorText, Link as ExternalLink } from 'styles/typography'
-import { useAuth } from 'hooks/useAuth'
-import { useSignInMutation } from 'hooks/sign-in'
-import { syncSession } from 'hooks/sso'
-import language from 'language'
-import LoadingIndicator from 'components/LoadingIndicator'
+import { RowFlexEnd } from '@/styles/containers'
+import { ErrorText, Link as ExternalLink } from '@/styles/typography'
+import { useAuth } from '@/hooks/useAuth'
+import { useSignInMutation } from '@/hooks/sign-in'
+import { syncSession } from '@/hooks/sso'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
 import {
   Hero,
   HeroContent,
@@ -33,13 +33,13 @@ import {
   LogoContainer,
   Logo,
   LandingHeaderContainer
-} from 'styles/v2/containers/landing'
-import { Paragraph, StyledLink } from 'styles/v2/ui/typography'
-import { Divider } from 'styles/v2/ui/divider'
-import { FormInput } from 'components/Form/FormInput'
+} from '@/styles/v2/containers/landing'
+import { Paragraph, StyledLink } from '@/styles/v2/ui/typography'
+import { Divider } from '@/styles/v2/ui/divider'
+import { FormInput } from '@/components/Form/FormInput'
 
-import LandingHeaderDesktop from 'components/landing/header-desktop'
-import LandingHeaderMobile from 'components/landing/header-mobile'
+import LandingHeaderDesktop from '@/components/landing/header-desktop'
+import LandingHeaderMobile from '@/components/landing/header-mobile'
 
 const validationSchema = yup.object({
   email: yup.string().required('Email required'),

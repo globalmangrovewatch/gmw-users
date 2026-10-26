@@ -4,10 +4,10 @@ import { MenuItem, TextField } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 
-import { TabularInputSection, TabularLabel } from '../../styles/forms'
-import { costs as questions } from '../../data/questions'
-import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
-import language from '../../language'
+import { TabularInputSection, TabularLabel } from '@/styles/forms'
+import { costs as questions } from '@/data/questions'
+import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
+import language from '@/language'
 
 const ProjectFunderNamesRow = ({ label, type, percentage, index, deleteItem, updateItem }) => {
   const [initialType, setInitialType] = useState('')

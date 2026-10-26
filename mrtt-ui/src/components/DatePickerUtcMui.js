@@ -6,8 +6,8 @@ import { Stack, TextField } from '@mui/material'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import { TextSmall } from '../styles/typography'
-import language from '../language'
+import { TextSmall } from '@/styles/typography'
+import language from '@/language'
 
 const DatePickerUtcMui = (props) => {
   const value = DateTime.fromISO(props.field?.value)

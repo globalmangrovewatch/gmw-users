@@ -1,13 +1,13 @@
 import { styled } from '@mui/system'
 import PropTypes from 'prop-types'
 import React from 'react'
-import theme from '../styles/theme'
+import theme from '@/styles/theme'
 
 import Footer from './MobileFooter'
 import Header from './Header/Header'
-import themeMui from '../styles/themeMui'
-import { useAuth } from '../hooks/useAuth'
-import { useFeatureFlags } from '../hooks/useFeatureFlags'
+import themeMui from '@/styles/themeMui'
+import { useAuth } from '@/hooks/useAuth'
+import { useFeatureFlags } from '@/hooks/useFeatureFlags'
 
 const LayoutWrapper = styled('div')`
   display: flex;

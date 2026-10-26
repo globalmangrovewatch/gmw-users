@@ -1,6 +1,6 @@
 import { ValidationError } from 'yup'
 
-import { validationSchema } from 'components/FormWrapper/FormSchemaValidation'
+import { validationSchema } from '@/components/FormWrapper/FormSchemaValidation'
 
 import { validationCases } from 'fixtures/validationCases'
 

@@ -16,33 +16,34 @@ import { styled } from '@mui/material/styles'
 import { useParams } from 'react-router-dom'
 import { useState, useCallback, useMemo, useEffect } from 'react'
 
-import { ContentWrapper } from '../../styles/containers'
-import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
+import { ContentWrapper } from '@/styles/containers'
+import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
 import {
   FormLayout,
   FormPageHeader,
   FormQuestionDiv,
   InnerFormDiv,
   StickyFormLabel
-} from '../../styles/forms'
+} from '@/styles/forms'
 
-import { questionMapping } from '../../data/questionMapping'
-import { propaguleOptions, seedlingOptions } from '../../data/siteInterventionOptions'
-import { siteInterventions as questions } from '../../data/questions'
-import language from '../../language'
+import { questionMapping } from '@/data/questionMapping'
+import { propaguleOptions, seedlingOptions } from '@/data/siteInterventionOptions'
+import { siteInterventions as questions } from '@/data/questions'
+import language from '@/language'
 
 import AddMangroveAssociatedSpeciesRow from './AddMangroveAssociatedSpeciesRow'
 import MangroveAssociatedSpeciesRow from './MangroveAssociatedSpeciesRow'
-import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
-import QuestionNav from '../QuestionNav'
-import DatePickerUtcMui from '../DatePickerUtcMui'
+import CheckboxGroupWithLabelAndController from '@/components/CheckboxGroupWithLabelAndController'
+import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
+import QuestionNav from '@/components/QuestionNav'
+import DatePickerUtcMui from '@/components/DatePickerUtcMui'
 
-import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
-import useSiteInfo from '../../library/useSiteInfo'
-import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
+import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
+import useSiteInfo from '@/library/useSiteInfo'
+import organizeMangroveSpeciesList from '@/library/organizeMangroveSpeciesList'
 
-import LoadingIndicator from '../LoadingIndicator'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import { env } from '@/lib/env'
 
 function SiteInterventionsForm() {
   const { site_name } = useSiteInfo()
@@ -53,7 +54,7 @@ function SiteInterventionsForm() {
   } = form
 
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
 
   const [isSubmitting] = useState(false)
   const [isError] = useState(false)

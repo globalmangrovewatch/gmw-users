@@ -3,9 +3,9 @@ import { StrictMode } from 'react'
 import { render, screen } from '@testing-library/react'
 
 import { AuthProvider, useAuth } from './useAuth'
-import { exchangeCode, readAndStripCode, silentSsoCheck } from 'hooks/sso'
+import { exchangeCode, readAndStripCode, silentSsoCheck } from '@/hooks/sso'
 
-vi.mock('hooks/sso', () => ({
+vi.mock('@/hooks/sso', () => ({
   exchangeCode: vi.fn(),
   readAndStripCode: vi.fn(),
   silentSsoCheck: vi.fn()

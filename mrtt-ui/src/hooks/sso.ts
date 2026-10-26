@@ -1,16 +1,19 @@
 import axios from 'axios'
+import { env } from '@/lib/env'
+
+export type SSOUser = {
+  name?: string
+  email: string
+  organization?: string | null
+}
 
 type SSOExchangeResponse = {
   token: string
-  user: {
-    name?: string
-    email: string
-    organization?: string | null
-  }
+  user: SSOUser
 }
 
 const gmwUrl = (): string => {
-  const url = process.env.REACT_APP_GMW_URL
+  const url = env.GMW_URL
   if (!url) {
     throw new Error('REACT_APP_GMW_URL is not set')
   }
