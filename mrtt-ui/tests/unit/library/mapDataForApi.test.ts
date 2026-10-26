@@ -1,4 +1,4 @@
-import { defaultValues } from '@/components/FormWrapper/FormSchemaValidation'
+import { defaultValues } from '@/forms/schemas'
 import { questionMapping } from '@/data/questionMapping'
 import { formatApiAnswersForFormByKey } from '@/library/formatApiAnswersForForm'
 import { mapDataForApi } from '@/library/mapDataForApi'

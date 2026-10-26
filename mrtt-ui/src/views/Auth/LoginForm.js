@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import PropTypes from 'prop-types'
 
 import { Alert, Button } from '@mui/material'
@@ -41,9 +41,9 @@ import { FormInput } from '@/components/Form/FormInput'
 import LandingHeaderDesktop from '@/components/landing/header-desktop'
 import LandingHeaderMobile from '@/components/landing/header-mobile'
 
-const validationSchema = yup.object({
-  email: yup.string().required('Email required'),
-  password: yup.string().required('Password required')
+const validationSchema = z.object({
+  email: z.string({ error: 'Email required' }).min(1, 'Email required'),
+  password: z.string({ error: 'Password required' }).min(1, 'Password required')
 })
 
 const formDefaultValues = { email: '', password: '' }
@@ -59,7 +59,7 @@ const LoginForm = ({ isUserNew }) => {
     handleSubmit: validateInputs,
     formState: { errors }
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
     defaultValues: formDefaultValues
   })
 

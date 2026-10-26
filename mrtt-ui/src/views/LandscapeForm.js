@@ -2,8 +2,8 @@ import { Autocomplete, FormLabel, TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
@@ -20,11 +20,14 @@ import RequiredIndicator from '@/components/RequiredIndicator'
 import SubmitErrorWithExtraErrorContent from '@/components/SubmitErrorWithExtraErrorContent'
 import { env } from '@/lib/env'
 
-const validationSchema = yup.object({
-  landscape_name: yup.string().required(language.pages.landscapeForm.validation.nameRequired),
-  selectedOrganizations: yup
-    .array()
+const nameRequired = language.pages.landscapeForm.validation.nameRequired
+
+const validationSchema = z.object({
+  landscape_name: z.string({ error: nameRequired }).min(1, nameRequired),
+  selectedOrganizations: z
+    .array(z.unknown())
     .min(1, language.pages.landscapeForm.validation.organizationRequired)
+    .optional()
 })
 
 const formDefaultValues = { landscape_name: '', selectedOrganizations: [] }
@@ -53,7 +56,10 @@ const LandscapeForm = ({ isNewLandscape }) => {
     handleSubmit: validateInputs,
     formState: { errors },
     reset: resetForm
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
+    defaultValues: formDefaultValues
+  })
 
   useEffect(
     function loadApiData() {
