@@ -24,15 +24,3 @@ export const mapDataForApi = (formTitle, data, sectionTarget) => {
 
   return preppedData
 }
-
-export const mapAllDataForApi = (formsByTitle) => {
-  const answers = []
-
-  for (const [formTitle, data] of Object.entries(formsByTitle || {})) {
-    answers.push(...mapDataForApi(formTitle, data))
-  }
-
-  const byId = new Map()
-  for (const a of answers) byId.set(a.question_id, a)
-  return Array.from(byId.values())
-}
