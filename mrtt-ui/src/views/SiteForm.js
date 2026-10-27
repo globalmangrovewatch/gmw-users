@@ -1,7 +1,9 @@
+'use client'
+
 import { Controller, useForm, useFormContext } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useRouter, useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useQuery } from '@tanstack/react-query'
@@ -37,7 +39,7 @@ const formDefaultValues = { site_name: '', landscape_id: '', defaultSectionPriva
 const SiteForm = ({ isNewSite }) => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const { siteId } = useParams()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const siteForm = useFormContext()
   const { reset: resetSiteForm } = siteForm
@@ -97,7 +99,7 @@ const SiteForm = ({ isNewSite }) => {
       onSuccess: ({ site_name }) => {
         toast.success(language.success.getCreateThingSuccessMessage(site_name))
         resetSiteForm()
-        navigate('/sites')
+        router.push('/sites')
       },
       onError: handleSubmitError
     })
@@ -107,7 +109,7 @@ const SiteForm = ({ isNewSite }) => {
     updateSite.mutate(formData, {
       onSuccess: ({ site_name }) => {
         toast.success(language.success.getEditThingSuccessMessage(site_name))
-        navigate('/sites')
+        router.push('/sites')
       },
       onError: handleSubmitError
     })
@@ -124,7 +126,7 @@ const SiteForm = ({ isNewSite }) => {
   }
 
   const handleCancelClick = () => {
-    navigate('/sites')
+    router.push('/sites')
   }
 
   const form = !doesItemExist ? (

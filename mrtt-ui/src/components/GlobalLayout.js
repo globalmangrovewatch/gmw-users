@@ -1,3 +1,5 @@
+'use client'
+
 import { styled } from '@mui/system'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -7,7 +9,6 @@ import Footer from './MobileFooter'
 import Header from './Header/Header'
 import themeMui from '@/styles/themeMui'
 import { useAuth } from '@/hooks/useAuth'
-import { useFeatureFlags } from '@/hooks/useFeatureFlags'
 
 const LayoutWrapper = styled('div')`
   display: flex;
@@ -19,14 +20,14 @@ const LayoutWrapper = styled('div')`
 const Main = styled('main')`
   margin: ${theme.layout.headerHeight} 0 ${themeMui.spacing(4)} 0;
 `
-const GlobalLayout = ({ children }) => {
+// `isLanding` is set by the layout of the login pages, which use the new landing design.
+const GlobalLayout = ({ children, isLanding = false }) => {
   const { isLoggedIn } = useAuth()
-  const { showNewLandingPage } = useFeatureFlags()
 
-  if (showNewLandingPage) {
+  if (isLanding) {
     return (
       <main>
-        <Header />
+        <Header isLanding />
         {children}
       </main>
     )
@@ -41,6 +42,6 @@ const GlobalLayout = ({ children }) => {
   )
 }
 
-GlobalLayout.propTypes = { children: PropTypes.node.isRequired }
+GlobalLayout.propTypes = { children: PropTypes.node.isRequired, isLanding: PropTypes.bool }
 
 export default GlobalLayout

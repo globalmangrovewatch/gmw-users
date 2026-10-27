@@ -58,4 +58,8 @@ jobs:
           path: mrtt-ui/coverage
           retention-days: 7
 
+      # No deployment variables in CI: the build only has to compile.
       - run: pnpm build
+        env:
+          SKIP_ENV_VALIDATION: 'true'
+          NEXT_TELEMETRY_DISABLED: '1'

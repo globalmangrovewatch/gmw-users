@@ -1,8 +1,11 @@
+'use client'
+
 import { Settings as SettingsIcon } from '@mui/icons-material'
 import { Menu, MenuItem, Stack } from '@mui/material'
 import { styled } from '@mui/system'
 import { toast } from 'react-toastify'
-import { useParams, Link as LinkReactRouter } from 'react-router-dom'
+import { useParams } from 'next/navigation'
+import NextLink from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 
@@ -120,7 +123,7 @@ const SiteOverview = () => {
                 {language.pages.sites.publicData}
               </MenuItem>
             </Menu>
-            <ButtonSecondary component={LinkReactRouter} to={`/sites/${siteId}/edit`}>
+            <ButtonSecondary component={NextLink} href={`/sites/${siteId}/edit`}>
               <SettingsIcon /> {pageLanguage.settings}
             </ButtonSecondary>
           </ButtonContainer>
@@ -133,35 +136,35 @@ const SiteOverview = () => {
           <tbody>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/project-details`}>
+                <Link href={`/sites/${siteId}/form/project-details`}>
                   {pageLanguage.formName.siteDetails}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/site-background`}>
+                <Link href={`/sites/${siteId}/form/site-background`}>
                   {pageLanguage.formName.siteBackground}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/restoration-aims`}>
+                <Link href={`/sites/${siteId}/form/restoration-aims`}>
                   {pageLanguage.formName.restorationAims}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/causes-of-decline`}>
+                <Link href={`/sites/${siteId}/form/causes-of-decline`}>
                   {pageLanguage.formName.causesOfDecline}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/pre-restoration-assessment`}>
+                <Link href={`/sites/${siteId}/form/pre-restoration-assessment`}>
                   {pageLanguage.formName.preRestorationAssessment}
                 </Link>
               </WideTh>
@@ -173,14 +176,14 @@ const SiteOverview = () => {
           <tbody>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/site-interventions`}>
+                <Link href={`/sites/${siteId}/form/site-interventions`}>
                   {pageLanguage.formName.siteInterventions}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/costs`}>{pageLanguage.formName.costs}</Link>
+                <Link href={`/sites/${siteId}/form/costs`}>{pageLanguage.formName.costs}</Link>
               </WideTh>
             </tr>
           </tbody>

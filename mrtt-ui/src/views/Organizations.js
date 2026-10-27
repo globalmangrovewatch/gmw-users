@@ -1,3 +1,5 @@
+'use client'
+
 import { ButtonPrimary, ButtonSecondary } from '@/styles/buttons'
 import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
@@ -12,7 +14,7 @@ import {
   TitleAndActionContainer
 } from '@/styles/containers'
 import { H2, LinkLooksLikeButtonSecondary, PageTitle } from '@/styles/typography'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { toast } from 'react-toastify'
 import { UlAlternating, UlUndecorated } from '@/styles/lists'
 import language from '@/language'
@@ -68,7 +70,7 @@ function Organizations() {
                   {language.pages.organizations.downloadOrganizationSites}
                 </ButtonSecondary>
                 {canManageUsers ? (
-                  <LinkLooksLikeButtonSecondary to={`/organizations/${organizationId}/users`}>
+                  <LinkLooksLikeButtonSecondary href={`/organizations/${organizationId}/users`}>
                     {language.pages.organizations.manageUsers}
                   </LinkLooksLikeButtonSecondary>
                 ) : null}
@@ -119,7 +121,7 @@ function Organizations() {
       <ContentWrapper>
         <TitleAndActionContainer>
           <PageTitle>{language.pages.organizations.title}</PageTitle>
-          <ButtonPrimary component={Link} to='/organizations/new'>
+          <ButtonPrimary component={Link} href='/organizations/new'>
             {language.pages.organizations.newOrganizationButton}
           </ButtonPrimary>
         </TitleAndActionContainer>

@@ -1,6 +1,8 @@
+'use client'
+
 import { ArrowBack } from '@mui/icons-material'
 import { toast } from 'react-toastify'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useRouter, useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useQuery } from '@tanstack/react-query'
@@ -33,7 +35,7 @@ const formDefaultValues = { email: '', role: 'org-user' }
 const NewOrganizationUser = () => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const { organizationId } = useParams()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const organizationQuery = useQuery(organizationQueries.detail(organizationId))
   const addUser = useAddOrganizationUser(organizationId)
@@ -53,7 +55,7 @@ const NewOrganizationUser = () => {
   })
 
   const handleCancelClick = () => {
-    navigate(-1)
+    router.back()
   }
   const handleSubmit = (formData) => {
     setIsSubmitError(false)
@@ -78,7 +80,7 @@ const NewOrganizationUser = () => {
   ) : (
     <ContentWrapper>
       <PageTitle>{pageLanguage.getTitle(organizationName)}</PageTitle>
-      <Link to={-1}>
+      <Link href={`/organizations/${organizationId}/users`}>
         <ArrowBack />
         {pageLanguage.backToUsers}
       </Link>

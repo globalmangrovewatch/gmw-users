@@ -1,15 +1,16 @@
+'use client'
+
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import PropTypes from 'prop-types'
 
 import { Alert, Button } from '@mui/material'
-import { useTheme } from '@mui/styles'
+import { useTheme } from '@mui/material/styles'
 import { useMediaQuery } from '@mui/system'
 
 import { RowFlexEnd } from '@/styles/containers'
@@ -64,13 +65,13 @@ const LoginForm = ({ isUserNew }) => {
   })
 
   const { isChecking, isLoggedIn, login } = useAuth()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   useEffect(() => {
     if (!isChecking && isLoggedIn) {
-      navigate('/sites', { replace: true })
+      router.replace('/sites')
     }
-  }, [isChecking, isLoggedIn, navigate])
+  }, [isChecking, isLoggedIn, router])
 
   const handleSubmit = (formData) => {
     setIsSubmitError(false)
@@ -85,7 +86,7 @@ const LoginForm = ({ isUserNew }) => {
         }
         await syncSession(data.token)
         login(data.token, user)
-        navigate('/sites')
+        router.push('/sites')
       },
       onError: (error) => {
         setIsSubmitError(true)
@@ -103,9 +104,9 @@ const LoginForm = ({ isUserNew }) => {
     <Base>
       <LandingHeaderContainer>
         <LogoContainer draggable='false'>
-          <Link to='https://www.globalmangrovewatch.org/' target='_blank' rel='noreferrer'>
+          <a href='https://www.globalmangrovewatch.org/' target='_blank' rel='noreferrer'>
             <Logo src='/images/landing/logo.webp' />
-          </Link>
+          </a>
         </LogoContainer>
         {!isMobile && <LandingHeaderDesktop />}
         {isMobile && <LandingHeaderMobile />}
@@ -118,7 +119,7 @@ const LoginForm = ({ isUserNew }) => {
             secure location to hold information across restoration planning, intervention and
             monitoring.{' '}
             <ExternalLink
-              to='https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
+              href='https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
               rel='noreferrer'
               target='_blank'
               style={{ color: 'white' }}>
@@ -159,13 +160,13 @@ const LoginForm = ({ isUserNew }) => {
             <Button type='submit'>Log in</Button>
           </Form>
           <FormFooter>
-            <StyledLink to='/auth/password/forgot-password'>
+            <StyledLink href='/auth/password/forgot-password'>
               {pageLanguage.forgotPassowrd}
             </StyledLink>
             <Divider />
             <Paragraph>
               Don&apos;t have an account?&nbsp;
-              <StyledLink to='/auth/signup'>{pageLanguage.signUp}</StyledLink>
+              <StyledLink href='/auth/signup'>{pageLanguage.signUp}</StyledLink>
             </Paragraph>
           </FormFooter>
         </MainContent>

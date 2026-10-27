@@ -13,9 +13,9 @@ type SSOExchangeResponse = {
 }
 
 const gmwUrl = (): string => {
-  const url = env.GMW_URL
+  const url = env.NEXT_PUBLIC_GMW_URL
   if (!url) {
-    throw new Error('REACT_APP_GMW_URL is not set')
+    throw new Error('NEXT_PUBLIC_GMW_URL is not set')
   }
   return url.replace(/\/$/, '')
 }

@@ -97,16 +97,16 @@ export function createClient({ baseUrl, auth = false, credentials }: ClientConfi
 export type ApiClient = ReturnType<typeof createClient>
 
 // The MRTT API, with the signed-in user's token.
-export const api = createClient({ baseUrl: () => env.API_URL, auth: true })
+export const api = createClient({ baseUrl: () => env.NEXT_PUBLIC_API_URL, auth: true })
 
 // The MRTT auth endpoints (sign in, sign up, password reset), which take no token.
-export const authApi = createClient({ baseUrl: () => env.AUTH_URL })
+export const authApi = createClient({ baseUrl: () => env.NEXT_PUBLIC_AUTH_URL })
 
 // GMW's SSO endpoints, which rely on GMW's session cookie.
 export const gmwApi = createClient({
   baseUrl: () => {
-    if (!env.GMW_URL) throw new Error('REACT_APP_GMW_URL is not set')
-    return env.GMW_URL.replace(/\/$/, '')
+    if (!env.NEXT_PUBLIC_GMW_URL) throw new Error('NEXT_PUBLIC_GMW_URL is not set')
+    return env.NEXT_PUBLIC_GMW_URL.replace(/\/$/, '')
   },
   credentials: 'include'
 })

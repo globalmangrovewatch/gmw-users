@@ -1,3 +1,5 @@
+'use client'
+
 import { Stack } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 
@@ -49,7 +51,7 @@ function Landscapes() {
         <UlUndecorated>
           {sites.map(({ site_name, site_id }) => (
             <li key={site_id}>
-              <Link to={`/sites/${site_id}/overview`}>{site_name}</Link>
+              <Link href={`/sites/${site_id}/overview`}>{site_name}</Link>
             </li>
           ))}
         </UlUndecorated>
@@ -68,7 +70,7 @@ function Landscapes() {
           <RowSpaceBetween>
             <ItemTitle>{landscape_name}</ItemTitle>
             <RowCenterCenter>
-              <EditLink to={`/landscapes/${id}/edit`} />
+              <EditLink href={`/landscapes/${id}/edit`} />
             </RowCenterCenter>
           </RowSpaceBetween>
           <H4>{language.pages.landscapes.sites}</H4>
@@ -86,7 +88,7 @@ function Landscapes() {
     <ContentWrapper>
       <TitleAndActionContainer>
         <PageTitle>{language.pages.landscapes.title}</PageTitle>
-        <LinkLooksLikeButtonPrimary to='/landscapes/new'>
+        <LinkLooksLikeButtonPrimary href='/landscapes/new'>
           {language.pages.landscapes.newLandscapeButton}
         </LinkLooksLikeButtonPrimary>
       </TitleAndActionContainer>

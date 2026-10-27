@@ -17,7 +17,7 @@ const MonitoringFormsList = ({ monitoringFormsSortedByDate, siteId }) => {
             <tr key={formId}>
               <WideTh>
                 <RowSpaceBetween>
-                  <Link to={formUrl}>{formLabel}</Link>
+                  <Link href={formUrl}>{formLabel}</Link>
                   <SmallUpperCase>{monitoring_date}</SmallUpperCase>
                 </RowSpaceBetween>
               </WideTh>

@@ -1,7 +1,9 @@
+'use client'
+
 import { Controller, useForm } from 'react-hook-form'
 import { FormLabel, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useRouter, useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import PropTypes from 'prop-types'
@@ -35,7 +37,7 @@ const formDefaultValues = { organization_name: '' }
 const OrganizationForm = ({ isNewOrganization }) => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const { organizationId } = useParams()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const organizationQuery = useQuery({
     ...organizationQueries.detail(organizationId),
@@ -69,7 +71,7 @@ const OrganizationForm = ({ isNewOrganization }) => {
     (getMessage) =>
     ({ organization_name }) => {
       toast.success(getMessage(organization_name))
-      navigate('/organizations')
+      router.push('/organizations')
     }
 
   const handleSubmitError = (error) => {
@@ -91,7 +93,7 @@ const OrganizationForm = ({ isNewOrganization }) => {
   }
 
   const handleCancelClick = () => {
-    navigate('/organizations')
+    router.push('/organizations')
   }
 
   const form = !doesOrganizationExist ? (

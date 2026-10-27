@@ -9,7 +9,7 @@ const StyledButton = styled(ButtonCaution)`
   margin-top: ${themeMui.spacing(3)};
 `
 
-const ButtonDeleteForm = ({ isDeleting, ...restOfProps }) => {
+const ButtonDeleteForm = ({ isDeleting = false, ...restOfProps }) => {
   return (
     <StyledButton
       isHolding={isDeleting}
@@ -22,10 +22,6 @@ const ButtonDeleteForm = ({ isDeleting, ...restOfProps }) => {
 
 ButtonDeleteForm.propTypes = {
   isDeleting: PropTypes.bool
-}
-
-ButtonDeleteForm.defaultProps = {
-  isDeleting: false
 }
 
 export default ButtonDeleteForm

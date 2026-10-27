@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Box,
   Button,
@@ -13,7 +15,7 @@ import {
 } from '@mui/material'
 import { Controller, useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { styled } from '@mui/material/styles'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'next/navigation'
 import { useState, useCallback, useMemo, useEffect } from 'react'
 
 import { ContentWrapper } from '@/styles/containers'

@@ -1,5 +1,7 @@
+'use client'
+
 import { GroupRemove } from '@mui/icons-material'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
 
@@ -78,7 +80,9 @@ const ManageOrganizationUsers = () => {
       <ContentWrapper>
         <TitleAndActionContainer>
           <PageTitle>{pageLanguage.title}</PageTitle>
-          <LinkLooksLikeButtonPrimary to={'new'}>{pageLanguage.newUser}</LinkLooksLikeButtonPrimary>
+          <LinkLooksLikeButtonPrimary href={`/organizations/${organizationId}/users/new`}>
+            {pageLanguage.newUser}
+          </LinkLooksLikeButtonPrimary>
         </TitleAndActionContainer>
 
         <PageSubtitle>{organizationName}</PageSubtitle>

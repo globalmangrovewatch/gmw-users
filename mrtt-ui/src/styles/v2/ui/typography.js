@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Typography } from '@mui/material'
+import { forwardRef } from 'react'
 import { styled } from '@mui/material/styles'
 
 export const H1 = styled('h1')(({ theme }) => ({
@@ -24,11 +25,10 @@ export const StyledLink = styled(({ ...props }) => (
   }
 }))
 
-export const Paragraph = styled(Typography)(() => ({
+export const Paragraph = styled(
+  forwardRef(function Paragraph(props, ref) {
+    return <Typography component='p' variant='text-sm' ref={ref} {...props} />
+  })
+)(() => ({
   color: '#0F2B3B'
 }))
-
-Paragraph.defaultProps = {
-  component: 'p',
-  variant: 'text-sm'
-}
