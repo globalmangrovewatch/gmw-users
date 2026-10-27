@@ -51,7 +51,7 @@ const formDefaultValues = { email: '', password: '' }
 
 const pageLanguage = language.pages.login
 
-const LoginForm = ({ isUserNew }) => {
+const LoginForm = ({ isUserNew = false }) => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const signInMutation = useSignInMutation()
 
@@ -177,10 +177,6 @@ const LoginForm = ({ isUserNew }) => {
 
 LoginForm.propTypes = {
   isUserNew: PropTypes.bool
-}
-
-LoginForm.defaultValues = {
-  isUserNew: false
 }
 
 export default LoginForm
