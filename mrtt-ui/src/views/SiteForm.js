@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import axios from 'axios'
+import { useQuery } from '@tanstack/react-query'
 import PropTypes from 'prop-types'
 
 import { ButtonCancel, ButtonSubmit } from '@/styles/buttons'
@@ -17,7 +17,9 @@ import language from '@/language'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import RequiredIndicator from '@/components/RequiredIndicator'
 import PRIVACY_VALUES from '@/constants/privacyValues'
-import { env } from '@/lib/env'
+import { isNotFound, useLoadErrorToast } from '@/hooks/useLoadErrorToast'
+import { landscapeQueries } from '@/queries/landscapes'
+import { siteQueries, useCreateSite, useUpdateSite } from '@/queries/sites'
 
 const { nameRequired, landscapeRequired } = language.pages.siteform.validation
 
@@ -33,19 +35,22 @@ const validationSchema = z.object({
 const formDefaultValues = { site_name: '', landscape_id: '', defaultSectionPrivacy: 'public' }
 
 const SiteForm = ({ isNewSite }) => {
-  const [doesItemExist, setDoesItemExist] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [landscapes, setLandscapes] = useState([])
   const { siteId } = useParams()
-  const landscapesUrl = `${env.API_URL}/landscapes`
   const navigate = useNavigate()
-  const sitesUrl = `${env.API_URL}/sites`
-  const siteUrl = `${sitesUrl}/${siteId}`
 
   const siteForm = useFormContext()
   const { reset: resetSiteForm } = siteForm
+
+  const landscapesQuery = useQuery(landscapeQueries.list())
+  const siteQuery = useQuery({ ...siteQueries.detail(siteId), enabled: !isNewSite && !!siteId })
+  const createSite = useCreateSite()
+  const updateSite = useUpdateSite(siteId)
+  const landscapes = landscapesQuery.data ?? []
+  const isLoading = landscapesQuery.isLoading || siteQuery.isLoading
+  const isSubmitting = createSite.isPending || updateSite.isPending
+  const doesItemExist = !isNotFound(siteQuery.error)
+  useLoadErrorToast(landscapesQuery.error, siteQuery.error)
 
   const {
     control: formControl,
@@ -58,39 +63,17 @@ const SiteForm = ({ isNewSite }) => {
   })
 
   useEffect(
-    function loadApiData() {
-      if (isNewSite) {
-        resetForm()
-      }
-      if (resetForm && sitesUrl && landscapesUrl) {
-        setIsLoading(true)
-
-        const serverDataPromises = [axios.get(landscapesUrl)]
-        if (!isNewSite && siteId) {
-          serverDataPromises.push(axios.get(siteUrl))
-        }
-
-        Promise.all(serverDataPromises)
-          .then(([{ data: landscapesData }, siteResponse]) => {
-            setIsLoading(false)
-
-            setLandscapes(landscapesData)
-            if (!isNewSite) {
-              resetForm(siteResponse?.data)
-            }
-          })
-          .catch((error) => {
-            setIsLoading(false)
-            if (error?.response?.status === 404) {
-              setDoesItemExist(false)
-            } else {
-              toast.error(language.error.apiLoad)
-            }
-          })
-      }
+    function loadSiteIntoForm() {
+      if (isNewSite) resetForm()
+      else if (siteQuery.data) resetForm(siteQuery.data)
     },
-    [siteId, resetForm, sitesUrl, isNewSite, landscapesUrl, siteUrl]
+    [isNewSite, siteQuery.data, resetForm]
   )
+
+  const handleSubmitError = () => {
+    setIsSubmitError(true)
+    toast.error(language.error.submit)
+  }
 
   const postNewSite = ({ site_name, landscape_id, defaultSectionPrivacy }) => {
     const siteDataToSubmit = {
@@ -110,38 +93,27 @@ const SiteForm = ({ isNewSite }) => {
       }
     }
 
-    axios
-      .post(sitesUrl, siteDataToSubmit)
-      .then(({ data: { site_name } }) => {
-        setIsSubmitting(false)
+    createSite.mutate(siteDataToSubmit, {
+      onSuccess: ({ site_name }) => {
         toast.success(language.success.getCreateThingSuccessMessage(site_name))
         resetSiteForm()
         navigate('/sites')
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(language.error.submit)
-      })
+      },
+      onError: handleSubmitError
+    })
   }
 
   const editSite = (formData) => {
-    axios
-      .patch(siteUrl, formData)
-      .then(({ data: { site_name } }) => {
-        setIsSubmitting(false)
+    updateSite.mutate(formData, {
+      onSuccess: ({ site_name }) => {
         toast.success(language.success.getEditThingSuccessMessage(site_name))
         navigate('/sites')
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(language.error.submit)
-      })
+      },
+      onError: handleSubmitError
+    })
   }
 
   const handleSubmit = (formData) => {
-    setIsSubmitting(true)
     setIsSubmitError(false)
     if (isNewSite) {
       postNewSite(formData)
