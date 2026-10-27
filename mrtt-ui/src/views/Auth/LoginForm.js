@@ -89,7 +89,7 @@ const LoginForm = ({ isUserNew }) => {
       },
       onError: (error) => {
         setIsSubmitError(true)
-        toast.error(error?.response?.data?.error ?? 'Login failed')
+        toast.error(error?.body?.error ?? 'Login failed')
       }
     })
   }
