@@ -250,8 +250,8 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
           <NavSubWrapper>
             <PrivacySelect
               id='form-privacy'
-              defaultValue={''}
-              value={sectionPrivacy}
+              // '' (the disabled placeholder) until the site has loaded, so the select stays controlled.
+              value={sectionPrivacy ?? ''}
               onChange={handleOnPrivacyChange}
               disabled={isFormPrivacyDisabled}>
               <option value={''} disabled>
