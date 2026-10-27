@@ -133,10 +133,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
 
   const { data: monitorForms } = useGetMonitorsForms({
     siteId,
-    key: sectionFromUrl,
-    queryOptions: {
-      enabled: sectionTarget === 'monitors'
-    }
+    enabled: sectionTarget === 'monitors'
   })
 
   useEffect(() => {

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Controller, useFormContext, useFieldArray, useWatch } from 'react-hook-form'
 import {
@@ -27,12 +27,11 @@ import QuestionNav from '@/components/QuestionNav'
 import useSiteInfo from '@/library/useSiteInfo'
 import language from '@/language'
 import { ContentWrapper } from '@/styles/containers'
-import { questionMapping } from '@/data/questionMapping'
 import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
 import { ecologicalStatusOutcomes as questions } from '@/data/questions'
 import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
 import CheckboxGroupWithLabelAndController from '@/components/CheckboxGroupWithLabelAndController'
-import { findRegistationDataItem, findMonitoringDataItem } from '@/library/findDataItems'
+import { findRegistationDataItem } from '@/library/findDataItems'
 import { monitoringIndicators } from '@/data/monitoringIndicators'
 import ButtonDeleteForm from '@/components/ButtonDeleteForm'
 import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
@@ -43,16 +42,14 @@ import RequiredIndicator from '@/components/RequiredIndicator'
 
 import { useInitializeQuestionMappedFormMonitors } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import LoadingIndicator from '@/components/LoadingIndicator'
-import { env } from '@/lib/env'
+import { useLoadErrorToast } from '@/hooks/useLoadErrorToast'
+import { siteQueries, useDeleteMonitor } from '@/queries/sites'
 
 const getEcologicalAims = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '3.1') ?? []
 
 const getBiophysicalInterventions = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '6.2') ?? []
-
-const getEcologicalMonitoringStakeholders = (registrationAnswersFromServer) =>
-  findMonitoringDataItem(registrationAnswersFromServer, '10.2') ?? []
 
 const EcologicalStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
@@ -84,16 +81,20 @@ const EcologicalStatusAndOutcomesForm = () => {
   } = useFieldArray({ name: 'ecologicalMonitoringStakeholders', control })
 
   const { siteId } = useParams()
-  const monitoringFormsUrl = `${env.API_URL}/sites/${siteId}/monitoring_answers`
-  const monitoringFormSingularUrl = `${monitoringFormsUrl}/${monitoringFormId}`
-  const registrationInterventionFormsUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
-  const [biophysicalInterventions, setBiophysicalInterventions] = useState([])
+  const registrationQuery = useQuery({ ...siteQueries.registration(siteId), enabled: !!siteId })
+  useLoadErrorToast(registrationQuery.error)
+  const biophysicalInterventions = getBiophysicalInterventions(registrationQuery.data)
+  const ecologicalAimsAnswer = getEcologicalAims(registrationQuery.data)
+  const ecologicalAims = ecologicalAimsAnswer.selectedValues?.length
+    ? [
+        ...ecologicalAimsAnswer.selectedValues,
+        ...(ecologicalAimsAnswer.otherValue ? [ecologicalAimsAnswer.otherValue] : [])
+      ]
+    : []
 
   const mangroveAreaIncreaseWatcher = useWatch({ control, name: 'mangroveAreaIncrease' })
-  const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
   const monitoringIndicatorsWatcher = useWatch({ name: 'monitoringIndicators', control })
-  const [ecologicalAims, setEcologicalAims] = useState([])
   const preAndPostRestorationActivitiesWatcher = useWatch({
     name: 'preAndPostRestorationActivities',
     control
@@ -102,66 +103,6 @@ const EcologicalStatusAndOutcomesForm = () => {
     ecologicalMonitoringStakeholdersTypesChecked,
     setEcologicalMonitoringStakeholdersTypesChecked
   ] = useState([])
-
-  const _loadRegistrationAnswers = useEffect(
-    function loadRegistrationServerData() {
-      axios
-        .get(registrationInterventionFormsUrl)
-        .then((registrationInterventionResponse) => {
-          setBiophysicalInterventions(getBiophysicalInterventions(registrationInterventionResponse))
-          const ecologicalAimsInitialVal = getEcologicalAims(registrationInterventionResponse)
-
-          if (ecologicalAimsInitialVal.selectedValues?.length > 0) {
-            const ecologicalAimsFlattened = ecologicalAimsInitialVal.selectedValues
-            if (ecologicalAimsInitialVal.otherValue) {
-              ecologicalAimsFlattened.push(ecologicalAimsInitialVal.otherValue)
-            }
-            setEcologicalAims(ecologicalAimsFlattened)
-          }
-          // set ecologicalMonitoringStakeholders
-          const ecologicalMonitoringStakeholdersInitialVal = getEcologicalMonitoringStakeholders(
-            registrationInterventionResponse
-          )
-
-          const initialEcologicalMonitoringStakeholdersTypesChecked =
-            ecologicalMonitoringStakeholdersInitialVal?.map(
-              (stakeholder) => stakeholder.stakeholder
-            )
-          setEcologicalMonitoringStakeholdersTypesChecked(
-            initialEcologicalMonitoringStakeholdersTypesChecked
-          )
-        })
-        .catch(() => {
-          toast.error(language.error.apiLoad)
-        })
-    },
-    [registrationInterventionFormsUrl]
-  )
-
-  const _loadMonitoringAnswers = useEffect(
-    function loadMonitoringServerData() {
-      if (isEditMode) {
-        axios
-          .get(monitoringFormSingularUrl)
-          .then((monitoringResponse) => {
-            const ecologicalMonitoringStakeholdersInitialVal =
-              getEcologicalMonitoringStakeholders(monitoringResponse)
-
-            const initialEcologicalMonitoringStakeholdersTypesChecked =
-              ecologicalMonitoringStakeholdersInitialVal?.map(
-                (stakeholder) => stakeholder.stakeholder
-              )
-            setEcologicalMonitoringStakeholdersTypesChecked(
-              initialEcologicalMonitoringStakeholdersTypesChecked
-            )
-          })
-          .catch(() => {
-            toast.error(language.error.apiLoad)
-          })
-      }
-    },
-    [monitoringFormSingularUrl, isEditMode]
-  )
 
   const onLoaded = () => {
     const v = form.getValues()
@@ -174,28 +115,23 @@ const EcologicalStatusAndOutcomesForm = () => {
 
   const { isLoading } = useInitializeQuestionMappedFormMonitors({
     key: 'ecologicalStatusAndOutcomes',
-    apiUrl: isEditMode ? monitoringFormSingularUrl : null,
+    siteId,
+    monitorId: isEditMode ? monitoringFormId : undefined,
     form,
-    questionMapping,
-    successCallback: onLoaded,
-    queryOptions: {
-      enabled: isEditMode
-    }
+    successCallback: onLoaded
   })
 
+  const deleteMonitor = useDeleteMonitor(siteId)
+  const isDeleting = deleteMonitor.isPending
+
   const handleDeleteConfirm = () => {
-    setIsDeleting(true)
-    axios
-      .delete(monitoringFormSingularUrl)
-      .then(() => {
-        setIsDeleting(false)
+    deleteMonitor.mutate(monitoringFormId, {
+      onSuccess: () => {
         toast.success(language.success.getDeleteThingSuccessMessage('That form'))
         navigate(`/sites/${siteId}/overview`)
-      })
-      .catch(() => {
-        toast.error(language.error.delete)
-        setIsDeleting(false)
-      })
+      },
+      onError: () => toast.error(language.error.delete)
+    })
   }
 
   const handleDeleteClick = () => {

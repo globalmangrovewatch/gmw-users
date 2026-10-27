@@ -4,50 +4,45 @@ import getOptionsValuesAndLabels from '@/library/getOptionsValuesAndLabels'
 import organizeMangroveSpeciesList from '@/library/organizeMangroveSpeciesList'
 
 describe('findRegistationDataItem', () => {
-  const response = {
-    data: [
-      { question_id: '1.2', answer_value: ['Angola'] },
-      { question_id: '2.1', answer_value: [] }
-    ]
-  }
+  const answers = [
+    { question_id: '1.2', answer_value: ['Angola'] },
+    { question_id: '2.1', answer_value: [] }
+  ]
 
   it('returns the answer for the question', () => {
-    expect(findRegistationDataItem(response, '1.2')).toEqual(['Angola'])
+    expect(findRegistationDataItem(answers, '1.2')).toEqual(['Angola'])
   })
 
   it('returns falsy answers as they are', () => {
-    expect(findRegistationDataItem(response, '2.1')).toEqual([])
+    expect(findRegistationDataItem(answers, '2.1')).toEqual([])
   })
 
   it('returns undefined for an unanswered question', () => {
-    expect(findRegistationDataItem(response, '9.9')).toBeUndefined()
+    expect(findRegistationDataItem(answers, '9.9')).toBeUndefined()
   })
 
-  it('returns undefined before the response has loaded', () => {
+  it('returns undefined before the answers have loaded', () => {
     expect(findRegistationDataItem(undefined, '1.2')).toBeUndefined()
   })
 })
 
 describe('findMonitoringDataItem', () => {
-  const response = {
-    data: {
-      form_type: 'ecologicalStatusAndOutcomes',
-      answers: [{ question_id: '10.6', answer_value: 80 }]
-    }
+  const monitoringForm = {
+    form_type: 'ecologicalStatusAndOutcomes',
+    answers: [{ question_id: '10.6', answer_value: 80 }]
   }
 
   it('returns the answer from the monitoring form answers', () => {
-    expect(findMonitoringDataItem(response, '10.6')).toBe(80)
+    expect(findMonitoringDataItem(monitoringForm, '10.6')).toBe(80)
   })
 
   it('returns undefined for an unanswered question', () => {
-    expect(findMonitoringDataItem(response, '10.7')).toBeUndefined()
+    expect(findMonitoringDataItem(monitoringForm, '10.7')).toBeUndefined()
   })
 
   it.each([
-    ['no response', undefined],
-    ['no data', {}],
-    ['no answers', { data: {} }]
+    ['no form', undefined],
+    ['no answers', {}]
   ])('returns undefined with %s', (_label, value) => {
     expect(findMonitoringDataItem(value, '10.6')).toBeUndefined()
   })

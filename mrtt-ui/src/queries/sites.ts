@@ -16,6 +16,10 @@ export const siteKeys = {
     ['sites', String(siteId), 'monitors', String(monitorId)] as const
 }
 
+// Answers fill the form once; a background refetch would overwrite what the user is editing.
+// They are refetched only after a save (see `useSaveRegistrationSection`).
+const answersOptions = { staleTime: Infinity, refetchOnMount: false } as const
+
 export const siteQueries = {
   list: () =>
     queryOptions({
@@ -33,7 +37,8 @@ export const siteQueries = {
       queryFn: ({ signal }) =>
         api.get<RegistrationAnswer[]>(`/sites/${siteId}/registration_intervention_answers`, {
           signal
-        })
+        }),
+      ...answersOptions
     }),
   monitors: (siteId: SiteId) =>
     queryOptions({
@@ -45,7 +50,8 @@ export const siteQueries = {
     queryOptions({
       queryKey: siteKeys.monitor(siteId, monitorId),
       queryFn: ({ signal }) =>
-        api.get<MonitoringForm>(`/sites/${siteId}/monitoring_answers/${monitorId}`, { signal })
+        api.get<MonitoringForm>(`/sites/${siteId}/monitoring_answers/${monitorId}`, { signal }),
+      ...answersOptions
     })
 }
 
@@ -79,18 +85,6 @@ export function useUpdateSite(siteId: SiteId, { replace = false } = {}) {
     mutationFn: (site: SiteInput) =>
       replace ? api.put<Site>(`/sites/${siteId}`, site) : api.patch<Site>(`/sites/${siteId}`, site),
     onSuccess: () => invalidateSites(siteId)
-  })
-}
-
-export function useDeleteSite(siteId: SiteId) {
-  const queryClient = useQueryClient()
-  const invalidateSites = useInvalidateSites()
-  return useMutation({
-    mutationFn: () => api.delete(`/sites/${siteId}`),
-    onSuccess: () => {
-      queryClient.removeQueries({ queryKey: siteKeys.detail(siteId) })
-      return invalidateSites()
-    }
   })
 }
 
