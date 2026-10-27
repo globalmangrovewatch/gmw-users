@@ -8,7 +8,8 @@ import {
   useState,
   type ReactNode
 } from 'react'
-import { setAuthToken } from '@/library/auth/interceptor'
+import { onUnauthorized } from '@/lib/api'
+import { setAuthToken } from '@/lib/auth/token'
 import { exchangeCode, readAndStripCode, silentSsoCheck, type SSOUser } from '@/hooks/sso'
 
 export type AuthUser = SSOUser
@@ -41,6 +42,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setTokenState(null)
     setCurrentUser(null)
   }, [])
+
+  // The API rejected the token (e.g. it expired): sign out so the protected routes send the
+  // user back to the login page.
+  useEffect(() => onUnauthorized(clearSession), [clearSession])
 
   useEffect(() => {
     // Run the bootstrap exactly once for the lifetime of the provider.
