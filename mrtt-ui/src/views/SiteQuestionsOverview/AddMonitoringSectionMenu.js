@@ -42,17 +42,17 @@ const AddMonitoringSectionMenu = ({ siteId }) => {
           'aria-labelledby': 'add-monitoring-section-button'
         }}>
         <MenuItem>
-          <Link to={`/sites/${siteId}/form/management-status-and-effectiveness`}>
+          <Link href={`/sites/${siteId}/form/management-status-and-effectiveness`}>
             {pageLanguage.formName.managementStatusAndEffectiveness}
           </Link>
         </MenuItem>
         <MenuItem>
-          <Link to={`/sites/${siteId}/form/socioeconomic-and-governance-status`}>
+          <Link href={`/sites/${siteId}/form/socioeconomic-and-governance-status`}>
             {pageLanguage.formName.socioeconomicGovernanceStatusOutcomes}
           </Link>
         </MenuItem>
         <MenuItem>
-          <Link to={`/sites/${siteId}/form/ecological-status-and-outcomes`}>
+          <Link href={`/sites/${siteId}/form/ecological-status-and-outcomes`}>
             {pageLanguage.formName.ecologicalStatusOutcomes}
           </Link>
         </MenuItem>

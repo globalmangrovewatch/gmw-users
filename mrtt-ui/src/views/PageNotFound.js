@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { ContentWrapper } from '@/styles/containers'
 import { PageTitle } from '@/styles/typography'

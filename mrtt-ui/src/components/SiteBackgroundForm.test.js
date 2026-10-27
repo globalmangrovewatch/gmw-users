@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom'
 import { render, screen, waitFor } from '@testing-library/react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { FormProvider, useForm } from 'react-hook-form'
 import PropTypes from 'prop-types'
@@ -9,6 +8,7 @@ import SiteBackgroundForm from './SiteBackgroundForm'
 import FormWrapperProvider from './FormWrapper/FormWrapperProvider'
 
 vi.mock('./QuestionNav', () => ({ default: () => null }))
+vi.mock('next/navigation', () => ({ useParams: () => ({ siteId: SITE_ID }) }))
 
 const API_URL = 'http://api.test'
 const SITE_ID = '42'
@@ -26,13 +26,9 @@ const renderSiteBackgroundForm = ({ Provider = FormWrapper } = {}) => {
 
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={[`/sites/${SITE_ID}/site-background`]}>
-        <Provider>
-          <Routes>
-            <Route path='/sites/:siteId/site-background' element={<SiteBackgroundForm />} />
-          </Routes>
-        </Provider>
-      </MemoryRouter>
+      <Provider>
+        <SiteBackgroundForm />
+      </Provider>
     </QueryClientProvider>
   )
 }

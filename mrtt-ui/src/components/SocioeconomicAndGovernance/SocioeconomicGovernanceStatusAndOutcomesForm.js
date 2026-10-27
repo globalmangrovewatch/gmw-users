@@ -1,5 +1,7 @@
+'use client'
+
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useRouter, useParams } from 'next/navigation'
 
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
@@ -37,7 +39,7 @@ const getSocioeconomicAims = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '3.2') ?? []
 
 const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
-  const navigate = useNavigate()
+  const router = useRouter()
   const { monitoringFormId } = useParams()
   const isEditMode = !!monitoringFormId
   const { site_name } = useSiteInfo()
@@ -104,7 +106,7 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
     deleteMonitor.mutate(monitoringFormId, {
       onSuccess: () => {
         toast.success(language.success.getDeleteThingSuccessMessage('That form'))
-        navigate(`/sites/${siteId}/overview`)
+        router.push(`/sites/${siteId}/overview`)
       },
       onError: () => toast.error(language.error.delete)
     })

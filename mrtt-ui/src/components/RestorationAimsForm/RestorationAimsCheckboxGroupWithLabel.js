@@ -13,7 +13,7 @@ const RestorationAimsCheckboxGroupWithLabel = ({
   options,
   question,
   form,
-  showAsterisk,
+  showAsterisk = false,
   stakeholders
 }) => {
   const { control: formControl, getValues: getFormValues, setValue: setFormValue } = form
@@ -88,6 +88,5 @@ RestorationAimsCheckboxGroupWithLabel.propTypes = {
   showAsterisk: PropTypes.bool,
   stakeholders: stakeholdersPropType.isRequired
 }
-RestorationAimsCheckboxGroupWithLabel.defaultProps = { showAsterisk: false }
 
 export default RestorationAimsCheckboxGroupWithLabel

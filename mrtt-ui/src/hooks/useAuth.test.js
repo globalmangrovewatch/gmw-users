@@ -62,7 +62,7 @@ describe('AuthProvider bootstrap', () => {
 
   it('falls back to logged out when the SSO bootstrap throws', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {})
-    silentSsoCheck.mockRejectedValue(new Error('REACT_APP_GMW_URL is not set'))
+    silentSsoCheck.mockRejectedValue(new Error('NEXT_PUBLIC_GMW_URL is not set'))
 
     renderInStrictMode()
 

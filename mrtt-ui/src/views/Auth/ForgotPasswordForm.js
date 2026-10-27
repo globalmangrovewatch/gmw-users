@@ -1,3 +1,5 @@
+'use client'
+
 import { Controller, useForm } from 'react-hook-form'
 import { FormLabel, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
@@ -69,7 +71,7 @@ const ForgotPasswordForm = () => {
         <ErrorText>{errors?.email?.message}</ErrorText>
         <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
         <ButtonContainer>
-          <LinkLooksLikeButtonSecondary to={-1}>
+          <LinkLooksLikeButtonSecondary href='/auth/login'>
             {language.buttons.cancel}
           </LinkLooksLikeButtonSecondary>
           <ButtonSubmit isSubmitting={isSubmitting} />

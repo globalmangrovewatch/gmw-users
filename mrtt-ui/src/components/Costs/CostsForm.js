@@ -1,5 +1,7 @@
+'use client'
+
 import { useState, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'next/navigation'
 
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
 import { Alert, Box, Button, MenuItem, TextField, Typography } from '@mui/material'

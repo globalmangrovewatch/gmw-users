@@ -1,5 +1,7 @@
+'use client'
+
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useRouter, useParams } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { Box, MenuItem, TextField } from '@mui/material'
@@ -25,7 +27,7 @@ import { useDeleteMonitor } from '@/queries/sites'
 const ManagementStatusAndEffectivenessForm = () => {
   const { monitoringFormId, siteId } = useParams()
   const isEditMode = !!monitoringFormId
-  const navigate = useNavigate()
+  const router = useRouter()
   const { site_name } = useSiteInfo()
 
   const form = useFormContext()
@@ -54,7 +56,7 @@ const ManagementStatusAndEffectivenessForm = () => {
     deleteMonitor.mutate(monitoringFormId, {
       onSuccess: () => {
         toast.success(language.success.getDeleteThingSuccessMessage('That form'))
-        navigate(`/sites/${siteId}/overview`)
+        router.push(`/sites/${siteId}/overview`)
       },
       onError: () => toast.error(language.error.delete)
     })

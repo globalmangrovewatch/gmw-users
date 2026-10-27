@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           if (silentCode) await tryExchange(silentCode)
         }
       } catch (error) {
-        // e.g. REACT_APP_GMW_URL missing: fall back to the regular login form.
+        // e.g. NEXT_PUBLIC_GMW_URL missing: fall back to the regular login form.
         console.warn('SSO bootstrap failed', error)
       } finally {
         setIsChecking(false)

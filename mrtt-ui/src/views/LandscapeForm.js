@@ -1,7 +1,9 @@
+'use client'
+
 import { Autocomplete, FormLabel, TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useRouter, useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import PropTypes from 'prop-types'
@@ -46,7 +48,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const { landscapeId } = useParams()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const organizationsQuery = useQuery(organizationQueries.list())
   const landscapeQuery = useQuery({
@@ -105,7 +107,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
     mutation.mutate(formatDataForSubmit(formData), {
       onSuccess: ({ landscape_name }) => {
         toast.success(getSuccessMessage(landscape_name))
-        navigate('/landscapes')
+        router.push('/landscapes')
       },
       onError: (error) => {
         setIsSubmitError(true)
@@ -115,14 +117,14 @@ const LandscapeForm = ({ isNewLandscape }) => {
   }
 
   const handleCancelClick = () => {
-    navigate('/landscapes')
+    router.push('/landscapes')
   }
 
   const handleDeleteConfirm = () => {
     deleteLandscape.mutate(undefined, {
       onSuccess: () => {
         toast.success(language.success.getDeleteThingSuccessMessage(landscapeName))
-        navigate('/landscapes')
+        router.push('/landscapes')
       },
       onError: () => toast.error(language.error.delete)
     })

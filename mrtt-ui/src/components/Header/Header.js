@@ -1,9 +1,10 @@
+'use client'
+
+import PropTypes from 'prop-types'
 import React from 'react'
 import styled from '@emotion/styled'
 import theme from '@/styles/theme'
 import HeaderMenu from './HeaderMenu'
-import { ReactComponent as GmwLogo } from '@/assets/gmw-logo.svg'
-import { useFeatureFlags } from '@/hooks/useFeatureFlags'
 import { Header as HeaderV2 } from '@/styles/v2/containers/header'
 
 const HeaderContainer = styled('header')`
@@ -22,24 +23,24 @@ const HeaderContainer = styled('header')`
   }
 `
 
-const StyledGmwLogo = styled(GmwLogo)`
+const GmwLogo = styled('img')`
   height: 100%;
   width: auto;
 `
 
-const Header = () => {
-  const { showNewLandingPage } = useFeatureFlags()
-
-  if (showNewLandingPage) {
+const Header = ({ isLanding = false }) => {
+  if (isLanding) {
     return <HeaderV2></HeaderV2>
   }
 
   return (
     <HeaderContainer>
-      <StyledGmwLogo />
+      <GmwLogo src='/images/gmw-logo.svg' alt='Global Mangrove Watch' />
       <HeaderMenu />
     </HeaderContainer>
   )
 }
+
+Header.propTypes = { isLanding: PropTypes.bool }
 
 export default Header
