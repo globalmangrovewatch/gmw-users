@@ -1,8 +1,8 @@
 import { ArrowBack } from '@mui/icons-material'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
@@ -19,9 +19,11 @@ import { env } from '@/lib/env'
 
 const pageLanguage = language.pages.newOrganizationUser
 
-const validationSchema = yup.object({
-  email: yup.string().email().required(),
-  role: yup.string().required()
+const validationSchema = z.object({
+  email: z.email({
+    error: (issue) => (issue.input ? 'email must be a valid email' : 'email is a required field')
+  }),
+  role: z.string({ error: 'role is a required field' }).min(1, 'role is a required field')
 })
 
 const formDefaultValues = { email: '', role: 'org-user' }
@@ -41,7 +43,10 @@ const NewOrganizationUser = () => {
     formState: { errors },
     handleSubmit: validateInputs,
     setError: setFormError
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
+    defaultValues: formDefaultValues
+  })
 
   useEffect(
     function loadApiData() {

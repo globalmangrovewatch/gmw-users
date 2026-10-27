@@ -1,35 +1,33 @@
-import language from '@/language'
-import * as yup from 'yup'
+import { z } from 'zod'
 
-export const otherIsCheckedButInputIsEmptyValidation = <S extends yup.AnySchema>(schema: S) =>
-  schema.test({
-    name: 'isOtherCheckedAndEmpty',
-    message: language.multiselectWithOtherFormQuestion.validation.clairfyOther,
-    test: (_value, context) => {
-      const { otherValue } = context.parent as { otherValue?: string }
-      return otherValue !== undefined && otherValue !== ''
+import language from '@/language'
+
+const messages = language.multiselectWithOtherFormQuestion.validation
+
+// `.default({})` rather than `.optional()`, which would skip the refinement below for a
+// missing answer.
+const multiselectWithOther = z
+  .object({
+    selectedValues: z.array(z.unknown()).optional(),
+    otherValue: z.string().optional(),
+    isOtherChecked: z.boolean().optional()
+  })
+  .default({})
+
+// When "Other" is checked its text is required; otherwise at least one item is, unless
+// `requireOne` is false. Errors go on `selectedValues`, which is where the UI reads them.
+const withOtherRules = (requireOne: boolean) =>
+  multiselectWithOther.superRefine((value, ctx) => {
+    const path = ['selectedValues']
+    if (value.isOtherChecked) {
+      if (!value.otherValue) {
+        ctx.addIssue({ code: 'custom', message: messages.clairfyOther, path })
+      }
+    } else if (requireOne && !value.selectedValues?.length) {
+      ctx.addIssue({ code: 'custom', message: messages.selectAtleastOneItem, path })
     }
   })
 
-export const multiselectWithOtherValidation = yup.object({
-  selectedValues: yup
-    .array()
-    .default([])
-    .when('isOtherChecked', {
-      is: false,
-      then: (schema) =>
-        schema.min(1, language.multiselectWithOtherFormQuestion.validation.selectAtleastOneItem),
-      otherwise: otherIsCheckedButInputIsEmptyValidation
-    }),
-  otherValue: yup.string(),
-  isOtherChecked: yup.bool().default(false)
-})
+export const multiselectWithOtherValidation = withOtherRules(true)
 
-export const multiselectWithOtherValidationNoMinimum = yup.object({
-  selectedValues: yup.array().default([]).when('isOtherChecked', {
-    is: false,
-    otherwise: otherIsCheckedButInputIsEmptyValidation
-  }),
-  otherValue: yup.string(),
-  isOtherChecked: yup.bool().default(false)
-})
+export const multiselectWithOtherValidationNoMinimum = withOtherRules(false)

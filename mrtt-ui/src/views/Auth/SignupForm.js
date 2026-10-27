@@ -2,8 +2,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import axios from 'axios'
 
 import { ButtonCancel, ButtonSubmit } from '@/styles/buttons'
@@ -18,24 +18,23 @@ import { env } from '@/lib/env'
 
 const signUpFormLanguage = language.pages.userSignUp
 
-const validationSchema = yup.object({
-  email: yup
-    .string()
-    .required(language.form.required)
-    .email(signUpFormLanguage.validation.emailValid),
-  password: yup
-    .string()
-    .required(language.form.required)
-    .min(8, signUpFormLanguage.validation.passwordMinimumCharacters),
-  confirmationPassword: yup
-    .string()
-    .required(language.form.required)
-    .oneOf([yup.ref('password')], signUpFormLanguage.validation.passwordsMustMatch),
-  termsAndConditions: yup
-    .boolean()
-    .required(signUpFormLanguage.validation.termsAndConditions)
-    .oneOf([true], signUpFormLanguage.validation.termsAndConditions)
-})
+const required = z.string({ error: language.form.required }).min(1, language.form.required)
+
+const validationSchema = z
+  .object({
+    email: z.email({
+      error: (issue) =>
+        issue.input ? signUpFormLanguage.validation.emailValid : language.form.required
+    }),
+    password: required.min(8, signUpFormLanguage.validation.passwordMinimumCharacters),
+    confirmationPassword: required,
+    termsAndConditions: z.literal(true, signUpFormLanguage.validation.termsAndConditions)
+  })
+  .refine(({ password, confirmationPassword }) => password === confirmationPassword, {
+    error: signUpFormLanguage.validation.passwordsMustMatch,
+    path: ['confirmationPassword'],
+    when: () => true
+  })
 
 const formDefaultValues = {
   name: '',
@@ -57,7 +56,10 @@ const SignupForm = () => {
     control: formControl,
     handleSubmit: validateInputs,
     formState: { errors }
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
+    defaultValues: formDefaultValues
+  })
 
   const handleSubmit = ({ email, name, password }) => {
     setIsSubmitting(true)

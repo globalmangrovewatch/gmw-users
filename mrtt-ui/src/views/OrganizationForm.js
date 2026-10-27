@@ -2,8 +2,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { FormLabel, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
@@ -19,8 +19,10 @@ import RequiredIndicator from '@/components/RequiredIndicator'
 import SubmitErrorWithExtraErrorContent from '@/components/SubmitErrorWithExtraErrorContent'
 import { env } from '@/lib/env'
 
-const validationSchema = yup.object({
-  organization_name: yup.string().required(language.pages.organizationForm.validation.nameRequired)
+const nameRequired = language.pages.organizationForm.validation.nameRequired
+
+const validationSchema = z.object({
+  organization_name: z.string({ error: nameRequired }).min(1, nameRequired)
 })
 
 const formDefaultValues = { organization_name: '' }
@@ -40,7 +42,10 @@ const OrganizationForm = ({ isNewOrganization }) => {
     formState: { errors },
     handleSubmit: validateInputs,
     reset: resetForm
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
+    defaultValues: formDefaultValues
+  })
 
   useEffect(
     function loadApiData() {

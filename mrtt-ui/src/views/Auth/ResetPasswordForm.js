@@ -3,8 +3,8 @@ import { FormLabel, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useState } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import axios from 'axios'
 
 import { ButtonContainer, RowFlexEnd, ContentWrapper } from '@/styles/containers'
@@ -17,16 +17,18 @@ import { env } from '@/lib/env'
 
 const pageLanguage = language.pages.resetPassword
 
-const validationSchema = yup.object({
-  password: yup
-    .string()
-    .required(language.form.required)
-    .min(8, pageLanguage.validation.passwordMinimumCharacters),
-  confirmationPassword: yup
-    .string()
-    .required(language.form.required)
-    .oneOf([yup.ref('password')], pageLanguage.validation.passwordsMustMatch)
-})
+const required = z.string({ error: language.form.required }).min(1, language.form.required)
+
+const validationSchema = z
+  .object({
+    password: required.min(8, pageLanguage.validation.passwordMinimumCharacters),
+    confirmationPassword: required
+  })
+  .refine(({ password, confirmationPassword }) => password === confirmationPassword, {
+    error: pageLanguage.validation.passwordsMustMatch,
+    path: ['confirmationPassword'],
+    when: () => true
+  })
 
 const formDefaultValues = { password: '', confirmationPassword: '' }
 
@@ -42,7 +44,10 @@ const ResetPasswordForm = () => {
     control: formControl,
     handleSubmit: validateInputs,
     formState: { errors }
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
+    defaultValues: formDefaultValues
+  })
 
   const handleSubmit = ({ password, confirmationPassword }) => {
     axios

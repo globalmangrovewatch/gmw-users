@@ -19,6 +19,7 @@ import { toast } from 'react-toastify'
 
 import { UseFormReturn, Path } from 'react-hook-form'
 import { env } from '@/lib/env'
+import type { RegistrationFormValues } from '@/forms/schemas'
 
 type SaveRegistrationSectionParams<TFormValues extends Record<string, unknown>> = {
   siteId: string
@@ -189,7 +190,7 @@ export function useInitializeQuestionMappedFormMonitors<TSelected = FormattedMon
 }
 
 export function useSaveRegistrationSection<
-  TFormValues extends Record<string, unknown> = Record<string, unknown>
+  TFormValues extends Record<string, unknown> = RegistrationFormValues
 >({ siteId, form, section, sectionTarget, monitorId }: SaveRegistrationSectionParams<TFormValues>) {
   const queryClient = useQueryClient()
   const apiUrl: Record<SectionTarget, string> = {

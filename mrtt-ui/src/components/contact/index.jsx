@@ -14,8 +14,8 @@ import {
   Typography
 } from '@mui/material'
 import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 
 const TOPICS = [
   { label: 'General', value: 'general' },
@@ -25,16 +25,25 @@ const TOPICS = [
   { label: 'Global Mangrove Alliance', value: 'gma' }
 ]
 
-const schema = yup.object().shape({
-  name: yup.string().min(2).required('Name is required'),
-  organization: yup.string(),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  topic: yup
-    .string()
-    .oneOf(TOPICS.map((t) => t.value))
-    .required('Topic is required'),
-  message: yup.string().min(2).required('Message is required'),
-  privacyPolicy: yup.boolean().oneOf([true], 'You must accept the Privacy Notice')
+const TOPIC_VALUES = TOPICS.map((t) => t.value)
+
+const schema = z.object({
+  name: z
+    .string({ error: 'Name is required' })
+    .min(1, 'Name is required')
+    .min(2, 'Name must be at least 2 characters'),
+  organization: z.string().optional(),
+  email: z.email({ error: (issue) => (issue.input ? 'Invalid email' : 'Email is required') }),
+  topic: z.enum(TOPIC_VALUES, {
+    error: (issue) =>
+      issue.input === undefined
+        ? 'Topic is required'
+        : `topic must be one of the following values: ${TOPIC_VALUES.join(', ')}`
+  }),
+  message: z
+    .string({ error: 'Message is required' })
+    .min(2, 'message must be at least 2 characters'),
+  privacyPolicy: z.literal(true, 'You must accept the Privacy Notice')
 })
 
 const defaultValues = {
@@ -54,7 +63,7 @@ const ContactForm = ({ isOpen, setIsOpen }) => {
     reset,
     formState: { errors, isSubmitting }
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: zodResolver(schema, undefined, { raw: true }),
     defaultValues
   })
 
