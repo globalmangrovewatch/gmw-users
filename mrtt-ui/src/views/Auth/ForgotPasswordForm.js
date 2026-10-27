@@ -2,8 +2,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { FormLabel, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import axios from 'axios'
 
 import { ButtonContainer, ContentWrapper, RowFlexEnd } from '@/styles/containers'
@@ -14,8 +14,10 @@ import language from '@/language'
 import RequiredIndicator from '@/components/RequiredIndicator'
 import { env } from '@/lib/env'
 
-const validationSchema = yup.object({
-  email: yup.string().email().required(language.form.required)
+const validationSchema = z.object({
+  email: z.email({
+    error: (issue) => (issue.input ? 'email must be a valid email' : language.form.required)
+  })
 })
 
 const formDefaultValues = { email: '' }
@@ -32,7 +34,10 @@ const ForgotPasswordForm = () => {
     control: formControl,
     handleSubmit: validateInputs,
     formState: { errors }
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
+    defaultValues: formDefaultValues
+  })
 
   const handleSubmit = (formData) => {
     setIsSubmitting(true)

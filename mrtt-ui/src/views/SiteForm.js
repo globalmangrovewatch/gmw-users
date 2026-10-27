@@ -2,8 +2,8 @@ import { Controller, useForm, useFormContext } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 
@@ -19,10 +19,15 @@ import RequiredIndicator from '@/components/RequiredIndicator'
 import PRIVACY_VALUES from '@/constants/privacyValues'
 import { env } from '@/lib/env'
 
-const validationSchema = yup.object({
-  site_name: yup.string().required(language.pages.siteform.validation.nameRequired),
-  landscape_id: yup.string().required(language.pages.siteform.validation.landscapeRequired),
-  defaultSectionPrivacy: yup.string() // skipping requiring this since input hidden for when isNewSite = false / its a select with an initial value / time constraints
+const { nameRequired, landscapeRequired } = language.pages.siteform.validation
+
+const validationSchema = z.object({
+  site_name: z.string({ error: nameRequired }).min(1, nameRequired),
+  // The landscape select holds the landscape's numeric id; '' until one is picked.
+  landscape_id: z.union([z.number(), z.string().min(1, landscapeRequired)], {
+    error: landscapeRequired
+  }),
+  defaultSectionPrivacy: z.string().optional() // skipping requiring this since input hidden for when isNewSite = false / its a select with an initial value / time constraints
 })
 
 const formDefaultValues = { site_name: '', landscape_id: '', defaultSectionPrivacy: 'public' }
@@ -47,7 +52,10 @@ const SiteForm = ({ isNewSite }) => {
     handleSubmit: validateInputs,
     formState: { errors },
     reset: resetForm
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
+    defaultValues: formDefaultValues
+  })
 
   useEffect(
     function loadApiData() {

@@ -1,4 +1,4 @@
-import { defaultValues } from '@/components/FormWrapper/FormSchemaValidation'
+import { defaultValues } from '@/forms/schemas'
 import type { RegistrationAnswer } from '@/types/api'
 
 /** Section name to { form field: question id }, like `questionMapping`. */
