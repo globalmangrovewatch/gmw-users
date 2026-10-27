@@ -10,6 +10,7 @@ import {
 } from 'react'
 import { onUnauthorized } from '@/lib/api'
 import { setAuthToken } from '@/lib/auth/token'
+import { getQueryClient } from '@/lib/queryClient'
 import { exchangeCode, readAndStripCode, silentSsoCheck, type SSOUser } from '@/hooks/sso'
 
 export type AuthUser = SSOUser
@@ -31,13 +32,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isChecking, setIsChecking] = useState(true)
   const bootstrappedRef = useRef(false)
 
+  // Cached API data belongs to whoever was signed in, so it is dropped whenever the session
+  // changes; otherwise the next user could see the previous user's sites and answers.
   const applySession = useCallback((nextToken: string, nextUser?: AuthUser | null) => {
+    getQueryClient().clear()
     setAuthToken(nextToken)
     setTokenState(nextToken)
     setCurrentUser(nextUser ?? null)
   }, [])
 
   const clearSession = useCallback(() => {
+    getQueryClient().clear()
     setAuthToken(null)
     setTokenState(null)
     setCurrentUser(null)
