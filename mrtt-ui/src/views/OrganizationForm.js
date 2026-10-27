@@ -2,110 +2,92 @@ import { Controller, useForm } from 'react-hook-form'
 import { FormLabel, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
-import axios from 'axios'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import PropTypes from 'prop-types'
+import { useQuery } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
-import { ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
-import { ErrorText, PageTitle } from '../styles/typography'
-import { FormLayout } from '../styles/forms'
-import ItemDoesntExist from '../components/ItemDoesntExist'
-import language from '../language'
-import LoadingIndicator from '../components/LoadingIndicator'
-import RequiredIndicator from '../components/RequiredIndicator'
-import SubmitErrorWithExtraErrorContent from '../components/SubmitErrorWithExtraErrorContent'
+import { ButtonCancel, ButtonSubmit } from '@/styles/buttons'
+import { ButtonContainer, ContentWrapper, RowFlexEnd } from '@/styles/containers'
+import { ErrorText, PageTitle } from '@/styles/typography'
+import { FormLayout } from '@/styles/forms'
+import ItemDoesntExist from '@/components/ItemDoesntExist'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import RequiredIndicator from '@/components/RequiredIndicator'
+import SubmitErrorWithExtraErrorContent from '@/components/SubmitErrorWithExtraErrorContent'
+import { isNotFound, useLoadErrorToast } from '@/hooks/useLoadErrorToast'
+import {
+  organizationQueries,
+  useCreateOrganization,
+  useUpdateOrganization
+} from '@/queries/organizations'
 
-const validationSchema = yup.object({
-  organization_name: yup.string().required(language.pages.organizationForm.validation.nameRequired)
+const nameRequired = language.pages.organizationForm.validation.nameRequired
+
+const validationSchema = z.object({
+  organization_name: z.string({ error: nameRequired }).min(1, nameRequired)
 })
 
 const formDefaultValues = { organization_name: '' }
 
 const OrganizationForm = ({ isNewOrganization }) => {
-  const [doesOrganizationExist, setDoesOrganizationExist] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const { organizationId } = useParams()
   const navigate = useNavigate()
-  const organizationsUrl = `${process.env.REACT_APP_API_URL}/organizations`
-  const organizationUrl = `${organizationsUrl}/${organizationId}`
+
+  const organizationQuery = useQuery({
+    ...organizationQueries.detail(organizationId),
+    enabled: !isNewOrganization && !!organizationId
+  })
+  const createOrganization = useCreateOrganization()
+  const updateOrganization = useUpdateOrganization(organizationId)
+  const isLoading = organizationQuery.isLoading
+  const isSubmitting = createOrganization.isPending || updateOrganization.isPending
+  const doesOrganizationExist = !isNotFound(organizationQuery.error)
+  useLoadErrorToast(organizationQuery.error)
 
   const {
     control: formControl,
     formState: { errors },
     handleSubmit: validateInputs,
     reset: resetForm
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
+    defaultValues: formDefaultValues
+  })
 
   useEffect(
-    function loadApiData() {
-      if (!isNewOrganization && organizationId) {
-        setIsLoading(true)
-        axios
-          .get(organizationUrl)
-          .then(({ data }) => {
-            resetForm(data)
-            setIsLoading(false)
-          })
-          .catch((error) => {
-            setIsLoading(false)
-            if (error?.response?.status === 404) {
-              setDoesOrganizationExist(false)
-            } else {
-              toast.error(language.error.apiLoad)
-            }
-          })
-      }
+    function loadOrganizationIntoForm() {
+      if (organizationQuery.data) resetForm(organizationQuery.data)
     },
-    [isNewOrganization, organizationUrl, organizationId, resetForm]
+    [organizationQuery.data, resetForm]
   )
-  const createOrganization = (formData) => {
-    axios
-      .post(organizationsUrl, formData)
-      .then(({ data: { organization_name } }) => {
-        setIsSubmitting(false)
-        toast.success(language.success.getCreateThingSuccessMessage(organization_name))
-        navigate('/organizations')
-      })
-      .catch((error) => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(
-          <SubmitErrorWithExtraErrorContent extraErrorContent={error.response.data.error} />
-        )
-      })
-  }
-  const editOrganization = (formData) => {
-    axios
-      .patch(organizationUrl, formData)
-      .then(({ data: { organization_name } }) => {
-        setIsSubmitting(false)
-        toast.success(language.success.getEditThingSuccessMessage(organization_name))
-        navigate('/organizations')
-      })
-      .catch((error) => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(
-          <SubmitErrorWithExtraErrorContent extraErrorContent={error.response.data.error} />
-        )
-      })
+
+  const handleSubmitSuccess =
+    (getMessage) =>
+    ({ organization_name }) => {
+      toast.success(getMessage(organization_name))
+      navigate('/organizations')
+    }
+
+  const handleSubmitError = (error) => {
+    setIsSubmitError(true)
+    toast.error(<SubmitErrorWithExtraErrorContent extraErrorContent={error.body?.error} />)
   }
 
   const handleSubmit = (formData) => {
-    setIsSubmitting(true)
     setIsSubmitError(false)
-
-    if (isNewOrganization) {
-      createOrganization(formData)
-    }
-    if (!isNewOrganization) {
-      editOrganization(formData)
-    }
+    const mutation = isNewOrganization ? createOrganization : updateOrganization
+    mutation.mutate(formData, {
+      onSuccess: handleSubmitSuccess(
+        isNewOrganization
+          ? language.success.getCreateThingSuccessMessage
+          : language.success.getEditThingSuccessMessage
+      ),
+      onError: handleSubmitError
+    })
   }
 
   const handleCancelClick = () => {

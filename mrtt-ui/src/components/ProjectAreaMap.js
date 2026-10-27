@@ -15,13 +15,14 @@ import GeoPropTypes from 'geojson-prop-types'
 import PropTypes from 'prop-types'
 import turfBbox from '@turf/bbox'
 
-import emptyFeatureCollection from '../data/emptyFeatureCollection'
-import handleFileLoadEvent from '../library/handleFileLoadEvent'
-import language from '../language'
+import emptyFeatureCollection from '@/data/emptyFeatureCollection'
+import handleFileLoadEvent from '@/library/handleFileLoadEvent'
+import language from '@/language'
 import MapDrawControl, { drawControlRef } from './MapDrawControl'
 import MapDrawInfo from './MapDrawInfo'
+import { env } from '@/lib/env'
 
-const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
+const MAPBOX_TOKEN = env.MAPBOX_ACCESS_TOKEN
 
 const acceptedFileMimeTypes = [
   'application/json',
@@ -74,7 +75,6 @@ const ProjectAreaMap = ({
         mapRef.current.zoomTo(0, animationProps)
       }
     } catch (e) {
-      console.error(e)
       setError(e.message)
     }
   }, [extent])

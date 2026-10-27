@@ -20,18 +20,17 @@ import {
   NestedLabel1,
   NestedLabel2,
   StickyFormLabel
-} from '../styles/forms'
-import { causesOfDecline } from '../data/questions'
-import { causesOfDeclineOptions } from '../data/causesOfDeclineOptions'
-import { ContentWrapper } from '../styles/containers'
-import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
-import { questionMapping } from '../data/questionMapping'
+} from '@/styles/forms'
+import { causesOfDecline } from '@/data/questions'
+import { causesOfDeclineOptions } from '@/data/causesOfDeclineOptions'
+import { ContentWrapper } from '@/styles/containers'
+import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
-import language from '../language'
+import language from '@/language'
 import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
-import { useInitializeQuestionMappedForm } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
-import useSiteInfo from '../library/useSiteInfo'
+import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
+import useSiteInfo from '@/library/useSiteInfo'
 
 function CausesOfDeclineForm() {
   const { site_name } = useSiteInfo()
@@ -50,13 +49,11 @@ function CausesOfDeclineForm() {
 
   const [causesOfDeclineTypesChecked, setCausesOfDeclineTypesChecked] = useState([])
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
 
   useInitializeQuestionMappedForm({
     key: 'causesOfDecline',
-    apiUrl: apiAnswersUrl,
-    form,
-    questionMapping
+    siteId,
+    form
   })
 
   // big function with many different cases for Q4.2 due to the nesting involved in this question type
@@ -173,32 +170,6 @@ function CausesOfDeclineForm() {
     setCausesOfDeclineTypesChecked(causesOfDeclineTypesCheckedCopy)
   }
 
-  // const onSubmit = async (data) => {
-  //   const fields = Object.keys(questionMapping['causesOfDecline'])
-  //   const ok = await form.trigger(fields, { shouldFocus: true })
-
-  //   if (!ok) {
-  //     setIsError(true)
-  //     toast.error(language.error.validation)
-  //     return
-  //   }
-  //   setIsSubmitting(true)
-  //   setIsError(false)
-  //   if (!data) return
-
-  //   axios
-  //     .patch(apiAnswersUrl, mapDataForApi('causesOfDecline', data))
-  //     .then(() => {
-  //       setIsSubmitting(false)
-  //       toast.success(language.success.submit)
-  //     })
-  //     .catch(() => {
-  //       setIsError(true)
-  //       setIsSubmitting(false)
-  //       toast.error(language.error.apiLoad)
-  //     })
-  // }
-
   const causesOfDeclineChecked = useMemo(() => {
     const causes = form.getValues('causesOfDecline') ?? []
     return causes.flatMap((cause) => {
@@ -220,7 +191,6 @@ function CausesOfDeclineForm() {
         currentSection='causes-of-decline'
       />
       <FormValidationMessageIfErrors formErrors={errors} />
-      {/* <FormProvider> */}
       <FormLayout>
         <FormQuestionDiv>
           <StickyFormLabel>{causesOfDecline.lossKnown.question}</StickyFormLabel>
@@ -406,7 +376,6 @@ function CausesOfDeclineForm() {
           </FormQuestionDiv>
         ) : null}
       </FormLayout>
-      {/* </FormProvider> */}
     </ContentWrapper>
   )
 }

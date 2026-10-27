@@ -1,84 +1,76 @@
 import { ArrowBack } from '@mui/icons-material'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { useQuery } from '@tanstack/react-query'
+import React, { useState } from 'react'
 
-import { ButtonCancel, ButtonSubmit } from '../styles/buttons'
-import { ButtonContainer, ContentWrapper, RowFlexEnd } from '../styles/containers'
+import { ButtonCancel, ButtonSubmit } from '@/styles/buttons'
+import { ButtonContainer, ContentWrapper, RowFlexEnd } from '@/styles/containers'
 import { Controller, useForm } from 'react-hook-form'
-import { ErrorText, Link, PageTitle } from '../styles/typography'
-import { FormLayout } from '../styles/forms'
+import { ErrorText, Link, PageTitle } from '@/styles/typography'
+import { FormLayout } from '@/styles/forms'
 import { FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material'
-import language from '../language'
-import LoadingIndicator from '../components/LoadingIndicator'
-import RequiredIndicator from '../components/RequiredIndicator'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import RequiredIndicator from '@/components/RequiredIndicator'
+import { useLoadErrorToast } from '@/hooks/useLoadErrorToast'
+import { organizationQueries } from '@/queries/organizations'
+import { useAddOrganizationUser } from '@/queries/users'
 
 const pageLanguage = language.pages.newOrganizationUser
 
-const validationSchema = yup.object({
-  email: yup.string().email().required(),
-  role: yup.string().required()
+const validationSchema = z.object({
+  email: z.email({
+    error: (issue) => (issue.input ? 'email must be a valid email' : 'email is a required field')
+  }),
+  role: z.string({ error: 'role is a required field' }).min(1, 'role is a required field')
 })
 
 const formDefaultValues = { email: '', role: 'org-user' }
 
 const NewOrganizationUser = () => {
-  const [isLoading, setIsLoading] = useState(true)
   const [isSubmitError, setIsSubmitError] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [organizationName, setOrganizationName] = useState()
   const { organizationId } = useParams()
   const navigate = useNavigate()
-  const organizationUrl = `${process.env.REACT_APP_API_URL}/organizations/${organizationId}`
-  const organizationUsersUrl = `${organizationUrl}/users`
+
+  const organizationQuery = useQuery(organizationQueries.detail(organizationId))
+  const addUser = useAddOrganizationUser(organizationId)
+  const organizationName = organizationQuery.data?.organization_name
+  const isLoading = organizationQuery.isPending
+  const isSubmitting = addUser.isPending
+  useLoadErrorToast(organizationQuery.error)
 
   const {
     control: formControl,
     formState: { errors },
     handleSubmit: validateInputs,
     setError: setFormError
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
+    defaultValues: formDefaultValues
+  })
 
-  useEffect(
-    function loadApiData() {
-      axios
-        .get(organizationUrl)
-        .then(({ data: { organization_name } }) => {
-          setOrganizationName(organization_name)
-          setIsLoading(false)
-        })
-        .catch(() => {
-          setIsLoading(false)
-          toast.error(language.error.apiLoad)
-        })
-    },
-    [organizationUrl]
-  )
   const handleCancelClick = () => {
     navigate(-1)
   }
   const handleSubmit = (formData) => {
-    setIsSubmitting(true)
     setIsSubmitError(false)
-    axios
-      .post(organizationUsersUrl, formData)
-      .then(() => {
-        setIsSubmitting(false)
+    addUser.mutate(formData, {
+      onSuccess: () => {
         toast.success(pageLanguage.getUserAdded({ userName: formData.email, organizationName }))
-      })
-      .catch((error) => {
-        setIsSubmitting(false)
+      },
+      onError: (error) => {
         setIsSubmitError(true)
-        if (error.response.data.error === 'Record not found') {
+        if (error.body?.error === 'Record not found') {
           setFormError('email', {
             type: 'custom',
             message: pageLanguage.getUserDoesntExist(formData.email)
           })
         }
-      })
+      }
+    })
   }
 
   return isLoading ? (

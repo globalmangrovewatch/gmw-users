@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import axios, { AxiosError } from 'axios'
+import { authApi, type ApiError } from '@/lib/api'
 
 type SignInInput = {
   email: string
@@ -17,22 +17,7 @@ type SignInError = {
 }
 
 export function useSignInMutation() {
-  const authUrl = `${process.env.REACT_APP_AUTH_URL}/users/sign_in`
-
-  return useMutation<SignInResponse, AxiosError<SignInError>, SignInInput>({
-    mutationFn: async (input) => {
-      const { data } = await axios.post<SignInResponse>(
-        authUrl,
-        { user: input },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
-          }
-        }
-      )
-
-      return data
-    }
+  return useMutation<SignInResponse, ApiError<SignInError>, SignInInput>({
+    mutationFn: (input) => authApi.post<SignInResponse>('/users/sign_in', { user: input })
   })
 }

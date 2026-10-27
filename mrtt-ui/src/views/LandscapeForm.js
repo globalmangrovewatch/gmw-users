@@ -2,28 +2,39 @@ import { Autocomplete, FormLabel, TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
-import axios from 'axios'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import PropTypes from 'prop-types'
+import { useQuery } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
 
-import { ButtonCancel, ButtonCaution, ButtonSubmit } from '../styles/buttons'
-import { ButtonContainer, PaddedSection, RowFlexEnd, ContentWrapper } from '../styles/containers'
-import { ErrorText, PageTitle } from '../styles/typography'
-import { FormLayout } from '../styles/forms'
-import ConfirmPrompt from '../components/ConfirmPrompt/ConfirmPrompt'
-import ItemDoesntExist from '../components/ItemDoesntExist'
-import language from '../language'
-import LoadingIndicator from '../components/LoadingIndicator'
-import RequiredIndicator from '../components/RequiredIndicator'
-import SubmitErrorWithExtraErrorContent from '../components/SubmitErrorWithExtraErrorContent'
+import { ButtonCancel, ButtonCaution, ButtonSubmit } from '@/styles/buttons'
+import { ButtonContainer, PaddedSection, RowFlexEnd, ContentWrapper } from '@/styles/containers'
+import { ErrorText, PageTitle } from '@/styles/typography'
+import { FormLayout } from '@/styles/forms'
+import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
+import ItemDoesntExist from '@/components/ItemDoesntExist'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import RequiredIndicator from '@/components/RequiredIndicator'
+import SubmitErrorWithExtraErrorContent from '@/components/SubmitErrorWithExtraErrorContent'
+import { isNotFound, useLoadErrorToast } from '@/hooks/useLoadErrorToast'
+import {
+  landscapeQueries,
+  useCreateLandscape,
+  useDeleteLandscape,
+  useUpdateLandscape
+} from '@/queries/landscapes'
+import { organizationQueries } from '@/queries/organizations'
 
-const validationSchema = yup.object({
-  landscape_name: yup.string().required(language.pages.landscapeForm.validation.nameRequired),
-  selectedOrganizations: yup
-    .array()
+const nameRequired = language.pages.landscapeForm.validation.nameRequired
+
+const validationSchema = z.object({
+  landscape_name: z.string({ error: nameRequired }).min(1, nameRequired),
+  selectedOrganizations: z
+    .array(z.unknown())
     .min(1, language.pages.landscapeForm.validation.organizationRequired)
+    .optional()
 })
 
 const formDefaultValues = { landscape_name: '', selectedOrganizations: [] }
@@ -32,65 +43,50 @@ const getOrgsUserBelongsTo = (organizations) =>
   organizations.filter(({ role }) => role === 'org-admin' || role === 'org-user')
 
 const LandscapeForm = ({ isNewLandscape }) => {
-  const [doesLandscapeExist, setDoesLandscapeExist] = useState(true)
-  const [isAssociatedSites, setIsAssociatedSites] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [landscapeName, setLandscapeName] = useState()
-  const [organizationOptions, setOrganizationOptions] = useState([])
   const { landscapeId } = useParams()
-  const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes`
-  const landscapeUrl = `${landscapesUrl}/${landscapeId}`
   const navigate = useNavigate()
-  const organizationsUrl = `${process.env.REACT_APP_API_URL}/organizations`
+
+  const organizationsQuery = useQuery(organizationQueries.list())
+  const landscapeQuery = useQuery({
+    ...landscapeQueries.detail(landscapeId),
+    enabled: !isNewLandscape && !!landscapeId
+  })
+  const createLandscape = useCreateLandscape()
+  const updateLandscape = useUpdateLandscape(landscapeId)
+  const deleteLandscape = useDeleteLandscape(landscapeId)
+
+  const landscape = landscapeQuery.data
+  const landscapeName = landscape?.landscape_name
+  const isAssociatedSites = !!landscape?.sites.length
+  const organizationOptions = getOrgsUserBelongsTo(organizationsQuery.data ?? [])
+  const isLoading = organizationsQuery.isLoading || landscapeQuery.isLoading
+  const isSubmitting = createLandscape.isPending || updateLandscape.isPending
+  const isDeleting = deleteLandscape.isPending
+  const doesLandscapeExist = !isNotFound(landscapeQuery.error)
+  useLoadErrorToast(organizationsQuery.error, landscapeQuery.error)
 
   const {
     control: formControl,
     handleSubmit: validateInputs,
     formState: { errors },
     reset: resetForm
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
+    defaultValues: formDefaultValues
+  })
 
   useEffect(
-    function loadApiData() {
-      const serverDataPromises = [axios.get(organizationsUrl)]
-      if (!isNewLandscape && landscapeId) {
-        serverDataPromises.push(axios.get(landscapeUrl))
+    function loadLandscapeIntoForm() {
+      if (landscape) {
+        resetForm({
+          landscape_name: landscape.landscape_name,
+          selectedOrganizations: landscape.organizations
+        })
       }
-
-      Promise.all(serverDataPromises)
-        .then(([{ data: organizationsData }, landscapeResponse]) => {
-          if (!isNewLandscape && landscapeId && landscapeResponse) {
-            setIsLoading(true)
-            const {
-              landscape_name,
-              organizations: selectedOrganizations,
-              sites
-            } = landscapeResponse.data
-            const landscapeDataFormattedForForm = {
-              landscape_name,
-              selectedOrganizations
-            }
-            resetForm(landscapeDataFormattedForForm)
-            setIsAssociatedSites(!!sites.length)
-            setLandscapeName(landscape_name)
-          }
-          setOrganizationOptions(getOrgsUserBelongsTo(organizationsData))
-          setIsLoading(false)
-        })
-        .catch((error) => {
-          setIsLoading(false)
-          if (error?.response?.status === 404) {
-            setDoesLandscapeExist(false)
-          } else {
-            toast.error(language.error.apiLoad)
-          }
-        })
     },
-    [landscapeUrl, resetForm, isNewLandscape, landscapeId, organizationsUrl]
+    [landscape, resetForm]
   )
 
   const formatDataForSubmit = ({ landscape_name, selectedOrganizations }) => {
@@ -99,49 +95,23 @@ const LandscapeForm = ({ isNewLandscape }) => {
     return { landscape_name, organizations: organizationIds }
   }
 
-  const postNewLandscape = (formData) => {
-    axios
-      .post(landscapesUrl, formatDataForSubmit(formData))
-      .then(({ data: { landscape_name } }) => {
-        setIsSubmitting(false)
-        toast.success(language.success.getCreateThingSuccessMessage(landscape_name))
-        navigate('/landscapes')
-      })
-      .catch((error) => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(
-          <SubmitErrorWithExtraErrorContent extraErrorContent={error.response.data.error} />
-        )
-      })
-  }
-
-  const editLandscape = (formData) => {
-    axios
-      .patch(landscapeUrl, formatDataForSubmit(formData))
-      .then(({ data: { landscape_name } }) => {
-        setIsSubmitting(false)
-        toast.success(language.success.getEditThingSuccessMessage(landscape_name))
-        navigate('/landscapes')
-      })
-      .catch((error) => {
-        setIsSubmitting(false)
-        setIsSubmitError(true)
-        toast.error(
-          <SubmitErrorWithExtraErrorContent extraErrorContent={error.response.data.error} />
-        )
-      })
-  }
   const handleSubmit = (formData) => {
-    setIsSubmitting(true)
     setIsSubmitError(false)
+    const mutation = isNewLandscape ? createLandscape : updateLandscape
+    const getSuccessMessage = isNewLandscape
+      ? language.success.getCreateThingSuccessMessage
+      : language.success.getEditThingSuccessMessage
 
-    if (isNewLandscape) {
-      postNewLandscape(formData)
-    }
-    if (!isNewLandscape) {
-      editLandscape(formData)
-    }
+    mutation.mutate(formatDataForSubmit(formData), {
+      onSuccess: ({ landscape_name }) => {
+        toast.success(getSuccessMessage(landscape_name))
+        navigate('/landscapes')
+      },
+      onError: (error) => {
+        setIsSubmitError(true)
+        toast.error(<SubmitErrorWithExtraErrorContent extraErrorContent={error.body?.error} />)
+      }
+    })
   }
 
   const handleCancelClick = () => {
@@ -149,18 +119,13 @@ const LandscapeForm = ({ isNewLandscape }) => {
   }
 
   const handleDeleteConfirm = () => {
-    setIsDeleting(true)
-    axios
-      .delete(landscapeUrl)
-      .then(() => {
-        setIsDeleting(false)
+    deleteLandscape.mutate(undefined, {
+      onSuccess: () => {
         toast.success(language.success.getDeleteThingSuccessMessage(landscapeName))
         navigate('/landscapes')
-      })
-      .catch(() => {
-        setIsDeleting(false)
-        toast.error(language.error.delete)
-      })
+      },
+      onError: () => toast.error(language.error.delete)
+    })
   }
 
   const handleDeleteClick = () => {

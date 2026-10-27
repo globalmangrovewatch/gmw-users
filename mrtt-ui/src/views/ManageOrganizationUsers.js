@@ -1,71 +1,46 @@
 import { GroupRemove } from '@mui/icons-material'
 import { useParams } from 'react-router-dom'
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import React, { useState } from 'react'
 
-import { ButtonSecondary } from '../styles/buttons'
-import { ContentWrapper, TitleAndActionContainer } from '../styles/containers'
-import { LinkLooksLikeButtonPrimary, PageSubtitle, PageTitle } from '../styles/typography'
-import { TableAlertnatingRows, TdCenter, ThCenter } from '../styles/table'
+import { ButtonSecondary } from '@/styles/buttons'
+import { ContentWrapper, TitleAndActionContainer } from '@/styles/containers'
+import { LinkLooksLikeButtonPrimary, PageSubtitle, PageTitle } from '@/styles/typography'
+import { TableAlertnatingRows, TdCenter, ThCenter } from '@/styles/table'
 import { toast } from 'react-toastify'
-import { useAuth } from '../hooks/useAuth'
-import ConfirmPrompt from '../components/ConfirmPrompt/ConfirmPrompt'
-import language from '../language'
-import LoadingIndicator from '../components/LoadingIndicator'
-import LoadingIndicatorOverlay from '../components/LoadingIndicatorOverlay'
-import USER_ROLES from '../constants/userRoles'
+import { useAuth } from '@/hooks/useAuth'
+import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import LoadingIndicatorOverlay from '@/components/LoadingIndicatorOverlay'
+import USER_ROLES from '@/constants/userRoles'
+import { useLoadErrorToast } from '@/hooks/useLoadErrorToast'
+import { organizationQueries } from '@/queries/organizations'
+import {
+  organizationUserQueries,
+  useRemoveOrganizationUser,
+  useUpdateOrganizationUserRole
+} from '@/queries/users'
 
 const pageLanguage = language.pages.manageOrganizationUsers
 
 const ManageOrganizationUsers = () => {
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [organizationName, setOrganizationName] = useState()
-  const [organizationUsers, setOrganizationUsers] = useState([])
   const [userToDelete, setUserToDelete] = useState()
   const { currentUser } = useAuth()
   const { organizationId } = useParams()
   const isDeleteConfirmPromptOpen = !!userToDelete
-  const organizationUrl = `${process.env.REACT_APP_API_URL}/organizations/${organizationId}`
-  const organizationUsersUrl = `${organizationUrl}/users`
+
+  const organizationQuery = useQuery(organizationQueries.detail(organizationId))
+  const usersQuery = useQuery(organizationUserQueries.list(organizationId))
+  const updateUserRole = useUpdateOrganizationUserRole(organizationId)
+  const removeUser = useRemoveOrganizationUser(organizationId)
+  const organizationName = organizationQuery.data?.organization_name
+  const organizationUsers = usersQuery.data ?? []
+  const isLoading = organizationQuery.isPending || usersQuery.isPending
+  const isSubmitting = updateUserRole.isPending || removeUser.isPending
+  useLoadErrorToast(organizationQuery.error, usersQuery.error)
 
   const clearUserToDelete = () => setUserToDelete(null)
-
-  const updateOrganizationUserUi = (userWithUpdatedInfo) => {
-    const organizationUsersWithUserRoleUpdated = organizationUsers.map((existingUserInfo) => {
-      return existingUserInfo.id === userWithUpdatedInfo.id ? userWithUpdatedInfo : existingUserInfo
-    })
-    setOrganizationUsers(organizationUsersWithUserRoleUpdated)
-  }
-
-  const deleteOrganizationUserUi = (userToDelete) => {
-    setOrganizationUsers(organizationUsers.filter((user) => user.id !== userToDelete.id))
-  }
-
-  useEffect(
-    function loadApiData() {
-      Promise.all([axios.get(organizationUrl), axios.get(organizationUsersUrl)])
-        .then(
-          ([
-            {
-              data: { organization_name }
-            },
-            { data: organizationUsers }
-          ]) => {
-            setOrganizationName(organization_name)
-            setOrganizationUsers(organizationUsers)
-            setIsLoading(false)
-          }
-        )
-        .catch(() => {
-          setIsLoading(false)
-          toast.error(language.error.apiLoad)
-        })
-    },
-    [organizationUrl, organizationUsersUrl]
-  )
-
-  const getOrgUserUrl = (userEmail) => `${organizationUsersUrl}/${userEmail}`
 
   const handleUserRoleChange = ({
     event: {
@@ -73,41 +48,26 @@ const ManageOrganizationUsers = () => {
     },
     userEmail
   }) => {
-    setIsSubmitting(true)
-    const orgUserUrl = getOrgUserUrl(userEmail)
-
-    axios
-      .patch(orgUserUrl, { role: newRole })
-      .then(({ data: updatedUserInfo }) => {
-        setIsSubmitting(false)
-        updateOrganizationUserUi(updatedUserInfo)
-      })
-      .catch(() => {
-        setIsSubmitting(false)
-        toast.error(language.error.submit)
-      })
+    updateUserRole.mutate(
+      { email: userEmail, role: newRole },
+      { onError: () => toast.error(language.error.submit) }
+    )
   }
   const handleDeleteClick = (user) => {
     setUserToDelete(user)
   }
 
   const handleDeleteConfirm = () => {
-    setIsSubmitting(true)
-
-    const orgUserUrl = getOrgUserUrl(userToDelete.email)
-    axios
-      .delete(orgUserUrl)
-      .then(() => {
-        setIsSubmitting(false)
+    removeUser.mutate(userToDelete.email, {
+      onSuccess: () => {
         toast.success(language.success.getDeleteThingSuccessMessage(userToDelete.name))
-        deleteOrganizationUserUi(userToDelete)
         clearUserToDelete()
-      })
-      .catch(() => {
-        setIsSubmitting(false)
+      },
+      onError: () => {
         toast.error(language.error.delete)
         clearUserToDelete()
-      })
+      }
+    })
   }
 
   return isLoading ? (

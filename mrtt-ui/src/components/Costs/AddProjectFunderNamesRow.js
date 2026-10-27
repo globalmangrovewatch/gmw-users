@@ -2,10 +2,10 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Box, MenuItem, TextField } from '@mui/material'
 
-import { TabularInputSection, TabularLabel, TabularSectionDiv } from '../../styles/forms'
-import { ErrorText } from '../../styles/typography'
-import TabularButtons from '../TabularInput/TabularButtons'
-import { costs as questions } from '../../data/questions'
+import { TabularInputSection, TabularLabel, TabularSectionDiv } from '@/styles/forms'
+import { ErrorText } from '@/styles/typography'
+import TabularButtons from '@/components/TabularInput/TabularButtons'
+import { costs as questions } from '@/data/questions'
 
 const AddProjectFunderNamesRow = ({ saveItem, updateTabularInputDisplay }) => {
   const [funderName, setFunderName] = useState('')

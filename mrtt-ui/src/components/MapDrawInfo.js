@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import area from '@turf/area'
 import { Typography } from '@mui/material'
 
-import { ErrorText } from '../styles/typography'
-import language from '../language'
+import { ErrorText } from '@/styles/typography'
+import language from '@/language'
 
 const MapDrawInfo = ({ polygons, lineCount, pointCount, error }) => {
   let polygonAreaSqKm = 0

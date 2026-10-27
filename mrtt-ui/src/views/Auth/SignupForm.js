@@ -2,39 +2,38 @@ import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
-import axios from 'axios'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 
-import { ButtonCancel, ButtonSubmit } from '../../styles/buttons'
-import { ButtonContainer, PagePadding, RowFlexEnd } from '../../styles/containers'
-import { ErrorText, PageTitle } from '../../styles/typography'
-import { FormLayout, MainFormDiv } from '../../styles/forms'
+import { ButtonCancel, ButtonSubmit } from '@/styles/buttons'
+import { ButtonContainer, PagePadding, RowFlexEnd } from '@/styles/containers'
+import { ErrorText, PageTitle } from '@/styles/typography'
+import { FormLayout, MainFormDiv } from '@/styles/forms'
 import { Checkbox, Link, FormControlLabel, FormLabel, TextField } from '@mui/material'
-import language from '../../language'
-import LoadingIndicator from '../../components/LoadingIndicator'
-import RequiredIndicator from '../../components/RequiredIndicator'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import RequiredIndicator from '@/components/RequiredIndicator'
+import { authApi } from '@/lib/api'
 
 const signUpFormLanguage = language.pages.userSignUp
 
-const validationSchema = yup.object({
-  email: yup
-    .string()
-    .required(language.form.required)
-    .email(signUpFormLanguage.validation.emailValid),
-  password: yup
-    .string()
-    .required(language.form.required)
-    .min(8, signUpFormLanguage.validation.passwordMinimumCharacters),
-  confirmationPassword: yup
-    .string()
-    .required(language.form.required)
-    .oneOf([yup.ref('password')], signUpFormLanguage.validation.passwordsMustMatch),
-  termsAndConditions: yup
-    .boolean()
-    .required(signUpFormLanguage.validation.termsAndConditions)
-    .oneOf([true], signUpFormLanguage.validation.termsAndConditions)
-})
+const required = z.string({ error: language.form.required }).min(1, language.form.required)
+
+const validationSchema = z
+  .object({
+    email: z.email({
+      error: (issue) =>
+        issue.input ? signUpFormLanguage.validation.emailValid : language.form.required
+    }),
+    password: required.min(8, signUpFormLanguage.validation.passwordMinimumCharacters),
+    confirmationPassword: required,
+    termsAndConditions: z.literal(true, signUpFormLanguage.validation.termsAndConditions)
+  })
+  .refine(({ password, confirmationPassword }) => password === confirmationPassword, {
+    error: signUpFormLanguage.validation.passwordsMustMatch,
+    path: ['confirmationPassword'],
+    when: () => true
+  })
 
 const formDefaultValues = {
   name: '',
@@ -50,19 +49,20 @@ const SignupForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
 
-  const authUrl = `${process.env.REACT_APP_AUTH_URL}/users`
-
   const {
     control: formControl,
     handleSubmit: validateInputs,
     formState: { errors }
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
+    defaultValues: formDefaultValues
+  })
 
   const handleSubmit = ({ email, name, password }) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
-    axios
-      .post(authUrl, { user: { email, name, password } })
+    authApi
+      .post('/users', { user: { email, name, password } })
       .then(() => {
         setIsSubmitting(false)
         toast.success(language.success.signup)

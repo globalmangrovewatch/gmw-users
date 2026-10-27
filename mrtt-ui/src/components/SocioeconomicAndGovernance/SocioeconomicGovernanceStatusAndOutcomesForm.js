@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import axios from 'axios'
+import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 import { Controller, useFormContext, useFieldArray } from 'react-hook-form'
@@ -13,23 +13,25 @@ import {
   FormQuestionDiv,
   NestedLabel1,
   StickyFormLabel
-} from '../../styles/forms'
-import QuestionNav from '../QuestionNav'
-import useSiteInfo from '../../library/useSiteInfo'
-import language from '../../language'
-import { ContentWrapper } from '../../styles/containers'
-import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
-import { socioeconomicGovernanceStatusOutcomes as questions } from '../../data/questions'
-import LoadingIndicator from '../LoadingIndicator'
-import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
-import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import { socioIndicators } from '../../data/socioIndicators'
-import { findRegistationDataItem } from '../../library/findDataItems'
+} from '@/styles/forms'
+import QuestionNav from '@/components/QuestionNav'
+import useSiteInfo from '@/library/useSiteInfo'
+import language from '@/language'
+import { ContentWrapper } from '@/styles/containers'
+import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
+import { socioeconomicGovernanceStatusOutcomes as questions } from '@/data/questions'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
+import CheckboxGroupWithLabelAndController from '@/components/CheckboxGroupWithLabelAndController'
+import { socioIndicators } from '@/data/socioIndicators'
+import { findRegistationDataItem } from '@/library/findDataItems'
 import SocioeconomicOutcomesRow from './SocioeconomicOutcomesRow'
-import ButtonDeleteForm from '../ButtonDeleteForm'
-import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
-import DatePickerUtcMui from '../DatePickerUtcMui'
-import RequiredIndicator from '../RequiredIndicator'
+import ButtonDeleteForm from '@/components/ButtonDeleteForm'
+import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
+import DatePickerUtcMui from '@/components/DatePickerUtcMui'
+import RequiredIndicator from '@/components/RequiredIndicator'
+import { useLoadErrorToast } from '@/hooks/useLoadErrorToast'
+import { siteQueries, useDeleteMonitor } from '@/queries/sites'
 
 const getSocioeconomicAims = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '3.2') ?? []
@@ -56,50 +58,30 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
   } = useFieldArray({ name: 'socioeconomicOutcomes', control })
 
   const { siteId } = useParams()
-  const monitoringFormSingularUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers/${monitoringFormId}`
-  const registrationInterventionFormsUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
+  const registrationQuery = useQuery({ ...siteQueries.registration(siteId), enabled: !!siteId })
+  useLoadErrorToast(registrationQuery.error)
+  const areSociologicalAimsLoading = registrationQuery.isLoading
+  const socioeconomicAimsAnswer = getSocioeconomicAims(registrationQuery.data)
+  const socioeconomicAims = socioeconomicAimsAnswer.selectedValues?.length
+    ? [
+        ...socioeconomicAimsAnswer.selectedValues,
+        'Not applicable',
+        ...(socioeconomicAimsAnswer.otherValue ? [socioeconomicAimsAnswer.otherValue] : [])
+      ]
+    : []
+  const deleteMonitor = useDeleteMonitor(siteId)
+  const isDeleting = deleteMonitor.isPending
 
   const changeInGovernanceWatcher = watchForm('changeInGovernance')
   const changeInTenureArrangementWatcher = watchForm('changeInTenureArrangement')
   const socioeconomicOutcomesWatcher = watchForm('socioeconomicOutcomes')
-  const [socioeconomicAims, setSocioeconomicAims] = useState([])
-  const [areSociologicalAimsLoading, setAreSociologicalAimsLoading] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
-
-  useEffect(
-    function loadSocioeconomicAims() {
-      setAreSociologicalAimsLoading(true)
-      axios
-        .get(registrationInterventionFormsUrl)
-        .then((registrationInterventionResponse) => {
-          setAreSociologicalAimsLoading(false)
-          const socioeconomicAimsInitialVal = getSocioeconomicAims(registrationInterventionResponse)
-          if (socioeconomicAimsInitialVal.selectedValues?.length > 0) {
-            const socioeconomicAimsFlattened = socioeconomicAimsInitialVal.selectedValues
-            socioeconomicAimsFlattened.push('Not applicable')
-            if (socioeconomicAimsInitialVal.otherValue) {
-              socioeconomicAimsFlattened.push(socioeconomicAimsInitialVal.otherValue)
-            }
-            setSocioeconomicAims(socioeconomicAimsFlattened)
-          }
-        })
-        .catch(() => {
-          setAreSociologicalAimsLoading(false)
-          toast.error(language.error.apiLoad)
-        })
-    },
-    [registrationInterventionFormsUrl]
-  )
 
   // const { data, isLoading } = useInitializeQuestionMappedFormMonitors({
   //   key: 'socioeconomicGovernanceStatusAndOutcomes',
-  //   apiUrl: isEditMode ? monitoringFormSingularUrl : null,
+  //   siteId,
+  //   monitorId: isEditMode ? monitoringFormId : undefined,
   //   form,
-  //   questionMapping,
-  //   queryOptions: {
-  //     enabled: !!isEditMode
-  //   }
   // })
 
   // const handleSubmit = (formData) => {
@@ -119,18 +101,13 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
   // }
 
   const handleDeleteConfirm = () => {
-    setIsDeleting(true)
-    axios
-      .delete(monitoringFormSingularUrl)
-      .then(() => {
-        setIsDeleting(false)
+    deleteMonitor.mutate(monitoringFormId, {
+      onSuccess: () => {
         toast.success(language.success.getDeleteThingSuccessMessage('That form'))
         navigate(`/sites/${siteId}/overview`)
-      })
-      .catch(() => {
-        toast.error(language.error.delete)
-        setIsDeleting(false)
-      })
+      },
+      onError: () => toast.error(language.error.delete)
+    })
   }
 
   const handleDeleteClick = () => {
@@ -345,6 +322,7 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
                     updateItem={updateSocioeconomicOutcome}></SocioeconomicOutcomesRow>
                 ))
               : null}
+            <ErrorText>{errors.socioeconomicOutcomes?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>

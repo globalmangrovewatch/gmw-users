@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { StickyFormLabel } from '../styles/forms'
+import { StickyFormLabel } from '@/styles/forms'
 import { Controller } from 'react-hook-form'
 import CheckboxGroup from './CheckboxGroup/CheckboxGroup'
 import RequiredIndicator from './RequiredIndicator'
-import getOptionsValuesAndLabels from '../library/getOptionsValuesAndLabels'
+import getOptionsValuesAndLabels from '@/library/getOptionsValuesAndLabels'
 
 const CheckboxGroupWithLabelAndController = ({
   fieldName,

@@ -1,16 +1,19 @@
-import axios from 'axios'
+import { env } from '@/lib/env'
+import { gmwApi } from '@/lib/api'
+
+export type SSOUser = {
+  name?: string
+  email: string
+  organization?: string | null
+}
 
 type SSOExchangeResponse = {
   token: string
-  user: {
-    name?: string
-    email: string
-    organization?: string | null
-  }
+  user: SSOUser
 }
 
 const gmwUrl = (): string => {
-  const url = process.env.REACT_APP_GMW_URL
+  const url = env.GMW_URL
   if (!url) {
     throw new Error('REACT_APP_GMW_URL is not set')
   }
@@ -22,34 +25,13 @@ export const SILENT_CALLBACK_PATH = '/auth/sso-silent'
 const SSO_MESSAGE_TYPE = 'mrtt-sso-code'
 const SILENT_TIMEOUT_MS = 4000
 
-export function redirectToAuthorize(returnUrl: string = window.location.href): void {
-  const authorize = new URL(`${gmwUrl()}/api/auth/sso/authorize`)
-  authorize.searchParams.set('redirect_uri', returnUrl)
-  window.location.replace(authorize.toString())
-}
-
-export async function exchangeCode(code: string): Promise<SSOExchangeResponse> {
-  const { data } = await axios.post<SSOExchangeResponse>(
-    `${gmwUrl()}/api/auth/sso/exchange`,
-    { code },
-    {
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' }
-    }
-  )
-  return data
+export function exchangeCode(code: string): Promise<SSOExchangeResponse> {
+  return gmwApi.post<SSOExchangeResponse>('/api/auth/sso/exchange', { code })
 }
 
 export async function syncSession(token: string): Promise<void> {
   try {
-    await axios.post(
-      `${gmwUrl()}/api/auth/sso/sync`,
-      { token },
-      {
-        withCredentials: true,
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' }
-      }
-    )
+    await gmwApi.post('/api/auth/sso/sync', { token })
   } catch (error) {
     console.warn('SSO sync failed; user logged in locally only', error)
   }
@@ -57,14 +39,7 @@ export async function syncSession(token: string): Promise<void> {
 
 export async function ssoLogout(): Promise<void> {
   try {
-    await axios.post(
-      `${gmwUrl()}/api/auth/sso/logout`,
-      {},
-      {
-        withCredentials: true,
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' }
-      }
-    )
+    await gmwApi.post('/api/auth/sso/logout', {})
   } catch (error) {
     console.warn('SSO logout request failed', error)
   }

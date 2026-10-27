@@ -6,8 +6,8 @@ import {
   Language as LandscapesIcon,
   PeopleOutline as OrganizationsIcon
 } from '@mui/icons-material'
-import theme from '../../styles/theme'
-import themeMui from '../../styles/themeMui'
+import theme from '@/styles/theme'
+import themeMui from '@/styles/themeMui'
 
 const StyledFooter = styled('footer')`
   display: flex;
@@ -57,15 +57,15 @@ function MobileFooter() {
 
   return (
     <StyledFooter>
-      <LinkContainer to='/sites' active={String(/^\/sites/.test(pathname))}>
+      <LinkContainer to='/sites' active={String(pathname.startsWith('/sites'))}>
         <SitesIcon />
         <span>Sites</span>
       </LinkContainer>
-      <LinkContainer to='/landscapes' active={String(/^\/landscapes/.test(pathname))}>
+      <LinkContainer to='/landscapes' active={String(pathname.startsWith('/landscapes'))}>
         <LandscapesIcon />
         <span>Landscapes</span>
       </LinkContainer>
-      <LinkContainer to='/organizations' active={String(/^\/organizations/.test(pathname))}>
+      <LinkContainer to='/organizations' active={String(pathname.startsWith('/organizations'))}>
         <OrganizationsIcon />
         <span>Organizations</span>
       </LinkContainer>

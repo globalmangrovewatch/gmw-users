@@ -1,6 +1,5 @@
 import { Stack } from '@mui/material'
-import { toast } from 'react-toastify'
-import axios from 'axios'
+import { useQuery } from '@tanstack/react-query'
 
 import {
   RowCenterCenter,
@@ -9,7 +8,7 @@ import {
   PaddedSection,
   RowSpaceBetween,
   TitleAndActionContainer
-} from '../styles/containers'
+} from '@/styles/containers'
 import {
   H4,
   ItemTitle,
@@ -17,29 +16,20 @@ import {
   LinkLooksLikeButtonPrimary,
   PageTitle,
   SmallUpperCase
-} from '../styles/typography'
-import { UlUndecorated } from '../styles/lists'
-import EditLink from '../components/EditLink'
-import language from '../language'
-import LoadingIndicator from '../components/LoadingIndicator'
-import React, { useEffect, useState } from 'react'
+} from '@/styles/typography'
+import { UlUndecorated } from '@/styles/lists'
+import EditLink from '@/components/EditLink'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import React from 'react'
+import { useLoadErrorToast } from '@/hooks/useLoadErrorToast'
+import { landscapeQueries } from '@/queries/landscapes'
 
-const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes/`
 function Landscapes() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [landscapes, setLandscapes] = useState([])
+  const { data: landscapes = [], isPending, error } = useQuery(landscapeQueries.list())
+  useLoadErrorToast(error)
 
-  useEffect(function loadApiData() {
-    axios
-      .get(landscapesUrl)
-      .then(({ data }) => {
-        setIsLoading(false)
-        setLandscapes(data)
-      })
-      .catch(() => toast.error(language.error.apiLoad))
-  }, [])
-
-  const landscapesList = landscapes
+  const landscapesList = [...landscapes]
     .sort((landscapeA, landscapeB) => {
       const landscapeAName = landscapeA.landscape_name?.toLowerCase()
       const landscapeBName = landscapeB.landscape_name?.toLowerCase()
@@ -90,7 +80,7 @@ function Landscapes() {
       )
     })
 
-  return isLoading ? (
+  return isPending ? (
     <LoadingIndicator />
   ) : (
     <ContentWrapper>

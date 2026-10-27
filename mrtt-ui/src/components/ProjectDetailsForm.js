@@ -3,28 +3,26 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { useState } from 'react'
 
 import Autocomplete from '@mui/material/Autocomplete'
-// import axios from 'axios'
 import turfBbox from '@turf/bbox'
 import turfBboxPolygon from '@turf/bbox-polygon'
 import turfConvex from '@turf/convex'
 
-import { ContentWrapper } from '../styles/containers'
-import { ErrorText, PageSubtitle, PageTitle } from '../styles/typography'
-// import { mapDataForApi } from '../library/mapDataForApi'
-import { projectDetails as questions } from '../data/questions'
-import { questionMapping } from '../data/questionMapping'
-import { StickyFormLabel, FormPageHeader, FormQuestionDiv, FormLayout } from '../styles/forms'
+import { ContentWrapper } from '@/styles/containers'
+import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
+// import { mapDataForApi } from '@/library/mapDataForApi'
+import { projectDetails as questions } from '@/data/questions'
+import { StickyFormLabel, FormPageHeader, FormQuestionDiv, FormLayout } from '@/styles/forms'
 // import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
-import language from '../language'
+import language from '@/language'
 // import LoadingIndicator from './LoadingIndicator'
-import mangroveCountries from '../data/mangrove_countries.json'
+import mangroveCountries from '@/data/mangrove_countries.json'
 import ProjectAreaMap from './ProjectAreaMap'
 import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
-import { useInitializeQuestionMappedForm } from '../library/question-mapped-form/useInitializeQuestionMappedForm'
-import useSiteInfo from '../library/useSiteInfo'
+import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
+import useSiteInfo from '@/library/useSiteInfo'
 import DatePickerUtcMui from './DatePickerUtcMui'
 
 export const siteAreaError = 'Please provide a site area'
@@ -47,7 +45,6 @@ function ProjectDetailsForm() {
 
   // const { errors } = form.formState
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   let watchHasProjectEndDate = form.watch('hasProjectEndDate', false)
   /* showEndDateInput is a hack because MUI follows native html and casts values to strings.
    The api casts them to boolean so we support both */
@@ -56,26 +53,27 @@ function ProjectDetailsForm() {
   useInitializeQuestionMappedForm({
     siteId,
     key: 'projectDetails',
-    apiUrl: apiAnswersUrl,
-    form,
-    questionMapping
+    form
   })
 
   const onCountriesChange = (field, features) => {
+    field.onChange(features)
+
+    if (features.length === 0) {
+      setMapExtent(undefined)
+      return
+    }
+
+    // Only the map framing can fail (a country without a usable bbox). The selection above is
+    // already saved, so keep the current map extent and report the problem.
     try {
-      field.onChange(features)
-      if (features.length > 0) {
-        const bboxFeatureCollection = {
-          features: features.map((feature) => turfBboxPolygon(feature.bbox)),
-          type: 'FeatureCollection'
-        }
-        const totalBbox = turfBbox(turfConvex(bboxFeatureCollection))
-        setMapExtent(totalBbox)
-      } else {
-        setMapExtent(undefined)
+      const bboxFeatureCollection = {
+        features: features.map((feature) => turfBboxPolygon(feature.bbox)),
+        type: 'FeatureCollection'
       }
-    } catch (e) {
-      console.error(e)
+      setMapExtent(turfBbox(turfConvex(bboxFeatureCollection)))
+    } catch (error) {
+      console.error('Could not fit the map to the selected countries', error)
     }
   }
 
@@ -86,23 +84,6 @@ function ProjectDetailsForm() {
       setMapExtent(turfBbox(featureCollection))
     }
   }
-
-  // const handleSubmit = async (formData) => {
-  //   setIsSubmitting(true)
-  //   setIsError(false)
-
-  //   axios
-  //     .patch(apiAnswersUrl, mapDataForApi('projectDetails', formData))
-  //     .then(() => {
-  //       setIsSubmitting(false)
-  //       toast.success(language.success.submit)
-  //     })
-  //     .catch(() => {
-  //       setIsError(true)
-  //       setIsSubmitting(false)
-  //       toast.error(language.error.submit)
-  //     })
-  // }
 
   return (
     <ContentWrapper>

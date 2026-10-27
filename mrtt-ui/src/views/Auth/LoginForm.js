@@ -4,21 +4,21 @@ import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import PropTypes from 'prop-types'
 
 import { Alert, Button } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import { useMediaQuery } from '@mui/system'
 
-import { RowFlexEnd } from 'styles/containers'
-import { ErrorText, Link as ExternalLink } from 'styles/typography'
-import { useAuth } from 'hooks/useAuth'
-import { useSignInMutation } from 'hooks/sign-in'
-import { syncSession } from 'hooks/sso'
-import language from 'language'
-import LoadingIndicator from 'components/LoadingIndicator'
+import { RowFlexEnd } from '@/styles/containers'
+import { ErrorText, Link as ExternalLink } from '@/styles/typography'
+import { useAuth } from '@/hooks/useAuth'
+import { useSignInMutation } from '@/hooks/sign-in'
+import { syncSession } from '@/hooks/sso'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
 import {
   Hero,
   HeroContent,
@@ -33,17 +33,17 @@ import {
   LogoContainer,
   Logo,
   LandingHeaderContainer
-} from 'styles/v2/containers/landing'
-import { Paragraph, StyledLink } from 'styles/v2/ui/typography'
-import { Divider } from 'styles/v2/ui/divider'
-import { FormInput } from 'components/Form/FormInput'
+} from '@/styles/v2/containers/landing'
+import { Paragraph, StyledLink } from '@/styles/v2/ui/typography'
+import { Divider } from '@/styles/v2/ui/divider'
+import { FormInput } from '@/components/Form/FormInput'
 
-import LandingHeaderDesktop from 'components/landing/header-desktop'
-import LandingHeaderMobile from 'components/landing/header-mobile'
+import LandingHeaderDesktop from '@/components/landing/header-desktop'
+import LandingHeaderMobile from '@/components/landing/header-mobile'
 
-const validationSchema = yup.object({
-  email: yup.string().required('Email required'),
-  password: yup.string().required('Password required')
+const validationSchema = z.object({
+  email: z.string({ error: 'Email required' }).min(1, 'Email required'),
+  password: z.string({ error: 'Password required' }).min(1, 'Password required')
 })
 
 const formDefaultValues = { email: '', password: '' }
@@ -59,7 +59,7 @@ const LoginForm = ({ isUserNew }) => {
     handleSubmit: validateInputs,
     formState: { errors }
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
     defaultValues: formDefaultValues
   })
 
@@ -89,7 +89,7 @@ const LoginForm = ({ isUserNew }) => {
       },
       onError: (error) => {
         setIsSubmitError(true)
-        toast.error(error?.response?.data?.error ?? 'Login failed')
+        toast.error(error?.body?.error ?? 'Login failed')
       }
     })
   }

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 import { FormLabel, MenuItem, Stack, TextField } from '@mui/material'
-import { makeValidClassName } from '../../library/strings/makeValidClassName'
-import { NestedQuestion } from '../../styles/forms'
-import { restorationAims as questions } from '../../data/questions'
-import language from '../../language'
+import { makeValidClassName } from '@/library/strings/makeValidClassName'
+import { NestedQuestion } from '@/styles/forms'
+import { restorationAims as questions } from '@/data/questions'
+import language from '@/language'
 const stakeholdersPropType = PropTypes.arrayOf(
   PropTypes.shape({ stakeholderType: PropTypes.string, stakeholderName: PropTypes.string })
 )

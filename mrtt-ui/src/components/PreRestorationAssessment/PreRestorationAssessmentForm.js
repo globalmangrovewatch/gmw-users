@@ -21,22 +21,21 @@ import {
   FormQuestionDiv,
   StickyFormLabel,
   SelectedInputSection
-} from '../../styles/forms'
-import { ContentWrapper } from '../../styles/containers'
-import { ErrorText, PageSubtitle, PageTitle } from '../../styles/typography'
-import { findRegistationDataItem } from '../../library/findDataItems'
-import { preRestorationAssessment as questions } from '../../data/questions'
-import { questionMapping } from '../../data/questionMapping'
+} from '@/styles/forms'
+import { ContentWrapper } from '@/styles/containers'
+import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
+import { findRegistationDataItem } from '@/library/findDataItems'
+import { preRestorationAssessment as questions } from '@/data/questions'
 import AddPhysicalMeasurementRow from './AddPhysicalMeasurementRow'
-import CheckboxGroupWithLabelAndController from '../CheckboxGroupWithLabelAndController'
-import language from '../../language'
-import LoadingIndicator from '../LoadingIndicator'
-import QuestionNav from '../QuestionNav'
+import CheckboxGroupWithLabelAndController from '@/components/CheckboxGroupWithLabelAndController'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import QuestionNav from '@/components/QuestionNav'
 import PhysicalMeasurementRow from './PhysicalMeasurementRow'
-import { useInitializeQuestionMappedForm } from '../../library/question-mapped-form/useInitializeQuestionMappedForm'
-import useSiteInfo from '../../library/useSiteInfo'
-import FormValidationMessageIfErrors from '../FormValidationMessageIfErrors'
-import organizeMangroveSpeciesList from '../../library/organizeMangroveSpeciesList'
+import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
+import useSiteInfo from '@/library/useSiteInfo'
+import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
+import organizeMangroveSpeciesList from '@/library/organizeMangroveSpeciesList'
 
 const getSiteCountries = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '1.2') ?? []
@@ -75,7 +74,6 @@ function PreRestorationAssessmentForm() {
   } = useFieldArray({ name: 'physicalMeasurementsTaken', control })
 
   const { siteId } = useParams()
-  const apiAnswersUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`
   const mangroveRestorationAttemptedWatcher = watchForm('mangroveRestorationAttempted')
   const siteAssessmentBeforeProjectWatcher = watchForm('siteAssessmentBeforeProject')
   const speciesCompositionWatcher = watchForm('speciesComposition')
@@ -118,37 +116,10 @@ function PreRestorationAssessmentForm() {
 
   const { isLoading } = useInitializeQuestionMappedForm({
     key: 'preRestorationAssessment',
-    apiUrl: apiAnswersUrl,
-    questionMapping: questionMapping,
+    siteId,
     form,
     successCallback: loadServerData
   })
-
-  // const handleSubmit = async (formData) => {
-  //   const fields = Object.keys(questionMapping['preRestorationAssessment'])
-  //   const ok = await form.trigger(fields, { shouldFocus: true })
-
-  //   if (!ok) {
-  //     setIsError(true)
-  //     toast.error(language.error.validation)
-  //     return
-  //   }
-  //   setIsSubmitting(true)
-  //   setIsError(false)
-  //   if (!formData) return
-
-  //   axios
-  //     .patch(apiAnswersUrl, mapDataForApi('preRestorationAssessment', formData))
-  //     .then(() => {
-  //       setIsSubmitting(false)
-  //       toast.success(language.success.submit)
-  //     })
-  //     .catch(() => {
-  //       setIsError(true)
-  //       setIsSubmitting(false)
-  //       toast.error(language.error.submit)
-  //     })
-  // }
 
   const handleMangroveSpeciesPresentOnChange = (event, specie) => {
     const mangroveSpeciesTypesCheckedCopy = [...mangroveSpeciesTypesChecked]

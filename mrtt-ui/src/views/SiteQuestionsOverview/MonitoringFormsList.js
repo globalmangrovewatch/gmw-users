@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import MONITORING_FORM_CONSTANTS from '../../constants/monitoringFormConstants'
-import { RowSpaceBetween } from '../../styles/containers'
-import { TableAlertnatingRows, WideTh } from '../../styles/table'
-import { Link, SmallUpperCase } from '../../styles/typography'
+import MONITORING_FORM_CONSTANTS from '@/constants/monitoringFormConstants'
+import { RowSpaceBetween } from '@/styles/containers'
+import { TableAlertnatingRows, WideTh } from '@/styles/table'
+import { Link, SmallUpperCase } from '@/styles/typography'
 
 const MonitoringFormsList = ({ monitoringFormsSortedByDate, siteId }) => {
   return (

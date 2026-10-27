@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Dialog } from '@mui/material'
-import { ButtonContainer, PaddedSection, RowFlexEnd } from '../../styles/containers'
-import { H2 } from '../../styles/typography'
-import { ButtonCancel, ButtonPrimary } from '../../styles/buttons'
+import { ButtonContainer, PaddedSection, RowFlexEnd } from '@/styles/containers'
+import { H2 } from '@/styles/typography'
+import { ButtonCancel, ButtonPrimary } from '@/styles/buttons'
 
 const ConfirmPrompt = ({ title, promptText, confirmButtonText, isOpen, setIsOpen, onConfirm }) => {
   const handleCancelClick = () => {

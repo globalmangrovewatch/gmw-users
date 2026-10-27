@@ -1,14 +1,17 @@
 import '@testing-library/jest-dom'
 import { StrictMode } from 'react'
-import { render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 
 import { AuthProvider, useAuth } from './useAuth'
-import { exchangeCode, readAndStripCode, silentSsoCheck } from 'hooks/sso'
+import { exchangeCode, readAndStripCode, silentSsoCheck } from '@/hooks/sso'
+import { api } from '@/lib/api'
+import { getAuthToken, setAuthToken } from '@/lib/auth/token'
+import { getQueryClient } from '@/lib/queryClient'
 
-jest.mock('hooks/sso', () => ({
-  exchangeCode: jest.fn(),
-  readAndStripCode: jest.fn(),
-  silentSsoCheck: jest.fn()
+vi.mock('@/hooks/sso', () => ({
+  exchangeCode: vi.fn(),
+  readAndStripCode: vi.fn(),
+  silentSsoCheck: vi.fn()
 }))
 
 const AuthStatus = () => {
@@ -34,7 +37,7 @@ describe('AuthProvider bootstrap', () => {
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('clears the checking state under StrictMode when there is no SSO session', async () => {
@@ -58,11 +61,69 @@ describe('AuthProvider bootstrap', () => {
   })
 
   it('falls back to logged out when the SSO bootstrap throws', async () => {
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
     silentSsoCheck.mockRejectedValue(new Error('REACT_APP_GMW_URL is not set'))
 
     renderInStrictMode()
 
     expect(await screen.findByText('logged out')).toBeInTheDocument()
+  })
+})
+
+describe('AuthProvider session changes', () => {
+  beforeEach(() => {
+    readAndStripCode.mockReturnValue(null)
+    silentSsoCheck.mockResolvedValue(null)
+  })
+
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
+
+  const SessionButtons = () => {
+    const { isChecking, login, logout } = useAuth()
+    if (isChecking) return <span>checking</span>
+    return (
+      <>
+        <button onClick={() => login('jwt', { email: 'next@example.com' })}>log in</button>
+        <button onClick={logout}>log out</button>
+      </>
+    )
+  }
+
+  it.each(['log in', 'log out'])(
+    'drops cached API data on %s, so the next user never sees it',
+    async (action) => {
+      const queryClient = getQueryClient()
+      queryClient.setQueryData(['sites'], [{ id: 1, site_name: 'Previous user site' }])
+
+      render(
+        <AuthProvider>
+          <SessionButtons />
+        </AuthProvider>
+      )
+      fireEvent.click(await screen.findByText(action))
+
+      expect(queryClient.getQueryData(['sites'])).toBeUndefined()
+    }
+  )
+
+  it('signs out when the API rejects the token', async () => {
+    render(
+      <AuthProvider>
+        <AuthStatus />
+      </AuthProvider>
+    )
+    await screen.findByText('logged out')
+    act(() => {
+      setAuthToken('expired')
+    })
+
+    const fetchMock = vi.fn(async () => new Response('{}', { status: 401 }))
+    vi.stubGlobal('fetch', fetchMock)
+    await api.get('/sites').catch(() => {})
+    vi.unstubAllGlobals()
+
+    expect(getAuthToken()).toBeNull()
   })
 })
