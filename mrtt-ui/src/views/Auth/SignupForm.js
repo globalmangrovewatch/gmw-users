@@ -22,7 +22,10 @@ const required = z.string({ error: language.form.required }).min(1, language.for
 
 const validationSchema = z
   .object({
-    email: required.pipe(z.email(signUpFormLanguage.validation.emailValid)),
+    email: z.email({
+      error: (issue) =>
+        issue.input ? signUpFormLanguage.validation.emailValid : language.form.required
+    }),
     password: required.min(8, signUpFormLanguage.validation.passwordMinimumCharacters),
     confirmationPassword: required,
     termsAndConditions: z.literal(true, signUpFormLanguage.validation.termsAndConditions)

@@ -28,12 +28,12 @@ const TOPICS = [
 const TOPIC_VALUES = TOPICS.map((t) => t.value)
 
 const schema = z.object({
-  name: z.string({ error: 'Name is required' }).min(2, 'name must be at least 2 characters'),
+  name: z
+    .string({ error: 'Name is required' })
+    .min(1, 'Name is required')
+    .min(2, 'Name must be at least 2 characters'),
   organization: z.string().optional(),
-  email: z
-    .string({ error: 'Email is required' })
-    .min(1, 'Email is required')
-    .pipe(z.email('Invalid email')),
+  email: z.email({ error: (issue) => (issue.input ? 'Invalid email' : 'Email is required') }),
   topic: z.enum(TOPIC_VALUES, {
     error: (issue) =>
       issue.input === undefined

@@ -15,10 +15,9 @@ import RequiredIndicator from '@/components/RequiredIndicator'
 import { env } from '@/lib/env'
 
 const validationSchema = z.object({
-  email: z
-    .string({ error: language.form.required })
-    .min(1, language.form.required)
-    .pipe(z.email('email must be a valid email'))
+  email: z.email({
+    error: (issue) => (issue.input ? 'email must be a valid email' : language.form.required)
+  })
 })
 
 const formDefaultValues = { email: '' }

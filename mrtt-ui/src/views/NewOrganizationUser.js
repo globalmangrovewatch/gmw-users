@@ -20,10 +20,9 @@ import { env } from '@/lib/env'
 const pageLanguage = language.pages.newOrganizationUser
 
 const validationSchema = z.object({
-  email: z
-    .string({ error: 'email is a required field' })
-    .min(1, 'email is a required field')
-    .pipe(z.email('email must be a valid email')),
+  email: z.email({
+    error: (issue) => (issue.input ? 'email must be a valid email' : 'email is a required field')
+  }),
   role: z.string({ error: 'role is a required field' }).min(1, 'role is a required field')
 })
 
