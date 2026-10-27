@@ -4,27 +4,34 @@ import language from '@/language'
 import { multiselectWithOtherValidationNoMinimum } from '@/validation/multiSelectWithOther'
 import {
   addIssue,
+  checkRows,
   date,
   endBeforeStartMessage,
   isBefore,
   linkedAims,
+  measurementRule,
+  numberField,
+  percentageRule,
   requireDate,
+  numberAnswer,
   rows,
   stakeholderRows,
   text,
-  unvalidated,
   type SectionRefine,
   type SectionShape
 } from './fields'
 
 export const shape = {
-  // Not validated, as before the zod migration.
-  dateOfEcologicalMonitoring: unvalidated,
+  // Set by QuestionNav from the monitoring form's date; no input shows it.
+  dateOfEcologicalMonitoring: date,
   monitoringStartDate: date,
   monitoringEndDate: date,
   ecologicalMonitoringStakeholders: stakeholderRows,
   mangroveAreaIncrease: text,
-  mangroveAreaBeforeAfter: unvalidated,
+  // No input shows it, so a bad value could only come from the API; checked by type only.
+  mangroveAreaBeforeAfter: z
+    .object({ before: numberAnswer, after: numberAnswer, unit: text })
+    .optional(),
   mangroveConditionImprovement: text,
   preAndPostRestorationActivities: z
     .object({
@@ -37,17 +44,19 @@ export const shape = {
     })
     .optional(),
   naturalRegenerationOnSite: text,
-  percentageSurvival: unvalidated,
+  percentageSurvival: numberField(percentageRule),
   causeOfLowSurvival: multiselectWithOtherValidationNoMinimum,
   monitoringIndicators: rows({
     mainLabel: text,
     secondaryLabel: text,
+    // The form writes `indicator`; older answers may hold the misspelt `indictor`.
+    indicator: text,
     indictor: text,
     metric: text,
-    measurement: unvalidated,
+    measurement: numberAnswer,
     unit: text,
     comparison: text,
-    measurementComparison: unvalidated,
+    measurementComparison: numberAnswer,
     linkedAims
   }),
   achievementOfEcologicalAims: text
@@ -57,6 +66,10 @@ export const refine: SectionRefine = (values, ctx) => {
   requireDate(ctx, values, 'monitoringStartDate', language.form.required)
   if (isBefore(values.monitoringEndDate, values.monitoringStartDate)) {
     addIssue(ctx, ['monitoringEndDate'], endBeforeStartMessage)
+  }
+
+  for (const key of ['measurement', 'measurementComparison']) {
+    checkRows(ctx, values, 'monitoringIndicators', (row) => row[key], measurementRule, 'indicator')
   }
 }
 

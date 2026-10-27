@@ -599,6 +599,7 @@ const EcologicalStatusAndOutcomesForm = () => {
                     updateItem={updateMonitoringOutcome}></EcologicalOutcomesRow>
                 ))
               : null}
+            <ErrorText>{errors.monitoringIndicators?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>

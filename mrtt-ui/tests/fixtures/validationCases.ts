@@ -17,6 +17,7 @@ export type ValidationCase = {
 const thisYear = new Date().getFullYear()
 const multiselectErrors = language.multiselectWithOtherFormQuestion.validation
 const yearErrors = language.form.error
+const numberErrors = language.form.error
 const siteAreaError = 'Please provide a site area'
 
 const noErrorsFor = (section: SectionKey) =>
@@ -114,17 +115,25 @@ const yearCases: ValidationCase[] = [
     expected: { lastRestorationAttemptYear: null }
   },
   {
-    // Current behaviour: the transform turns any non-number into null before the type check,
-    // so `noYearProvided` is never shown.
     name: 'restoration year that is not a number',
     values: { mangroveRestorationAttempted: 'Yes', lastRestorationAttemptYear: 'abc' },
+    expected: { lastRestorationAttemptYear: yearErrors.noYearProvided }
+  },
+  {
+    // The year input is a text field, so typed years arrive as strings.
+    name: 'restoration year as a numeric string',
+    values: { mangroveRestorationAttempted: 'Yes', lastRestorationAttemptYear: '1850' },
+    expected: { lastRestorationAttemptYear: yearErrors.yearTooLow }
+  },
+  {
+    name: 'restoration year as a valid numeric string',
+    values: { mangroveRestorationAttempted: 'Yes', lastRestorationAttemptYear: '2015' },
     expected: { lastRestorationAttemptYear: null }
   },
   {
-    // Current behaviour: a numeric string is not a number either, so it also becomes null.
-    name: 'restoration year as a numeric string',
-    values: { mangroveRestorationAttempted: 'Yes', lastRestorationAttemptYear: '1850' },
-    expected: { lastRestorationAttemptYear: null }
+    name: 'restoration year that is not a whole number',
+    values: { mangroveRestorationAttempted: 'Yes', lastRestorationAttemptYear: '2015.5' },
+    expected: { lastRestorationAttemptYear: yearErrors.wholeNumber }
   },
   {
     name: 'restoration year not checked when no restoration was attempted',
@@ -274,11 +283,96 @@ const otherRequiredCases: ValidationCase[] = [
   }
 ]
 
+// Number answers are typed into text fields: strings or API numbers, and may be left empty.
+// Errors in table rows are reported on the whole list, named by the row.
+const numberCases: ValidationCase[] = [
+  {
+    name: 'survival percentage above 100',
+    values: { percentageSurvival: '120' },
+    expected: { percentageSurvival: numberErrors.percentage }
+  },
+  {
+    name: 'survival percentage that is not a number',
+    values: { percentageSurvival: 'most' },
+    expected: { percentageSurvival: numberErrors.notANumber }
+  },
+  {
+    name: 'survival percentage left empty',
+    values: { percentageSurvival: '' },
+    expected: { percentageSurvival: null }
+  },
+  {
+    name: 'negative project cost',
+    values: { costOfProjectActivities: { cost: '-5', currency: 'USD' } },
+    expected: { costOfProjectActivities: numberErrors.notNegative }
+  },
+  {
+    name: 'funder percentage above 100',
+    values: { projectFunderNames: [{ funderName: 'Blue Fund', percentage: '150' }] },
+    expected: { projectFunderNames: `Blue Fund: ${numberErrors.percentage}` }
+  },
+  {
+    name: 'cost breakdown row that is not a number',
+    values: { breakdownOfCost: [{ costType: 'Labour', cost: 'lots' }] },
+    expected: { breakdownOfCost: `Labour: ${numberErrors.notANumber}` }
+  },
+  {
+    name: 'split of activities row without a label',
+    values: { percentageSplitOfActivities: [{ percentage: '-1' }] },
+    expected: { percentageSplitOfActivities: `Row 1: ${numberErrors.percentage}` }
+  },
+  {
+    name: 'seed count that is not a whole number',
+    values: {
+      mangroveSpeciesUsed: [{ type: 'Rhizophora mangle', seed: { checked: true, count: '2.5' } }]
+    },
+    expected: { mangroveSpeciesUsed: `Rhizophora mangle: ${numberErrors.wholeNumber}` }
+  },
+  {
+    name: 'negative associated species count',
+    values: { mangroveAssociatedSpecies: [{ type: 'Nypa fruticans', count: -3 }] },
+    expected: { mangroveAssociatedSpecies: `Nypa fruticans: ${numberErrors.notNegative}` }
+  },
+  {
+    name: 'physical measurement that is not a number',
+    values: {
+      physicalMeasurementsTaken: [{ measurementType: 'Salinity', measurementValue: 'high' }]
+    },
+    expected: { physicalMeasurementsTaken: `Salinity: ${numberErrors.notANumber}` }
+  },
+  {
+    name: 'monitoring indicator measurement that is not a number',
+    values: { monitoringIndicators: [{ indicator: 'Canopy cover', measurement: 'n/a' }] },
+    expected: { monitoringIndicators: `Canopy cover: ${numberErrors.notANumber}` }
+  },
+  {
+    name: 'socioeconomic outcome value that is not a number',
+    values: { socioeconomicOutcomes: [{ child: 'Fisheries income', value: 'more' }] },
+    expected: { socioeconomicOutcomes: `Fisheries income: ${numberErrors.notANumber}` }
+  },
+  {
+    name: 'number answers left empty in rows',
+    values: {
+      breakdownOfCost: [{ costType: 'Labour', cost: '' }],
+      percentageSplitOfActivities: [{ intervention: 'Planting' }]
+    },
+    expected: { breakdownOfCost: null, percentageSplitOfActivities: null }
+  },
+  {
+    name: 'species composition above 100',
+    values: {
+      speciesComposition: [{ mangroveSpeciesType: 'Rhizophora mangle', percentageComposition: 101 }]
+    },
+    expected: { speciesComposition: numberErrors.percentage }
+  }
+]
+
 export const validationCases: ValidationCase[] = [
   ...validSectionCases,
   ...projectDateCases,
   ...yearCases,
   ...multiselectCases,
   ...countryAndAreaCases,
-  ...otherRequiredCases
+  ...otherRequiredCases,
+  ...numberCases
 ]
