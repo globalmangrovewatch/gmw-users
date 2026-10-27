@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { Box, MenuItem, TextField } from '@mui/material'
@@ -13,7 +12,6 @@ import QuestionNav from '@/components/QuestionNav'
 import useSiteInfo from '@/library/useSiteInfo'
 import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
 import language from '@/language'
-import { questionMapping } from '@/data/questionMapping'
 import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
 import ButtonDeleteForm from '@/components/ButtonDeleteForm'
 import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
@@ -22,7 +20,7 @@ import RequiredIndicator from '@/components/RequiredIndicator'
 
 import { useInitializeQuestionMappedFormMonitors } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import LoadingIndicator from '@/components/LoadingIndicator'
-import { env } from '@/lib/env'
+import { useDeleteMonitor } from '@/queries/sites'
 
 const ManagementStatusAndEffectivenessForm = () => {
   const { monitoringFormId, siteId } = useParams()
@@ -37,36 +35,29 @@ const ManagementStatusAndEffectivenessForm = () => {
     control
   } = form
 
-  const monitoringFormSingularUrl = `${env.API_URL}/sites/${siteId}/monitoring_answers/${monitoringFormId}`
   const managementStatusChangesWatcher = useWatch({ control, name: 'managementStatusChanges' })
   const projectStatusChangeWatcher = useWatch({ control, name: 'projectStatusChange' })
   const financeForCiteManagementWatcher = useWatch({ control, name: 'financeForCiteManagement' })
-  const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
 
   const { isLoading } = useInitializeQuestionMappedFormMonitors({
     key: 'managementStatusAndEffectiveness',
-    apiUrl: isEditMode ? monitoringFormSingularUrl : null,
-    form,
-    questionMapping,
-    queryOptions: {
-      enabled: isEditMode
-    }
+    siteId,
+    monitorId: isEditMode ? monitoringFormId : undefined,
+    form
   })
 
+  const deleteMonitor = useDeleteMonitor(siteId)
+  const isDeleting = deleteMonitor.isPending
+
   const handleDeleteConfirm = () => {
-    setIsDeleting(true)
-    axios
-      .delete(monitoringFormSingularUrl)
-      .then(() => {
-        setIsDeleting(false)
+    deleteMonitor.mutate(monitoringFormId, {
+      onSuccess: () => {
         toast.success(language.success.getDeleteThingSuccessMessage('That form'))
         navigate(`/sites/${siteId}/overview`)
-      })
-      .catch(() => {
-        toast.error(language.error.delete)
-        setIsDeleting(false)
-      })
+      },
+      onError: () => toast.error(language.error.delete)
+    })
   }
 
   const handleDeleteClick = () => {

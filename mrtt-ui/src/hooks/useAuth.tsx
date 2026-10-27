@@ -8,7 +8,9 @@ import {
   useState,
   type ReactNode
 } from 'react'
-import { setAuthToken } from '@/library/auth/interceptor'
+import { onUnauthorized } from '@/lib/api'
+import { setAuthToken } from '@/lib/auth/token'
+import { getQueryClient } from '@/lib/queryClient'
 import { exchangeCode, readAndStripCode, silentSsoCheck, type SSOUser } from '@/hooks/sso'
 
 export type AuthUser = SSOUser
@@ -30,17 +32,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isChecking, setIsChecking] = useState(true)
   const bootstrappedRef = useRef(false)
 
+  // Cached API data belongs to whoever was signed in, so it is dropped whenever the session
+  // changes; otherwise the next user could see the previous user's sites and answers.
   const applySession = useCallback((nextToken: string, nextUser?: AuthUser | null) => {
+    getQueryClient().clear()
     setAuthToken(nextToken)
     setTokenState(nextToken)
     setCurrentUser(nextUser ?? null)
   }, [])
 
   const clearSession = useCallback(() => {
+    getQueryClient().clear()
     setAuthToken(null)
     setTokenState(null)
     setCurrentUser(null)
   }, [])
+
+  // The API rejected the token (e.g. it expired): sign out so the protected routes send the
+  // user back to the login page.
+  useEffect(() => onUnauthorized(clearSession), [clearSession])
 
   useEffect(() => {
     // Run the bootstrap exactly once for the lifetime of the provider.

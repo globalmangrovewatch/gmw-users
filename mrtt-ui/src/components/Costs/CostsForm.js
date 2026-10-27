@@ -18,7 +18,6 @@ import { ContentWrapper } from '@/styles/containers'
 import { costs as questions } from '@/data/questions'
 import CheckboxGroupWithLabelAndController from '@/components/CheckboxGroupWithLabelAndController'
 import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
-import { questionMapping } from '@/data/questionMapping'
 import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import AddProjectFunderNamesRow from './AddProjectFunderNamesRow'
 import ProjectFunderNamesRow from './ProjectFunderNamesRow'
@@ -27,7 +26,6 @@ import PercentageSplitOfActivitiesRow from './PercentageSplitOfActivitiesRow'
 import { currencies } from '@/data/currencies'
 import { findRegistationDataItem } from '@/library/findDataItems'
 import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
-import { env } from '@/lib/env'
 
 const getEndDate = (registrationAnswersFromServer) =>
   findRegistationDataItem(registrationAnswersFromServer, '1.1b') ?? ''
@@ -58,7 +56,6 @@ const CostsForm = () => {
 
   const form = useFormContext()
   const { siteId } = useParams()
-  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
 
   const {
     // handleSubmit: validateInputs,
@@ -144,9 +141,8 @@ const CostsForm = () => {
 
   useInitializeQuestionMappedForm({
     key: 'costs',
-    apiUrl: apiAnswersUrl,
+    siteId,
     form,
-    questionMapping,
     successCallback: loadServerData
   })
 

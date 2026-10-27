@@ -6,7 +6,6 @@ import { ContentWrapper } from '@/styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
 import { FormLayout, FormPageHeader, FormQuestionDiv, StickyFormLabel } from '@/styles/forms'
 
-import { questionMapping } from '@/data/questionMapping'
 import { siteBackground } from '@/data/questions'
 import CheckboxGroupWithLabelAndController from './CheckboxGroupWithLabelAndController'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
@@ -17,21 +16,17 @@ import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/
 import useSiteInfo from '@/library/useSiteInfo'
 
 import { useWatch } from 'react-hook-form'
-import { env } from '@/lib/env'
 
 const SiteBackgroundForm = () => {
   const form = useFormContext()
 
   const { site_name } = useSiteInfo()
   const { siteId } = useParams()
-  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
 
   useInitializeQuestionMappedForm({
     siteId,
     key: 'siteBackground',
-    apiUrl: apiAnswersUrl,
-    form,
-    questionMapping
+    form
   })
 
   const {

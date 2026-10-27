@@ -67,6 +67,6 @@ export type MonitoringForm = {
 }
 
 /** Error body the API returns on 4xx responses. */
-export type ApiError = {
+export type ApiErrorBody = {
   error: string
 }

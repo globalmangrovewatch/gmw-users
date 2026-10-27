@@ -3,13 +3,11 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { FormProvider, useForm } from 'react-hook-form'
-import axios from 'axios'
 import PropTypes from 'prop-types'
 
 import SiteBackgroundForm from './SiteBackgroundForm'
 import FormWrapperProvider from './FormWrapper/FormWrapperProvider'
 
-vi.mock('axios')
 vi.mock('./QuestionNav', () => ({ default: () => null }))
 
 const API_URL = 'http://api.test'
@@ -39,41 +37,46 @@ const renderSiteBackgroundForm = ({ Provider = FormWrapper } = {}) => {
   )
 }
 
+const jsonResponse = (body) =>
+  new Response(JSON.stringify(body), { headers: { 'Content-Type': 'application/json' } })
+
 describe('SiteBackgroundForm', () => {
+  const fetchMock = vi.fn()
+
   beforeEach(() => {
-    axios.get.mockImplementation((url) => {
+    vi.stubGlobal('fetch', fetchMock)
+    fetchMock.mockImplementation(async (url) => {
       if (url === ANSWERS_URL) {
-        return Promise.resolve({
-          data: [
-            {
-              question_id: '2.1',
-              answer_value: [
-                { stakeholderType: 'Local leaders', stakeholderName: 'Jane Doe' },
-                { stakeholderType: 'Unknown' }
-              ]
-            },
-            { question_id: '2.2', answer_value: 'Protected informally at a local level' },
-            {
-              question_id: '2.5',
-              answer_value: {
-                selectedValues: ['Partial protection', 'Sustainable use'],
-                isOtherChecked: true,
-                otherValue: 'Seasonal closure'
-              }
-            },
-            {
-              question_id: '2.8',
-              answer_value: { selectedValues: ['Communal'], isOtherChecked: false }
+        return jsonResponse([
+          {
+            question_id: '2.1',
+            answer_value: [
+              { stakeholderType: 'Local leaders', stakeholderName: 'Jane Doe' },
+              { stakeholderType: 'Unknown' }
+            ]
+          },
+          { question_id: '2.2', answer_value: 'Protected informally at a local level' },
+          {
+            question_id: '2.5',
+            answer_value: {
+              selectedValues: ['Partial protection', 'Sustainable use'],
+              isOtherChecked: true,
+              otherValue: 'Seasonal closure'
             }
-          ]
-        })
+          },
+          {
+            question_id: '2.8',
+            answer_value: { selectedValues: ['Communal'], isOtherChecked: false }
+          }
+        ])
       }
-      return Promise.resolve({ data: { site_name: 'Test site' } })
+      return jsonResponse({ site_name: 'Test site' })
     })
   })
 
   afterEach(() => {
-    vi.clearAllMocks()
+    vi.unstubAllGlobals()
+    fetchMock.mockReset()
   })
 
   it('loads saved stakeholders (2.1) from the API into the form on mount', async () => {
@@ -89,7 +92,7 @@ describe('SiteBackgroundForm', () => {
     // 2.2 (managementStatus) is a MUI Select: its value lives in a hidden input
     expect(screen.getByDisplayValue('Protected informally at a local level')).toBeInTheDocument()
 
-    expect(axios.get).toHaveBeenCalledWith(ANSWERS_URL)
+    expect(fetchMock).toHaveBeenCalledWith(ANSWERS_URL, expect.anything())
   })
 
   it('marks the multi-select checkbox groups (2.5, 2.8) through the real FormWrapperProvider', async () => {

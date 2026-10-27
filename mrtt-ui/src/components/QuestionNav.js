@@ -3,7 +3,7 @@ import { css, styled } from '@mui/system'
 import { Stack } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import axios from 'axios'
+import { useQuery } from '@tanstack/react-query'
 import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useState } from 'react'
 
@@ -23,7 +23,7 @@ import { useFormContext } from 'react-hook-form'
 import { useSaveRegistrationSection } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import { useGetSectionTarget } from '@/library/question-mapped-form/sections-hook'
 import { useGetMonitorsForms } from '@/library/question-mapped-form/monitors'
-import { env } from '@/lib/env'
+import { siteQueries, useUpdateSite } from '@/queries/sites'
 
 const componentLanguage = language.questionNav
 
@@ -99,16 +99,12 @@ const NavSubWrapper = styled('div')`
 
 const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   const [isPrivacySaveError, setIsPrivacySaveError] = useState(false)
-  const [isPrivacySaving, setIsPrivacySaving] = useState(false)
-  const [sectionPrivacy, setSectionPrivacy] = useState()
-  const [siteFromApi, setSiteFromApi] = useState()
   const { siteId, monitoringFormId: monitorIdUrl } = useParams()
   const currentSectionNameIndex = SECTION_NAMES.indexOf(currentSection)
   const isFormPrivacyDisabled = currentSection === 'project-details'
   const nextSection = SECTION_NAMES[currentSectionNameIndex + 1]
   const previousSection = SECTION_NAMES[currentSectionNameIndex - 1]
   const sectionIdForApi = currentSectionNameIndex + 1
-  const siteUrl = `${env.API_URL}/sites/${siteId}`
   const form = useFormContext()
   const navigate = useNavigate()
   const { pathname } = useLocation()
@@ -137,10 +133,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
 
   const { data: monitorForms } = useGetMonitorsForms({
     siteId,
-    key: sectionFromUrl,
-    queryOptions: {
-      enabled: sectionTarget === 'monitors'
-    }
+    enabled: sectionTarget === 'monitors'
   })
 
   useEffect(() => {
@@ -159,22 +152,19 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
     }
   }, [sectionTarget, sectionFromUrl, monitorIdUrl, monitorForms]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(
-    function getSiteInfoToUseWithAPutRequestToUpdateSitePrivacySincePatchDoesntWork() {
-      // A tech debt ticket has been created to have the api accept a patch for section privacy,
-      // instead of the front end having to do a PUT with all the site info.
-      // https://github.com/globalmangrovewatch/gmw-users/issues/260
-      axios.get(siteUrl).then(({ data }) => {
-        setSiteFromApi(data)
-        setSectionPrivacy(data.section_data_visibility?.[sectionIdForApi])
-      })
-    },
-    [siteUrl, sectionIdForApi]
-  )
+  // The API only takes section privacy as part of a PUT with the whole site, so the site is
+  // loaded here and sent back in full.
+  // https://github.com/globalmangrovewatch/gmw-users/issues/260
+  const { data: siteFromApi } = useQuery({ ...siteQueries.detail(siteId), enabled: !!siteId })
+  const updateSitePrivacy = useUpdateSite(siteId, { replace: true })
+  const isPrivacySaving = updateSitePrivacy.isPending
+  // While saving, show the value being saved; otherwise the one the API returned.
+  const sectionPrivacy = isPrivacySaving
+    ? updateSitePrivacy.variables?.section_data_visibility?.[sectionIdForApi]
+    : siteFromApi?.section_data_visibility?.[sectionIdForApi]
 
   const handleOnPrivacyChange = (event) => {
     setIsPrivacySaveError(false)
-    setIsPrivacySaving(true)
     if (siteFromApi && !isFormPrivacyDisabled) {
       const siteWithUpdatedSectionPrivacy = {
         ...siteFromApi,
@@ -183,21 +173,12 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
           [sectionIdForApi]: event.target.value
         }
       }
-      axios
-        .put(siteUrl, siteWithUpdatedSectionPrivacy)
-        .then((response) => {
-          setSectionPrivacy(response.data.section_data_visibility[sectionIdForApi])
-          setIsPrivacySaving(false)
-          toast.success(componentLanguage.privacySavingSuccess)
-        })
-        .catch(() => {
-          setIsPrivacySaveError(true)
-          setIsPrivacySaving(false)
-          setSectionPrivacy(siteFromApi.section_data_visibility[sectionIdForApi])
-        })
+      updateSitePrivacy.mutate(siteWithUpdatedSectionPrivacy, {
+        onSuccess: () => toast.success(componentLanguage.privacySavingSuccess),
+        onError: () => setIsPrivacySaveError(true)
+      })
     } else {
       setIsPrivacySaveError(true)
-      setIsPrivacySaving(false)
     }
   }
 

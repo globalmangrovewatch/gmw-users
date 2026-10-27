@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import { Menu, MenuItem, Stack } from '@mui/material'
 import { toast } from 'react-toastify'
-import axios from 'axios'
 import LoadingIndicator from '@/components/LoadingIndicator'
-import React, { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import React from 'react'
 
 import { ButtonPrimary, ButtonSecondary } from '@/styles/buttons'
 import {
@@ -14,24 +14,15 @@ import {
 } from '@/styles/containers'
 import { ItemTitle, ItemSubTitle, PageTitle } from '@/styles/typography'
 import language from '@/language'
-import { env } from '@/lib/env'
-
-const sitesUrl = `${env.API_URL}/sites/`
+import { saveBlob } from '@/lib/download'
+import { useLoadErrorToast } from '@/hooks/useLoadErrorToast'
+import { downloadAllSitesReport, siteQueries } from '@/queries/sites'
 
 function Sites() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [sites, setSites] = useState([])
+  const { data: sites = [], isPending, error } = useQuery(siteQueries.list())
   const [downloadOptionsAnchorEl, setDownloadOptionsAnchorEl] = React.useState(null)
 
-  useEffect(function loadSitesData() {
-    axios
-      .get(sitesUrl)
-      .then(({ data }) => {
-        setIsLoading(false)
-        setSites(data)
-      })
-      .catch(() => toast.error(language.error.apiLoad))
-  }, [])
+  useLoadErrorToast(error)
 
   const handleDownloadButtonClick = (event) => {
     setDownloadOptionsAnchorEl(event.currentTarget)
@@ -43,27 +34,16 @@ function Sites() {
 
   const handleDownloadOptionSelect = ({ publicOnly }) => {
     setDownloadOptionsAnchorEl(null)
-    axios({
-      url: `${env.API_URL}/report/answers_as_xlsx?&public_only=${publicOnly}`,
-      method: 'GET',
-      responseType: 'blob'
-    }).then((response) => {
-      const href = URL.createObjectURL(response.data)
-
-      const link = document.createElement('a')
-      link.href = href
-      link.setAttribute('download', 'organization-data.xlsx')
-      document.body.appendChild(link)
-      link.click()
-
-      document.body.removeChild(link)
-      URL.revokeObjectURL(href)
-    })
+    downloadAllSitesReport(publicOnly)
+      .then((blob) => saveBlob(blob, 'organization-data.xlsx'))
+      .catch(() => toast.error(language.error.apiLoad))
   }
 
   const open = Boolean(downloadOptionsAnchorEl)
 
-  const orderedSitesTesting = sites.sort((a, b) => a.site_name.localeCompare(b.site_name)).reverse()
+  const orderedSitesTesting = [...sites]
+    .sort((a, b) => a.site_name.localeCompare(b.site_name))
+    .reverse()
 
   const sitesList = orderedSitesTesting
     .sort((siteA, siteB) => {
@@ -101,7 +81,7 @@ function Sites() {
       )
     })
 
-  return isLoading ? (
+  return isPending ? (
     <LoadingIndicator />
   ) : (
     <ContentWrapper>

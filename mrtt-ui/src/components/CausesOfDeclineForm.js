@@ -25,14 +25,12 @@ import { causesOfDecline } from '@/data/questions'
 import { causesOfDeclineOptions } from '@/data/causesOfDeclineOptions'
 import { ContentWrapper } from '@/styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
-import { questionMapping } from '@/data/questionMapping'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '@/language'
 import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
 import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '@/library/useSiteInfo'
-import { env } from '@/lib/env'
 
 function CausesOfDeclineForm() {
   const { site_name } = useSiteInfo()
@@ -51,13 +49,11 @@ function CausesOfDeclineForm() {
 
   const [causesOfDeclineTypesChecked, setCausesOfDeclineTypesChecked] = useState([])
   const { siteId } = useParams()
-  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
 
   useInitializeQuestionMappedForm({
     key: 'causesOfDecline',
-    apiUrl: apiAnswersUrl,
-    form,
-    questionMapping
+    siteId,
+    form
   })
 
   // big function with many different cases for Q4.2 due to the nesting involved in this question type

@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import axios from 'axios'
 
 import { ButtonCancel, ButtonSubmit } from '@/styles/buttons'
 import { ButtonContainer, PagePadding, RowFlexEnd } from '@/styles/containers'
@@ -14,7 +13,7 @@ import { Checkbox, Link, FormControlLabel, FormLabel, TextField } from '@mui/mat
 import language from '@/language'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import RequiredIndicator from '@/components/RequiredIndicator'
-import { env } from '@/lib/env'
+import { authApi } from '@/lib/api'
 
 const signUpFormLanguage = language.pages.userSignUp
 
@@ -50,8 +49,6 @@ const SignupForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
 
-  const authUrl = `${env.AUTH_URL}/users`
-
   const {
     control: formControl,
     handleSubmit: validateInputs,
@@ -64,8 +61,8 @@ const SignupForm = () => {
   const handleSubmit = ({ email, name, password }) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
-    axios
-      .post(authUrl, { user: { email, name, password } })
+    authApi
+      .post('/users', { user: { email, name, password } })
       .then(() => {
         setIsSubmitting(false)
         toast.success(language.success.signup)

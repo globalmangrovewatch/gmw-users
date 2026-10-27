@@ -26,7 +26,6 @@ import {
   StickyFormLabel
 } from '@/styles/forms'
 
-import { questionMapping } from '@/data/questionMapping'
 import { propaguleOptions, seedlingOptions } from '@/data/siteInterventionOptions'
 import { siteInterventions as questions } from '@/data/questions'
 import language from '@/language'
@@ -43,7 +42,6 @@ import useSiteInfo from '@/library/useSiteInfo'
 import organizeMangroveSpeciesList from '@/library/organizeMangroveSpeciesList'
 
 import LoadingIndicator from '@/components/LoadingIndicator'
-import { env } from '@/lib/env'
 
 function SiteInterventionsForm() {
   const { site_name } = useSiteInfo()
@@ -54,7 +52,6 @@ function SiteInterventionsForm() {
   } = form
 
   const { siteId } = useParams()
-  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
 
   const [isSubmitting] = useState(false)
   const [isError] = useState(false)
@@ -165,9 +162,8 @@ function SiteInterventionsForm() {
 
   const { isLoading } = useInitializeQuestionMappedForm({
     key: 'siteInterventions',
-    apiUrl: apiAnswersUrl,
+    siteId,
     form,
-    questionMapping,
     successCallback: onLoaded
   })
 

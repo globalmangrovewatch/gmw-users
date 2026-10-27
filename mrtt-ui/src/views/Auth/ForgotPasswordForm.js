@@ -4,7 +4,6 @@ import { toast } from 'react-toastify'
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import axios from 'axios'
 
 import { ButtonContainer, ContentWrapper, RowFlexEnd } from '@/styles/containers'
 import { ButtonSubmit } from '@/styles/buttons'
@@ -12,7 +11,7 @@ import { ErrorText, LinkLooksLikeButtonSecondary, PageTitle } from '@/styles/typ
 import { FormLayout } from '@/styles/forms'
 import language from '@/language'
 import RequiredIndicator from '@/components/RequiredIndicator'
-import { env } from '@/lib/env'
+import { authApi } from '@/lib/api'
 
 const validationSchema = z.object({
   email: z.email({
@@ -21,8 +20,6 @@ const validationSchema = z.object({
 })
 
 const formDefaultValues = { email: '' }
-
-const passwordUrl = `${env.AUTH_URL}/users/password`
 
 const pageLanguage = language.pages.forgotPassword
 
@@ -43,8 +40,8 @@ const ForgotPasswordForm = () => {
     setIsSubmitting(true)
     setIsSubmitError(false)
 
-    axios
-      .post(passwordUrl, { user: formData })
+    authApi
+      .post('/users/password', { user: formData })
       .then(() => {
         setIsSubmitting(false)
         toast.success(pageLanguage.success)

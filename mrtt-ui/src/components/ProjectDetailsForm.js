@@ -3,7 +3,6 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { useState } from 'react'
 
 import Autocomplete from '@mui/material/Autocomplete'
-// import axios from 'axios'
 import turfBbox from '@turf/bbox'
 import turfBboxPolygon from '@turf/bbox-polygon'
 import turfConvex from '@turf/convex'
@@ -12,7 +11,6 @@ import { ContentWrapper } from '@/styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
 // import { mapDataForApi } from '@/library/mapDataForApi'
 import { projectDetails as questions } from '@/data/questions'
-import { questionMapping } from '@/data/questionMapping'
 import { StickyFormLabel, FormPageHeader, FormQuestionDiv, FormLayout } from '@/styles/forms'
 // import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
@@ -26,7 +24,6 @@ import RequiredIndicator from './RequiredIndicator'
 import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '@/library/useSiteInfo'
 import DatePickerUtcMui from './DatePickerUtcMui'
-import { env } from '@/lib/env'
 
 export const siteAreaError = 'Please provide a site area'
 
@@ -48,7 +45,6 @@ function ProjectDetailsForm() {
 
   // const { errors } = form.formState
   const { siteId } = useParams()
-  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
   let watchHasProjectEndDate = form.watch('hasProjectEndDate', false)
   /* showEndDateInput is a hack because MUI follows native html and casts values to strings.
    The api casts them to boolean so we support both */
@@ -57,9 +53,7 @@ function ProjectDetailsForm() {
   useInitializeQuestionMappedForm({
     siteId,
     key: 'projectDetails',
-    apiUrl: apiAnswersUrl,
-    form,
-    questionMapping
+    form
   })
 
   const onCountriesChange = (field, features) => {
@@ -90,23 +84,6 @@ function ProjectDetailsForm() {
       setMapExtent(turfBbox(featureCollection))
     }
   }
-
-  // const handleSubmit = async (formData) => {
-  //   setIsSubmitting(true)
-  //   setIsError(false)
-
-  //   axios
-  //     .patch(apiAnswersUrl, mapDataForApi('projectDetails', formData))
-  //     .then(() => {
-  //       setIsSubmitting(false)
-  //       toast.success(language.success.submit)
-  //     })
-  //     .catch(() => {
-  //       setIsError(true)
-  //       setIsSubmitting(false)
-  //       toast.error(language.error.submit)
-  //     })
-  // }
 
   return (
     <ContentWrapper>

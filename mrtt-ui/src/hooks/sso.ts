@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { env } from '@/lib/env'
+import { gmwApi } from '@/lib/api'
 
 export type SSOUser = {
   name?: string
@@ -25,28 +25,13 @@ export const SILENT_CALLBACK_PATH = '/auth/sso-silent'
 const SSO_MESSAGE_TYPE = 'mrtt-sso-code'
 const SILENT_TIMEOUT_MS = 4000
 
-export async function exchangeCode(code: string): Promise<SSOExchangeResponse> {
-  const { data } = await axios.post<SSOExchangeResponse>(
-    `${gmwUrl()}/api/auth/sso/exchange`,
-    { code },
-    {
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' }
-    }
-  )
-  return data
+export function exchangeCode(code: string): Promise<SSOExchangeResponse> {
+  return gmwApi.post<SSOExchangeResponse>('/api/auth/sso/exchange', { code })
 }
 
 export async function syncSession(token: string): Promise<void> {
   try {
-    await axios.post(
-      `${gmwUrl()}/api/auth/sso/sync`,
-      { token },
-      {
-        withCredentials: true,
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' }
-      }
-    )
+    await gmwApi.post('/api/auth/sso/sync', { token })
   } catch (error) {
     console.warn('SSO sync failed; user logged in locally only', error)
   }
@@ -54,14 +39,7 @@ export async function syncSession(token: string): Promise<void> {
 
 export async function ssoLogout(): Promise<void> {
   try {
-    await axios.post(
-      `${gmwUrl()}/api/auth/sso/logout`,
-      {},
-      {
-        withCredentials: true,
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' }
-      }
-    )
+    await gmwApi.post('/api/auth/sso/logout', {})
   } catch (error) {
     console.warn('SSO logout request failed', error)
   }

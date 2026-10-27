@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom'
 import { ContentWrapper } from '@/styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
 import { FormLayout, FormPageHeader, FormQuestionDiv } from '@/styles/forms'
-import { questionMapping } from '@/data/questionMapping'
 import { restorationAims as questions } from '@/data/questions'
 import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
 import language from '@/language'
@@ -15,22 +14,19 @@ import RestorationAimsCheckboxGroupWithLabel from './RestorationAimsCheckboxGrou
 import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '@/library/useSiteInfo'
 import { Alert } from '@mui/material'
-import { env } from '@/lib/env'
 
 const RestorationAimsForm = () => {
   const form = useFormContext()
   const stakeholders = form.getValues('stakeholders') || []
   const { site_name } = useSiteInfo()
   const { siteId } = useParams()
-  const apiAnswersUrl = `${env.API_URL}/sites/${siteId}/registration_intervention_answers`
 
   const errors = form.errors
 
   const { data, isLoading } = useInitializeQuestionMappedForm({
     key: 'restorationAims',
-    apiUrl: apiAnswersUrl,
-    form,
-    questionMapping
+    siteId,
+    form
   })
 
   // TO DO

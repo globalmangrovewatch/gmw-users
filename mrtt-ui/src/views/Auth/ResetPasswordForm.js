@@ -5,7 +5,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import axios from 'axios'
 
 import { ButtonContainer, RowFlexEnd, ContentWrapper } from '@/styles/containers'
 import { ButtonSubmit } from '@/styles/buttons'
@@ -13,7 +12,7 @@ import { ErrorText, PageTitle } from '@/styles/typography'
 import { FormLayout } from '@/styles/forms'
 import language from '@/language'
 import RequiredIndicator from '@/components/RequiredIndicator'
-import { env } from '@/lib/env'
+import { authApi } from '@/lib/api'
 
 const pageLanguage = language.pages.resetPassword
 
@@ -32,8 +31,6 @@ const validationSchema = z
 
 const formDefaultValues = { password: '', confirmationPassword: '' }
 
-const passwordUrl = `${env.AUTH_URL}/users/password`
-
 const ResetPasswordForm = () => {
   const [searchParams] = useSearchParams()
   const [isSubmitError, setIsSubmitError] = useState(false)
@@ -50,16 +47,16 @@ const ResetPasswordForm = () => {
   })
 
   const handleSubmit = ({ password, confirmationPassword }) => {
-    axios
-      .put(passwordUrl, {
+    authApi
+      .put('/users/password', {
         user: {
           password,
           password_confirmation: confirmationPassword,
           reset_password_token: searchParams.get('token')
         }
       })
-      .then((response) => {
-        if (response.data.message === 'The password was reset successfully') {
+      .then((data) => {
+        if (data?.message === 'The password was reset successfully') {
           setIsSubmitting(false)
           toast.success(pageLanguage.success)
           navigate('/auth/login')
