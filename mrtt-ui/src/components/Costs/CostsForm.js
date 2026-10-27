@@ -328,6 +328,7 @@ const CostsForm = () => {
                       updateItem={updateBreakdownOfCostItem}></BreakdownOfCostRow>
                   ))
                 : null}
+              <ErrorText>{errors.breakdownOfCost?.message}</ErrorText>
               <Typography>Total: {sumOfBreakdownActivties()}</Typography>
               {isSumOfBreakdownLessOrEqualToTotalCost() ? null : (
                 <ErrorText>Breakdown of activities must not exceed total cost in 7.4</ErrorText>
@@ -347,6 +348,7 @@ const CostsForm = () => {
               ) : (
                 <Alert severity='info'>{language.pages.costs.missingInterventionsWarning}</Alert>
               )}
+              <ErrorText>{errors.percentageSplitOfActivities?.message}</ErrorText>
             </FormQuestionDiv>
           </div>
         ) : null}

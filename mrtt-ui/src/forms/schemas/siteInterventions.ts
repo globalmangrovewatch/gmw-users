@@ -6,13 +6,15 @@ import {
 } from '@/validation/multiSelectWithOther'
 import {
   addIssue,
+  checkRows,
+  countRule,
   date,
   endBeforeStartMessage,
   isBefore,
+  numberAnswer,
   rows,
   stakeholderRows,
   text,
-  unvalidated,
   type SectionRefine,
   type SectionShape
 } from './fields'
@@ -21,7 +23,7 @@ const plantingMaterial = z
   .object({
     checked: z.boolean().optional(),
     source: z.array(z.string()).optional(),
-    count: unvalidated
+    count: numberAnswer
   })
   .optional()
 
@@ -32,7 +34,7 @@ export const shape = {
   mangroveSpeciesUsed: rows({ type: text, seed: plantingMaterial, propagule: plantingMaterial }),
   mangroveAssociatedSpecies: rows({
     type: text,
-    count: unvalidated,
+    count: numberAnswer,
     source: text,
     purpose: z.object({ purpose: text, other: text }).optional()
   }),
@@ -48,6 +50,12 @@ export const refine: SectionRefine = (values, ctx) => {
   if (isBefore(duration?.endDate, duration?.startDate)) {
     addIssue(ctx, ['biophysicalInterventionDuration', 'endDate'], endBeforeStartMessage)
   }
+
+  const count = (material: 'seed' | 'propagule') => (row: Record<string, unknown>) =>
+    (row[material] as { count?: unknown } | undefined)?.count
+  checkRows(ctx, values, 'mangroveSpeciesUsed', count('seed'), countRule, 'type')
+  checkRows(ctx, values, 'mangroveSpeciesUsed', count('propagule'), countRule, 'type')
+  checkRows(ctx, values, 'mangroveAssociatedSpecies', (row) => row.count, countRule, 'type')
 }
 
 export const defaultValues = {

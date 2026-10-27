@@ -21,7 +21,11 @@ const form = {
   error: {
     yearTooLow: 'Year must be greater than 1900',
     noYearProvided: 'You must specifiy a year',
-    yearTooHigh: 'Year must less than or equal to the current year'
+    yearTooHigh: 'Year must less than or equal to the current year',
+    notANumber: 'Please enter a number',
+    wholeNumber: 'Please enter a whole number',
+    notNegative: 'Please enter 0 or more',
+    percentage: 'Please enter a percentage between 0 and 100'
   },
   navigateBackToSiteOverview: 'Return to site form overview',
   required: 'This is a required field',

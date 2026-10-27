@@ -2,7 +2,16 @@ import { z } from 'zod'
 
 import language from '@/language'
 import { multiselectWithOtherValidationNoMinimum } from '@/validation/multiSelectWithOther'
-import { linkedAims, rows, text, unvalidated, type SectionShape } from './fields'
+import {
+  checkRows,
+  linkedAims,
+  measurementRule,
+  numberAnswer,
+  rows,
+  text,
+  type SectionRefine,
+  type SectionShape
+} from './fields'
 
 export const shape = {
   dateOfOutcomesAssessment: z
@@ -23,10 +32,14 @@ export const shape = {
     measurement: text,
     unit: text,
     comparison: text,
-    value: unvalidated
+    value: numberAnswer
   }),
   achievementOfSocioeconomicAims: text
 } satisfies SectionShape<'socioeconomicGovernanceStatusAndOutcomes'>
+
+export const refine: SectionRefine = (values, ctx) => {
+  checkRows(ctx, values, 'socioeconomicOutcomes', (row) => row.value, measurementRule, 'child')
+}
 
 export const defaultValues = {
   currentGovenance: { selectedValues: [] },

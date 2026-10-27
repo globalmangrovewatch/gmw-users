@@ -346,6 +346,7 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
                     updateItem={updateSocioeconomicOutcome}></SocioeconomicOutcomesRow>
                 ))
               : null}
+            <ErrorText>{errors.socioeconomicOutcomes?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
         <FormQuestionDiv>

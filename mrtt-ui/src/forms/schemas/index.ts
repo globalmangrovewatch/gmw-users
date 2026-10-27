@@ -16,6 +16,8 @@ const sectionRefines = [
   causesOfDecline.refine,
   preRestorationAssessment.refine,
   siteInterventions.refine,
+  costs.refine,
+  socioeconomicGovernanceStatusAndOutcomes.refine,
   ecologicalStatusAndOutcomes.refine
 ]
 
