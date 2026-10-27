@@ -1,4 +1,3 @@
-import 'react-toastify/dist/ReactToastify.css'
 import '@/index.css'
 
 import type { Metadata, Viewport } from 'next'
