@@ -1,7 +1,9 @@
+'use client'
+
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -47,7 +49,7 @@ const SignupForm = () => {
   const [isLoading] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const {
     control: formControl,
@@ -66,7 +68,7 @@ const SignupForm = () => {
       .then(() => {
         setIsSubmitting(false)
         toast.success(language.success.signup)
-        navigate('/auth/login/newUser')
+        router.push('/auth/login/newUser')
       })
       .catch(() => {
         setIsSubmitting(false)
@@ -76,7 +78,7 @@ const SignupForm = () => {
   }
 
   const handleCancelClick = () => {
-    navigate(-1)
+    router.back()
   }
 
   const form = (

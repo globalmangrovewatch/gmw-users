@@ -38,12 +38,12 @@ The project board for this work can be found [here](https://github.com/Vizzualit
 
 ## Setting Up and Running a Development Environment
 
-These instructions assume familiarity with React and Create React App.
+The app is a Next.js (App Router) project. Routes live in `src/app/`; each `page.tsx` renders a client view from `src/views/` or `src/components/`.
 
 **Requirements:** Node `22.15.0` exactly (see `.nvmrc`; `engine-strict` rejects other versions) and pnpm (the version is pinned in `package.json#packageManager`; `corepack enable` picks it up).
 
 1. `nvm use` (or install Node 22.15.0 another way).
-1. Create a file called `.env` in this folder (`mrtt-ui/`). Copy the keys from `.env.sample`. Values will need to be obtained from the repo custodian.
+1. Create a file called `.env` in this folder (`mrtt-ui/`). Copy the keys from `.env.sample`. Values will need to be obtained from the repo custodian. Variables are validated in `src/lib/env.ts`; all of them are `NEXT_PUBLIC_*` and end up in the browser bundle.
 1. `pnpm install`. This also installs the git hooks (Husky) for the whole repository.
 1. `pnpm dev`. This opens the app in development mode at [http://localhost:3000](http://localhost:3000).
 
@@ -52,11 +52,11 @@ These instructions assume familiarity with React and Create React App.
 | Script                    | What it does                                               |
 | ------------------------- | ---------------------------------------------------------- |
 | `pnpm dev`                | Development server                                         |
-| `pnpm build`              | Production build into `build/`                             |
-| `pnpm start`              | Serves `build/` with Express (what Heroku runs)            |
+| `pnpm build`              | Production build into `.next/`                             |
+| `pnpm start`              | `next start` on `$PORT` (what Heroku runs)                 |
 | `pnpm lint`               | oxlint (`pnpm lint:fix` applies safe fixes)                |
 | `pnpm format`             | oxfmt, writes changes (`pnpm format:check` only reports)   |
-| `pnpm check-types`        | `tsc --noEmit`                                             |
+| `pnpm check-types`        | `next typegen` then `tsc --noEmit`                         |
 | `pnpm test:unit`          | Vitest, single run (`pnpm test:unit:watch` for watch mode) |
 | `pnpm test:unit:coverage` | Vitest with coverage into `coverage/`                      |
 
@@ -70,26 +70,26 @@ These instructions assume familiarity with React and Create React App.
 
 MRTT keeps the API bearer token **in memory only**. It is never written to `localStorage`, `sessionStorage` or a cookie the app can read. After a page reload the session is restored through the Global Mangrove Watch app (`mangrove-atlas`), which holds the token in a 30-day `httpOnly` cookie on `.globalmangrovewatch.org`:
 
-1. `AuthProvider` loads `${REACT_APP_GMW_URL}/api/auth/sso/authorize` in a hidden iframe.
+1. `AuthProvider` loads `${NEXT_PUBLIC_GMW_URL}/api/auth/sso/authorize` in a hidden iframe.
 2. If GMW has a session it redirects back to `/auth/sso-silent?code=…` with a short-lived code, which the iframe posts to the parent window.
 3. MRTT exchanges the code at `/api/auth/sso/exchange` and keeps the token in memory.
 
 After an email/password login MRTT also pushes the token to GMW (`/api/auth/sso/sync`), so the next reload is restored the same way. If GMW is not reachable the silent check gives up after 4 seconds and the login form is shown.
 
-**Consequence for local development:** if `REACT_APP_GMW_URL` points at an instance of GMW that is not running, or at MRTT itself (`http://localhost:3000`), every reload logs you out. To keep the session locally, give MRTT a real GMW to talk to:
+**Consequence for local development:** if `NEXT_PUBLIC_GMW_URL` points at an instance of GMW that is not running, or at MRTT itself (`http://localhost:3000`), every reload logs you out. To keep the session locally, give MRTT a real GMW to talk to:
 
 **Option A: run GMW locally**
 
 1. Clone and run [`mangrove-atlas`](https://github.com/Vizzuality/mangrove-atlas) (`pnpm dev`, port 3000). In its `.env`:
-   - `AUTH_API_URL` must be the same backend as MRTT's `REACT_APP_AUTH_URL`.
+   - `AUTH_API_URL` must be the same backend as MRTT's `NEXT_PUBLIC_AUTH_URL`.
    - `NEXTAUTH_URL=http://localhost:3000`
    - `SSO_ALLOWED_ORIGINS=http://localhost:3001` (the MRTT origin; it feeds `frame-ancestors`, the `redirect_uri` allowlist and CORS on the SSO endpoints).
-2. Run MRTT on another port: `PORT=3001 pnpm dev`, with `REACT_APP_GMW_URL=http://localhost:3000` in MRTT's `.env`.
+2. Run MRTT on another port: `PORT=3001 pnpm dev`, with `NEXT_PUBLIC_GMW_URL=http://localhost:3000` in MRTT's `.env`.
 3. Log in to MRTT (or to GMW) and reload: you stay logged in.
 
 **Option B: use the staging GMW**
 
-Set `REACT_APP_GMW_URL` to the staging GMW URL and ask the GMW maintainers to add your MRTT origin (for example `http://localhost:3001`) to the `SSO_ALLOWED_ORIGINS` config var of that deployment. The browser must allow third-party cookies for the GMW origin for the iframe handshake to work.
+Set `NEXT_PUBLIC_GMW_URL` to the staging GMW URL and ask the GMW maintainers to add your MRTT origin (for example `http://localhost:3001`) to the `SSO_ALLOWED_ORIGINS` config var of that deployment. The browser must allow third-party cookies for the GMW origin for the iframe handshake to work.
 
 Do not "fix" this by persisting the token in web storage: that re-exposes it to any script running on the MRTT origin and cannot see logouts done on the GMW side. See GMW-1149.
 

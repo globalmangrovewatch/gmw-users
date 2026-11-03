@@ -10,7 +10,7 @@ import { PaddedSection } from '@/styles/containers'
 import theme from '@/styles/theme'
 import language from '@/language'
 
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { ssoLogout } from '@/hooks/sso'
 import ContactForm from '@/components/contact'
@@ -25,14 +25,14 @@ const CustomButton = styled(Button)`
 function HeaderMenu() {
   const [anchorElement, setAnchorElement] = useState(null)
   const [isOpen, setIsOpen] = useState(false)
-  const navigate = useNavigate()
+  const router = useRouter()
   const { logout } = useAuth()
 
   async function handleLogoutOnClick() {
     setAnchorElement(null)
     await ssoLogout()
     logout()
-    navigate('/auth/login')
+    router.push('/auth/login')
   }
 
   function handleMenuClick(event) {

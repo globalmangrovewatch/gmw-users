@@ -1,10 +1,11 @@
+'use client'
+
 import { Autocomplete, FormLabel, TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useRouter, useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import PropTypes from 'prop-types'
 import { useQuery } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
 
@@ -42,16 +43,17 @@ const formDefaultValues = { landscape_name: '', selectedOrganizations: [] }
 const getOrgsUserBelongsTo = (organizations) =>
   organizations.filter(({ role }) => role === 'org-admin' || role === 'org-user')
 
-const LandscapeForm = ({ isNewLandscape }) => {
+const LandscapeForm = () => {
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const { landscapeId } = useParams()
-  const navigate = useNavigate()
+  const isNewLandscape = !landscapeId
+  const router = useRouter()
 
   const organizationsQuery = useQuery(organizationQueries.list())
   const landscapeQuery = useQuery({
     ...landscapeQueries.detail(landscapeId),
-    enabled: !isNewLandscape && !!landscapeId
+    enabled: !isNewLandscape
   })
   const createLandscape = useCreateLandscape()
   const updateLandscape = useUpdateLandscape(landscapeId)
@@ -105,7 +107,7 @@ const LandscapeForm = ({ isNewLandscape }) => {
     mutation.mutate(formatDataForSubmit(formData), {
       onSuccess: ({ landscape_name }) => {
         toast.success(getSuccessMessage(landscape_name))
-        navigate('/landscapes')
+        router.push('/landscapes')
       },
       onError: (error) => {
         setIsSubmitError(true)
@@ -115,14 +117,14 @@ const LandscapeForm = ({ isNewLandscape }) => {
   }
 
   const handleCancelClick = () => {
-    navigate('/landscapes')
+    router.push('/landscapes')
   }
 
   const handleDeleteConfirm = () => {
     deleteLandscape.mutate(undefined, {
       onSuccess: () => {
         toast.success(language.success.getDeleteThingSuccessMessage(landscapeName))
-        navigate('/landscapes')
+        router.push('/landscapes')
       },
       onError: () => toast.error(language.error.delete)
     })
@@ -224,7 +226,5 @@ const LandscapeForm = ({ isNewLandscape }) => {
     </>
   )
 }
-
-LandscapeForm.propTypes = { isNewLandscape: PropTypes.bool.isRequired }
 
 export default LandscapeForm

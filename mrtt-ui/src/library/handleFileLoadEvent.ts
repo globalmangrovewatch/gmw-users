@@ -1,6 +1,6 @@
 import type { FeatureCollection, Geometry } from 'geojson'
 
-import { KML, Shp } from './transformer'
+import KML from './transformer/kml'
 import type { ShpFeatureCollection } from 'shpjs'
 import determineDataType from './determineDataType'
 import getStringFromFile from './getStringFromFile'
@@ -14,6 +14,8 @@ async function handleKML(data: File) {
 
 async function handleShp(data: File) {
   const parsedData = await getArrayBufferFromFile(data)
+  // shpjs is only needed for shapefile uploads, so it is loaded on first use.
+  const { default: Shp } = await import('./transformer/shp')
   const geojson = await new Shp(parsedData).geojson()
   return geojson
 }

@@ -1,12 +1,12 @@
 {
-  // Type-checking config for the app. CRA reads tsconfig.cra.json instead (see config-overrides.js),
-  // because it rewrites `moduleResolution` and strips `paths` from whatever file it is given.
   "compilerOptions": {
     "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
     "allowJs": true,
     "checkJs": false,
     "strict": true,
@@ -23,5 +23,6 @@
     },
     "types": ["node", "vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["src"]
+  "include": ["next-env.d.ts", "src", ".next/types/**/*.ts", ".next/dev/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

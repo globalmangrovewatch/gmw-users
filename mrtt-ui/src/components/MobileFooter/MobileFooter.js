@@ -1,6 +1,7 @@
 import React from 'react'
 import { styled, css } from '@mui/system'
-import { Link, useLocation } from 'react-router-dom'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 import {
   Map as SitesIcon,
   Language as LandscapesIcon,
@@ -53,19 +54,19 @@ const LinkContainer = styled(Link)`
 `
 
 function MobileFooter() {
-  const { pathname } = useLocation()
+  const pathname = usePathname()
 
   return (
     <StyledFooter>
-      <LinkContainer to='/sites' active={String(pathname.startsWith('/sites'))}>
+      <LinkContainer href='/sites' active={String(pathname.startsWith('/sites'))}>
         <SitesIcon />
         <span>Sites</span>
       </LinkContainer>
-      <LinkContainer to='/landscapes' active={String(pathname.startsWith('/landscapes'))}>
+      <LinkContainer href='/landscapes' active={String(pathname.startsWith('/landscapes'))}>
         <LandscapesIcon />
         <span>Landscapes</span>
       </LinkContainer>
-      <LinkContainer to='/organizations' active={String(pathname.startsWith('/organizations'))}>
+      <LinkContainer href='/organizations' active={String(pathname.startsWith('/organizations'))}>
         <OrganizationsIcon />
         <span>Organizations</span>
       </LinkContainer>

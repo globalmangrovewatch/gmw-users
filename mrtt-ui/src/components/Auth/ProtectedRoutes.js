@@ -1,21 +1,25 @@
-import { Navigate, Outlet } from 'react-router-dom'
+'use client'
+
+import { useEffect } from 'react'
+import PropTypes from 'prop-types'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import LoadingIndicator from '@/components/LoadingIndicator'
 
-function ProtectedRoutes() {
+function ProtectedRoutes({ children }) {
   const { isLoggedIn, isChecking } = useAuth()
+  const router = useRouter()
+  const isSignedOut = !isChecking && !isLoggedIn
 
-  if (isChecking) return <LoadingIndicator />
+  useEffect(() => {
+    if (isSignedOut) router.replace('/auth/login')
+  }, [isSignedOut, router])
 
-  if (!isLoggedIn) {
-    return <Navigate to='/auth/login' replace />
-  }
+  if (!isLoggedIn) return <LoadingIndicator />
 
-  return (
-    <div>
-      <Outlet />
-    </div>
-  )
+  return <div>{children}</div>
 }
+
+ProtectedRoutes.propTypes = { children: PropTypes.node.isRequired }
 
 export default ProtectedRoutes

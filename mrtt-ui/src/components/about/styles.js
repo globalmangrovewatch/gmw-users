@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import theme from '@/styles/theme'
 import { css } from '@emotion/react'
-import { Link } from 'react-router-dom'
 
 export const AboutParagraph = styled('p')`
   color: ${theme.color.lightGrey};
@@ -11,7 +10,7 @@ export const AboutParagraph = styled('p')`
   padding-bottom: 2rem;
 `
 
-export const ExternalLink = styled(Link)`
+export const ExternalLink = styled('a')`
   color: ${theme.color.primary};
   letter-spacing: 1px;
   margin: 0;

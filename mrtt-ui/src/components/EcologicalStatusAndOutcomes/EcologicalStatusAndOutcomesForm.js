@@ -1,6 +1,9 @@
+'use client'
+
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useRouter, useParams } from 'next/navigation'
+import useMonitoringFormId from '@/library/useMonitoringFormId'
 import { toast } from 'react-toastify'
 import { Controller, useFormContext, useFieldArray, useWatch } from 'react-hook-form'
 import {
@@ -53,10 +56,10 @@ const getBiophysicalInterventions = (registrationAnswersFromServer) =>
 
 const EcologicalStatusAndOutcomesForm = () => {
   const { site_name } = useSiteInfo()
-  const { monitoringFormId } = useParams()
+  const monitoringFormId = useMonitoringFormId()
 
   const isEditMode = !!monitoringFormId
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const form = useFormContext()
 
@@ -128,7 +131,7 @@ const EcologicalStatusAndOutcomesForm = () => {
     deleteMonitor.mutate(monitoringFormId, {
       onSuccess: () => {
         toast.success(language.success.getDeleteThingSuccessMessage('That form'))
-        navigate(`/sites/${siteId}/overview`)
+        router.push(`/sites/${siteId}/overview`)
       },
       onError: () => toast.error(language.error.delete)
     })

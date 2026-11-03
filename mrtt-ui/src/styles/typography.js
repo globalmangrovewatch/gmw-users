@@ -1,14 +1,18 @@
 import { styled, Typography, Link as LinkMui } from '@mui/material'
-import { Link as LinkReactRouter } from 'react-router-dom'
+import NextLink from 'next/link'
+import { forwardRef } from 'react'
 import { ButtonPrimary, ButtonSecondary } from './buttons'
 
 import theme from './theme'
 import themeMui from './themeMui'
 
-export const ErrorText = styled(Typography)`
+export const ErrorText = styled(
+  forwardRef(function ErrorText(props, ref) {
+    return <Typography variant='subtitle' ref={ref} {...props} />
+  })
+)`
   color: red;
 `
-ErrorText.defaultProps = { variant: 'subtitle' }
 
 export const H2 = styled('h2')`
   margin: ${themeMui.spacing(1)} 0;
@@ -19,15 +23,15 @@ export const H4 = styled('h4')`
 `
 
 export const Link = (props) => (
-  <LinkMui sx={{ display: 'inline-flex' }} component={LinkReactRouter} {...props} />
+  <LinkMui sx={{ display: 'inline-flex' }} component={NextLink} {...props} />
 )
 
 export const LinkLooksLikeButtonPrimary = (props) => (
-  <ButtonPrimary component={LinkReactRouter} {...props} />
+  <ButtonPrimary component={NextLink} {...props} />
 )
 
 export const LinkLooksLikeButtonSecondary = (props) => (
-  <ButtonSecondary component={LinkReactRouter} {...props} />
+  <ButtonSecondary component={NextLink} {...props} />
 )
 
 export const SmallUpperCase = styled('div')`

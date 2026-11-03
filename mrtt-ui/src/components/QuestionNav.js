@@ -2,7 +2,8 @@ import { ArrowBack, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material
 import { css, styled } from '@mui/system'
 import { Stack } from '@mui/material'
 import { toast } from 'react-toastify'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useParams, useRouter, usePathname } from 'next/navigation'
+import useMonitoringFormId from '@/library/useMonitoringFormId'
 import { useQuery } from '@tanstack/react-query'
 import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -99,15 +100,16 @@ const NavSubWrapper = styled('div')`
 
 const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   const [isPrivacySaveError, setIsPrivacySaveError] = useState(false)
-  const { siteId, monitoringFormId: monitorIdUrl } = useParams()
+  const { siteId } = useParams()
+  const monitorIdUrl = useMonitoringFormId()
   const currentSectionNameIndex = SECTION_NAMES.indexOf(currentSection)
   const isFormPrivacyDisabled = currentSection === 'project-details'
   const nextSection = SECTION_NAMES[currentSectionNameIndex + 1]
   const previousSection = SECTION_NAMES[currentSectionNameIndex - 1]
   const sectionIdForApi = currentSectionNameIndex + 1
   const form = useFormContext()
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
+  const router = useRouter()
+  const pathname = usePathname()
 
   const pathParts = pathname.split('/').filter(Boolean)
 
@@ -185,7 +187,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   const handleInterventionFormSave = async (e) => {
     e?.preventDefault?.()
     const saved = await save(sectionPayload)
-    if (saved && sectionFromUrl === 'ecological-status-and-outcomes') navigate('/sites')
+    if (saved && sectionFromUrl === 'ecological-status-and-outcomes') router.push('/sites')
   }
 
   const handleNavigateWithSave = useCallback(
@@ -202,11 +204,11 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
           monitorId &&
           (sectionFromUrl !== 'ecological-status-and-outcomes' || direction === 'previous')
         ) {
-          navigate(`${to}/${monitorId}`)
-        } else navigate(to)
+          router.push(`${to}/${monitorId}`)
+        } else router.push(to)
       }
     },
-    [navigate, save, sectionPayload, monitorId, sectionFromUrl]
+    [router, save, sectionPayload, monitorId, sectionFromUrl]
   )
 
   return (
@@ -216,13 +218,13 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
         <NavWrapper>
           <NavSubWrapper>
             {/* back to sites overview */}
-            <LinkLooksLikeButtonSecondary to={`/sites/${siteId}/overview`}>
+            <LinkLooksLikeButtonSecondary href={`/sites/${siteId}/overview`}>
               <ArrowBack /> <NavButtonText>{componentLanguage.returnToSite}</NavButtonText>
             </LinkLooksLikeButtonSecondary>
             {/* previous and next section buttons */}
             {/* previous  */}
             <LinkLooksLikeButtonSecondary
-              to={!previousSection ? '#' : `/sites/${siteId}/form/${previousSection}`}
+              href={!previousSection ? '#' : `/sites/${siteId}/form/${previousSection}`}
               direction='previous'
               disabled={!previousSection}
               onClick={
@@ -235,7 +237,7 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
             </LinkLooksLikeButtonSecondary>
             {/* next */}
             <LinkLooksLikeButtonSecondary
-              to={!nextSection ? '#' : `/sites/${siteId}/form/${nextSection}`}
+              href={!nextSection ? '#' : `/sites/${siteId}/form/${nextSection}`}
               direction='next'
               disabled={!nextSection}
               onClick={
@@ -250,8 +252,8 @@ const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
           <NavSubWrapper>
             <PrivacySelect
               id='form-privacy'
-              defaultValue={''}
-              value={sectionPrivacy}
+              // '' (the disabled placeholder) until the site has loaded, so the select stays controlled.
+              value={sectionPrivacy ?? ''}
               onChange={handleOnPrivacyChange}
               disabled={isFormPrivacyDisabled}>
               <option value={''} disabled>

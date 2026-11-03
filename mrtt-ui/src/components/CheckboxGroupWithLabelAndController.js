@@ -11,7 +11,7 @@ const CheckboxGroupWithLabelAndController = ({
   options,
   question,
   control,
-  shouldAddOtherOptionWithClarification,
+  shouldAddOtherOptionWithClarification = false,
   required = false
 }) => {
   const labelId = `${fieldName}-label`
@@ -50,6 +50,5 @@ CheckboxGroupWithLabelAndController.propTypes = {
   shouldAddOtherOptionWithClarification: PropTypes.bool,
   required: PropTypes.bool
 }
-CheckboxGroup.defaultProps = { shouldAddOtherOptionWithClarification: false }
 
 export default CheckboxGroupWithLabelAndController

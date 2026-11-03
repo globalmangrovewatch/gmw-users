@@ -1,11 +1,12 @@
+'use client'
+
 import { Controller, useForm, useFormContext } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useRouter, useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useQuery } from '@tanstack/react-query'
-import PropTypes from 'prop-types'
 
 import { ButtonCancel, ButtonSubmit } from '@/styles/buttons'
 import { ErrorText, PageTitle } from '@/styles/typography'
@@ -34,16 +35,17 @@ const validationSchema = z.object({
 
 const formDefaultValues = { site_name: '', landscape_id: '', defaultSectionPrivacy: 'public' }
 
-const SiteForm = ({ isNewSite }) => {
+const SiteForm = () => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const { siteId } = useParams()
-  const navigate = useNavigate()
+  const isNewSite = !siteId
+  const router = useRouter()
 
   const siteForm = useFormContext()
   const { reset: resetSiteForm } = siteForm
 
   const landscapesQuery = useQuery(landscapeQueries.list())
-  const siteQuery = useQuery({ ...siteQueries.detail(siteId), enabled: !isNewSite && !!siteId })
+  const siteQuery = useQuery({ ...siteQueries.detail(siteId), enabled: !isNewSite })
   const createSite = useCreateSite()
   const updateSite = useUpdateSite(siteId)
   const landscapes = landscapesQuery.data ?? []
@@ -97,7 +99,7 @@ const SiteForm = ({ isNewSite }) => {
       onSuccess: ({ site_name }) => {
         toast.success(language.success.getCreateThingSuccessMessage(site_name))
         resetSiteForm()
-        navigate('/sites')
+        router.push('/sites')
       },
       onError: handleSubmitError
     })
@@ -107,7 +109,7 @@ const SiteForm = ({ isNewSite }) => {
     updateSite.mutate(formData, {
       onSuccess: ({ site_name }) => {
         toast.success(language.success.getEditThingSuccessMessage(site_name))
-        navigate('/sites')
+        router.push('/sites')
       },
       onError: handleSubmitError
     })
@@ -124,7 +126,7 @@ const SiteForm = ({ isNewSite }) => {
   }
 
   const handleCancelClick = () => {
-    navigate('/sites')
+    router.push('/sites')
   }
 
   const form = !doesItemExist ? (
@@ -207,7 +209,5 @@ const SiteForm = ({ isNewSite }) => {
 
   return isLoading ? <LoadingIndicator /> : form
 }
-
-SiteForm.propTypes = { isNewSite: PropTypes.bool.isRequired }
 
 export default SiteForm

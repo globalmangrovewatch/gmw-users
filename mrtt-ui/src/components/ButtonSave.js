@@ -17,8 +17,4 @@ ButtonSave.propTypes = {
   component: PropTypes.any
 }
 
-ButtonSave.defaultProps = {
-  component: undefined
-}
-
 export default ButtonSave

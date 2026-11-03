@@ -3,15 +3,19 @@ import { styled } from '@mui/system'
 import { Button as ButtonBase } from '@mui/base'
 
 import PropTypes from 'prop-types'
+import { forwardRef } from 'react'
 import ButtonSecondaryWithLoader from '@/components/ButtonSecondaryWithLoader'
 import language from '@/language'
 import theme from './theme'
 
-const ButtonPrimary = styled(Button)``
-ButtonPrimary.defaultProps = { variant: 'contained' }
+// Defaults are set here, not with `defaultProps`: React 19 ignores those on function components.
+const ButtonPrimary = forwardRef(function ButtonPrimary(props, ref) {
+  return <Button variant='contained' ref={ref} {...props} />
+})
 
-const ButtonSecondary = styled(Button)``
-ButtonSecondary.defaultProps = { variant: 'outlined' }
+const ButtonSecondary = forwardRef(function ButtonSecondary(props, ref) {
+  return <Button variant='outlined' ref={ref} {...props} />
+})
 
 const ButtonSubmit = ({ isSubmitting }) => {
   return (

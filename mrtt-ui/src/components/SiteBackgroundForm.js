@@ -1,6 +1,8 @@
+'use client'
+
 import { Box, Checkbox, List, ListItem, MenuItem, TextField, Typography } from '@mui/material'
 import { useFieldArray, Controller, useFormContext } from 'react-hook-form'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'next/navigation'
 
 import { ContentWrapper } from '@/styles/containers'
 import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'

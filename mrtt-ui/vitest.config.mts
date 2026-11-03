@@ -15,7 +15,7 @@ const aliases = [
   }
 ]
 
-// CRA allows JSX in `.js` files; Vite's Oxc transform only parses JSX in `.jsx`/`.tsx`.
+// Next.js allows JSX in `.js` files; Vite's Oxc transform only parses JSX in `.jsx`/`.tsx`.
 // Compile `src/**/*.js` as JSX first so the rest of the pipeline sees plain JS.
 const jsxInJs = (): Plugin => ({
   name: 'mrtt:jsx-in-js',
@@ -40,10 +40,10 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     // src/lib/env.ts validates these at import time.
     env: {
-      REACT_APP_API_URL: 'http://api.test',
-      REACT_APP_AUTH_URL: 'http://auth.test',
-      REACT_APP_MAPBOX_ACCESS_TOKEN: 'test-mapbox-token',
-      REACT_APP_GMW_URL: 'https://gmw.test'
+      NEXT_PUBLIC_API_URL: 'http://api.test',
+      NEXT_PUBLIC_AUTH_URL: 'http://auth.test',
+      NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: 'test-mapbox-token',
+      NEXT_PUBLIC_GMW_URL: 'https://gmw.test'
     },
     include: [
       'src/**/*.{test,spec}.{js,jsx,ts,tsx}',
@@ -54,7 +54,7 @@ export default defineConfig({
       reportsDirectory: 'coverage',
       reporter: ['text', 'text-summary', 'html'],
       include: ['src/**/*.{js,jsx,ts,tsx}'],
-      exclude: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}', 'src/index.js', 'src/**/*.d.ts']
+      exclude: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}', 'src/app/**', 'src/**/*.d.ts']
     }
   }
 })

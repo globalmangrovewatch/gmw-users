@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { Menu, MenuItem, Stack } from '@mui/material'
 import { toast } from 'react-toastify'
 import LoadingIndicator from '@/components/LoadingIndicator'
@@ -69,7 +71,7 @@ function Sites() {
       )
 
       return (
-        <LinkCard key={id} to={`/sites/${id}/overview`}>
+        <LinkCard key={id} href={`/sites/${id}/overview`}>
           <ItemTitle>{site_name}</ItemTitle>
           <ItemSubTitle>{landscape_name}</ItemSubTitle>
           {section_last_updated ? (
@@ -122,7 +124,7 @@ function Sites() {
               {language.pages.sites.publicData}
             </MenuItem>
           </Menu>
-          <ButtonPrimary component={Link} to='/sites/new'>
+          <ButtonPrimary component={Link} href='/sites/new'>
             {language.pages.sites.newSiteButton}
           </ButtonPrimary>
         </ButtonContainer>

@@ -8,13 +8,13 @@ import { env } from '@/lib/env'
 
 const GMW_URL = 'https://gmw.test'
 
-// `env` is parsed once at import; make it writable so each test can set GMW_URL.
+// `env` is parsed once at import; make it writable so each test can set NEXT_PUBLIC_GMW_URL.
 vi.mock('@/lib/env', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/env')>()
   return { env: { ...actual.env } }
 })
 const setGmwUrl = (url: string | undefined) => {
-  ;(env as { GMW_URL?: string }).GMW_URL = url
+  ;(env as { NEXT_PUBLIC_GMW_URL?: string }).NEXT_PUBLIC_GMW_URL = url
 }
 const MESSAGE_TYPE = 'mrtt-sso-code'
 const TIMEOUT_MS = 4000
@@ -166,10 +166,10 @@ describe('silentSsoCheck', () => {
     expect(ssoIframes()).toHaveLength(0)
   })
 
-  it('rejects when REACT_APP_GMW_URL is not set, without adding an iframe', async () => {
+  it('rejects when NEXT_PUBLIC_GMW_URL is not set, without adding an iframe', async () => {
     setGmwUrl(undefined)
 
-    await expect(silentSsoCheck()).rejects.toThrow('REACT_APP_GMW_URL is not set')
+    await expect(silentSsoCheck()).rejects.toThrow('NEXT_PUBLIC_GMW_URL is not set')
     expect(document.querySelectorAll('iframe')).toHaveLength(0)
   })
 })

@@ -1,3 +1,5 @@
+'use client'
+
 import Map, {
   NavigationControl,
   FullscreenControl,
@@ -18,11 +20,11 @@ import turfBbox from '@turf/bbox'
 import emptyFeatureCollection from '@/data/emptyFeatureCollection'
 import handleFileLoadEvent from '@/library/handleFileLoadEvent'
 import language from '@/language'
-import MapDrawControl, { drawControlRef } from './MapDrawControl'
+import MapDrawControl from './MapDrawControl'
 import MapDrawInfo from './MapDrawInfo'
 import { env } from '@/lib/env'
 
-const MAPBOX_TOKEN = env.MAPBOX_ACCESS_TOKEN
+const MAPBOX_TOKEN = env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
 
 const acceptedFileMimeTypes = [
   'application/json',
@@ -53,9 +55,12 @@ const ProjectAreaMap = ({
   extent,
   setExtent,
   height,
-  siteAreaFeatureCollection,
+  siteAreaFeatureCollection = emptyFeatureCollection,
   setSiteAreaFeatureCollection
 }) => {
+  const mapRef = useRef()
+  // The MapboxDraw instance, set by MapDrawControl once the map has created it.
+  const drawControlRef = useRef(null)
   const [uploadLineCount, setUploadLineCount] = useState(0)
   const [uploadPointCount, setUploadPointCount] = useState(0)
   const [error, setError] = useState()
@@ -81,13 +86,13 @@ const ProjectAreaMap = ({
 
   const onMapLoad = () => {
     if (siteAreaFeatureCollection.features.length) {
-      drawControlRef.add(siteAreaFeatureCollection)
+      drawControlRef.current.add(siteAreaFeatureCollection)
       setExtent(turfBbox(siteAreaFeatureCollection))
     }
   }
 
   const onAddGeomFile = async (files) => {
-    if (drawControlRef && files.length) {
+    if (drawControlRef.current && files.length) {
       try {
         const fileJson = await handleFileLoadEvent(files)
 
@@ -100,30 +105,28 @@ const ProjectAreaMap = ({
           fileJson.features.filter((f) => pointTypes.includes(f.geometry.type)).length
         )
 
-        drawControlRef.deleteAll()
-        drawControlRef.add(polygonOnlyFeatureClass)
+        drawControlRef.current.deleteAll()
+        drawControlRef.current.add(polygonOnlyFeatureClass)
         setError()
       } catch (e) {
         setError(`${language.projectAreaMap.uploadErrorPrefix}: ${e}`)
       }
-      setSiteAreaFeatureCollection(drawControlRef.getAll())
+      setSiteAreaFeatureCollection(drawControlRef.current.getAll())
     }
   }
 
   const onDropzoneDelete = () => {
-    drawControlRef.deleteAll()
-    setSiteAreaFeatureCollection(ProjectAreaMap.defaultProps.siteAreaFeatureCollection)
+    drawControlRef.current.deleteAll()
+    setSiteAreaFeatureCollection(emptyFeatureCollection)
   }
 
   const onUpdate = useCallback(() => {
-    setSiteAreaFeatureCollection(drawControlRef.getAll())
+    setSiteAreaFeatureCollection(drawControlRef.current.getAll())
   }, [setSiteAreaFeatureCollection])
 
   const onDelete = useCallback(() => {
-    setSiteAreaFeatureCollection(drawControlRef.getAll())
+    setSiteAreaFeatureCollection(drawControlRef.current.getAll())
   }, [setSiteAreaFeatureCollection])
-
-  const mapRef = useRef()
 
   return (
     <>
@@ -150,6 +153,7 @@ const ProjectAreaMap = ({
         mapStyle='mapbox://styles/mapbox/satellite-streets-v11'
         onLoad={onMapLoad}>
         <MapDrawControl
+          drawRef={drawControlRef}
           position='top-left'
           displayControlsDefault={false}
           controls={{
@@ -176,12 +180,6 @@ const ProjectAreaMap = ({
       />
     </>
   )
-}
-
-ProjectAreaMap.defaultProps = {
-  extent: undefined,
-  height: undefined,
-  siteAreaFeatureCollection: emptyFeatureCollection
 }
 
 ProjectAreaMap.propTypes = {

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Stack } from '@mui/material'
 import { css, styled } from '@mui/system'
 import theme from './theme'

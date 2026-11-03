@@ -1,10 +1,11 @@
+'use client'
+
 import { Controller, useForm } from 'react-hook-form'
 import { FormLabel, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useRouter, useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import PropTypes from 'prop-types'
 import { useQuery } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
 
@@ -32,14 +33,15 @@ const validationSchema = z.object({
 
 const formDefaultValues = { organization_name: '' }
 
-const OrganizationForm = ({ isNewOrganization }) => {
+const OrganizationForm = () => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const { organizationId } = useParams()
-  const navigate = useNavigate()
+  const isNewOrganization = !organizationId
+  const router = useRouter()
 
   const organizationQuery = useQuery({
     ...organizationQueries.detail(organizationId),
-    enabled: !isNewOrganization && !!organizationId
+    enabled: !isNewOrganization
   })
   const createOrganization = useCreateOrganization()
   const updateOrganization = useUpdateOrganization(organizationId)
@@ -69,7 +71,7 @@ const OrganizationForm = ({ isNewOrganization }) => {
     (getMessage) =>
     ({ organization_name }) => {
       toast.success(getMessage(organization_name))
-      navigate('/organizations')
+      router.push('/organizations')
     }
 
   const handleSubmitError = (error) => {
@@ -91,7 +93,7 @@ const OrganizationForm = ({ isNewOrganization }) => {
   }
 
   const handleCancelClick = () => {
-    navigate('/organizations')
+    router.push('/organizations')
   }
 
   const form = !doesOrganizationExist ? (
@@ -131,7 +133,5 @@ const OrganizationForm = ({ isNewOrganization }) => {
 
   return isLoading ? <LoadingIndicator /> : form
 }
-
-OrganizationForm.propTypes = { isNewOrganization: PropTypes.bool.isRequired }
 
 export default OrganizationForm

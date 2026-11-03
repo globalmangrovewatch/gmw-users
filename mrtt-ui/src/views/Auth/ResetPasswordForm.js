@@ -1,7 +1,9 @@
+'use client'
+
 import { Controller, useForm } from 'react-hook-form'
 import { FormLabel, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -32,10 +34,10 @@ const validationSchema = z
 const formDefaultValues = { password: '', confirmationPassword: '' }
 
 const ResetPasswordForm = () => {
-  const [searchParams] = useSearchParams()
+  const searchParams = useSearchParams()
   const [isSubmitError, setIsSubmitError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const {
     control: formControl,
@@ -59,7 +61,7 @@ const ResetPasswordForm = () => {
         if (data?.message === 'The password was reset successfully') {
           setIsSubmitting(false)
           toast.success(pageLanguage.success)
-          navigate('/auth/login')
+          router.push('/auth/login')
         } else {
           throw new Error('This didnt work. Your token probably expired.')
         }

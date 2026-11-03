@@ -1,3 +1,5 @@
+'use client'
+
 import { FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useState } from 'react'
@@ -13,17 +15,20 @@ import { ErrorText, PageSubtitle, PageTitle } from '@/styles/typography'
 import { projectDetails as questions } from '@/data/questions'
 import { StickyFormLabel, FormPageHeader, FormQuestionDiv, FormLayout } from '@/styles/forms'
 // import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import dynamic from 'next/dynamic'
+import { useParams } from 'next/navigation'
 import FormValidationMessageIfErrors from './FormValidationMessageIfErrors'
 import language from '@/language'
 // import LoadingIndicator from './LoadingIndicator'
 import mangroveCountries from '@/data/mangrove_countries.json'
-import ProjectAreaMap from './ProjectAreaMap'
 import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
 import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '@/library/useSiteInfo'
 import DatePickerUtcMui from './DatePickerUtcMui'
+
+// mapbox-gl touches `window` on import, so the map only ever loads in the browser.
+const ProjectAreaMap = dynamic(() => import('./ProjectAreaMap'), { ssr: false })
 
 export const siteAreaError = 'Please provide a site area'
 
