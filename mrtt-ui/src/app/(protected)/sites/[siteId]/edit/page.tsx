@@ -1,5 +1,1 @@
-import SiteForm from '@/views/SiteForm'
-
-export default function Page() {
-  return <SiteForm isNewSite={false} />
-}
+export { default } from '@/app/(protected)/sites/new/page'

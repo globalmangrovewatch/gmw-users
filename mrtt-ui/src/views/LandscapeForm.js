@@ -6,7 +6,6 @@ import { toast } from 'react-toastify'
 import { useRouter, useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import PropTypes from 'prop-types'
 import { useQuery } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
 
@@ -44,16 +43,17 @@ const formDefaultValues = { landscape_name: '', selectedOrganizations: [] }
 const getOrgsUserBelongsTo = (organizations) =>
   organizations.filter(({ role }) => role === 'org-admin' || role === 'org-user')
 
-const LandscapeForm = ({ isNewLandscape }) => {
+const LandscapeForm = () => {
   const [isDeleteConfirmPromptOpen, setIsDeleteConfirmPromptOpen] = useState(false)
   const [isSubmitError, setIsSubmitError] = useState(false)
   const { landscapeId } = useParams()
+  const isNewLandscape = !landscapeId
   const router = useRouter()
 
   const organizationsQuery = useQuery(organizationQueries.list())
   const landscapeQuery = useQuery({
     ...landscapeQueries.detail(landscapeId),
-    enabled: !isNewLandscape && !!landscapeId
+    enabled: !isNewLandscape
   })
   const createLandscape = useCreateLandscape()
   const updateLandscape = useUpdateLandscape(landscapeId)
@@ -226,7 +226,5 @@ const LandscapeForm = ({ isNewLandscape }) => {
     </>
   )
 }
-
-LandscapeForm.propTypes = { isNewLandscape: PropTypes.bool.isRequired }
 
 export default LandscapeForm

@@ -1,5 +1,5 @@
 import SiteForm from '@/views/SiteForm'
 
 export default function Page() {
-  return <SiteForm isNewSite />
+  return <SiteForm />
 }

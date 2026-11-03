@@ -6,7 +6,6 @@ import { toast } from 'react-toastify'
 import { useRouter, useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import PropTypes from 'prop-types'
 import { useQuery } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
 
@@ -34,14 +33,15 @@ const validationSchema = z.object({
 
 const formDefaultValues = { organization_name: '' }
 
-const OrganizationForm = ({ isNewOrganization }) => {
+const OrganizationForm = () => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const { organizationId } = useParams()
+  const isNewOrganization = !organizationId
   const router = useRouter()
 
   const organizationQuery = useQuery({
     ...organizationQueries.detail(organizationId),
-    enabled: !isNewOrganization && !!organizationId
+    enabled: !isNewOrganization
   })
   const createOrganization = useCreateOrganization()
   const updateOrganization = useUpdateOrganization(organizationId)
@@ -133,7 +133,5 @@ const OrganizationForm = ({ isNewOrganization }) => {
 
   return isLoading ? <LoadingIndicator /> : form
 }
-
-OrganizationForm.propTypes = { isNewOrganization: PropTypes.bool.isRequired }
 
 export default OrganizationForm

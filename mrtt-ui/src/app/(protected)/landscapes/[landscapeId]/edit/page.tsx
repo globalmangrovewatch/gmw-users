@@ -1,5 +1,1 @@
-import LandscapeForm from '@/views/LandscapeForm'
-
-export default function Page() {
-  return <LandscapeForm isNewLandscape={false} />
-}
+export { default } from '@/app/(protected)/landscapes/new/page'
