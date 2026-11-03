@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+import useMonitoringFormId from '@/library/useMonitoringFormId'
 import { toast } from 'react-toastify'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { Box, MenuItem, TextField } from '@mui/material'
@@ -25,7 +26,8 @@ import LoadingIndicator from '@/components/LoadingIndicator'
 import { useDeleteMonitor } from '@/queries/sites'
 
 const ManagementStatusAndEffectivenessForm = () => {
-  const { monitoringFormId, siteId } = useParams()
+  const { siteId } = useParams()
+  const monitoringFormId = useMonitoringFormId()
   const isEditMode = !!monitoringFormId
   const router = useRouter()
   const { site_name } = useSiteInfo()

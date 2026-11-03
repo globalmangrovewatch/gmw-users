@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+import useMonitoringFormId from '@/library/useMonitoringFormId'
 
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
@@ -40,7 +41,7 @@ const getSocioeconomicAims = (registrationAnswersFromServer) =>
 
 const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
   const router = useRouter()
-  const { monitoringFormId } = useParams()
+  const monitoringFormId = useMonitoringFormId()
   const isEditMode = !!monitoringFormId
   const { site_name } = useSiteInfo()
 

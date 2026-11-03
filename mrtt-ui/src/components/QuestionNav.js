@@ -3,6 +3,7 @@ import { css, styled } from '@mui/system'
 import { Stack } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useParams, useRouter, usePathname } from 'next/navigation'
+import useMonitoringFormId from '@/library/useMonitoringFormId'
 import { useQuery } from '@tanstack/react-query'
 import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -99,7 +100,8 @@ const NavSubWrapper = styled('div')`
 
 const QuestionNav = ({ isFormSaving, isFormSaveError, currentSection }) => {
   const [isPrivacySaveError, setIsPrivacySaveError] = useState(false)
-  const { siteId, monitoringFormId: monitorIdUrl } = useParams()
+  const { siteId } = useParams()
+  const monitorIdUrl = useMonitoringFormId()
   const currentSectionNameIndex = SECTION_NAMES.indexOf(currentSection)
   const isFormPrivacyDisabled = currentSection === 'project-details'
   const nextSection = SECTION_NAMES[currentSectionNameIndex + 1]
