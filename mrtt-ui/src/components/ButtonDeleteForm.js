@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { styled } from '@mui/system'
-import language from '../language'
-import themeMui from '../styles/themeMui'
-import { ButtonCaution } from '../styles/buttons'
+import language from '@/language'
+import themeMui from '@/styles/themeMui'
+import { ButtonCaution } from '@/styles/buttons'
 
 const StyledButton = styled(ButtonCaution)`
   margin-top: ${themeMui.spacing(3)};
 `
 
-const ButtonDeleteForm = ({ isDeleting, ...restOfProps }) => {
+const ButtonDeleteForm = ({ isDeleting = false, ...restOfProps }) => {
   return (
     <StyledButton
       isHolding={isDeleting}
@@ -22,10 +22,6 @@ const ButtonDeleteForm = ({ isDeleting, ...restOfProps }) => {
 
 ButtonDeleteForm.propTypes = {
   isDeleting: PropTypes.bool
-}
-
-ButtonDeleteForm.defaultProps = {
-  isDeleting: false
 }
 
 export default ButtonDeleteForm

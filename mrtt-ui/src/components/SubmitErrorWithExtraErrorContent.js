@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import language from '../language'
+import language from '@/language'
 
 const SubmitErrorWithExtraErrorContent = ({ extraErrorContent }) => {
   return (
@@ -12,5 +12,4 @@ const SubmitErrorWithExtraErrorContent = ({ extraErrorContent }) => {
 }
 
 SubmitErrorWithExtraErrorContent.propTypes = { extraErrorContent: PropTypes.node }
-SubmitErrorWithExtraErrorContent.defaultProps = { extraErrorContent: undefined }
 export default SubmitErrorWithExtraErrorContent

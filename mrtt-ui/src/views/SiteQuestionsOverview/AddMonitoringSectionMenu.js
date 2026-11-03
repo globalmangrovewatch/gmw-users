@@ -1,9 +1,9 @@
 import React from 'react'
 import { Menu, MenuItem, Stack, styled } from '@mui/material'
-import { ButtonPrimary } from '../../styles/buttons'
-import language from '../../language'
+import { ButtonPrimary } from '@/styles/buttons'
+import language from '@/language'
 import { ArrowDropDown } from '@mui/icons-material'
-import { Link } from '../../styles/typography'
+import { Link } from '@/styles/typography'
 import PropTypes from 'prop-types'
 
 const pageLanguage = language.pages.siteQuestionsOverview
@@ -42,17 +42,17 @@ const AddMonitoringSectionMenu = ({ siteId }) => {
           'aria-labelledby': 'add-monitoring-section-button'
         }}>
         <MenuItem>
-          <Link to={`/sites/${siteId}/form/management-status-and-effectiveness`}>
+          <Link href={`/sites/${siteId}/form/management-status-and-effectiveness`}>
             {pageLanguage.formName.managementStatusAndEffectiveness}
           </Link>
         </MenuItem>
         <MenuItem>
-          <Link to={`/sites/${siteId}/form/socioeconomic-and-governance-status`}>
+          <Link href={`/sites/${siteId}/form/socioeconomic-and-governance-status`}>
             {pageLanguage.formName.socioeconomicGovernanceStatusOutcomes}
           </Link>
         </MenuItem>
         <MenuItem>
-          <Link to={`/sites/${siteId}/form/ecological-status-and-outcomes`}>
+          <Link href={`/sites/${siteId}/form/ecological-status-and-outcomes`}>
             {pageLanguage.formName.ecologicalStatusOutcomes}
           </Link>
         </MenuItem>

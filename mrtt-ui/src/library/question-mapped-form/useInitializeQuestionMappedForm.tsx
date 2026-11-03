@@ -1,22 +1,17 @@
-import {
-  useQuery,
-  useQueryClient,
-  UseQueryResult,
-  UseQueryOptions,
-  useMutation
-} from '@tanstack/react-query'
-import axios, { AxiosResponse } from 'axios'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
 
-import { mapDataForApi } from '../../library/mapDataForApi'
-import { formatApiAnswersForFormByKey } from '../formatApiAnswersForForm'
-import { questionMapping } from '../../data/questionMapping'
-import { FORM_NAMES_DICTIONARY_INTERVENTIONS } from '../../constants/sectionNames'
+import { mapDataForApi } from '@/library/mapDataForApi'
+import { formatApiAnswersForFormByKey } from '@/library/formatApiAnswersForForm'
+import { isSectionKey, questionMapping } from '@/data/questionMapping'
+import { FORM_NAMES_DICTIONARY_INTERVENTIONS, type SectionTarget } from '@/constants/sectionNames'
 import { toast } from 'react-toastify'
 
 import { UseFormReturn, Path } from 'react-hook-form'
-
-type SectionTarget = 'interventions' | 'monitors'
+import { api } from '@/lib/api'
+import { siteKeys, siteQueries } from '@/queries/sites'
+import type { RegistrationFormValues } from '@/forms/schemas'
+import type { MonitoringForm, RegistrationAnswer } from '@/types/api'
 
 type SaveRegistrationSectionParams<TFormValues extends Record<string, unknown>> = {
   siteId: string
@@ -28,176 +23,114 @@ type SaveRegistrationSectionParams<TFormValues extends Record<string, unknown>> 
 
 type MutationPayload = Record<string, unknown>
 
-type ApiResponse = AxiosResponse<unknown>
+type FormattedData = Record<string, Record<string, unknown>>
 
-type ApiAnswerItem = {
-  question_id: string
-  answer_value: unknown
-}
+const formatAnswers = (answers: RegistrationAnswer[]): FormattedData =>
+  formatApiAnswersForFormByKey({ apiAnswers: answers, questionMapping }) as FormattedData
 
-export type FormattedResponse = {
-  response: AxiosResponse<ApiAnswerItem[]>
-  formattedData: Record<string, Record<string, unknown>>
-}
+// Module-level, so TanStack Query keeps the selected result between renders.
+const selectRegistration = (answers: RegistrationAnswer[]) => ({
+  answers,
+  formattedData: formatAnswers(answers)
+})
 
-type ApiAnswerMonitorsItem = {
-  question_id: string
-  monitoring_date: string
-  answer_value: unknown
-}
+const selectMonitor = (monitor: MonitoringForm) => ({
+  monitor,
+  formattedData: formatAnswers(monitor.answers)
+})
 
-type ApiMonitorsFormResponse = {
-  id: string
-  form_type: string
-  answers: ApiAnswerMonitorsItem[]
-}
-
-export type FormattedMonitorsResponse = {
-  response: AxiosResponse<ApiMonitorsFormResponse>
-  formattedData: Record<string, Record<string, unknown>>
-}
-
-type Params<TSelected = FormattedResponse> = {
+type Params<TData> = {
   key: string
-  apiUrl: string
   siteId?: string
   form: UseFormReturn
-  questionMapping: unknown
   successCallback?: (
-    response: AxiosResponse<ApiAnswerItem[]>,
+    data: TData,
     sectionData: Record<string, unknown>,
-    allSectionsData: Record<string, Record<string, unknown>>
+    allSectionsData: FormattedData
   ) => void
   enabled?: boolean
-  queryOptions?: Omit<
-    UseQueryOptions<FormattedResponse, Error, TSelected, readonly unknown[]>,
-    'queryKey' | 'queryFn' | 'enabled'
-  >
 }
 
-type ParamsMonitors<TSelected = FormattedMonitorsResponse> = Omit<
-  Params,
-  'successCallback' | 'queryOptions'
-> & {
-  successCallback?: (
-    response: AxiosResponse<ApiMonitorsFormResponse>,
-    sectionData: Record<string, unknown>,
-    allSectionsData: Record<string, Record<string, unknown>>
-  ) => void
-  queryOptions?: Omit<
-    UseQueryOptions<FormattedMonitorsResponse, Error, TSelected, readonly unknown[]>,
-    'queryKey' | 'queryFn' | 'enabled'
-  >
-}
-
-const queryOptionsDefault = {
-  refetchOnMount: false,
-  staleTime: Infinity
-} as const
-
-export function useInitializeQuestionMappedForm<TSelected = FormattedResponse>({
-  key,
-  apiUrl,
-  siteId,
-  form,
-  questionMapping,
-  successCallback,
-  enabled = true,
-  queryOptions
-}: Params<TSelected>): UseQueryResult<TSelected, Error> {
+// Copies the section's answers into the form each time they are (re)loaded.
+function usePopulateForm<TData>(
+  formattedData: FormattedData | undefined,
+  callbackData: TData | undefined,
+  dataUpdatedAt: number,
+  { key, form, successCallback }: Pick<Params<TData>, 'key' | 'form' | 'successCallback'>
+) {
   const lastPopulatedAt = useRef(0)
 
-  const query = useQuery<FormattedResponse, Error, TSelected>({
-    queryKey: ['question-mapped-form', key, apiUrl, siteId],
-    enabled: Boolean(enabled && key && apiUrl && !apiUrl.includes('undefined')),
-    queryFn: async (): Promise<FormattedResponse> => {
-      const response = await axios.get<ApiAnswerItem[]>(apiUrl)
-
-      const formattedData = formatApiAnswersForFormByKey({
-        apiAnswers: response.data,
-        questionMapping
-      }) as Record<string, Record<string, unknown>>
-
-      return { response, formattedData }
-    },
-    ...queryOptionsDefault,
-    ...queryOptions
-  })
-
   useEffect(() => {
-    if (!query.data || query.dataUpdatedAt === lastPopulatedAt.current) return
-    lastPopulatedAt.current = query.dataUpdatedAt
+    if (!formattedData || callbackData === undefined) return
+    if (dataUpdatedAt === lastPopulatedAt.current) return
+    lastPopulatedAt.current = dataUpdatedAt
 
-    const data = query.data as unknown as FormattedResponse
-    const sectionData = data.formattedData[key] ?? {}
+    const sectionData = formattedData[key] ?? {}
     Object.entries(sectionData).forEach(([fieldKey, value]) => {
       form.setValue(fieldKey, value, { shouldDirty: false })
     })
 
-    successCallback?.(data.response, sectionData, data.formattedData)
-  }, [query.data, query.dataUpdatedAt]) // eslint-disable-line react-hooks/exhaustive-deps
+    successCallback?.(callbackData, sectionData, formattedData)
+  }, [formattedData, dataUpdatedAt]) // eslint-disable-line react-hooks/exhaustive-deps
+}
+
+// Loads the site's registration answers, shared by every registration section, into the form.
+export function useInitializeQuestionMappedForm({
+  key,
+  siteId,
+  form,
+  successCallback,
+  enabled = true
+}: Params<RegistrationAnswer[]>) {
+  const query = useQuery({
+    ...siteQueries.registration(siteId ?? ''),
+    enabled: enabled && !!siteId,
+    select: selectRegistration
+  })
+
+  usePopulateForm(query.data?.formattedData, query.data?.answers, query.dataUpdatedAt, {
+    key,
+    form,
+    successCallback
+  })
 
   return query
 }
 
-export function useInitializeQuestionMappedFormMonitors<TSelected = FormattedMonitorsResponse>({
+// Loads one monitoring form's answers into the form. Disabled until `monitorId` is known.
+export function useInitializeQuestionMappedFormMonitors({
   key,
-  apiUrl,
   siteId,
+  monitorId,
   form,
-  questionMapping,
   successCallback,
-  enabled = true,
-  queryOptions
-}: ParamsMonitors<TSelected>): UseQueryResult<TSelected, Error> {
-  const lastPopulatedAt = useRef(0)
-  const isQueryEnabled =
-    Boolean(enabled) && Boolean(key) && Boolean(apiUrl) && !apiUrl.includes('undefined')
-
-  const query = useQuery<FormattedMonitorsResponse, Error, TSelected>({
-    queryKey: ['question-mapped-form-monitors', key, apiUrl, siteId],
-    enabled: isQueryEnabled,
-    queryFn: async (): Promise<FormattedMonitorsResponse> => {
-      const response = await axios.get<ApiMonitorsFormResponse>(apiUrl)
-      const formattedData = formatApiAnswersForFormByKey({
-        apiAnswers: response.data.answers,
-        questionMapping
-      }) as Record<string, Record<string, unknown>>
-
-      return { response, formattedData }
-    },
-    ...queryOptionsDefault,
-    ...queryOptions
+  enabled = true
+}: Params<MonitoringForm> & { monitorId?: string }) {
+  const query = useQuery({
+    ...siteQueries.monitor(siteId ?? '', monitorId ?? ''),
+    enabled: enabled && !!siteId && !!monitorId,
+    select: selectMonitor
   })
 
-  useEffect(() => {
-    if (!query.data || query.dataUpdatedAt === lastPopulatedAt.current) return
-    lastPopulatedAt.current = query.dataUpdatedAt
-
-    const data = query.data as unknown as FormattedMonitorsResponse
-    const sectionData = data.formattedData[key] ?? {}
-    Object.entries(sectionData).forEach(([fieldKey, value]) => {
-      form.setValue(fieldKey, value, { shouldDirty: false })
-    })
-
-    successCallback?.(data.response, sectionData, data.formattedData)
-  }, [query.data, query.dataUpdatedAt]) // eslint-disable-line react-hooks/exhaustive-deps
+  usePopulateForm(query.data?.formattedData, query.data?.monitor, query.dataUpdatedAt, {
+    key,
+    form,
+    successCallback
+  })
 
   return query
 }
 
 export function useSaveRegistrationSection<
-  TFormValues extends Record<string, unknown> = Record<string, unknown>
+  TFormValues extends Record<string, unknown> = RegistrationFormValues
 >({ siteId, form, section, sectionTarget, monitorId }: SaveRegistrationSectionParams<TFormValues>) {
   const queryClient = useQueryClient()
-  const apiUrl: Record<SectionTarget, string> = {
-    interventions: `${process.env.REACT_APP_API_URL}/sites/${siteId}/registration_intervention_answers`,
-    monitors: `${process.env.REACT_APP_API_URL}/sites/${siteId}/monitoring_answers${
-      monitorId ? `/${monitorId}` : ''
-    }`
-  }
+  const answersPath = {
+    interventions: `/sites/${siteId}/registration_intervention_answers`,
+    monitors: `/sites/${siteId}/monitoring_answers${monitorId ? `/${monitorId}` : ''}`
+  } satisfies Record<SectionTarget, string>
 
-  const mutation = useMutation<ApiResponse, Error, MutationPayload>({
+  const mutation = useMutation<unknown, Error, MutationPayload>({
     mutationKey: ['save-registration-section', siteId, section],
     mutationFn: async (formData) => {
       if (!siteId) throw new Error('Missing siteId')
@@ -205,30 +138,34 @@ export function useSaveRegistrationSection<
       const payload = mapDataForApi(section, formData, sectionTarget)
 
       if (sectionTarget === 'interventions') {
-        return axios.patch(apiUrl.interventions, payload)
+        return api.patch(answersPath.interventions, payload)
       }
 
       if (sectionTarget === 'monitors' && monitorId) {
-        return axios.put(`${apiUrl.monitors}`, payload)
+        return api.put(answersPath.monitors, payload)
       }
 
-      return axios.post(apiUrl.monitors, payload)
+      return api.post(answersPath.monitors, payload)
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['question-mapped-form'] })
-      await queryClient.invalidateQueries({ queryKey: ['question-mapped-form-monitors'] })
+      await queryClient.invalidateQueries({ queryKey: siteKeys.registration(siteId) })
+      await queryClient.invalidateQueries({ queryKey: siteKeys.monitors(siteId) })
     }
   })
 
   const save = async (currentSection: string): Promise<boolean> => {
-    const fields = Object.keys(questionMapping[currentSection] ?? {}) as Array<keyof TFormValues>
+    const fields = (
+      isSectionKey(currentSection) ? Object.keys(questionMapping[currentSection]) : []
+    ) as Array<keyof TFormValues>
 
     const ok = await form.trigger(fields as Path<TFormValues>[], { shouldFocus: true })
 
     if (!ok) {
       toast.error(
         `Cannot save "${
-          FORM_NAMES_DICTIONARY_INTERVENTIONS[currentSection] || currentSection
+          (FORM_NAMES_DICTIONARY_INTERVENTIONS as Record<string, string | undefined>)[
+            currentSection
+          ] || currentSection
         }". Please fix the errors indicated on the form.`
       )
       return false

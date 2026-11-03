@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Box, TextField } from '@mui/material'
 
-import { TabularLabel, VerticalTabularBox, VerticalTabularInputSection } from '../../styles/forms'
+import { TabularLabel, VerticalTabularBox, VerticalTabularInputSection } from '@/styles/forms'
 
 const PercentageSplitOfActivitiesRow = ({ label, percentage, index, updateItem }) => {
   const [initialPercentage, setInitialPercentage] = useState('')

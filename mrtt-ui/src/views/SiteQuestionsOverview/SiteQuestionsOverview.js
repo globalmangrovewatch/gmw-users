@@ -1,26 +1,32 @@
+'use client'
+
 import { Settings as SettingsIcon } from '@mui/icons-material'
 import { Menu, MenuItem, Stack } from '@mui/material'
 import { styled } from '@mui/system'
 import { toast } from 'react-toastify'
-import { useParams, Link as LinkReactRouter } from 'react-router-dom'
-import axios from 'axios'
-import fileDownload from 'js-file-download'
-import React, { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
+import NextLink from 'next/link'
+import { useQuery } from '@tanstack/react-query'
+import React from 'react'
 
-import { ButtonSecondary } from '../../styles/buttons'
+import { ButtonSecondary } from '@/styles/buttons'
 import {
   ButtonContainer,
   ContentWrapper,
   RowCenterCenter,
   TitleAndActionContainer
-} from '../../styles/containers'
-import { ItemSubTitle, ItemTitle, Link } from '../../styles/typography'
-import { TableAlertnatingRows, WideTh } from '../../styles/table'
+} from '@/styles/containers'
+import { ItemSubTitle, ItemTitle, Link } from '@/styles/typography'
+import { TableAlertnatingRows, WideTh } from '@/styles/table'
 import AddMonitoringSectionMenu from './AddMonitoringSectionMenu'
-import ItemDoesntExist from '../../components/ItemDoesntExist'
-import language from '../../language'
-import LoadingIndicator from '../../components/LoadingIndicator'
+import ItemDoesntExist from '@/components/ItemDoesntExist'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
 import MonitoringFormsList from './MonitoringFormsList'
+import { saveBlob } from '@/lib/download'
+import { isNotFound, useLoadErrorToast } from '@/hooks/useLoadErrorToast'
+import { landscapeQueries } from '@/queries/landscapes'
+import { downloadSiteReport, siteQueries } from '@/queries/sites'
 
 const pageLanguage = language.pages.siteQuestionsOverview
 
@@ -30,15 +36,19 @@ const StyledSectionHeader = styled('h3')`
 `
 
 const SiteOverview = () => {
-  const [doesSiteExist, setDoesSiteExist] = useState(true)
-  const [isLoading, setIsLoading] = useState(true)
-  const [landscape, setLandscape] = useState()
-  const [monitoringForms, setMonitoringForms] = useState([])
-  const [site, setSite] = useState()
   const [downloadOptionsAnchorEl, setDownloadOptionsAnchorEl] = React.useState(null)
   const { siteId } = useParams()
 
-  const monitoringFormsSortedByDate = monitoringForms.sort((formA, formB) => {
+  const siteQuery = useQuery(siteQueries.detail(siteId))
+  const landscapesQuery = useQuery(landscapeQueries.list())
+  const monitorsQuery = useQuery(siteQueries.monitors(siteId))
+  const site = siteQuery.data
+  const landscape = landscapesQuery.data?.find((landscape) => landscape.id === site?.landscape_id)
+  const isLoading = siteQuery.isPending || landscapesQuery.isPending || monitorsQuery.isPending
+  const doesSiteExist = !isNotFound(siteQuery.error)
+  useLoadErrorToast(siteQuery.error, landscapesQuery.error, monitorsQuery.error)
+
+  const monitoringFormsSortedByDate = [...(monitorsQuery.data ?? [])].sort((formA, formB) => {
     const formAMonitoringDate = formA.monitoring_date
     const formBMonitoringDate = formB.monitoring_date
 
@@ -50,32 +60,6 @@ const SiteOverview = () => {
     }
     return 0
   })
-  useEffect(
-    function loadDataFromServer() {
-      if (siteId) {
-        const sitesDataUrl = `${process.env.REACT_APP_API_URL}/sites/${siteId}`
-        const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes`
-        const monitoringUrl = `${sitesDataUrl}/monitoring_answers`
-
-        Promise.all([axios.get(sitesDataUrl), axios.get(landscapesUrl), axios.get(monitoringUrl)])
-          .then(([{ data: siteData }, { data: landscapesData }, { data: monitoringFormsData }]) => {
-            setIsLoading(false)
-            setSite(siteData)
-            setLandscape(landscapesData.find((landscape) => landscape.id === siteData.landscape_id))
-            setMonitoringForms(monitoringFormsData)
-          })
-          .catch((error) => {
-            setIsLoading(false)
-            if (error?.response?.status === 404) {
-              setDoesSiteExist(false)
-            } else {
-              toast.error(language.error.apiLoad)
-            }
-          })
-      }
-    },
-    [siteId]
-  )
 
   const handleDownloadButtonClick = (event) => {
     setDownloadOptionsAnchorEl(event.currentTarget)
@@ -87,10 +71,9 @@ const SiteOverview = () => {
 
   const handleDownloadOptionSelect = ({ publicOnly }) => {
     setDownloadOptionsAnchorEl(null)
-    const siteDownloadUrl = `${process.env.REACT_APP_API_URL}/report/answers_as_pdf/${siteId}?&public_only=${publicOnly}`
-    axios.get(siteDownloadUrl, { responseType: 'blob' }).then((response) => {
-      fileDownload(response.data, `${site.site_name}.pdf`)
-    })
+    downloadSiteReport(siteId, publicOnly)
+      .then((blob) => saveBlob(blob, `${site.site_name}.pdf`))
+      .catch(() => toast.error(language.error.apiLoad))
   }
 
   const open = Boolean(downloadOptionsAnchorEl)
@@ -140,7 +123,7 @@ const SiteOverview = () => {
                 {language.pages.sites.publicData}
               </MenuItem>
             </Menu>
-            <ButtonSecondary component={LinkReactRouter} to={`/sites/${siteId}/edit`}>
+            <ButtonSecondary component={NextLink} href={`/sites/${siteId}/edit`}>
               <SettingsIcon /> {pageLanguage.settings}
             </ButtonSecondary>
           </ButtonContainer>
@@ -153,35 +136,35 @@ const SiteOverview = () => {
           <tbody>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/project-details`}>
+                <Link href={`/sites/${siteId}/form/project-details`}>
                   {pageLanguage.formName.siteDetails}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/site-background`}>
+                <Link href={`/sites/${siteId}/form/site-background`}>
                   {pageLanguage.formName.siteBackground}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/restoration-aims`}>
+                <Link href={`/sites/${siteId}/form/restoration-aims`}>
                   {pageLanguage.formName.restorationAims}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/causes-of-decline`}>
+                <Link href={`/sites/${siteId}/form/causes-of-decline`}>
                   {pageLanguage.formName.causesOfDecline}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/pre-restoration-assessment`}>
+                <Link href={`/sites/${siteId}/form/pre-restoration-assessment`}>
                   {pageLanguage.formName.preRestorationAssessment}
                 </Link>
               </WideTh>
@@ -193,14 +176,14 @@ const SiteOverview = () => {
           <tbody>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/site-interventions`}>
+                <Link href={`/sites/${siteId}/form/site-interventions`}>
                   {pageLanguage.formName.siteInterventions}
                 </Link>
               </WideTh>
             </tr>
             <tr>
               <WideTh>
-                <Link to={`/sites/${siteId}/form/costs`}>{pageLanguage.formName.costs}</Link>
+                <Link href={`/sites/${siteId}/form/costs`}>{pageLanguage.formName.costs}</Link>
               </WideTh>
             </tr>
           </tbody>

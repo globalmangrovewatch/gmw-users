@@ -2,9 +2,9 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Box, TextField } from '@mui/material'
 
-import { TabularInputSection, TabularLabel, TabularSectionDiv } from '../../styles/forms'
-import { ErrorText } from '../../styles/typography'
-import TabularButtons from '../TabularInput/TabularButtons'
+import { TabularInputSection, TabularLabel, TabularSectionDiv } from '@/styles/forms'
+import { ErrorText } from '@/styles/typography'
+import TabularButtons from '@/components/TabularInput/TabularButtons'
 
 const AddPhysicaMeasurementRow = ({ saveItem, updateTabularInputDisplay }) => {
   const [type, setType] = useState('')

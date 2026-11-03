@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Box, MenuItem, TextField } from '@mui/material'
 
-import { TabularLabel, VerticalTabularBox, VerticalTabularInputSection } from '../../styles/forms'
-import { currencies } from '../../data/currencies'
+import { TabularLabel, VerticalTabularBox, VerticalTabularInputSection } from '@/styles/forms'
+import { currencies } from '@/data/currencies'
 
 const BreakdownOfCostRow = ({ label, cost, currency, index, updateItem }) => {
   const [initialCost, setInitialCost] = useState('')

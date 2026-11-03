@@ -3,12 +3,12 @@ import { useState, useCallback } from 'react'
 import { Dialog, DialogContent, Stack, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
-import { ButtonBurger, ButtonBurgerItem } from '../../styles/buttons'
-import theme from '../../styles/theme'
-import AboutDialogContent from '../about'
-import ContactForm from '../contact'
-import { ContactUsButton } from '../contact/styles'
-import LanguagePicker from '../language-selector'
+import { ButtonBurger, ButtonBurgerItem } from '@/styles/buttons'
+import theme from '@/styles/theme'
+import AboutDialogContent from '@/components/about'
+import ContactForm from '@/components/contact'
+import { ContactUsButton } from '@/components/contact/styles'
+import LanguagePicker from '@/components/language-selector'
 import { LanguagePickerStyledContainer, StyledLabel } from './styles'
 
 const LandingHeaderMobile = () => {

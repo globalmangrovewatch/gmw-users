@@ -1,5 +1,8 @@
-import { ButtonPrimary, ButtonSecondary } from '../styles/buttons'
-import React, { useEffect, useState } from 'react'
+'use client'
+
+import { ButtonPrimary, ButtonSecondary } from '@/styles/buttons'
+import React, { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Menu, MenuItem } from '@mui/material'
 
 import {
@@ -9,37 +12,26 @@ import {
   PaddedSection,
   RowSpaceBetween,
   TitleAndActionContainer
-} from '../styles/containers'
-import { H2, LinkLooksLikeButtonSecondary, PageTitle } from '../styles/typography'
-import { Link } from 'react-router-dom'
+} from '@/styles/containers'
+import { H2, LinkLooksLikeButtonSecondary, PageTitle } from '@/styles/typography'
+import Link from 'next/link'
 import { toast } from 'react-toastify'
-import { UlAlternating, UlUndecorated } from '../styles/lists'
-import axios from 'axios'
-import language from '../language'
-import LoadingIndicator from '../components/LoadingIndicator'
-import USER_ROLES from '../constants/userRoles'
-
-const organizationsUrl = `${process.env.REACT_APP_API_URL}/organizations`
+import { UlAlternating, UlUndecorated } from '@/styles/lists'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import USER_ROLES from '@/constants/userRoles'
+import { saveBlob } from '@/lib/download'
+import { useLoadErrorToast } from '@/hooks/useLoadErrorToast'
+import { downloadOrganizationReport, organizationQueries } from '@/queries/organizations'
 
 function Organizations() {
-  const [yourOrganizations, setYourOrganizations] = useState([])
-  const [otherOrganizations, setOtherOrganizations] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const { data: organizations = [], isPending, error } = useQuery(organizationQueries.list())
+  const yourOrganizations = organizations.filter((organization) => organization.role)
+  const otherOrganizations = organizations.filter((organization) => !organization.role)
   const [downloadOptionsAnchorEl, setDownloadOptionsAnchorEl] = useState(null)
   const [targetOrganization, setTargetOrganization] = useState(null)
 
-  useEffect(function loadOrganizations() {
-    axios
-      .get(organizationsUrl)
-      .then(({ data }) => {
-        setIsLoading(false)
-        setYourOrganizations(data.filter((organization) => organization.role))
-        setOtherOrganizations(data.filter((organization) => !organization.role))
-      })
-      .catch(() => {
-        toast.error(language.error.apiLoad)
-      })
-  }, [])
+  useLoadErrorToast(error)
 
   const handleDownloadButtonClick = (event, organizationId) => {
     setDownloadOptionsAnchorEl(event.currentTarget)
@@ -52,22 +44,9 @@ function Organizations() {
 
   const handleDownloadOptionSelect = ({ publicOnly }) => {
     setDownloadOptionsAnchorEl(null)
-    axios({
-      url: `${process.env.REACT_APP_API_URL}/report/answers_as_xlsx?organization_id=${targetOrganization}&public_only=${publicOnly}`,
-      method: 'GET',
-      responseType: 'blob'
-    }).then((response) => {
-      const href = URL.createObjectURL(response.data)
-
-      const link = document.createElement('a')
-      link.href = href
-      link.setAttribute('download', 'organization-data.xlsx')
-      document.body.appendChild(link)
-      link.click()
-
-      document.body.removeChild(link)
-      URL.revokeObjectURL(href)
-    })
+    downloadOrganizationReport(targetOrganization, publicOnly)
+      .then((blob) => saveBlob(blob, 'organization-data.xlsx'))
+      .catch(() => toast.error(language.error.apiLoad))
   }
 
   const open = Boolean(downloadOptionsAnchorEl)
@@ -91,7 +70,7 @@ function Organizations() {
                   {language.pages.organizations.downloadOrganizationSites}
                 </ButtonSecondary>
                 {canManageUsers ? (
-                  <LinkLooksLikeButtonSecondary to={`/organizations/${organizationId}/users`}>
+                  <LinkLooksLikeButtonSecondary href={`/organizations/${organizationId}/users`}>
                     {language.pages.organizations.manageUsers}
                   </LinkLooksLikeButtonSecondary>
                 ) : null}
@@ -135,14 +114,14 @@ function Organizations() {
       ))}
     </UlAlternating>
   )
-  return isLoading ? (
+  return isPending ? (
     <LoadingIndicator />
   ) : (
     <>
       <ContentWrapper>
         <TitleAndActionContainer>
           <PageTitle>{language.pages.organizations.title}</PageTitle>
-          <ButtonPrimary component={Link} to='/organizations/new'>
+          <ButtonPrimary component={Link} href='/organizations/new'>
             {language.pages.organizations.newOrganizationButton}
           </ButtonPrimary>
         </TitleAndActionContainer>

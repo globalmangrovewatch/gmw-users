@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { Button } from '@mui/material'
 
-import { TabularButtonsDiv } from '../../styles/forms'
+import { TabularButtonsDiv } from '@/styles/forms'
 
 // eslint-disable-next-line react/prop-types
 const TabularButtons = ({ handleSave, cancelItem }) => {

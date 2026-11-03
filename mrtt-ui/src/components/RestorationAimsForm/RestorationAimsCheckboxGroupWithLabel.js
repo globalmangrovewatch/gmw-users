@@ -1,19 +1,19 @@
 import { Controller } from 'react-hook-form'
-import { StickyFormLabel } from '../../styles/forms'
+import { StickyFormLabel } from '@/styles/forms'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import CheckboxGroup from '../CheckboxGroup/CheckboxGroup'
-import getOptionsValuesAndLabels from '../../library/getOptionsValuesAndLabels'
+import CheckboxGroup from '@/components/CheckboxGroup/CheckboxGroup'
+import getOptionsValuesAndLabels from '@/library/getOptionsValuesAndLabels'
 import StakeholderBenefitsInputs, { stakeholdersPropType } from './StakeholderBenefitsInputs'
-import RequiredIndicator from '../RequiredIndicator'
+import RequiredIndicator from '@/components/RequiredIndicator'
 
 const RestorationAimsCheckboxGroupWithLabel = ({
   fieldName,
   options,
   question,
   form,
-  showAsterisk,
+  showAsterisk = false,
   stakeholders
 }) => {
   const { control: formControl, getValues: getFormValues, setValue: setFormValue } = form
@@ -88,6 +88,5 @@ RestorationAimsCheckboxGroupWithLabel.propTypes = {
   showAsterisk: PropTypes.bool,
   stakeholders: stakeholdersPropType.isRequired
 }
-RestorationAimsCheckboxGroupWithLabel.defaultProps = { showAsterisk: false }
 
 export default RestorationAimsCheckboxGroupWithLabel

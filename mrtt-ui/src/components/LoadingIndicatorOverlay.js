@@ -2,8 +2,8 @@ import { Backdrop, CircularProgress } from '@mui/material'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import { LoadingWrapper } from '../styles/containers'
-import theme from '../styles/theme'
+import { LoadingWrapper } from '@/styles/containers'
+import theme from '@/styles/theme'
 
 const LoadingIndicatorOverlay = ({ isVisible }) => {
   return (

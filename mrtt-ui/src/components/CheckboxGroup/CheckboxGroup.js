@@ -1,8 +1,8 @@
 import { Checkbox, FormControlLabel, FormGroup, Stack, TextField } from '@mui/material'
 import PropTypes from 'prop-types'
 import { forwardRef } from 'react'
-import language from '../../language'
-import { makeValidClassName } from '../../library/strings/makeValidClassName'
+import language from '@/language'
+import { makeValidClassName } from '@/library/strings/makeValidClassName'
 
 const getValueToReturn = ({
   nonOtherSelectedValues,

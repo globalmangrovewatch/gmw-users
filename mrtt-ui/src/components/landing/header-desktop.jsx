@@ -1,10 +1,10 @@
 import Stack from '@mui/material/Stack'
 import { useState, useCallback } from 'react'
 
-import AboutDialogContent from '../about'
-import ContactForm from '../contact'
-import { ContactUsButton } from '../contact/styles'
-import LanguagePicker from '../language-selector'
+import AboutDialogContent from '@/components/about'
+import ContactForm from '@/components/contact'
+import { ContactUsButton } from '@/components/contact/styles'
+import LanguagePicker from '@/components/language-selector'
 import { MenuStyledLabel } from './styles'
 
 const LandingHeaderDesktop = () => {

@@ -1,6 +1,7 @@
+'use client'
+
 import { Stack } from '@mui/material'
-import { toast } from 'react-toastify'
-import axios from 'axios'
+import { useQuery } from '@tanstack/react-query'
 
 import {
   RowCenterCenter,
@@ -9,7 +10,7 @@ import {
   PaddedSection,
   RowSpaceBetween,
   TitleAndActionContainer
-} from '../styles/containers'
+} from '@/styles/containers'
 import {
   H4,
   ItemTitle,
@@ -17,29 +18,20 @@ import {
   LinkLooksLikeButtonPrimary,
   PageTitle,
   SmallUpperCase
-} from '../styles/typography'
-import { UlUndecorated } from '../styles/lists'
-import EditLink from '../components/EditLink'
-import language from '../language'
-import LoadingIndicator from '../components/LoadingIndicator'
-import React, { useEffect, useState } from 'react'
+} from '@/styles/typography'
+import { UlUndecorated } from '@/styles/lists'
+import EditLink from '@/components/EditLink'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import React from 'react'
+import { useLoadErrorToast } from '@/hooks/useLoadErrorToast'
+import { landscapeQueries } from '@/queries/landscapes'
 
-const landscapesUrl = `${process.env.REACT_APP_API_URL}/landscapes/`
 function Landscapes() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [landscapes, setLandscapes] = useState([])
+  const { data: landscapes = [], isPending, error } = useQuery(landscapeQueries.list())
+  useLoadErrorToast(error)
 
-  useEffect(function loadApiData() {
-    axios
-      .get(landscapesUrl)
-      .then(({ data }) => {
-        setIsLoading(false)
-        setLandscapes(data)
-      })
-      .catch(() => toast.error(language.error.apiLoad))
-  }, [])
-
-  const landscapesList = landscapes
+  const landscapesList = [...landscapes]
     .sort((landscapeA, landscapeB) => {
       const landscapeAName = landscapeA.landscape_name?.toLowerCase()
       const landscapeBName = landscapeB.landscape_name?.toLowerCase()
@@ -59,7 +51,7 @@ function Landscapes() {
         <UlUndecorated>
           {sites.map(({ site_name, site_id }) => (
             <li key={site_id}>
-              <Link to={`/sites/${site_id}/overview`}>{site_name}</Link>
+              <Link href={`/sites/${site_id}/overview`}>{site_name}</Link>
             </li>
           ))}
         </UlUndecorated>
@@ -78,7 +70,7 @@ function Landscapes() {
           <RowSpaceBetween>
             <ItemTitle>{landscape_name}</ItemTitle>
             <RowCenterCenter>
-              <EditLink to={`/landscapes/${id}/edit`} />
+              <EditLink href={`/landscapes/${id}/edit`} />
             </RowCenterCenter>
           </RowSpaceBetween>
           <H4>{language.pages.landscapes.sites}</H4>
@@ -90,13 +82,13 @@ function Landscapes() {
       )
     })
 
-  return isLoading ? (
+  return isPending ? (
     <LoadingIndicator />
   ) : (
     <ContentWrapper>
       <TitleAndActionContainer>
         <PageTitle>{language.pages.landscapes.title}</PageTitle>
-        <LinkLooksLikeButtonPrimary to='/landscapes/new'>
+        <LinkLooksLikeButtonPrimary href='/landscapes/new'>
           {language.pages.landscapes.newLandscapeButton}
         </LinkLooksLikeButtonPrimary>
       </TitleAndActionContainer>

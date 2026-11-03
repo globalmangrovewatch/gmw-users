@@ -1,25 +1,27 @@
+'use client'
+
 import { Controller, useForm } from 'react-hook-form'
 import { FormLabel, TextField } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
-import axios from 'axios'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 
-import { ButtonContainer, ContentWrapper, RowFlexEnd } from '../../styles/containers'
-import { ButtonSubmit } from '../../styles/buttons'
-import { ErrorText, LinkLooksLikeButtonSecondary, PageTitle } from '../../styles/typography'
-import { FormLayout } from '../../styles/forms'
-import language from '../../language'
-import RequiredIndicator from '../../components/RequiredIndicator'
+import { ButtonContainer, ContentWrapper, RowFlexEnd } from '@/styles/containers'
+import { ButtonSubmit } from '@/styles/buttons'
+import { ErrorText, LinkLooksLikeButtonSecondary, PageTitle } from '@/styles/typography'
+import { FormLayout } from '@/styles/forms'
+import language from '@/language'
+import RequiredIndicator from '@/components/RequiredIndicator'
+import { authApi } from '@/lib/api'
 
-const validationSchema = yup.object({
-  email: yup.string().email().required(language.form.required)
+const validationSchema = z.object({
+  email: z.email({
+    error: (issue) => (issue.input ? 'email must be a valid email' : language.form.required)
+  })
 })
 
 const formDefaultValues = { email: '' }
-
-const passwordUrl = `${process.env.REACT_APP_AUTH_URL}/users/password`
 
 const pageLanguage = language.pages.forgotPassword
 
@@ -31,14 +33,17 @@ const ForgotPasswordForm = () => {
     control: formControl,
     handleSubmit: validateInputs,
     formState: { errors }
-  } = useForm({ resolver: yupResolver(validationSchema), defaultValues: formDefaultValues })
+  } = useForm({
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
+    defaultValues: formDefaultValues
+  })
 
   const handleSubmit = (formData) => {
     setIsSubmitting(true)
     setIsSubmitError(false)
 
-    axios
-      .post(passwordUrl, { user: formData })
+    authApi
+      .post('/users/password', { user: formData })
       .then(() => {
         setIsSubmitting(false)
         toast.success(pageLanguage.success)
@@ -66,7 +71,7 @@ const ForgotPasswordForm = () => {
         <ErrorText>{errors?.email?.message}</ErrorText>
         <RowFlexEnd>{isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}</RowFlexEnd>
         <ButtonContainer>
-          <LinkLooksLikeButtonSecondary to={-1}>
+          <LinkLooksLikeButtonSecondary href='/auth/login'>
             {language.buttons.cancel}
           </LinkLooksLikeButtonSecondary>
           <ButtonSubmit isSubmitting={isSubmitting} />

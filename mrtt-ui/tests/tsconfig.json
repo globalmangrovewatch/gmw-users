@@ -1,0 +1,11 @@
+{
+  // Adds the test-only `fixtures/*` alias; `paths` here replaces the root one, so `@/*` is repeated.
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["../src/*"],
+      "fixtures/*": ["./fixtures/*"]
+    }
+  },
+  "include": [".", "../src/types"]
+}

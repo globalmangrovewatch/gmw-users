@@ -14,10 +14,8 @@ import {
   Typography
 } from '@mui/material'
 import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
-
-const isDev = process.env.NODE_ENV === 'development'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 
 const TOPICS = [
   { label: 'General', value: 'general' },
@@ -27,18 +25,25 @@ const TOPICS = [
   { label: 'Global Mangrove Alliance', value: 'gma' }
 ]
 
-const schema = yup.object().shape({
-  name: yup.string().min(2).required('Name is required'),
-  organization: yup.string(),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  topic: yup
-    .string()
-    .oneOf(TOPICS.map((t) => t.value))
-    .required('Topic is required'),
-  message: yup.string().min(2).required('Message is required'),
-  privacyPolicy: isDev
-    ? yup.boolean().oneOf([true], 'You must accept the Privacy Policy')
-    : yup.boolean().optional()
+const TOPIC_VALUES = TOPICS.map((t) => t.value)
+
+const schema = z.object({
+  name: z
+    .string({ error: 'Name is required' })
+    .min(1, 'Name is required')
+    .min(2, 'Name must be at least 2 characters'),
+  organization: z.string().optional(),
+  email: z.email({ error: (issue) => (issue.input ? 'Invalid email' : 'Email is required') }),
+  topic: z.enum(TOPIC_VALUES, {
+    error: (issue) =>
+      issue.input === undefined
+        ? 'Topic is required'
+        : `topic must be one of the following values: ${TOPIC_VALUES.join(', ')}`
+  }),
+  message: z
+    .string({ error: 'Message is required' })
+    .min(2, 'message must be at least 2 characters'),
+  privacyPolicy: z.literal(true, 'You must accept the Privacy Notice')
 })
 
 const defaultValues = {
@@ -47,7 +52,7 @@ const defaultValues = {
   email: '',
   topic: '',
   message: '',
-  privacyPolicy: true
+  privacyPolicy: false
 }
 
 const ContactForm = ({ isOpen, setIsOpen }) => {
@@ -58,7 +63,7 @@ const ContactForm = ({ isOpen, setIsOpen }) => {
     reset,
     formState: { errors, isSubmitting }
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: zodResolver(schema, undefined, { raw: true }),
     defaultValues
   })
 
@@ -69,7 +74,6 @@ const ContactForm = ({ isOpen, setIsOpen }) => {
   }
 
   const onSubmit = async (values) => {
-    console.info(values)
     setStatus('loading')
     try {
       const res = await fetch('https://www.globalmangrovewatch.org/api/send', {
@@ -84,8 +88,7 @@ const ContactForm = ({ isOpen, setIsOpen }) => {
       }
       setStatus('success')
       reset()
-    } catch (error) {
-      console.error('Error submitting form:', error)
+    } catch {
       setStatus('error')
     }
   }
@@ -180,26 +183,24 @@ const ContactForm = ({ isOpen, setIsOpen }) => {
               )}
             />
 
-            {isDev && (
-              <Controller
-                name='privacyPolicy'
-                control={control}
-                render={({ field }) => (
-                  <FormControl error={!!errors.privacyPolicy}>
-                    <Box display='flex' alignItems='center' gap={1}>
-                      <Checkbox {...field} checked={field.value} />
-                      <FormLabel sx={{ margin: 0 }}>
-                        I agree with the{' '}
-                        <a href='/' target='_blank' rel='noopener noreferrer'>
-                          Privacy Policy
-                        </a>
-                      </FormLabel>
-                    </Box>
-                    <FormHelperText>{errors.privacyPolicy?.message}</FormHelperText>
-                  </FormControl>
-                )}
-              />
-            )}
+            <Controller
+              name='privacyPolicy'
+              control={control}
+              render={({ field }) => (
+                <FormControl error={!!errors.privacyPolicy}>
+                  <Box display='flex' alignItems='center' gap={1}>
+                    <Checkbox {...field} checked={field.value} />
+                    <FormLabel sx={{ margin: 0 }}>
+                      I agree with the{' '}
+                      <a href='/privacy-notice.pdf' target='_blank' rel='noopener noreferrer'>
+                        Privacy Notice
+                      </a>
+                    </FormLabel>
+                  </Box>
+                  <FormHelperText>{errors.privacyPolicy?.message}</FormHelperText>
+                </FormControl>
+              )}
+            />
 
             {status === 'success' && (
               <Typography color='success.main'>Email sent successfully!</Typography>

@@ -1,24 +1,25 @@
+'use client'
+
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import PropTypes from 'prop-types'
 
 import { Alert, Button } from '@mui/material'
-import { useTheme } from '@mui/styles'
+import { useTheme } from '@mui/material/styles'
 import { useMediaQuery } from '@mui/system'
 
-import { RowFlexEnd } from 'styles/containers'
-import { ErrorText, Link as ExternalLink } from 'styles/typography'
-import { useAuth } from 'hooks/useAuth'
-import { useSignInMutation } from 'hooks/sign-in'
-import { syncSession } from 'hooks/sso'
-import language from 'language'
-import LoadingIndicator from 'components/LoadingIndicator'
+import { RowFlexEnd } from '@/styles/containers'
+import { ErrorText, Link as ExternalLink } from '@/styles/typography'
+import { useAuth } from '@/hooks/useAuth'
+import { useSignInMutation } from '@/hooks/sign-in'
+import { syncSession } from '@/hooks/sso'
+import language from '@/language'
+import LoadingIndicator from '@/components/LoadingIndicator'
 import {
   Hero,
   HeroContent,
@@ -33,24 +34,24 @@ import {
   LogoContainer,
   Logo,
   LandingHeaderContainer
-} from 'styles/v2/containers/landing'
-import { Paragraph, StyledLink } from 'styles/v2/ui/typography'
-import { Divider } from 'styles/v2/ui/divider'
-import { FormInput } from 'components/Form/FormInput'
+} from '@/styles/v2/containers/landing'
+import { Paragraph, StyledLink } from '@/styles/v2/ui/typography'
+import { Divider } from '@/styles/v2/ui/divider'
+import { FormInput } from '@/components/Form/FormInput'
 
-import LandingHeaderDesktop from 'components/landing/header-desktop'
-import LandingHeaderMobile from 'components/landing/header-mobile'
+import LandingHeaderDesktop from '@/components/landing/header-desktop'
+import LandingHeaderMobile from '@/components/landing/header-mobile'
 
-const validationSchema = yup.object({
-  email: yup.string().required('Email required'),
-  password: yup.string().required('Password required')
+const validationSchema = z.object({
+  email: z.string({ error: 'Email required' }).min(1, 'Email required'),
+  password: z.string({ error: 'Password required' }).min(1, 'Password required')
 })
 
 const formDefaultValues = { email: '', password: '' }
 
 const pageLanguage = language.pages.login
 
-const LoginForm = ({ isUserNew }) => {
+const LoginForm = ({ isUserNew = false }) => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const signInMutation = useSignInMutation()
 
@@ -59,18 +60,18 @@ const LoginForm = ({ isUserNew }) => {
     handleSubmit: validateInputs,
     formState: { errors }
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: zodResolver(validationSchema, undefined, { raw: true }),
     defaultValues: formDefaultValues
   })
 
   const { isChecking, isLoggedIn, login } = useAuth()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   useEffect(() => {
     if (!isChecking && isLoggedIn) {
-      navigate('/sites', { replace: true })
+      router.replace('/sites')
     }
-  }, [isChecking, isLoggedIn, navigate])
+  }, [isChecking, isLoggedIn, router])
 
   const handleSubmit = (formData) => {
     setIsSubmitError(false)
@@ -85,11 +86,11 @@ const LoginForm = ({ isUserNew }) => {
         }
         await syncSession(data.token)
         login(data.token, user)
-        navigate('/sites')
+        router.push('/sites')
       },
       onError: (error) => {
         setIsSubmitError(true)
-        toast.error(error?.response?.data?.error ?? 'Login failed')
+        toast.error(error?.body?.error ?? 'Login failed')
       }
     })
   }
@@ -103,9 +104,9 @@ const LoginForm = ({ isUserNew }) => {
     <Base>
       <LandingHeaderContainer>
         <LogoContainer draggable='false'>
-          <Link to='https://www.globalmangrovewatch.org/' target='_blank' rel='noreferrer'>
+          <a href='https://www.globalmangrovewatch.org/' target='_blank' rel='noreferrer'>
             <Logo src='/images/landing/logo.webp' />
-          </Link>
+          </a>
         </LogoContainer>
         {!isMobile && <LandingHeaderDesktop />}
         {isMobile && <LandingHeaderMobile />}
@@ -118,7 +119,7 @@ const LoginForm = ({ isUserNew }) => {
             secure location to hold information across restoration planning, intervention and
             monitoring.{' '}
             <ExternalLink
-              to='https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
+              href='https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
               rel='noreferrer'
               target='_blank'
               style={{ color: 'white' }}>
@@ -159,13 +160,13 @@ const LoginForm = ({ isUserNew }) => {
             <Button type='submit'>Log in</Button>
           </Form>
           <FormFooter>
-            <StyledLink to='/auth/password/forgot-password'>
+            <StyledLink href='/auth/password/forgot-password'>
               {pageLanguage.forgotPassowrd}
             </StyledLink>
             <Divider />
             <Paragraph>
               Don&apos;t have an account?&nbsp;
-              <StyledLink to='/auth/signup'>{pageLanguage.signUp}</StyledLink>
+              <StyledLink href='/auth/signup'>{pageLanguage.signUp}</StyledLink>
             </Paragraph>
           </FormFooter>
         </MainContent>
@@ -176,10 +177,6 @@ const LoginForm = ({ isUserNew }) => {
 
 LoginForm.propTypes = {
   isUserNew: PropTypes.bool
-}
-
-LoginForm.defaultValues = {
-  isUserNew: false
 }
 
 export default LoginForm

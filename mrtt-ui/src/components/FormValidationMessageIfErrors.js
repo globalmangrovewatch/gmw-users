@@ -1,7 +1,7 @@
 import { Alert, AlertTitle } from '@mui/material'
 import PropTypes from 'prop-types'
 
-import language from '../language'
+import language from '@/language'
 
 const FormValidationMessageIfErrors = ({ formErrors = {} }) => {
   const formHasErrors = !!Object.keys(formErrors).length

@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect } from 'react'
-import { postSilentCallbackResult, SSO_CODE_PARAM } from 'hooks/sso'
+import { postSilentCallbackResult, SSO_CODE_PARAM } from '@/hooks/sso'
 
 const SsoSilentCallback = () => {
   useEffect(() => {

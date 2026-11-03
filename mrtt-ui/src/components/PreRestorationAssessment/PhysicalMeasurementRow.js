@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Delete } from '@mui/icons-material'
 
-import ConfirmPrompt from '../ConfirmPrompt/ConfirmPrompt'
-import language from '../../language'
+import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
+import language from '@/language'
 
 import {
   HorizontalTabularBox,
@@ -12,7 +12,7 @@ import {
   TabularInputSection,
   TabularLabel,
   VerticalTabularBox
-} from '../../styles/forms'
+} from '@/styles/forms'
 
 const PhysicalMeasurementRow = ({ label, value, index, deleteItem, updateItem }) => {
   const [initialValue, setInitialValue] = useState('')
