@@ -4,7 +4,7 @@ import theme from './theme'
 const themeMui = createTheme({
   typography: {
     fontFamily: theme.typography.fontStack.join(','),
-    htmlFontSize: 10,
+    htmlFontSize: 16,
     'text-sm': {
       fontSize: '14px',
       fontStyle: 'normal',
@@ -35,7 +35,7 @@ const themeMui = createTheme({
       beige: '#EFEEEE'
     }
   },
-  spacing: (factor) => `${0.5 * factor}rem`,
+  spacing: (factor) => `${5 * factor}px`,
   breakpoints: {
     values: {
       xs: 0,
@@ -56,7 +56,7 @@ const themeMui = createTheme({
         },
         text: {
           '&.MuiTypography-h5': {
-            fontSize: '1rem'
+            fontSize: '10px'
           }
         }
       }

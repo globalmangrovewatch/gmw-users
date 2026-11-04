@@ -13,8 +13,8 @@ import themeMui from '@/styles/themeMui'
 const StyledFooter = styled('footer')`
   display: flex;
   justify-content: space-around;
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
+  padding-top: 2px;
+  padding-bottom: 2px;
   border-color: ${theme.color.primary};
   border-style: solid;
   border-width: 1px 0 0 0;
@@ -45,7 +45,7 @@ const LinkContainer = styled(Link)`
   color: ${(props) => (props.active === 'true' ? theme.color.primary : theme.color.text)};
   @media (min-width: ${theme.layout.mediaQueryDesktop}) {
     flex-direction: row;
-    gap: 1rem;
+    gap: 10px;
     padding: ${themeMui.spacing(1)} ${themeMui.spacing(2)};
   }
   ${theme.hoverState(css`

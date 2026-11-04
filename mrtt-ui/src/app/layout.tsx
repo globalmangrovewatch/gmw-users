@@ -1,4 +1,4 @@
-import '@/index.css'
+import '@/styles/globals.css'
 
 import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
@@ -18,6 +18,9 @@ export const viewport: Viewport = {
   themeColor: '#009b93'
 }
 
+const GOOGLE_FONTS_URL =
+  'https://fonts.googleapis.com/css2?family=Open+Sans:wdth,wght@75..100,300..800&family=Source+Code+Pro:wght@200..900&display=swap'
+
 const transifexSettings = {
   api_key: env.NEXT_PUBLIC_TRANSIFEX_API_KEY,
   detectlang: true,
@@ -29,6 +32,12 @@ const transifexSettings = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en'>
+      <head>
+        <link rel='preconnect' href='https://fonts.googleapis.com' />
+        <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='' />
+        {/* Literal family names, not next/font: emotion and MUI reference 'Open Sans' by name. */}
+        <link rel='stylesheet' href={GOOGLE_FONTS_URL} />
+      </head>
       <body>
         {env.NEXT_PUBLIC_TRANSIFEX_API_KEY && (
           <>
