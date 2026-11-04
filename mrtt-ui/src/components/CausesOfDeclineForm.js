@@ -314,7 +314,7 @@ function CausesOfDeclineForm() {
                               marginBottom: '1.5em'
                             }}>
                             {causesOfDecline.levelsOfDegredation.options.map((item, index) => (
-                              <MenuItem key={index} value={item} sx={{ fontSize: '1.8rem' }}>
+                              <MenuItem key={index} value={item} sx={{ fontSize: '18px' }}>
                                 {item}
                               </MenuItem>
                             ))}

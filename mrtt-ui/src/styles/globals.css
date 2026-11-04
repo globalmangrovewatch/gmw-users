@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wdth,wght@75..100,300..800&family=Source+Code+Pro:wght@200..900&display=swap');
+
+/*
+ * Tailwind 4 runs alongside emotion/MUI until GMW-1125.
+ * Preflight is left out on purpose: it would restyle headings, lists and buttons on the
+ * emotion screens. Emotion styles are unlayered, so they always win over these layers.
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import 'tw-animate-css';
+
+/* `class` strategy: only `form-input` etc. get styled, native and MUI inputs are left alone. */
+@plugin '@tailwindcss/forms' {
+  strategy: 'class';
+}
+
+@theme {
+  /* Brand scale aligned with mangrove-atlas. brand-800 = MUI primary. */
+  --color-brand-100: #f3f5f5;
+  --color-brand-400: #00c5bd;
+  --color-brand-600: #00afa7;
+  --color-brand-800: #00857f;
+  --color-brand-900: #003c39;
+  --color-brand-hover: #00c6bd;
+  --color-secondary: #02b1a8;
+
+  --color-text: #000000d9;
+  --color-grey-400: #939393;
+  --color-grey-dark: #2e3333;
+  --color-green-light: #afc4c3;
+  --color-row-even: #e6e6e6;
+  --color-row-odd: #f2f2f2;
+  --color-beige: #efeeee;
+  --color-page: #fafafa;
+  --color-danger: #b20000;
+  --color-error: #d00000;
+
+  --font-sans: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Source Code Pro', Menlo, Monaco, Consolas, 'Courier New', monospace;
+
+  /* px values from styles/theme.js and themeMui.js, at the 16px root. */
+  --text-2xs: 0.625rem; /* 10px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-sm--line-height: 1.3125rem; /* 21px */
+  --text-md: 0.9375rem; /* 15px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5625rem; /* 25px */
+  --text-3xl: 1.875rem; /* 30px */
+
+  /* Layout: h-header, h-footer, w-nav, h-section-nav, max-w-content, desktop: */
+  --spacing-header: 70px;
+  --spacing-footer: 60px;
+  --spacing-nav: 180px;
+  --spacing-section-nav: 56.5px;
+  --container-content: 960px;
+  --breakpoint-desktop: 600px;
+
+  /*
+   * Spacing stays at Tailwind's 4px step. themeMui.spacing(n) is 5n px, so MUI spacing n
+   * maps to Tailwind n × 1.25 (spacing(2) = 10px = p-2.5). theme.hoverState maps to `hover:`.
+   */
+}
+
+@layer base {
+  html,
+  body,
+  div,
+  span,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  pre,
+  a,
+  code,
+  img,
+  small,
+  strong,
+  sub,
+  sup,
+  ul,
+  ol,
+  li,
+  hr {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+  }
+
+  :root {
+    box-sizing: border-box;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
+
+  body {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-family: var(--font-sans);
+  }
+
+  body,
+  input,
+  button,
+  textarea {
+    color: var(--color-text);
+  }
+
+  code {
+    font-family: var(--font-mono);
+  }
+
+  /* The bit of Preflight the ui/* components need, scoped to them only. */
+  :is(button, input, select, textarea)[data-slot] {
+    font: inherit;
+    letter-spacing: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-800);
+    outline-offset: 2px;
+  }
+}

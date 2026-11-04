@@ -7,7 +7,7 @@ export const AboutParagraph = styled('p')`
   letter-spacing: 1px;
   margin: 0;
   font-size: ${theme.typography.smallFontSize};
-  padding-bottom: 2rem;
+  padding-bottom: 20px;
 `
 
 export const ExternalLink = styled('a')`
@@ -25,10 +25,10 @@ export const List = styled('ol')`
   letter-spacing: 1px;
   margin: 0;
   font-size: ${theme.typography.smallFontSize};
-  padding: 1.5rem 2rem;
+  padding: 15px 20px;
 `
 export const ListItem = styled('li')`
-  padding-bottom: 1rem;
+  padding-bottom: 10px;
 `
 
 export const Highlight = styled('span')`

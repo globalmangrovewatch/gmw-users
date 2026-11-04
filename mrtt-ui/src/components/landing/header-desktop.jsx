@@ -26,8 +26,8 @@ const LandingHeaderDesktop = () => {
         spacing={4}
         sx={{
           position: 'absolute',
-          top: '1rem',
-          right: '1rem',
+          top: '10px',
+          right: '10px',
           alignItems: 'center',
           backgroundColor: 'transparent',
           zIndex: 10,

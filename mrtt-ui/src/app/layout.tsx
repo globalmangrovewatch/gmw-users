@@ -1,4 +1,4 @@
-import '@/index.css'
+import '@/styles/globals.css'
 
 import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
