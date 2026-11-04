@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wdth,wght@75..100,300..800&family=Source+Code+Pro:wght@200..900&display=swap');
+/* Open Sans / Source Code Pro load from a <link> in app/layout.tsx: an @import url() here ends
+ * up after Tailwind's @layer output in the built chunk and the browser drops it. */
 
 /*
  * Tailwind 4 runs alongside emotion/MUI until GMW-1125.
