@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowBack } from '@mui/icons-material'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 import { useRouter, useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'

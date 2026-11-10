@@ -4,7 +4,6 @@ import { ThemeProvider } from '@mui/material/styles'
 import { QueryClientProvider } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 
-import { CustomToastContainer } from '@/components/CustomToastContainer'
 import { Toaster } from '@/components/ui/toast'
 import { AuthProvider } from '@/hooks/useAuth'
 import EmotionRegistry from '@/lib/EmotionRegistry'
@@ -19,8 +18,8 @@ export default function Providers({ children }: { children: ReactNode }) {
       <ThemeProvider theme={themeMui}>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            <CustomToastContainer />
-            <Toaster position='top-right' />
+            {/* Same placement and timing as the react-toastify container it replaced. */}
+            <Toaster position='top-center' duration={5000} closeButton />
             {children}
           </AuthProvider>
         </QueryClientProvider>

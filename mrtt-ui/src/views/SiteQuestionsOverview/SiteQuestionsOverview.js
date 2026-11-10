@@ -3,7 +3,7 @@
 import { Settings as SettingsIcon } from '@mui/icons-material'
 import { Menu, MenuItem, Stack } from '@mui/material'
 import { styled } from '@mui/system'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 import { useParams } from 'next/navigation'
 import NextLink from 'next/link'
 import { useQuery } from '@tanstack/react-query'

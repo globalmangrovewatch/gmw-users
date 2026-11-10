@@ -5,7 +5,7 @@ import { mapDataForApi } from '@/library/mapDataForApi'
 import { formatApiAnswersForFormByKey } from '@/library/formatApiAnswersForForm'
 import { isSectionKey, questionMapping } from '@/data/questionMapping'
 import { FORM_NAMES_DICTIONARY_INTERVENTIONS, type SectionTarget } from '@/constants/sectionNames'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 
 import { UseFormReturn, Path } from 'react-hook-form'
 import { api } from '@/lib/api'

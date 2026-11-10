@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'

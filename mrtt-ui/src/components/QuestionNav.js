@@ -1,7 +1,7 @@
 import { ArrowBack, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material'
 import { css, styled } from '@mui/system'
 import { Stack } from '@mui/material'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 import { useParams, useRouter, usePathname } from 'next/navigation'
 import useMonitoringFormId from '@/library/useMonitoringFormId'
 import { useQuery } from '@tanstack/react-query'

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import useMonitoringFormId from '@/library/useMonitoringFormId'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { Box, MenuItem, TextField } from '@mui/material'
 

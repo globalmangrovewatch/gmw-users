@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation'
 import useMonitoringFormId from '@/library/useMonitoringFormId'
 
 import { useQuery } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 
 import { Controller, useFormContext, useFieldArray } from 'react-hook-form'
 import { Box, Checkbox, FormControlLabel, ListItem, MenuItem, TextField } from '@mui/material'

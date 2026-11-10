@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { Menu, MenuItem, Stack } from '@mui/material'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
