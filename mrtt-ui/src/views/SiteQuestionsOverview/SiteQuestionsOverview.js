@@ -85,7 +85,7 @@ const SiteOverview = () => {
       <ContentWrapper>
         <TitleAndActionContainer>
           <Stack>
-            <ItemTitle as='h2'>{site?.site_name}</ItemTitle>
+            <ItemTitle render={<h2 />}>{site?.site_name}</ItemTitle>
             <ItemSubTitle>{landscape?.landscape_name}</ItemSubTitle>
           </Stack>
           <ButtonContainer>

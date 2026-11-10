@@ -1,3 +1,5 @@
+import { mergeProps } from '@base-ui/react/merge-props'
+import { useRender } from '@base-ui/react/use-render'
 import NextLink from 'next/link'
 import type { ComponentProps } from 'react'
 
@@ -5,8 +7,8 @@ import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/cn'
 
 /*
- * Tailwind versions of the exports in src/styles/typography.js, same names, so consumers can
- * switch the import path when their screen moves off emotion (GMW-1122..1124).
+ * Tailwind versions of the exports in src/styles/typography.js, which now re-exports these, so
+ * unconverted screens get them too until they import from here (GMW-1123, GMW-1124).
  * themeMui.spacing(1) = 5px → my-1.25; theme.typography.smallFontSize 15px → text-md;
  * xlargeFontSize 30px → text-3xl; theme.color.slub #333333D9.
  */
@@ -53,8 +55,13 @@ function TextSmall({ className, ...props }: ComponentProps<'div'>) {
   return <div className={cn('text-md', className)} {...props} />
 }
 
-function ItemTitle({ className, ...props }: ComponentProps<'h3'>) {
-  return <h3 className={cn('m-0 text-3xl font-extralight', className)} {...props} />
+/** Renders an <h3>; pass `render={<h2 />}` to use another heading level. */
+function ItemTitle({ className, render, ...props }: useRender.ComponentProps<'h3'>) {
+  return useRender({
+    defaultTagName: 'h3',
+    render,
+    props: mergeProps<'h3'>({ className: cn('m-0 text-3xl font-extralight', className) }, props)
+  })
 }
 
 function PageTitle({ className, ...props }: ComponentProps<'h1'>) {
