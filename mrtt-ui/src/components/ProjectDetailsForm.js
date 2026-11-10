@@ -25,7 +25,7 @@ import QuestionNav from './QuestionNav'
 import RequiredIndicator from './RequiredIndicator'
 import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '@/library/useSiteInfo'
-import DatePickerUtcMui from './DatePickerUtcMui'
+import DatePickerUtc from '@/components/DatePickerUtc'
 
 // mapbox-gl touches `window` on import, so the map only ever loads in the browser.
 const ProjectAreaMap = dynamic(() => import('./ProjectAreaMap'), { ssr: false })
@@ -110,7 +110,7 @@ function ProjectDetailsForm() {
           <Controller
             name='projectStartDate'
             control={form.control}
-            render={({ field }) => <DatePickerUtcMui id='start-date' label='date' field={field} />}
+            render={({ field }) => <DatePickerUtc id='start-date' label='date' field={field} />}
           />
           <ErrorText>{errors?.projectStartDate?.message}</ErrorText>
         </FormQuestionDiv>
@@ -150,7 +150,7 @@ function ProjectDetailsForm() {
               name='projectEndDate'
               control={form.control}
               render={({ field }) => (
-                <DatePickerUtcMui
+                <DatePickerUtc
                   id='end-date'
                   label='date'
                   field={field}

@@ -31,7 +31,7 @@ import { findRegistationDataItem } from '@/library/findDataItems'
 import SocioeconomicOutcomesRow from './SocioeconomicOutcomesRow'
 import ButtonDeleteForm from '@/components/ButtonDeleteForm'
 import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
-import DatePickerUtcMui from '@/components/DatePickerUtcMui'
+import DatePickerUtc from '@/components/DatePickerUtc'
 import RequiredIndicator from '@/components/RequiredIndicator'
 import { useLoadErrorToast } from '@/hooks/useLoadErrorToast'
 import { siteQueries, useDeleteMonitor } from '@/queries/sites'
@@ -191,7 +191,7 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
             name='dateOfOutcomesAssessment'
             control={control}
             render={({ field }) => (
-              <DatePickerUtcMui id='dateOfOutcomesAssessment' label='date' field={field} />
+              <DatePickerUtc id='dateOfOutcomesAssessment' label='date' field={field} />
             )}
           />
           <ErrorText>{errors.dateOfOutcomesAssessment?.message}</ErrorText>

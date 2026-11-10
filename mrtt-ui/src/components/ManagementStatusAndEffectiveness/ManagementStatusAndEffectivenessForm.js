@@ -18,7 +18,7 @@ import language from '@/language'
 import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
 import ButtonDeleteForm from '@/components/ButtonDeleteForm'
 import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
-import DatePickerUtcMui from '@/components/DatePickerUtcMui'
+import DatePickerUtc from '@/components/DatePickerUtc'
 import RequiredIndicator from '@/components/RequiredIndicator'
 
 import { useInitializeQuestionMappedFormMonitors } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
@@ -95,7 +95,7 @@ const ManagementStatusAndEffectivenessForm = () => {
             name='dateOfAssessment'
             control={control}
             render={({ field }) => (
-              <DatePickerUtcMui id='dateOfAssessment' label='date' field={field} />
+              <DatePickerUtc id='dateOfAssessment' label='date' field={field} />
             )}
           />
           <ErrorText>{errors.dateOfAssessment?.message}</ErrorText>

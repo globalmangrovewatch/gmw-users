@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -37,7 +37,7 @@ import {
 } from '@/styles/v2/containers/landing'
 import { Paragraph, StyledLink } from '@/styles/v2/ui/typography'
 import { Divider } from '@/styles/v2/ui/divider'
-import { FormInput } from '@/components/Form/FormInput'
+import { FormInput } from '@/components/form/FormInput'
 
 import LandingHeaderDesktop from '@/components/landing/header-desktop'
 import LandingHeaderMobile from '@/components/landing/header-mobile'
@@ -55,14 +55,11 @@ const LoginForm = ({ isUserNew = false }) => {
   const [isSubmitError, setIsSubmitError] = useState(false)
   const signInMutation = useSignInMutation()
 
-  const {
-    control: formControl,
-    handleSubmit: validateInputs,
-    formState: { errors }
-  } = useForm({
+  const form = useForm({
     resolver: zodResolver(validationSchema, undefined, { raw: true }),
     defaultValues: formDefaultValues
   })
+  const { handleSubmit: validateInputs } = form
 
   const { isChecking, isLoggedIn, login } = useAuth()
   const router = useRouter()
@@ -136,29 +133,29 @@ const LoginForm = ({ isUserNew = false }) => {
               {language.success.signup}
             </Alert>
           ) : null}
-          <Form onSubmit={validateInputs(handleSubmit)}>
-            <FormInput
-              type='email'
-              name='email'
-              label={pageLanguage.email}
-              placeholder='Enter your email'
-              control={formControl}
-              error={errors?.email?.message}
-            />
-            <FormInput
-              type='password'
-              name='password'
-              label={pageLanguage.password}
-              placeholder='Enter your password'
-              control={formControl}
-              error={errors?.password?.message}
-            />
+          <FormProvider {...form}>
+            <Form onSubmit={validateInputs(handleSubmit)}>
+              <FormInput
+                type='email'
+                name='email'
+                label={pageLanguage.email}
+                placeholder='Enter your email'
+                autoComplete='email'
+              />
+              <FormInput
+                type='password'
+                name='password'
+                label={pageLanguage.password}
+                placeholder='Enter your password'
+                autoComplete='current-password'
+              />
 
-            <RowFlexEnd>
-              {isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}
-            </RowFlexEnd>
-            <Button type='submit'>Log in</Button>
-          </Form>
+              <RowFlexEnd>
+                {isSubmitError && <ErrorText>{language.error.submit}</ErrorText>}
+              </RowFlexEnd>
+              <Button type='submit'>Log in</Button>
+            </Form>
+          </FormProvider>
           <FormFooter>
             <StyledLink href='/auth/password/forgot-password'>
               {pageLanguage.forgotPassowrd}
