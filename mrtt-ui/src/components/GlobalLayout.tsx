@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from 'react'
 
-import Header from '@/components/Header/Header'
+import Header from '@/components/header'
 import MobileFooter from '@/components/MobileFooter/MobileFooter'
 import { useAuth } from '@/hooks/useAuth'
 import { cn } from '@/lib/cn'

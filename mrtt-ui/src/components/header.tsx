@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from 'react'
 
-import HeaderMenu from '@/components/Header/HeaderMenu'
+import HeaderMenu from '@/components/header-menu'
 import { cn } from '@/lib/cn'
 
 type HeaderProps = Omit<ComponentProps<'header'>, 'children'> & {
