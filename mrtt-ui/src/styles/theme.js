@@ -21,7 +21,8 @@ const form = {
   requiredIndicatorColor: `${color.red}`
 }
 const typography = {
-  fontStack: ['Open Sans', 'sans-serif'],
+  // --font-open-sans is set by next/font on <html> (app/layout.tsx).
+  fontStack: ['var(--font-open-sans)', "'Open Sans'", 'sans-serif'],
   xsmallFontSize: '10px',
   smallFontSize: '15px',
   fontSize: '20px',

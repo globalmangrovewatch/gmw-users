@@ -1,6 +1,7 @@
 import '@/styles/globals.css'
 
 import type { Metadata, Viewport } from 'next'
+import { Open_Sans, Source_Code_Pro } from 'next/font/google'
 import Script from 'next/script'
 import type { ReactNode } from 'react'
 
@@ -18,8 +19,21 @@ export const viewport: Viewport = {
   themeColor: '#009b93'
 }
 
-const GOOGLE_FONTS_URL =
-  'https://fonts.googleapis.com/css2?family=Open+Sans:wdth,wght@75..100,300..800&family=Source+Code+Pro:wght@200..900&display=swap'
+// Self-hosted at build time. The families are exposed as CSS variables, which
+// styles/theme.js (emotion + MUI) and the Tailwind @theme in globals.css read.
+// `subsets` only picks what gets preloaded; the other subsets still load on demand.
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  axes: ['wdth'],
+  variable: '--font-open-sans',
+  display: 'swap'
+})
+
+const sourceCodePro = Source_Code_Pro({
+  subsets: ['latin'],
+  variable: '--font-source-code-pro',
+  display: 'swap'
+})
 
 const transifexSettings = {
   api_key: env.NEXT_PUBLIC_TRANSIFEX_API_KEY,
@@ -31,13 +45,7 @@ const transifexSettings = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang='en'>
-      <head>
-        <link rel='preconnect' href='https://fonts.googleapis.com' />
-        <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='' />
-        {/* Literal family names, not next/font: emotion and MUI reference 'Open Sans' by name. */}
-        <link rel='stylesheet' href={GOOGLE_FONTS_URL} />
-      </head>
+    <html lang='en' className={`${openSans.variable} ${sourceCodePro.variable}`}>
       <body>
         {env.NEXT_PUBLIC_TRANSIFEX_API_KEY && (
           <>

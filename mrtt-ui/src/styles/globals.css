@@ -1,6 +1,3 @@
-/* Open Sans / Source Code Pro load from a <link> in app/layout.tsx: an @import url() here ends
- * up after Tailwind's @layer output in the built chunk and the browser drops it. */
-
 /*
  * Tailwind 4 runs alongside emotion/MUI until GMW-1125.
  * Preflight is left out on purpose: it would restyle headings, lists and buttons on the
@@ -37,9 +34,6 @@
   --color-danger: #b20000;
   --color-error: #d00000;
 
-  --font-sans: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'Source Code Pro', Menlo, Monaco, Consolas, 'Courier New', monospace;
-
   /* px values from styles/theme.js and themeMui.js, at the 16px root. */
   --text-2xs: 0.625rem; /* 10px */
   --text-sm: 0.875rem; /* 14px */
@@ -61,6 +55,17 @@
    * Spacing stays at Tailwind's 4px step. themeMui.spacing(n) is 5n px, so MUI spacing n
    * maps to Tailwind n × 1.25 (spacing(2) = 10px = p-2.5). theme.hoverState maps to `hover:`.
    */
+}
+
+/*
+ * next/font sets --font-open-sans / --font-source-code-pro on <html> (app/layout.tsx).
+ * `inline` makes font-sans / font-mono resolve those variables where they are used.
+ */
+@theme inline {
+  --font-sans: var(--font-open-sans), 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    var(--font-source-code-pro), 'Source Code Pro', Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
 @layer base {
