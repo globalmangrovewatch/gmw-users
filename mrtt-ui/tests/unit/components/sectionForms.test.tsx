@@ -7,6 +7,7 @@ import { FormProvider, useForm, useFormContext, type DefaultValues } from 'react
 import CausesOfDeclineForm from '@/components/CausesOfDeclineForm'
 import PreRestorationAssessmentForm from '@/components/PreRestorationAssessment/PreRestorationAssessmentForm'
 import ProjectDetailsForm from '@/components/ProjectDetailsForm'
+import SiteInterventionsForm from '@/components/SiteInterventions/SiteInterventionsForm'
 import RestorationAimsForm from '@/components/RestorationAimsForm/RestorationAimsForm'
 import {
   causesOfDecline,
@@ -229,6 +230,87 @@ describe('section forms', () => {
         expect(screen.queryByLabelText('Tidal range (cm)')).not.toBeInTheDocument()
       )
       expect(formValues().physicalMeasurementsTaken).toHaveLength(7)
+    })
+  })
+  describe('SiteInterventionsForm', () => {
+    const species = organizeMangroveSpeciesList([{ properties: { country: 'Indonesia' } }])[0]!
+
+    it('loads saved stakeholders, species used and associated species', async () => {
+      answers = [
+        { question_id: '1.2', answer_value: [{ properties: { country: 'Indonesia' } }] },
+        {
+          question_id: '6.1',
+          answer_value: [
+            { stakeholder: 'Local community representatives', stakeholderType: 'Paid' }
+          ]
+        },
+        { question_id: '6.2', answer_value: { selectedValues: ['Planting'] } },
+        {
+          question_id: '6.2b',
+          answer_value: [
+            {
+              type: species,
+              seed: { checked: true, source: ['From a nursery'], count: 40 },
+              propagule: { checked: false, source: [], count: 0 }
+            }
+          ]
+        },
+        {
+          question_id: '6.2c',
+          answer_value: [
+            { type: 'Nipa palm', count: 12, source: 'Wild', purpose: { purpose: 'Source of food' } }
+          ]
+        }
+      ]
+      renderSection(<SiteInterventionsForm />)
+
+      expect(
+        await screen.findByRole('checkbox', { name: 'Local community representatives' })
+      ).toBeChecked()
+      expect(screen.getByRole('checkbox', { name: species })).toBeChecked()
+      expect(screen.getByRole('checkbox', { name: 'Seedling' })).toBeChecked()
+      expect(screen.getByRole('button', { name: 'Remove From a nursery' })).toBeInTheDocument()
+      expect(screen.getByLabelText('Seedling count')).toHaveValue('40')
+      expect(screen.getByText('Nipa palm')).toBeInTheDocument()
+      expect(screen.getByLabelText('Count')).toHaveValue('12')
+    })
+
+    it('adds a species used and an associated species row', async () => {
+      const user = userEvent.setup()
+      answers = [
+        { question_id: '1.2', answer_value: [{ properties: { country: 'Indonesia' } }] },
+        { question_id: '6.2', answer_value: { selectedValues: ['Planting'] } }
+      ]
+      renderSection(<SiteInterventionsForm />)
+
+      await user.click(await screen.findByRole('checkbox', { name: species }))
+      await user.click(screen.getByRole('checkbox', { name: 'Propagule' }))
+      expect(formValues().mangroveSpeciesUsed).toEqual([
+        {
+          type: species,
+          seed: { checked: false, source: [], count: 0 },
+          propagule: { checked: true, source: [], count: 0 }
+        }
+      ])
+
+      await user.click(screen.getByRole('button', { name: '+ Add measurement row' }))
+      await user.type(screen.getByLabelText('Species name'), 'Nipa palm')
+      await user.type(screen.getByLabelText('Number'), '3')
+      await user.click(screen.getByRole('combobox', { name: 'Source' }))
+      await user.click(await screen.findByRole('option', { name: 'Wild' }))
+      await user.click(screen.getByRole('combobox', { name: 'Purpose' }))
+      await user.click(await screen.findByRole('option', { name: 'Coastal defence' }))
+      await user.click(screen.getByRole('button', { name: language.buttons.save }))
+
+      expect(formValues().mangroveAssociatedSpecies).toEqual([
+        {
+          type: 'Nipa palm',
+          count: '3',
+          source: 'Wild',
+          purpose: { purpose: 'Coastal defence', other: '' }
+        }
+      ])
+      expect(await screen.findByText('Nipa palm')).toBeInTheDocument()
     })
   })
 })
