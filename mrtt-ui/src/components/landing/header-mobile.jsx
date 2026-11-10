@@ -66,7 +66,7 @@ const LandingHeaderMobile = () => {
             </ContactUsButton>
 
             <LanguagePickerStyledContainer>
-              <LanguagePicker theme='light' />
+              <LanguagePicker />
             </LanguagePickerStyledContainer>
             <a
               href='https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
