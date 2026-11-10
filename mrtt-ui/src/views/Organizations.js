@@ -56,7 +56,7 @@ function Organizations() {
       {yourOrganizations.map(({ id: organizationId, organization_name, role }) => {
         const canManageUsers = role === USER_ROLES.orgAdmin
         return (
-          <Card as='li' key={organizationId}>
+          <Card render={<li />} key={organizationId}>
             <RowSpaceBetween>
               {organization_name}
               <ButtonContainer>

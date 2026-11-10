@@ -186,9 +186,7 @@ const SiteBackgroundForm = () => {
               </TextField>
             )}
           />
-          <ErrorText variant='subtitle' sx={{ color: 'red' }}>
-            {form.errors?.areStakeholdersInvolved?.message}
-          </ErrorText>
+          <ErrorText>{form.errors?.areStakeholdersInvolved?.message}</ErrorText>
         </FormQuestionDiv>
         {/* Government Arrangement */}
         <FormQuestionDiv>
