@@ -7,7 +7,7 @@ import { isSectionKey, questionMapping } from '@/data/questionMapping'
 import { FORM_NAMES_DICTIONARY_INTERVENTIONS, type SectionTarget } from '@/constants/sectionNames'
 import { toast } from '@/components/ui/toast'
 
-import { UseFormReturn, Path } from 'react-hook-form'
+import type { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
 import { api } from '@/lib/api'
 import { siteKeys, siteQueries } from '@/queries/sites'
 import type { RegistrationFormValues } from '@/forms/schemas'
@@ -39,10 +39,10 @@ const selectMonitor = (monitor: MonitoringForm) => ({
   formattedData: formatAnswers(monitor.answers)
 })
 
-type Params<TData> = {
+type Params<TData, TFormValues extends FieldValues = FieldValues> = {
   key: string
   siteId?: string
-  form: UseFormReturn
+  form: UseFormReturn<TFormValues>
   successCallback?: (
     data: TData,
     sectionData: Record<string, unknown>,
@@ -52,11 +52,15 @@ type Params<TData> = {
 }
 
 // Copies the section's answers into the form each time they are (re)loaded.
-function usePopulateForm<TData>(
+function usePopulateForm<TData, TFormValues extends FieldValues>(
   formattedData: FormattedData | undefined,
   callbackData: TData | undefined,
   dataUpdatedAt: number,
-  { key, form, successCallback }: Pick<Params<TData>, 'key' | 'form' | 'successCallback'>
+  {
+    key,
+    form,
+    successCallback
+  }: Pick<Params<TData, TFormValues>, 'key' | 'form' | 'successCallback'>
 ) {
   const lastPopulatedAt = useRef(0)
 
@@ -67,7 +71,12 @@ function usePopulateForm<TData>(
 
     const sectionData = formattedData[key] ?? {}
     Object.entries(sectionData).forEach(([fieldKey, value]) => {
-      form.setValue(fieldKey, value, { shouldDirty: false })
+      // Section answers are keyed by form field name.
+      form.setValue(
+        fieldKey as Path<TFormValues>,
+        value as PathValue<TFormValues, Path<TFormValues>>,
+        { shouldDirty: false }
+      )
     })
 
     successCallback?.(callbackData, sectionData, formattedData)
@@ -75,13 +84,13 @@ function usePopulateForm<TData>(
 }
 
 // Loads the site's registration answers, shared by every registration section, into the form.
-export function useInitializeQuestionMappedForm({
+export function useInitializeQuestionMappedForm<TFormValues extends FieldValues = FieldValues>({
   key,
   siteId,
   form,
   successCallback,
   enabled = true
-}: Params<RegistrationAnswer[]>) {
+}: Params<RegistrationAnswer[], TFormValues>) {
   const query = useQuery({
     ...siteQueries.registration(siteId ?? ''),
     enabled: enabled && !!siteId,
@@ -98,14 +107,16 @@ export function useInitializeQuestionMappedForm({
 }
 
 // Loads one monitoring form's answers into the form. Disabled until `monitorId` is known.
-export function useInitializeQuestionMappedFormMonitors({
+export function useInitializeQuestionMappedFormMonitors<
+  TFormValues extends FieldValues = FieldValues
+>({
   key,
   siteId,
   monitorId,
   form,
   successCallback,
   enabled = true
-}: Params<MonitoringForm> & { monitorId?: string }) {
+}: Params<MonitoringForm, TFormValues> & { monitorId?: string }) {
   const query = useQuery({
     ...siteQueries.monitor(siteId ?? '', monitorId ?? ''),
     enabled: enabled && !!siteId && !!monitorId,

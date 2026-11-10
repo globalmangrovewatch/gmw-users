@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom'
 import { render, screen, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import type { ReactNode } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import PropTypes from 'prop-types'
 
 import SiteBackgroundForm from './SiteBackgroundForm'
 import FormWrapperProvider from './FormWrapper/FormWrapperProvider'
@@ -14,14 +14,14 @@ const API_URL = 'http://api.test'
 const SITE_ID = '42'
 const ANSWERS_URL = `${API_URL}/sites/${SITE_ID}/registration_intervention_answers`
 
-const FormWrapper = ({ children }) => {
+const FormWrapper = ({ children }: { children: ReactNode }) => {
   const form = useForm()
   return <FormProvider {...form}>{children}</FormProvider>
 }
 
-FormWrapper.propTypes = { children: PropTypes.node.isRequired }
-
-const renderSiteBackgroundForm = ({ Provider = FormWrapper } = {}) => {
+const renderSiteBackgroundForm = ({
+  Provider = FormWrapper
+}: { Provider?: (props: { children: ReactNode }) => ReactNode } = {}) => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
 
   return render(
@@ -33,23 +33,21 @@ const renderSiteBackgroundForm = ({ Provider = FormWrapper } = {}) => {
   )
 }
 
-// Stakeholders (2.1) still use MUI's native checkbox; the CheckboxGroup questions use
-// role="checkbox" elements with aria-checked. Read both by accessible name.
+// Every checkbox is a Base UI role="checkbox" element with aria-checked; read them by label.
 const checkedNames = () =>
   screen
-    .getAllByRole('checkbox')
-    .filter((c) => c.checked === true || c.getAttribute('aria-checked') === 'true')
-    .map((c) => c.value || c.closest('label')?.textContent)
+    .getAllByRole('checkbox', { checked: true })
+    .map((c) => c.closest('label')?.textContent?.trim())
 
-const jsonResponse = (body) =>
+const jsonResponse = (body: unknown) =>
   new Response(JSON.stringify(body), { headers: { 'Content-Type': 'application/json' } })
 
 describe('SiteBackgroundForm', () => {
-  const fetchMock = vi.fn()
+  const fetchMock = vi.fn<(url: string) => Promise<Response>>()
 
   beforeEach(() => {
     vi.stubGlobal('fetch', fetchMock)
-    fetchMock.mockImplementation(async (url) => {
+    fetchMock.mockImplementation(async (url: string) => {
       if (url === ANSWERS_URL) {
         return jsonResponse([
           {
@@ -92,7 +90,7 @@ describe('SiteBackgroundForm', () => {
     expect(checkedTypes).toEqual(expect.arrayContaining(['Local leaders', 'Unknown']))
     expect(checkedTypes).not.toContain('Local community representatives')
 
-    // 2.2 (managementStatus) is a MUI Select: its value lives in a hidden input
+    // 2.2 (managementStatus) is a Select: its value lives in a hidden input
     expect(screen.getByDisplayValue('Protected informally at a local level')).toBeInTheDocument()
 
     expect(fetchMock).toHaveBeenCalledWith(ANSWERS_URL, expect.anything())
