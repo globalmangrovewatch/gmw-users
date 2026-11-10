@@ -21,12 +21,13 @@ const form = {
   requiredIndicatorColor: `${color.red}`
 }
 const typography = {
-  fontStack: ['Open Sans', 'sans-serif'],
-  xsmallFontSize: '1rem',
-  smallFontSize: '1.5rem',
-  fontSize: '2rem',
-  largeFontSize: '2.5rem',
-  xlargeFontSize: '3rem'
+  // --font-open-sans is set by next/font on <html> (app/layout.tsx).
+  fontStack: ['var(--font-open-sans)', "'Open Sans'", 'sans-serif'],
+  xsmallFontSize: '10px',
+  smallFontSize: '15px',
+  fontSize: '20px',
+  largeFontSize: '25px',
+  xlargeFontSize: '30px'
 }
 const border = {
   primary: `solid thin ${color.primary}`,
@@ -34,12 +35,12 @@ const border = {
   primaryWidth: 'thin'
 }
 const layout = {
-  headerHeight: '7rem',
-  footerHeight: '6rem',
-  navWidth: '18rem',
+  headerHeight: '70px',
+  footerHeight: '60px',
+  navWidth: '180px',
   mediaQueryDesktop: '599px',
-  maxContentWidth: '96rem',
-  sectionNavHeight: '5.65rem'
+  maxContentWidth: '960px',
+  sectionNavHeight: '56.5px'
 }
 
 const hoverState = (content) => css`
