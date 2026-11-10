@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 
 import { isApiError } from '@/lib/api'
 import language from '@/language'

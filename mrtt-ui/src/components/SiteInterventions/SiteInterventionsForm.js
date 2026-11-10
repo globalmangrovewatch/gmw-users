@@ -37,7 +37,7 @@ import MangroveAssociatedSpeciesRow from './MangroveAssociatedSpeciesRow'
 import CheckboxGroupWithLabelAndController from '@/components/CheckboxGroupWithLabelAndController'
 import FormValidationMessageIfErrors from '@/components/FormValidationMessageIfErrors'
 import QuestionNav from '@/components/QuestionNav'
-import DatePickerUtcMui from '@/components/DatePickerUtcMui'
+import DatePickerUtc from '@/components/DatePickerUtc'
 
 import { useInitializeQuestionMappedForm } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
 import useSiteInfo from '@/library/useSiteInfo'
@@ -328,7 +328,7 @@ function SiteInterventionsForm() {
                   name='biophysicalInterventionDuration.startDate'
                   control={control}
                   render={({ field }) => (
-                    <DatePickerUtcMui
+                    <DatePickerUtc
                       id='biophysicalInterventionDuration.startDate'
                       label='Intervention start date'
                       field={field}
@@ -342,7 +342,7 @@ function SiteInterventionsForm() {
                   name='biophysicalInterventionDuration.endDate'
                   control={control}
                   render={({ field }) => (
-                    <DatePickerUtcMui
+                    <DatePickerUtc
                       id='biophysicalInterventionDuration.endDate'
                       label='Intervention end date'
                       field={field}

@@ -2,7 +2,7 @@
 
 import { Controller, useForm } from 'react-hook-form'
 import { FormLabel, TextField } from '@mui/material'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 import { useRouter, useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'

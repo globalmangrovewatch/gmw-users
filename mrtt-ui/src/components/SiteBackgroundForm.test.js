@@ -33,6 +33,14 @@ const renderSiteBackgroundForm = ({ Provider = FormWrapper } = {}) => {
   )
 }
 
+// Stakeholders (2.1) still use MUI's native checkbox; the CheckboxGroup questions use
+// role="checkbox" elements with aria-checked. Read both by accessible name.
+const checkedNames = () =>
+  screen
+    .getAllByRole('checkbox')
+    .filter((c) => c.checked === true || c.getAttribute('aria-checked') === 'true')
+    .map((c) => c.value || c.closest('label')?.textContent)
+
 const jsonResponse = (body) =>
   new Response(JSON.stringify(body), { headers: { 'Content-Type': 'application/json' } })
 
@@ -80,8 +88,7 @@ describe('SiteBackgroundForm', () => {
 
     expect(await screen.findByDisplayValue('Jane Doe')).toBeInTheDocument()
 
-    const checkboxes = screen.getAllByRole('checkbox')
-    const checkedTypes = checkboxes.filter((c) => c.checked).map((c) => c.value)
+    const checkedTypes = checkedNames()
     expect(checkedTypes).toEqual(expect.arrayContaining(['Local leaders', 'Unknown']))
     expect(checkedTypes).not.toContain('Local community representatives')
 
@@ -96,15 +103,8 @@ describe('SiteBackgroundForm', () => {
 
     await screen.findByDisplayValue('Jane Doe')
 
-    // CheckboxGroup mirrors the controller value into local state in an
-    // effect, so the checked state lands one render after the form value.
     await waitFor(() => {
-      const checkedValues = screen
-        .getAllByRole('checkbox')
-        .filter((c) => c.checked)
-        .map((c) => c.value)
-
-      expect(checkedValues).toEqual(
+      expect(checkedNames()).toEqual(
         expect.arrayContaining([
           'Local leaders',
           'Unknown',

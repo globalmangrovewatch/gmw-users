@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter, useParams } from 'next/navigation'
 import useMonitoringFormId from '@/library/useMonitoringFormId'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 import { Controller, useFormContext, useFieldArray, useWatch } from 'react-hook-form'
 import {
   Box,
@@ -39,7 +39,7 @@ import { monitoringIndicators } from '@/data/monitoringIndicators'
 import ButtonDeleteForm from '@/components/ButtonDeleteForm'
 import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
 import EcologicalOutcomesRow from './EcologicalOutcomesRow'
-import DatePickerUtcMui from '@/components/DatePickerUtcMui'
+import DatePickerUtc from '@/components/DatePickerUtc'
 import { unitOptions } from '@/data/ecologicalOptions'
 import RequiredIndicator from '@/components/RequiredIndicator'
 
@@ -244,11 +244,7 @@ const EcologicalStatusAndOutcomesForm = () => {
             name='monitoringStartDate'
             control={control}
             render={({ field }) => (
-              <DatePickerUtcMui
-                id='monitoringStartDate'
-                label='Monitoring start date'
-                field={field}
-              />
+              <DatePickerUtc id='monitoringStartDate' label='Monitoring start date' field={field} />
             )}
           />
           <ErrorText>{errors.monitoringStartDate?.message}</ErrorText>
@@ -257,11 +253,7 @@ const EcologicalStatusAndOutcomesForm = () => {
               name='monitoringEndDate'
               control={control}
               render={({ field }) => (
-                <DatePickerUtcMui
-                  id='monitoringEndDate'
-                  label='Monitoring end date'
-                  field={field}
-                />
+                <DatePickerUtc id='monitoringEndDate' label='Monitoring end date' field={field} />
               )}
             />
             <ErrorText>{errors.monitoringEndDate?.message}</ErrorText>

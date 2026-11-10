@@ -1,6 +1,7 @@
 'use client'
 
 import { Combobox as ComboboxPrimitive } from '@base-ui/react/combobox'
+import type { ComponentProps } from 'react'
 import { LuCheck, LuChevronsUpDown, LuX } from 'react-icons/lu'
 
 import { cn } from '@/lib/cn'
@@ -10,17 +11,25 @@ type ComboboxOption<T extends string = string> = {
   value: T
 }
 
-type ComboboxProps<T extends string = string> = {
-  options: ComboboxOption<T>[]
-  value?: T | null
-  onChange: (value: T | null) => void
-  placeholder?: string
-  emptyText?: string
-  disabled?: boolean
-  id?: string
-  className?: string
-  'aria-invalid'?: boolean
-}
+/** Props that go to the text input (its id, so a <label htmlFor> works, and aria-*). */
+type ComboboxInputProps = Pick<
+  ComponentProps<typeof ComboboxPrimitive.Input>,
+  'id' | 'placeholder' | 'aria-invalid' | 'aria-label' | 'aria-labelledby' | 'aria-describedby'
+>
+
+type ComboboxProps<T extends string = string> = Omit<
+  ComboboxPrimitive.Root.Props<ComboboxOption<T>>,
+  'items' | 'value' | 'defaultValue' | 'onValueChange' | 'children' | 'multiple'
+> &
+  ComboboxInputProps & {
+    options: ComboboxOption<T>[]
+    /** The selected option's value (not the option object). */
+    value?: T | null
+    onChange: (value: T | null) => void
+    emptyText?: string
+    /** Classes for the input group (input + clear + trigger). */
+    className?: string
+  }
 
 /** Searchable single select: type in the input to filter the options. The clear button resets it. */
 function Combobox<T extends string = string>({
@@ -29,19 +38,22 @@ function Combobox<T extends string = string>({
   onChange,
   placeholder = 'Select…',
   emptyText = 'No results.',
-  disabled,
-  id,
   className,
-  'aria-invalid': ariaInvalid
+  id,
+  'aria-invalid': ariaInvalid,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
+  ...rootProps
 }: ComboboxProps<T>) {
   const selected = options.find((option) => option.value === value) ?? null
 
   return (
     <ComboboxPrimitive.Root
+      {...rootProps}
       items={options}
       value={selected}
-      onValueChange={(option) => onChange(option?.value ?? null)}
-      disabled={disabled}>
+      onValueChange={(option) => onChange(option?.value ?? null)}>
       <ComboboxPrimitive.InputGroup
         data-slot='combobox'
         className={cn(
@@ -52,6 +64,9 @@ function Combobox<T extends string = string>({
           id={id}
           placeholder={placeholder}
           aria-invalid={ariaInvalid}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
           className='h-full w-full min-w-0 rounded-3xl border-0 bg-transparent pr-16 pl-3 outline-none placeholder:text-black/60'
         />
         <div className='absolute right-2 flex items-center gap-1'>

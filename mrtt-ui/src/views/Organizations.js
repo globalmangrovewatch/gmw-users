@@ -15,7 +15,7 @@ import {
 } from '@/styles/containers'
 import { H2, LinkLooksLikeButtonSecondary, PageTitle } from '@/styles/typography'
 import Link from 'next/link'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 import { UlAlternating, UlUndecorated } from '@/styles/lists'
 import language from '@/language'
 import LoadingIndicator from '@/components/LoadingIndicator'

@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation'
 import useMonitoringFormId from '@/library/useMonitoringFormId'
 
 import { useQuery } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 
 import { Controller, useFormContext, useFieldArray } from 'react-hook-form'
 import { Box, Checkbox, FormControlLabel, ListItem, MenuItem, TextField } from '@mui/material'
@@ -31,7 +31,7 @@ import { findRegistationDataItem } from '@/library/findDataItems'
 import SocioeconomicOutcomesRow from './SocioeconomicOutcomesRow'
 import ButtonDeleteForm from '@/components/ButtonDeleteForm'
 import ConfirmPrompt from '@/components/ConfirmPrompt/ConfirmPrompt'
-import DatePickerUtcMui from '@/components/DatePickerUtcMui'
+import DatePickerUtc from '@/components/DatePickerUtc'
 import RequiredIndicator from '@/components/RequiredIndicator'
 import { useLoadErrorToast } from '@/hooks/useLoadErrorToast'
 import { siteQueries, useDeleteMonitor } from '@/queries/sites'
@@ -191,7 +191,7 @@ const SocioeconomicGovernanceStatusAndOutcomesForm = () => {
             name='dateOfOutcomesAssessment'
             control={control}
             render={({ field }) => (
-              <DatePickerUtcMui id='dateOfOutcomesAssessment' label='date' field={field} />
+              <DatePickerUtc id='dateOfOutcomesAssessment' label='date' field={field} />
             )}
           />
           <ErrorText>{errors.dateOfOutcomesAssessment?.message}</ErrorText>

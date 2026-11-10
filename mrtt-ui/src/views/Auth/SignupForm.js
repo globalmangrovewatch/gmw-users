@@ -1,7 +1,7 @@
 'use client'
 
 import { Controller, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
+import { toast } from '@/components/ui/toast'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
