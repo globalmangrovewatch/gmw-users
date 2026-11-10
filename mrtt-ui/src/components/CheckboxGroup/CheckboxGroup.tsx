@@ -1,21 +1,23 @@
 'use client'
 
-import type { ComponentType, Ref } from 'react'
+import { CheckboxGroup as CheckboxGroupPrimitive } from '@base-ui/react/checkbox-group'
+import type { ComponentProps, ComponentType } from 'react'
+import type { ControllerRenderProps } from 'react-hook-form'
 
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import language from '@/language'
+import { cn } from '@/lib/cn'
 import { makeValidClassName } from '@/library/strings/makeValidClassName'
-
-type CheckboxGroupOptionValue = string | number
 
 type CheckboxGroupOption = {
   label: string
-  value: CheckboxGroupOptionValue
+  value: string
 }
 
+/** How the API stores a multi-select answer. */
 type CheckboxGroupValue = {
-  selectedValues?: CheckboxGroupOptionValue[]
+  selectedValues?: string[]
   isOtherChecked?: boolean
   otherValue?: string
 }
@@ -26,7 +28,7 @@ type CheckboxGroupChangeEvent = {
 }
 
 type CheckboxGroupChange = {
-  selectedValues: CheckboxGroupOptionValue[]
+  selectedValues: string[]
   isOtherChecked: boolean
   otherValue?: string
   event?: CheckboxGroupChangeEvent
@@ -34,127 +36,113 @@ type CheckboxGroupChange = {
 
 type SelectedMarkupProps = {
   optionId: string
-  optionValue: CheckboxGroupOptionValue
+  optionValue: string
 }
 
-type CheckboxGroupProps = {
-  id: string
-  options: CheckboxGroupOption[]
-  onChange: (value: CheckboxGroupChange) => void
-  onBlur?: () => void
-  value?: CheckboxGroupValue | null
-  optionsExcludedFromShowingSelectedMarkup?: CheckboxGroupOptionValue[]
-  shouldAddOtherOptionWithClarification?: boolean
-  /** Rendered under each checked option (and under "Other" when it's checked). */
-  SelectedMarkup?: ComponentType<SelectedMarkupProps>
-  /** Add `event` to the value passed to onChange. */
-  shouldReturnEvent?: boolean
-  disabled?: boolean
-  ref?: Ref<HTMLDivElement>
-  'aria-labelledby'?: string
-}
+type CheckboxGroupProps = Omit<
+  ComponentProps<typeof CheckboxGroupPrimitive>,
+  'value' | 'defaultValue' | 'onValueChange' | 'onChange' | 'onBlur' | 'children'
+> &
+  // Spread from a react-hook-form Controller `field`: `name` goes to each checkbox's input.
+  Partial<Pick<ControllerRenderProps, 'name' | 'onBlur'>> & {
+    /** Prefix for each checkbox's id. */
+    id: string
+    options: CheckboxGroupOption[]
+    value?: CheckboxGroupValue | null
+    onChange: (value: CheckboxGroupChange) => void
+    optionsExcludedFromShowingSelectedMarkup?: string[]
+    /** Adds an "Other" checkbox with a text input for the clarification. */
+    shouldAddOtherOptionWithClarification?: boolean
+    /** Rendered under each checked option (and under "Other" when it's checked). */
+    SelectedMarkup?: ComponentType<SelectedMarkupProps>
+    /** Add `event` to the value passed to onChange. */
+    shouldReturnEvent?: boolean
+  }
 
-const getValueToReturn = ({
-  nonOtherSelectedValues,
-  otherInputValue,
+const toChange = ({
+  selectedValues,
   isOtherChecked,
+  otherValue,
   event,
   shouldReturnEvent
-}: {
-  nonOtherSelectedValues: CheckboxGroupOptionValue[]
-  otherInputValue: string
-  isOtherChecked: boolean
+}: Required<Pick<CheckboxGroupChange, 'selectedValues' | 'isOtherChecked'>> & {
+  otherValue: string
   event: CheckboxGroupChangeEvent
   shouldReturnEvent: boolean
 }): CheckboxGroupChange => {
   // isOtherChecked is always explicit, so validation doesn't have to tell '' from undefined.
-  const valueToReturn: CheckboxGroupChange = {
-    selectedValues: nonOtherSelectedValues,
-    isOtherChecked
-  }
-  if (isOtherChecked) {
-    valueToReturn.otherValue = otherInputValue
-  }
-  if (shouldReturnEvent) {
-    // Only when the consumer handles onChange itself: react-hook-form shouldn't store the event.
-    valueToReturn.event = event
-  }
+  const change: CheckboxGroupChange = { selectedValues, isOtherChecked }
+  if (isOtherChecked) change.otherValue = otherValue
+  // Only when the consumer handles onChange itself: react-hook-form shouldn't store the event.
+  if (shouldReturnEvent) change.event = event
 
-  return valueToReturn
+  return change
 }
 
 /**
- * Multi-select checkboxes with an optional "Other" + clarification input.
+ * Multi-select checkboxes (Base UI CheckboxGroup) with an optional "Other" + clarification input.
  * Fully controlled: everything shown derives from `value`, which the form owns.
  */
 function CheckboxGroup({
   id,
+  name,
   options,
+  value,
   onChange,
   onBlur,
-  value,
   optionsExcludedFromShowingSelectedMarkup = [],
   shouldAddOtherOptionWithClarification = false,
   SelectedMarkup,
   shouldReturnEvent = false,
-  disabled,
-  ref,
-  'aria-labelledby': ariaLabelledBy
+  className,
+  ...props
 }: CheckboxGroupProps) {
+  const selectedValues = value?.selectedValues ?? []
   const isOtherChecked = !!value?.isOtherChecked
-  const nonOtherSelectedValues = value?.selectedValues ?? []
-  const otherInputValue = value?.otherValue ?? ''
+  const otherValue = value?.otherValue ?? ''
 
   const emit = (
-    next: Partial<Pick<CheckboxGroupChange, 'selectedValues' | 'isOtherChecked'>> & {
-      otherValue?: string
-    },
+    next: Partial<Pick<CheckboxGroupChange, 'selectedValues' | 'isOtherChecked' | 'otherValue'>>,
     event: CheckboxGroupChangeEvent
   ) =>
     onChange(
-      getValueToReturn({
-        nonOtherSelectedValues: next.selectedValues ?? nonOtherSelectedValues,
-        otherInputValue: next.otherValue ?? otherInputValue,
+      toChange({
+        selectedValues: next.selectedValues ?? selectedValues,
         isOtherChecked: next.isOtherChecked ?? isOtherChecked,
+        otherValue: next.otherValue ?? otherValue,
         shouldReturnEvent,
         event
       })
     )
 
-  const handleNonOtherCheckboxChange = (itemValue: CheckboxGroupOptionValue, checked: boolean) => {
-    const selectedValues = nonOtherSelectedValues.includes(itemValue)
-      ? nonOtherSelectedValues.filter((selected) => selected !== itemValue)
-      : [...nonOtherSelectedValues, itemValue]
+  const handleValueChange = (nextSelectedValues: string[]) => {
+    const added = nextSelectedValues.find((item) => !selectedValues.includes(item))
+    const removed = selectedValues.find((item) => !nextSelectedValues.includes(item))
 
-    emit({ selectedValues }, { target: { value: String(itemValue), checked } })
+    emit(
+      { selectedValues: nextSelectedValues },
+      { target: { value: added ?? removed ?? '', checked: added !== undefined } }
+    )
   }
 
   return (
-    <div
-      ref={ref}
-      role='group'
-      aria-labelledby={ariaLabelledBy}
+    <CheckboxGroupPrimitive
       data-slot='checkbox-group'
-      className='flex flex-col'>
+      value={selectedValues}
+      onValueChange={handleValueChange}
+      className={cn('flex flex-col', className)}
+      {...props}>
       {options.map((option) => {
-        const isChecked = nonOtherSelectedValues.includes(option.value)
         const optionId = makeValidClassName(`${id}-${option.value}`)
         const isSelectedMarkupShowing =
-          isChecked &&
           SelectedMarkup &&
+          selectedValues.includes(option.value) &&
           !optionsExcludedFromShowingSelectedMarkup.includes(option.value)
 
         return (
           <div key={option.value} className='flex flex-col'>
             <label className='flex w-fit cursor-pointer items-center gap-2.5 py-2 text-base text-text'>
-              <Checkbox
-                id={optionId}
-                value={String(option.value)}
-                checked={isChecked}
-                disabled={disabled}
-                onBlur={onBlur}
-                onCheckedChange={(checked) => handleNonOtherCheckboxChange(option.value, checked)}
-              />
+              <Checkbox id={optionId} name={name} value={option.value} onBlur={onBlur} />
               {option.label}
             </label>
             {isSelectedMarkupShowing ? (
@@ -166,11 +154,10 @@ function CheckboxGroup({
       {shouldAddOtherOptionWithClarification ? (
         <div className='flex flex-col'>
           <label className='flex w-fit cursor-pointer items-center gap-2.5 py-2 text-base text-text'>
+            {/* No `value`: the group leaves it alone, so "Other" never lands in selectedValues. */}
             <Checkbox
               id={`${id}-other`}
-              value='other'
               checked={isOtherChecked}
-              disabled={disabled}
               onBlur={onBlur}
               onCheckedChange={(checked) =>
                 emit({ isOtherChecked: checked }, { target: { value: 'other', checked } })
@@ -183,8 +170,8 @@ function CheckboxGroup({
               aria-label={language.form.checkboxGroupOtherInputPlaceholder}
               placeholder={language.form.checkboxGroupOtherInputPlaceholder}
               className='mt-1 mb-2 max-w-md'
-              value={otherInputValue}
-              disabled={disabled}
+              value={otherValue}
+              disabled={props.disabled}
               onChange={(event) =>
                 emit(
                   { otherValue: event.target.value },
@@ -198,7 +185,7 @@ function CheckboxGroup({
           ) : null}
         </div>
       ) : null}
-    </div>
+    </CheckboxGroupPrimitive>
   )
 }
 

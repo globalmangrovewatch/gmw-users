@@ -1,30 +1,42 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form'
+import {
+  Controller,
+  type FieldPath,
+  type FieldValues,
+  type UseControllerProps
+} from 'react-hook-form'
 
-import CheckboxGroup from '@/components/CheckboxGroup/CheckboxGroup'
+import CheckboxGroup, { type CheckboxGroupProps } from '@/components/CheckboxGroup/CheckboxGroup'
 import { StickyFormLabel } from '@/components/form/layout'
 import RequiredIndicator from '@/components/RequiredIndicator'
 import getOptionsValuesAndLabels from '@/library/getOptionsValuesAndLabels'
 
-type CheckboxGroupWithLabelAndControllerProps<T extends FieldValues> = {
-  fieldName: Path<T>
-  options: string[]
-  question: ReactNode
-  control: Control<T>
-  shouldAddOtherOptionWithClarification?: boolean
-  required?: boolean
-}
+type CheckboxGroupWithLabelAndControllerProps<
+  T extends FieldValues,
+  TName extends FieldPath<T>
+> = Pick<UseControllerProps<T, TName>, 'control' | 'rules'> &
+  Pick<CheckboxGroupProps, 'shouldAddOtherOptionWithClarification'> & {
+    // `fieldName` rather than `name`: the JS forms pass it under that name.
+    fieldName: TName
+    options: string[]
+    question: ReactNode
+    required?: boolean
+  }
 
-function CheckboxGroupWithLabelAndController<T extends FieldValues = FieldValues>({
+function CheckboxGroupWithLabelAndController<
+  T extends FieldValues = FieldValues,
+  TName extends FieldPath<T> = FieldPath<T>
+>({
   fieldName,
+  control,
+  rules,
   options,
   question,
-  control,
   shouldAddOtherOptionWithClarification = false,
   required = false
-}: CheckboxGroupWithLabelAndControllerProps<T>) {
+}: CheckboxGroupWithLabelAndControllerProps<T, TName>) {
   const labelId = `${fieldName}-label`
   const optionsValueLabels = getOptionsValuesAndLabels(options)
 
@@ -37,6 +49,7 @@ function CheckboxGroupWithLabelAndController<T extends FieldValues = FieldValues
       <Controller
         name={fieldName}
         control={control}
+        rules={rules}
         render={({ field }) => (
           <CheckboxGroup
             {...field}

@@ -1,9 +1,9 @@
-import type { ComponentProps, ElementType } from 'react'
+import type { ElementType } from 'react'
 
-import { Button } from '@/components/ui/button'
+import { Button, type ButtonProps } from '@/components/ui/button'
 import language from '@/language'
 
-type ButtonSaveProps = Omit<ComponentProps<'button'>, 'children'> & {
+type ButtonSaveProps = Omit<ButtonProps, 'children'> & {
   isSaving: boolean
   /** Render with another button component instead of ui/Button. */
   component?: ElementType

@@ -1,7 +1,13 @@
 'use client'
 
-import type { ReactNode } from 'react'
-import { useFormContext, type FieldValues, type Path } from 'react-hook-form'
+import type { Select as SelectPrimitive } from '@base-ui/react/select'
+import type { ComponentProps, ReactNode } from 'react'
+import {
+  useFormContext,
+  type FieldPath,
+  type FieldValues,
+  type UseControllerProps
+} from 'react-hook-form'
 
 import {
   FormControl,
@@ -23,52 +29,58 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 
 // Labelled form fields on top of ui/form. Each reads `control` from the surrounding
-// <FormProvider> and shows the field's validation message itself.
+// <FormProvider> and shows the field's validation message itself. The field props come from
+// react-hook-form's controller; everything else goes to the ui/* control it renders.
 
-type BaseFieldProps<T extends FieldValues> = {
-  name: Path<T>
+type FieldProps<T extends FieldValues, TName extends FieldPath<T>> = Pick<
+  UseControllerProps<T, TName>,
+  'name' | 'rules' | 'disabled' | 'defaultValue'
+> & {
   label: ReactNode
   required?: boolean
   description?: ReactNode
+  /** Classes for the field wrapper (label + control + message). */
   className?: string
-  disabled?: boolean
 }
 
-type FormInputProps<T extends FieldValues> = BaseFieldProps<T> & {
-  type?: string
-  placeholder?: string
-  autoComplete?: string
-}
+/** Control props the field owns, so they can't be passed to the control directly. */
+type FieldOwnedProps =
+  | 'name'
+  | 'value'
+  | 'defaultValue'
+  | 'onChange'
+  | 'onBlur'
+  | 'disabled'
+  | 'ref'
 
-function FormInput<T extends FieldValues = FieldValues>({
+type FormInputProps<T extends FieldValues, TName extends FieldPath<T>> = FieldProps<T, TName> &
+  Omit<ComponentProps<typeof Input>, FieldOwnedProps | 'className'>
+
+function FormInput<T extends FieldValues = FieldValues, TName extends FieldPath<T> = FieldPath<T>>({
   name,
+  rules,
+  disabled,
+  defaultValue,
   label,
   required,
   description,
   className,
-  disabled,
-  type = 'text',
-  placeholder,
-  autoComplete
-}: FormInputProps<T>) {
+  ...inputProps
+}: FormInputProps<T, TName>) {
   const { control } = useFormContext<T>()
 
   return (
     <FormField
       control={control}
       name={name}
+      rules={rules}
+      disabled={disabled}
+      defaultValue={defaultValue}
       render={({ field }) => (
         <FormItem className={className}>
           <FormLabel required={required}>{label}</FormLabel>
           <FormControl>
-            <Input
-              {...field}
-              value={field.value ?? ''}
-              type={type}
-              placeholder={placeholder}
-              autoComplete={autoComplete}
-              disabled={disabled}
-            />
+            <Input {...inputProps} {...field} value={field.value ?? ''} />
           </FormControl>
           {description ? <FormDescription>{description}</FormDescription> : null}
           <FormMessage />
@@ -78,38 +90,37 @@ function FormInput<T extends FieldValues = FieldValues>({
   )
 }
 
-type FormTextareaProps<T extends FieldValues> = BaseFieldProps<T> & {
-  placeholder?: string
-  rows?: number
-}
+type FormTextareaProps<T extends FieldValues, TName extends FieldPath<T>> = FieldProps<T, TName> &
+  Omit<ComponentProps<typeof Textarea>, FieldOwnedProps | 'className'>
 
-function FormTextarea<T extends FieldValues = FieldValues>({
+function FormTextarea<
+  T extends FieldValues = FieldValues,
+  TName extends FieldPath<T> = FieldPath<T>
+>({
   name,
+  rules,
+  disabled,
+  defaultValue,
   label,
   required,
   description,
   className,
-  disabled,
-  placeholder,
-  rows
-}: FormTextareaProps<T>) {
+  ...textareaProps
+}: FormTextareaProps<T, TName>) {
   const { control } = useFormContext<T>()
 
   return (
     <FormField
       control={control}
       name={name}
+      rules={rules}
+      disabled={disabled}
+      defaultValue={defaultValue}
       render={({ field }) => (
         <FormItem className={className}>
           <FormLabel required={required}>{label}</FormLabel>
           <FormControl>
-            <Textarea
-              {...field}
-              value={field.value ?? ''}
-              placeholder={placeholder}
-              rows={rows}
-              disabled={disabled}
-            />
+            <Textarea {...textareaProps} {...field} value={field.value ?? ''} />
           </FormControl>
           {description ? <FormDescription>{description}</FormDescription> : null}
           <FormMessage />
@@ -121,35 +132,50 @@ function FormTextarea<T extends FieldValues = FieldValues>({
 
 type FormSelectOption = { label: string; value: string }
 
-type FormSelectProps<T extends FieldValues> = BaseFieldProps<T> & {
-  options: FormSelectOption[]
-  placeholder?: string
-}
+type FormSelectProps<T extends FieldValues, TName extends FieldPath<T>> = FieldProps<T, TName> &
+  Omit<
+    SelectPrimitive.Root.Props<string>,
+    FieldOwnedProps | 'onValueChange' | 'items' | 'children'
+  > & {
+    options: FormSelectOption[]
+    placeholder?: string
+  }
 
-function FormSelect<T extends FieldValues = FieldValues>({
+function FormSelect<
+  T extends FieldValues = FieldValues,
+  TName extends FieldPath<T> = FieldPath<T>
+>({
   name,
+  rules,
+  disabled,
+  defaultValue,
   label,
   required,
   description,
   className,
-  disabled,
   options,
-  placeholder
-}: FormSelectProps<T>) {
+  placeholder,
+  ...selectProps
+}: FormSelectProps<T, TName>) {
   const { control } = useFormContext<T>()
 
   return (
     <FormField
       control={control}
       name={name}
+      rules={rules}
+      disabled={disabled}
+      defaultValue={defaultValue}
       render={({ field }) => (
         <FormItem className={className}>
           <FormLabel required={required}>{label}</FormLabel>
           <Select<string>
+            {...selectProps}
             items={options}
+            name={field.name}
             value={field.value || null}
             onValueChange={(value) => field.onChange(value ?? '')}
-            disabled={disabled}>
+            disabled={field.disabled}>
             <FormControl>
               <SelectTrigger ref={field.ref} onBlur={field.onBlur}>
                 <SelectValue placeholder={placeholder} />
@@ -171,19 +197,26 @@ function FormSelect<T extends FieldValues = FieldValues>({
   )
 }
 
-type FormRadioGroupProps<T extends FieldValues> = BaseFieldProps<T> & {
-  options: RadioOption[]
-}
+type FormRadioGroupProps<T extends FieldValues, TName extends FieldPath<T>> = FieldProps<T, TName> &
+  Omit<ComponentProps<typeof RadioGroup>, FieldOwnedProps | 'onValueChange' | 'className'> & {
+    options: RadioOption[]
+  }
 
-function FormRadioGroup<T extends FieldValues = FieldValues>({
+function FormRadioGroup<
+  T extends FieldValues = FieldValues,
+  TName extends FieldPath<T> = FieldPath<T>
+>({
   name,
+  rules,
+  disabled,
+  defaultValue,
   label,
   required,
   description,
   className,
-  disabled,
-  options
-}: FormRadioGroupProps<T>) {
+  options,
+  ...radioGroupProps
+}: FormRadioGroupProps<T, TName>) {
   const { control } = useFormContext<T>()
   const labelId = `${name}-label`
 
@@ -191,6 +224,9 @@ function FormRadioGroup<T extends FieldValues = FieldValues>({
     <FormField
       control={control}
       name={name}
+      rules={rules}
+      disabled={disabled}
+      defaultValue={defaultValue}
       render={({ field }) => (
         <FormItem className={className}>
           <FormLabel id={labelId} required={required}>
@@ -199,10 +235,12 @@ function FormRadioGroup<T extends FieldValues = FieldValues>({
           <FormControl>
             <RadioGroup
               aria-labelledby={labelId}
+              {...radioGroupProps}
               options={options}
+              name={field.name}
               value={field.value ?? null}
               onValueChange={(value) => field.onChange(value)}
-              disabled={disabled}
+              disabled={field.disabled}
             />
           </FormControl>
           {description ? <FormDescription>{description}</FormDescription> : null}

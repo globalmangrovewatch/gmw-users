@@ -166,7 +166,9 @@ describe('shared form primitives', () => {
         <ButtonDeleteForm isDeleting />
         <TabularButtons handleSave={handleSave} cancelItem={cancelItem} />
         <RequiredIndicator />
-        <FormValidationMessageIfErrors formErrors={{ name: { message: 'Required' } }} />
+        <FormValidationMessageIfErrors
+          formErrors={{ name: { type: 'required', message: 'Required' } }}
+        />
         <FormValidationMessageIfErrors formErrors={{}} />
       </WithForm>
     )

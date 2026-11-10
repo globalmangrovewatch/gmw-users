@@ -1,8 +1,14 @@
-import language from '@/language'
+import type { ComponentProps } from 'react'
 
-function RequiredIndicator() {
+import language from '@/language'
+import { cn } from '@/lib/cn'
+
+function RequiredIndicator({ className, ...props }: Omit<ComponentProps<'span'>, 'children'>) {
   return (
-    <span aria-label={language.form.requiredIndicator} className='px-1.25 text-danger'>
+    <span
+      aria-label={language.form.requiredIndicator}
+      className={cn('px-1.25 text-danger', className)}
+      {...props}>
       *
     </span>
   )

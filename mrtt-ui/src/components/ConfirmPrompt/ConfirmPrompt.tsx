@@ -1,5 +1,7 @@
 'use client'
 
+import type { ComponentProps } from 'react'
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,10 +14,14 @@ import {
 } from '@/components/ui/alert-dialog'
 import language from '@/language'
 
-type ConfirmPromptProps = {
+type ConfirmPromptProps = Omit<
+  ComponentProps<typeof AlertDialog>,
+  'open' | 'onOpenChange' | 'children'
+> & {
   title: string
   promptText: string
   confirmButtonText: string
+  // `isOpen` / `setIsOpen` instead of AlertDialog's open / onOpenChange: the JS forms use these.
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   onConfirm: () => void
@@ -28,10 +34,11 @@ function ConfirmPrompt({
   confirmButtonText,
   isOpen,
   setIsOpen,
-  onConfirm
+  onConfirm,
+  ...props
 }: ConfirmPromptProps) {
   return (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+    <AlertDialog {...props} open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
