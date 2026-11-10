@@ -1,7 +1,6 @@
 'use client'
 
-import type * as LabelPrimitive from '@radix-ui/react-label'
-import { Slot } from '@radix-ui/react-slot'
+import { useRender } from '@base-ui/react/use-render'
 import {
   createContext,
   useContext,
@@ -9,7 +8,8 @@ import {
   useId,
   useMemo,
   useState,
-  type ComponentProps
+  type ComponentProps,
+  type ReactElement
 } from 'react'
 import {
   Controller,
@@ -21,7 +21,7 @@ import {
   type FieldValues
 } from 'react-hook-form'
 
-import { Label } from '@/components/ui/label'
+import { Label, type LabelProps } from '@/components/ui/label'
 import { cn } from '@/lib/cn'
 
 const Form = FormProvider
@@ -94,10 +94,7 @@ function FormItem({ className, ...props }: ComponentProps<'div'>) {
   )
 }
 
-function FormLabel({
-  className,
-  ...props
-}: ComponentProps<typeof LabelPrimitive.Root> & { required?: boolean }) {
+function FormLabel({ className, ...props }: LabelProps) {
   const { error, formItemId } = useFormField()
 
   return (
@@ -129,7 +126,8 @@ function FormDescription({ className, ...props }: ComponentProps<'p'>) {
   )
 }
 
-function FormControl(props: ComponentProps<typeof Slot>) {
+/** Passes id and aria-* to its single child element (the input, select trigger, etc.). */
+function FormControl({ children }: { children: ReactElement }) {
   const { error, formItemId, formDescriptionId, formMessageId, hasDescription } = useFormField()
 
   // Only point at ids that are in the DOM: a dangling aria-describedby reads as described
@@ -139,15 +137,14 @@ function FormControl(props: ComponentProps<typeof Slot>) {
       .filter(Boolean)
       .join(' ') || undefined
 
-  return (
-    <Slot
-      data-slot='form-control'
-      id={formItemId}
-      aria-describedby={describedBy}
-      aria-invalid={!!error}
-      {...props}
-    />
-  )
+  return useRender({
+    render: children,
+    props: {
+      id: formItemId,
+      'aria-describedby': describedBy,
+      'aria-invalid': !!error
+    }
+  })
 }
 
 function FormMessage({ className, children, ...props }: ComponentProps<'p'>) {

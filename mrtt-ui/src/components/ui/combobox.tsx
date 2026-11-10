@@ -1,18 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-import { LuCheck, LuChevronsUpDown } from 'react-icons/lu'
+import { Combobox as ComboboxPrimitive } from '@base-ui/react/combobox'
+import { LuCheck, LuChevronsUpDown, LuX } from 'react-icons/lu'
 
-import { Button } from '@/components/ui/button'
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList
-} from '@/components/ui/command'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/cn'
 
 type ComboboxOption<T extends string = string> = {
@@ -25,7 +15,6 @@ type ComboboxProps<T extends string = string> = {
   value?: T | null
   onChange: (value: T | null) => void
   placeholder?: string
-  searchPlaceholder?: string
   emptyText?: string
   disabled?: boolean
   id?: string
@@ -33,72 +22,77 @@ type ComboboxProps<T extends string = string> = {
   'aria-invalid'?: boolean
 }
 
-/** Searchable single select: a Popover holding a Command list. Picking the current value clears it. */
+/** Searchable single select: type in the input to filter the options. The clear button resets it. */
 function Combobox<T extends string = string>({
   options,
   value = null,
   onChange,
   placeholder = 'Select…',
-  searchPlaceholder = 'Search…',
   emptyText = 'No results.',
   disabled,
   id,
   className,
   'aria-invalid': ariaInvalid
 }: ComboboxProps<T>) {
-  const [open, setOpen] = useState(false)
-  const selected = options.find((option) => option.value === value)
+  const selected = options.find((option) => option.value === value) ?? null
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
+    <ComboboxPrimitive.Root
+      items={options}
+      value={selected}
+      onValueChange={(option) => onChange(option?.value ?? null)}
+      disabled={disabled}>
+      <ComboboxPrimitive.InputGroup
+        data-slot='combobox'
+        className={cn(
+          'relative flex h-9 w-full items-center rounded-3xl border border-black/15 bg-white text-sm text-text ring-offset-white focus-within:ring-2 focus-within:ring-brand-800 focus-within:ring-offset-2 has-aria-invalid:border-error has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50',
+          className
+        )}>
+        <ComboboxPrimitive.Input
           id={id}
-          type='button'
-          variant='outline'
-          role='combobox'
-          aria-expanded={open}
+          placeholder={placeholder}
           aria-invalid={ariaInvalid}
-          disabled={disabled}
-          data-slot='combobox-trigger'
-          className={cn(
-            'h-9 w-full justify-between border-black/15 px-3 font-normal text-text hover:bg-transparent hover:text-text aria-invalid:border-error',
-            !selected && 'text-black/60',
-            className
-          )}>
-          <span className='truncate'>{selected ? selected.label : placeholder}</span>
-          <LuChevronsUpDown className='size-4 shrink-0 opacity-60' aria-hidden='true' />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent align='start' className='w-(--radix-popover-trigger-width) p-0'>
-        <Command>
-          <CommandInput placeholder={searchPlaceholder} />
-          <CommandList>
-            <CommandEmpty>{emptyText}</CommandEmpty>
-            <CommandGroup>
-              {options.map((option) => (
-                <CommandItem
+          className='h-full w-full min-w-0 rounded-3xl border-0 bg-transparent pr-16 pl-3 outline-none placeholder:text-black/60'
+        />
+        <div className='absolute right-2 flex items-center gap-1'>
+          <ComboboxPrimitive.Clear
+            aria-label='Clear selection'
+            className='flex size-6 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-text hover:bg-brand-100'>
+            <LuX className='size-4' aria-hidden='true' />
+          </ComboboxPrimitive.Clear>
+          <ComboboxPrimitive.Trigger
+            aria-label='Show options'
+            className='flex size-6 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-text'>
+            <LuChevronsUpDown className='size-4 opacity-60' aria-hidden='true' />
+          </ComboboxPrimitive.Trigger>
+        </div>
+      </ComboboxPrimitive.InputGroup>
+
+      <ComboboxPrimitive.Portal>
+        <ComboboxPrimitive.Positioner className='z-50 outline-none' align='start' sideOffset={4}>
+          <ComboboxPrimitive.Popup
+            data-slot='combobox-content'
+            className='w-(--anchor-width) max-w-(--available-width) origin-(--transform-origin) overflow-hidden rounded-md border border-black/15 bg-white text-text shadow-md outline-none data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95'>
+            <ComboboxPrimitive.Empty>
+              <div className='py-6 text-center text-sm'>{emptyText}</div>
+            </ComboboxPrimitive.Empty>
+            <ComboboxPrimitive.List className='max-h-[min(18rem,var(--available-height))] scroll-py-1 overflow-y-auto overscroll-contain p-1 outline-none data-empty:p-0'>
+              {(option: ComboboxOption<T>) => (
+                <ComboboxPrimitive.Item
                   key={option.value}
-                  value={option.label}
-                  onSelect={() => {
-                    onChange(option.value === value ? null : option.value)
-                    setOpen(false)
-                  }}>
-                  <LuCheck
-                    aria-hidden='true'
-                    className={cn(
-                      'size-4 text-brand-800',
-                      option.value === value ? 'opacity-100' : 'opacity-0'
-                    )}
-                  />
-                  {option.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+                  value={option}
+                  className='grid cursor-default grid-cols-[1rem_1fr] items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none data-highlighted:bg-brand-100 data-highlighted:text-brand-900'>
+                  <ComboboxPrimitive.ItemIndicator className='col-start-1'>
+                    <LuCheck className='size-4 text-brand-800' aria-hidden='true' />
+                  </ComboboxPrimitive.ItemIndicator>
+                  <span className='col-start-2'>{option.label}</span>
+                </ComboboxPrimitive.Item>
+              )}
+            </ComboboxPrimitive.List>
+          </ComboboxPrimitive.Popup>
+        </ComboboxPrimitive.Positioner>
+      </ComboboxPrimitive.Portal>
+    </ComboboxPrimitive.Root>
   )
 }
 

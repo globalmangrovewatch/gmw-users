@@ -17,14 +17,6 @@ import { Calendar } from '@/components/ui/calendar'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Combobox } from '@/components/ui/combobox'
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList
-} from '@/components/ui/command'
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -62,7 +54,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Toaster, toast } from '@/components/ui/toast'
 import * as Typography from '@/components/ui/typography'
 
-// jsdom lacks the layout APIs Radix and cmdk call.
+// jsdom lacks the layout APIs Base UI's floating popups call.
 beforeAll(() => {
   globalThis.ResizeObserver ??= class {
     observe() {}
@@ -75,12 +67,12 @@ beforeAll(() => {
 })
 
 describe('ui/* components', () => {
-  it('Button renders variants and asChild', () => {
+  it('Button renders variants and another element via render', () => {
     render(
       <>
         <Button>Save</Button>
-        <Button variant='outline' asChild>
-          <a href='/sites'>Sites</a>
+        <Button variant='outline' render={<a href='/sites' />}>
+          Sites
         </Button>
       </>
     )
@@ -109,7 +101,8 @@ describe('ui/* components', () => {
     render(<Checkbox aria-label='Agree' />)
     const checkbox = screen.getByRole('checkbox', { name: 'Agree' })
     await user.click(checkbox)
-    expect(checkbox).toHaveAttribute('data-state', 'checked')
+    expect(checkbox).toHaveAttribute('data-checked')
+    expect(checkbox).toBeChecked()
   })
 
   it('RadioGroup renders options and selects one', async () => {
@@ -227,23 +220,25 @@ describe('ui/* components', () => {
     expect(await screen.findByText('More detail')).toBeInTheDocument()
   })
 
-  it('Command filters items', async () => {
+  it('Combobox filters as you type', async () => {
     const user = userEvent.setup()
     render(
-      <Command>
-        <CommandInput placeholder='Search' />
-        <CommandList>
-          <CommandEmpty>Nothing</CommandEmpty>
-          <CommandGroup heading='Countries'>
-            <CommandItem>Spain</CommandItem>
-            <CommandItem>Kenya</CommandItem>
-          </CommandGroup>
-        </CommandList>
-      </Command>
+      <Combobox
+        options={[
+          { label: 'Spain', value: 'ES' },
+          { label: 'Kenya', value: 'KE' }
+        ]}
+        onChange={() => {}}
+        placeholder='Country'
+        emptyText='Nothing'
+      />
     )
-    await user.type(screen.getByPlaceholderText('Search'), 'ken')
-    expect(screen.getByRole('option', { name: 'Kenya' })).toBeInTheDocument()
+    await user.type(screen.getByRole('combobox'), 'ken')
+    expect(await screen.findByRole('option', { name: 'Kenya' })).toBeInTheDocument()
     expect(screen.queryByRole('option', { name: 'Spain' })).not.toBeInTheDocument()
+    await user.clear(screen.getByRole('combobox'))
+    await user.type(screen.getByRole('combobox'), 'zz')
+    expect(await screen.findByText('Nothing')).toBeInTheDocument()
   })
 
   it('Combobox picks an option', async () => {
@@ -265,10 +260,15 @@ describe('ui/* components', () => {
   })
 
   it('Select opens and picks an item', async () => {
-    const onValueChange = vi.fn<(value: string) => void>()
+    const onValueChange = vi.fn<(value: string | null) => void>()
     const user = userEvent.setup()
     render(
-      <Select onValueChange={onValueChange}>
+      <Select<string>
+        items={[
+          { label: 'Hectares', value: 'ha' },
+          { label: 'Square km', value: 'km2' }
+        ]}
+        onValueChange={(value) => onValueChange(value)}>
         <SelectTrigger aria-label='Unit'>
           <SelectValue placeholder='Pick a unit' />
         </SelectTrigger>
@@ -281,6 +281,8 @@ describe('ui/* components', () => {
     await user.click(screen.getByRole('combobox', { name: 'Unit' }))
     await user.click(await screen.findByRole('option', { name: 'Hectares' }))
     expect(onValueChange).toHaveBeenCalledWith('ha')
+    // `items` lets the trigger show the label, not the raw value.
+    expect(screen.getByRole('combobox', { name: 'Unit' })).toHaveTextContent('Hectares')
   })
 
   it('Calendar renders a month and selects a day', async () => {

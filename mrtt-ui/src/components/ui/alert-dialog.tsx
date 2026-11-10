@@ -1,6 +1,6 @@
 'use client'
 
-import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
+import { AlertDialog as AlertDialogPrimitive } from '@base-ui/react/alert-dialog'
 import type { ComponentProps } from 'react'
 
 import { buttonVariants } from '@/components/ui/button'
@@ -13,12 +13,12 @@ const AlertDialogPortal = AlertDialogPrimitive.Portal
 function AlertDialogOverlay({
   className,
   ...props
-}: ComponentProps<typeof AlertDialogPrimitive.Overlay>) {
+}: ComponentProps<typeof AlertDialogPrimitive.Backdrop>) {
   return (
-    <AlertDialogPrimitive.Overlay
+    <AlertDialogPrimitive.Backdrop
       data-slot='alert-dialog-overlay'
       className={cn(
-        'fixed inset-0 z-50 bg-black/30 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
+        'fixed inset-0 z-50 bg-black/30 data-closed:animate-out data-closed:fade-out-0 data-open:animate-in data-open:fade-in-0',
         className
       )}
       {...props}
@@ -29,14 +29,14 @@ function AlertDialogOverlay({
 function AlertDialogContent({
   className,
   ...props
-}: ComponentProps<typeof AlertDialogPrimitive.Content>) {
+}: ComponentProps<typeof AlertDialogPrimitive.Popup>) {
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
-      <AlertDialogPrimitive.Content
+      <AlertDialogPrimitive.Popup
         data-slot='alert-dialog-content'
         className={cn(
-          'fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 rounded-3xl bg-white p-6 text-text shadow-lg duration-200 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+          'fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 rounded-3xl bg-white p-6 text-text shadow-lg duration-200 outline-none data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95',
           className
         )}
         {...props}
@@ -91,19 +91,27 @@ function AlertDialogDescription({
   )
 }
 
+// Base UI has a single Close part: Action runs its onClick and then closes, like Radix's Action.
 function AlertDialogAction({
   className,
   ...props
-}: ComponentProps<typeof AlertDialogPrimitive.Action>) {
-  return <AlertDialogPrimitive.Action className={cn(buttonVariants(), className)} {...props} />
+}: ComponentProps<typeof AlertDialogPrimitive.Close>) {
+  return (
+    <AlertDialogPrimitive.Close
+      data-slot='alert-dialog-action'
+      className={cn(buttonVariants(), className)}
+      {...props}
+    />
+  )
 }
 
 function AlertDialogCancel({
   className,
   ...props
-}: ComponentProps<typeof AlertDialogPrimitive.Cancel>) {
+}: ComponentProps<typeof AlertDialogPrimitive.Close>) {
   return (
-    <AlertDialogPrimitive.Cancel
+    <AlertDialogPrimitive.Close
+      data-slot='alert-dialog-cancel'
       className={cn(buttonVariants({ variant: 'outline' }), className)}
       {...props}
     />

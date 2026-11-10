@@ -1,6 +1,6 @@
-import { Slot } from '@radix-ui/react-slot'
+import { mergeProps } from '@base-ui/react/merge-props'
+import { useRender } from '@base-ui/react/use-render'
 import { cva, type VariantProps } from 'class-variance-authority'
-import type { ComponentProps } from 'react'
 
 import { cn } from '@/lib/cn'
 
@@ -34,20 +34,19 @@ const buttonVariants = cva(
   }
 )
 
-type ButtonProps = ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }
+type ButtonProps = useRender.ComponentProps<'button'> & VariantProps<typeof buttonVariants>
 
-function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
-  const Comp = asChild ? Slot : 'button'
-  return (
-    <Comp
-      data-slot='button'
-      className={cn(buttonVariants({ variant, size }), className)}
-      {...props}
-    />
-  )
+/** Renders a <button>; pass `render={<a href='…' />}` (or next/link) to style another element. */
+function Button({ className, variant, size, render, ...props }: ButtonProps) {
+  return useRender({
+    defaultTagName: 'button',
+    render,
+    props: mergeProps<'button'>(
+      { className: cn(buttonVariants({ variant, size }), className) },
+      { 'data-slot': 'button' } as Record<string, string>,
+      props
+    )
+  })
 }
 
 export { Button, buttonVariants }

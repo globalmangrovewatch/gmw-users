@@ -1,6 +1,6 @@
 'use client'
 
-import * as DialogPrimitive from '@radix-ui/react-dialog'
+import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import type { ComponentProps } from 'react'
 import { LuX } from 'react-icons/lu'
 
@@ -11,12 +11,12 @@ const DialogTrigger = DialogPrimitive.Trigger
 const DialogPortal = DialogPrimitive.Portal
 const DialogClose = DialogPrimitive.Close
 
-function DialogOverlay({ className, ...props }: ComponentProps<typeof DialogPrimitive.Overlay>) {
+function DialogOverlay({ className, ...props }: ComponentProps<typeof DialogPrimitive.Backdrop>) {
   return (
-    <DialogPrimitive.Overlay
+    <DialogPrimitive.Backdrop
       data-slot='dialog-overlay'
       className={cn(
-        'fixed inset-0 z-50 bg-brand-600/70 bg-blend-multiply data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 md:bg-black/15',
+        'fixed inset-0 z-50 bg-brand-600/70 bg-blend-multiply data-closed:animate-out data-closed:fade-out-0 data-open:animate-in data-open:fade-in-0 md:bg-black/15',
         className
       )}
       {...props}
@@ -24,7 +24,7 @@ function DialogOverlay({ className, ...props }: ComponentProps<typeof DialogPrim
   )
 }
 
-type DialogContentProps = ComponentProps<typeof DialogPrimitive.Content> & {
+type DialogContentProps = ComponentProps<typeof DialogPrimitive.Popup> & {
   /** Render the top-right close button. */
   showClose?: boolean
 }
@@ -33,10 +33,10 @@ function DialogContent({ className, children, showClose = true, ...props }: Dial
   return (
     <DialogPortal>
       <DialogOverlay />
-      <DialogPrimitive.Content
+      <DialogPrimitive.Popup
         data-slot='dialog-content'
         className={cn(
-          'fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100vh-2rem)] w-[calc(100%-2rem)] max-w-135 -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-y-auto rounded-3xl bg-white p-6 text-text shadow-lg duration-200 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 sm:p-8',
+          'fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100vh-2rem)] w-[calc(100%-2rem)] max-w-135 -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-y-auto rounded-3xl bg-white p-6 text-text shadow-lg duration-200 outline-none data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 sm:p-8',
           className
         )}
         {...props}>
@@ -49,7 +49,7 @@ function DialogContent({ className, children, showClose = true, ...props }: Dial
             <LuX className='size-5' aria-hidden='true' />
           </DialogPrimitive.Close>
         )}
-      </DialogPrimitive.Content>
+      </DialogPrimitive.Popup>
     </DialogPortal>
   )
 }

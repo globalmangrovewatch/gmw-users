@@ -1,17 +1,15 @@
-'use client'
-
-import * as LabelPrimitive from '@radix-ui/react-label'
 import type { ComponentProps } from 'react'
 
 import { cn } from '@/lib/cn'
 
-type LabelProps = ComponentProps<typeof LabelPrimitive.Root> & {
+type LabelProps = ComponentProps<'label'> & {
   required?: boolean
 }
 
+// Base UI has no standalone Label primitive: a native <label> with htmlFor is enough.
 function Label({ className, required, children, ...props }: LabelProps) {
   return (
-    <LabelPrimitive.Root
+    <label
       data-slot='label'
       className={cn(
         'text-sm leading-none font-semibold transition-colors peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
@@ -26,8 +24,9 @@ function Label({ className, required, children, ...props }: LabelProps) {
           </span>
         )}
       </span>
-    </LabelPrimitive.Root>
+    </label>
   )
 }
 
 export { Label }
+export type { LabelProps }
