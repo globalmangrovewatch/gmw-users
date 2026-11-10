@@ -41,6 +41,8 @@ type FieldProps<T extends FieldValues, TName extends FieldPath<T>> = Pick<
   description?: ReactNode
   /** Classes for the field wrapper (label + control + message). */
   className?: string
+  /** Classes for the label, e.g. `stickyFormLabelClassName` for a section question. */
+  labelClassName?: string
 }
 
 /** Control props the field owns, so they can't be passed to the control directly. */
@@ -65,6 +67,7 @@ function FormInput<T extends FieldValues = FieldValues, TName extends FieldPath<
   required,
   description,
   className,
+  labelClassName,
   ...inputProps
 }: FormInputProps<T, TName>) {
   const { control } = useFormContext<T>()
@@ -78,7 +81,9 @@ function FormInput<T extends FieldValues = FieldValues, TName extends FieldPath<
       defaultValue={defaultValue}
       render={({ field }) => (
         <FormItem className={className}>
-          <FormLabel required={required}>{label}</FormLabel>
+          <FormLabel className={labelClassName} required={required}>
+            {label}
+          </FormLabel>
           <FormControl>
             <Input {...inputProps} {...field} value={field.value ?? ''} />
           </FormControl>
@@ -105,6 +110,7 @@ function FormTextarea<
   required,
   description,
   className,
+  labelClassName,
   ...textareaProps
 }: FormTextareaProps<T, TName>) {
   const { control } = useFormContext<T>()
@@ -118,7 +124,9 @@ function FormTextarea<
       defaultValue={defaultValue}
       render={({ field }) => (
         <FormItem className={className}>
-          <FormLabel required={required}>{label}</FormLabel>
+          <FormLabel className={labelClassName} required={required}>
+            {label}
+          </FormLabel>
           <FormControl>
             <Textarea {...textareaProps} {...field} value={field.value ?? ''} />
           </FormControl>
@@ -153,6 +161,7 @@ function FormSelect<
   required,
   description,
   className,
+  labelClassName,
   options,
   placeholder,
   ...selectProps
@@ -168,7 +177,9 @@ function FormSelect<
       defaultValue={defaultValue}
       render={({ field }) => (
         <FormItem className={className}>
-          <FormLabel required={required}>{label}</FormLabel>
+          <FormLabel className={labelClassName} required={required}>
+            {label}
+          </FormLabel>
           <Select<string>
             {...selectProps}
             items={options}
@@ -214,6 +225,7 @@ function FormRadioGroup<
   required,
   description,
   className,
+  labelClassName,
   options,
   ...radioGroupProps
 }: FormRadioGroupProps<T, TName>) {
@@ -229,7 +241,7 @@ function FormRadioGroup<
       defaultValue={defaultValue}
       render={({ field }) => (
         <FormItem className={className}>
-          <FormLabel id={labelId} required={required}>
+          <FormLabel id={labelId} className={labelClassName} required={required}>
             {label}
           </FormLabel>
           <FormControl>

@@ -1,7 +1,7 @@
 'use client'
 
 import { Combobox as ComboboxPrimitive } from '@base-ui/react/combobox'
-import type { ComponentProps } from 'react'
+import { useRef, type ComponentProps } from 'react'
 import { LuCheck, LuChevronsUpDown, LuX } from 'react-icons/lu'
 
 import { cn } from '@/lib/cn'
@@ -111,5 +111,113 @@ function Combobox<T extends string = string>({
   )
 }
 
-export { Combobox }
-export type { ComboboxOption, ComboboxProps }
+type MultiComboboxProps<T extends string = string> = Omit<
+  ComboboxPrimitive.Root.Props<ComboboxOption<T>, true>,
+  'items' | 'value' | 'defaultValue' | 'onValueChange' | 'children' | 'multiple'
+> &
+  ComboboxInputProps & {
+    options: ComboboxOption<T>[]
+    /** The selected options' values (not the option objects). */
+    value?: T[]
+    onChange: (value: T[]) => void
+    emptyText?: string
+    /** Classes for the chips container (chips + input). */
+    className?: string
+  }
+
+/** Searchable multi select: each selected option shows as a removable chip before the input. */
+function MultiCombobox<T extends string = string>({
+  options,
+  value = [],
+  onChange,
+  placeholder = 'Select…',
+  emptyText = 'No results.',
+  className,
+  id,
+  'aria-invalid': ariaInvalid,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
+  ...rootProps
+}: MultiComboboxProps<T>) {
+  const chipsRef = useRef<HTMLDivElement>(null)
+  const selected = options.filter((option) => value.includes(option.value))
+
+  return (
+    <ComboboxPrimitive.Root
+      {...rootProps}
+      multiple
+      items={options}
+      value={selected}
+      onValueChange={(next) => onChange(next.map((option) => option.value))}>
+      <ComboboxPrimitive.Chips
+        ref={chipsRef}
+        data-slot='multi-combobox'
+        className={cn(
+          'flex min-h-9 w-full flex-wrap items-center gap-1 rounded-3xl border border-black/15 bg-white px-2 py-1 text-sm text-text ring-offset-white focus-within:ring-2 focus-within:ring-brand-800 focus-within:ring-offset-2 has-aria-invalid:border-error has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50',
+          className
+        )}>
+        <ComboboxPrimitive.Value>
+          {(current: ComboboxOption<T>[]) => (
+            <>
+              {current.map((option) => (
+                <ComboboxPrimitive.Chip
+                  key={option.value}
+                  aria-label={option.label}
+                  className='flex items-center gap-1 rounded-full bg-brand-100 py-0.5 pr-1 pl-2.5 text-sm text-brand-900 outline-none data-highlighted:bg-brand-800 data-highlighted:text-white'>
+                  {option.label}
+                  <ComboboxPrimitive.ChipRemove
+                    aria-label={`Remove ${option.label}`}
+                    className='flex size-5 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-current hover:bg-black/10'>
+                    <LuX className='size-3.5' aria-hidden='true' />
+                  </ComboboxPrimitive.ChipRemove>
+                </ComboboxPrimitive.Chip>
+              ))}
+              <ComboboxPrimitive.Input
+                id={id}
+                placeholder={current.length ? undefined : placeholder}
+                aria-invalid={ariaInvalid}
+                aria-label={ariaLabel}
+                aria-labelledby={ariaLabelledBy}
+                aria-describedby={ariaDescribedBy}
+                className='h-7 min-w-12 flex-1 border-0 bg-transparent px-1 outline-none placeholder:text-black/60'
+              />
+            </>
+          )}
+        </ComboboxPrimitive.Value>
+      </ComboboxPrimitive.Chips>
+
+      <ComboboxPrimitive.Portal>
+        <ComboboxPrimitive.Positioner
+          className='z-50 outline-none'
+          align='start'
+          sideOffset={4}
+          anchor={chipsRef}>
+          <ComboboxPrimitive.Popup
+            data-slot='combobox-content'
+            className='w-(--anchor-width) max-w-(--available-width) origin-(--transform-origin) overflow-hidden rounded-md border border-black/15 bg-white text-text shadow-md outline-none data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95'>
+            <ComboboxPrimitive.Empty>
+              <div className='py-6 text-center text-sm'>{emptyText}</div>
+            </ComboboxPrimitive.Empty>
+            <ComboboxPrimitive.List className='max-h-[min(18rem,var(--available-height))] scroll-py-1 overflow-y-auto overscroll-contain p-1 outline-none data-empty:p-0'>
+              {(option: ComboboxOption<T>) => (
+                <ComboboxPrimitive.Item
+                  key={option.value}
+                  value={option}
+                  className='grid cursor-default grid-cols-[1rem_1fr] items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none data-highlighted:bg-brand-100 data-highlighted:text-brand-900'>
+                  <ComboboxPrimitive.ItemIndicator className='col-start-1'>
+                    <LuCheck className='size-4 text-brand-800' aria-hidden='true' />
+                  </ComboboxPrimitive.ItemIndicator>
+                  <span className='col-start-2'>{option.label}</span>
+                </ComboboxPrimitive.Item>
+              )}
+            </ComboboxPrimitive.List>
+          </ComboboxPrimitive.Popup>
+        </ComboboxPrimitive.Positioner>
+      </ComboboxPrimitive.Portal>
+    </ComboboxPrimitive.Root>
+  )
+}
+
+export { Combobox, MultiCombobox }
+export type { ComboboxOption, ComboboxProps, MultiComboboxProps }
