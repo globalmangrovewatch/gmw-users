@@ -6,8 +6,11 @@
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "incremental": true,
-    "plugins": [{ "name": "next" }],
-    "allowJs": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "checkJs": false,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
@@ -21,7 +24,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["node", "vitest/globals", "@testing-library/jest-dom/vitest"]
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom/vitest"],
+    "allowJs": false
   },
   "include": ["next-env.d.ts", "src", ".next/types/**/*.ts", ".next/dev/types/**/*.ts"],
   "exclude": ["node_modules"]

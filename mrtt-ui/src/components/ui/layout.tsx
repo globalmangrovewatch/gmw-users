@@ -6,10 +6,9 @@ import type { ComponentProps } from 'react'
 import { cn } from '@/lib/cn'
 
 /*
- * Tailwind versions of the exports in src/styles/containers.js, lists.js and table.js, same
- * names, so unconverted screens keep working until they move to ui/* (GMW-1123, GMW-1124).
- * themeMui.spacing(n) = 5n px: spacing(2) → 2.5, spacing(3) → 3.75, spacing(1) → 1.25.
- * theme.color.primary #009b93 has no token; theme.color.slub is #333333D9.
+ * Page layout pieces, ported from the old emotion containers, lists and tables with the same
+ * sizes: the old 5px spacing step n is Tailwind n × 1.25 (2 → 2.5, 3 → 3.75, 1 → 1.25).
+ * The old primary #009b93 has no token; the old "slub" grey is #333333D9.
  */
 
 // containers.js

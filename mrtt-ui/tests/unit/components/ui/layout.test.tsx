@@ -2,10 +2,8 @@ import { render, screen } from '@testing-library/react'
 
 import { Card, ContentWrapper, LinkCard, UlAlternating } from '@/components/ui/layout'
 import { ItemTitle } from '@/components/ui/typography'
-import { Card as LegacyCard } from '@/styles/containers'
-import { PageTitle as LegacyPageTitle } from '@/styles/typography'
 
-describe('ui/layout and ui/typography shims', () => {
+describe('ui/layout and ui/typography', () => {
   it('Card renders a div, or the element passed to render', () => {
     render(
       <ul>
@@ -52,11 +50,5 @@ describe('ui/layout and ui/typography shims', () => {
       '/sites/1/overview'
     )
     expect(screen.getByRole('list')).toHaveClass('list-none')
-  })
-
-  it('the legacy styles/* modules re-export the shims', () => {
-    expect(LegacyCard).toBe(Card)
-    render(<LegacyPageTitle>Sites</LegacyPageTitle>)
-    expect(screen.getByRole('heading', { level: 1 })).toHaveClass('uppercase')
   })
 })

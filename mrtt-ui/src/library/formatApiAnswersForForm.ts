@@ -29,7 +29,7 @@ export const formatApiAnswersForFormByKey = <M extends SectionMappings>({
     Object.entries(sectionMapping).forEach(([fieldKey, questionId]) => {
       let apiValue = answersById.get(questionId)
 
-      // MUI specific: cast 'true'/'false' strings to boolean
+      // The API stores booleans as 'true'/'false' strings; the forms expect booleans.
       if (apiValue === 'true') apiValue = true
       if (apiValue === 'false') apiValue = false
 
