@@ -1,21 +1,32 @@
-import PropTypes from 'prop-types'
-import { Dialog, Box, Typography } from '@mui/material'
+'use client'
 
-import { AboutParagraph, ExternalLink, Highlight, List, ListItem } from './styles'
+import type { ComponentProps } from 'react'
 
-const AboutDialogContent = ({ isOpen, setIsOpen }) => {
-  const onClose = () => {
-    setIsOpen(false)
-  }
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { cn } from '@/lib/cn'
 
+const USER_GUIDE_URL = 'https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
+
+type AboutDialogProps = {
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+}
+
+function AboutParagraph({ className, ...props }: ComponentProps<'p'>) {
+  return <p className={cn('pb-5 text-md tracking-[1px] text-grey-400', className)} {...props} />
+}
+
+/** What the MRTT is for, opened from the landing header. */
+function AboutDialog({ isOpen, setIsOpen }: AboutDialogProps) {
   return (
-    <Dialog open={isOpen} onClose={onClose}>
-      <Box p={4} width={400}>
-        <Typography variant='h6' gutterBottom>
-          About the Mangrove Restoration Tracker Tool (MRTT)
-        </Typography>
-
-        <Box>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogContent className='max-w-100'>
+        <DialogHeader>
+          <DialogTitle className='pr-8'>
+            About the Mangrove Restoration Tracker Tool (MRTT)
+          </DialogTitle>
+        </DialogHeader>
+        <div>
           <AboutParagraph>
             The MRTT is an open-access resource to support restoration practitioners. It provides a
             secure location to hold information across restoration planning, intervention and
@@ -31,42 +42,39 @@ const AboutDialogContent = ({ isOpen, setIsOpen }) => {
             questions to record information through the lifetime of a mangrove restoration project,
             covering:
           </AboutParagraph>
-          <List>
-            <ListItem>Site background and pre-restoration baseline.</ListItem>
-            <ListItem>The restoration interventions and project costs.</ListItem>
-            <ListItem>
+          <ol className='list-decimal px-5 py-3.75 text-md tracking-[1px] text-grey-400'>
+            <li className='pb-2.5'>Site background and pre-restoration baseline.</li>
+            <li className='pb-2.5'>The restoration interventions and project costs.</li>
+            <li className='pb-2.5'>
               Post-restoration monitoring that incorporates both socio-economic and ecological
               factors.
-            </ListItem>
-          </List>
+            </li>
+          </ol>
           <AboutParagraph>
             The MRTT can record both historical and current restoration projects.
           </AboutParagraph>
           <AboutParagraph>
             For support on how to enter data into the MRTT please see the{' '}
-            <ExternalLink
-              href='https://tnc.app.box.com/s/pspea7mm2m2uldrqvhahmvp9dck6mc06'
+            <a
+              href={USER_GUIDE_URL}
               rel='noreferrer'
-              target='_blank'>
+              target='_blank'
+              className='text-[#009b93] hover:text-brand-hover'>
               user guide
-            </ExternalLink>{' '}
+            </a>{' '}
             (also available in English, French, Spanish, Bahasa Indonesia, Portuguese, Swahili, and
             Arabic), which provides step-by-step instructions. The user guide also describes the
             different question types and provides an overview of each question.
           </AboutParagraph>
-          <AboutParagraph>
+          <AboutParagraph className='pb-0'>
             For questions and potential training opportunities please email:{' '}
-            <Highlight>contact@globalmangrovewatch.org</Highlight>
+            <span className='text-[#009b93]'>contact@globalmangrovewatch.org</span>
           </AboutParagraph>
-        </Box>
-      </Box>
+        </div>
+      </DialogContent>
     </Dialog>
   )
 }
 
-export default AboutDialogContent
-AboutDialogContent.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  setIsOpen: PropTypes.func.isRequired,
-  onSuccess: PropTypes.func
-}
+export { USER_GUIDE_URL }
+export default AboutDialog
