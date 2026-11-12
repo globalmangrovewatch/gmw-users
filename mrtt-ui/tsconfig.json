@@ -24,8 +24,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["node", "vitest/globals", "@testing-library/jest-dom"],
-    "allowJs": true
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom/vitest"],
+    "allowJs": false
   },
   "include": ["next-env.d.ts", "src", ".next/types/**/*.ts", ".next/dev/types/**/*.ts"],
   "exclude": ["node_modules"]

@@ -7,5 +7,5 @@
       "fixtures/*": ["./fixtures/*"]
     }
   },
-  "include": [".", "../src/types"]
+  "include": [".", "../src/types", "../next-env.d.ts"]
 }
