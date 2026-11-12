@@ -320,7 +320,9 @@ function SiteInterventionsForm() {
                 No items to display. Please select countries in Site Details and Location (1.2).
               </ErrorText>
             )}
-            <ErrorText>{errors.mangroveSpeciesUsed?.message}</ErrorText>
+            <ErrorText>
+              {errors.mangroveSpeciesUsed?.root?.message ?? errors.mangroveSpeciesUsed?.message}
+            </ErrorText>
           </FormQuestionDiv>
         ) : null}
 
@@ -337,7 +339,10 @@ function SiteInterventionsForm() {
                 onDelete={associatedSpeciesRemove}
               />
             ))}
-            <ErrorText>{errors.mangroveAssociatedSpecies?.message}</ErrorText>
+            <ErrorText>
+              {errors.mangroveAssociatedSpecies?.root?.message ??
+                errors.mangroveAssociatedSpecies?.message}
+            </ErrorText>
             {showAddAssociatedSpeciesRow ? (
               <AddMangroveAssociatedSpeciesRow
                 saveItem={associatedSpeciesAppend}
