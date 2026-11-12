@@ -6,6 +6,7 @@ import { useEffect, type ReactNode } from 'react'
 import { FormProvider, useForm, useFormContext, type DefaultValues } from 'react-hook-form'
 
 import CausesOfDeclineForm from '@/components/CausesOfDeclineForm'
+import CostsForm from '@/components/Costs/CostsForm'
 import PreRestorationAssessmentForm from '@/components/PreRestorationAssessment/PreRestorationAssessmentForm'
 import ProjectDetailsForm from '@/components/ProjectDetailsForm'
 import SiteInterventionsForm from '@/components/SiteInterventions/SiteInterventionsForm'
@@ -345,6 +346,78 @@ describe('section forms', () => {
       expect(
         await screen.findByText(`Nipa palm: ${language.form.error.notNegative}`)
       ).toBeInTheDocument()
+    })
+  })
+
+  describe('CostsForm', () => {
+    const monetary = { question_id: '7.1', answer_value: { selectedValues: ['Monetary'] } }
+
+    it('starts the breakdown and the split from the default costs and the site interventions', async () => {
+      answers = [
+        monetary,
+        { question_id: '6.2', answer_value: { selectedValues: ['Planting', 'None'] } },
+        {
+          question_id: '6.4',
+          answer_value: {
+            selectedValues: ['Community outreach'],
+            isOtherChecked: true,
+            otherValue: 'Beach clean-up'
+          }
+        }
+      ]
+      renderSection(<CostsForm />)
+
+      expect(await screen.findByLabelText('Monitoring: cost')).toHaveValue('0')
+      expect(formValues().breakdownOfCost).toHaveLength(6)
+      expect(formValues().percentageSplitOfActivities).toEqual([
+        { intervention: 'Planting' },
+        { intervention: 'Community outreach' },
+        { intervention: 'Beach clean-up' }
+      ])
+      expect(screen.getByLabelText('Beach clean-up')).toBeInTheDocument()
+    })
+
+    it('warns when there are no interventions to split, and when the breakdown exceeds the total', async () => {
+      const user = userEvent.setup()
+      answers = [monetary, { question_id: '7.4', answer_value: { cost: 100, currency: 'USD' } }]
+      renderSection(<CostsForm />)
+
+      expect(
+        await screen.findByText(language.pages.costs.missingInterventionsWarning)
+      ).toBeInTheDocument()
+      const breakdownMessage = 'Breakdown of activities must not exceed total cost in 7.4'
+      expect(screen.queryByText(breakdownMessage)).not.toBeInTheDocument()
+
+      await user.clear(screen.getByLabelText('Monitoring: cost'))
+      await user.type(screen.getByLabelText('Monitoring: cost'), '150')
+
+      expect(screen.getByText('Total: 150')).toBeInTheDocument()
+      expect(screen.getByText(breakdownMessage)).toBeInTheDocument()
+    })
+
+    it('adds a funder through the add row and removes it after confirming', async () => {
+      const user = userEvent.setup()
+      answers = [monetary]
+      renderSection(<CostsForm />)
+
+      await user.click(await screen.findByRole('button', { name: '+ Add measurement row' }))
+      await user.type(screen.getByLabelText('Funder Name'), 'Mangrove Fund')
+      await user.click(screen.getByRole('combobox', { name: 'Funder Type' }))
+      await user.click(await screen.findByRole('option', { name: 'Ecotourists' }))
+      await user.type(screen.getByLabelText('Percentage'), '40')
+      await user.click(screen.getByRole('button', { name: language.buttons.save }))
+
+      expect(formValues().projectFunderNames).toEqual([
+        { funderName: 'Mangrove Fund', funderType: 'Ecotourists', percentage: '40' }
+      ])
+      expect(screen.getByLabelText('Mangrove Fund: percentage')).toHaveValue('40')
+
+      const deleteLabel = `${language.form.tabularDeletePrompt.title}Mangrove Fund`
+      await user.click(screen.getByRole('button', { name: deleteLabel }))
+      await user.click(
+        await screen.findByRole('button', { name: language.form.tabularDeletePrompt.buttonText })
+      )
+      expect(formValues().projectFunderNames).toEqual([])
     })
   })
 })
