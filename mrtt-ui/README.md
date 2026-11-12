@@ -10,12 +10,11 @@ The project board for this work can be found [here](https://github.com/Vizzualit
 
 ## Tech Stack and Dependencies Worth Noting
 
-- React
-- Emotion to manage styling
-- MUI for user already styled user interface components
-- React-toastify
-- React Hook Form
-- Yup for form validation
+- Next.js (App Router) and React 19, in TypeScript
+- Tailwind CSS 4 for styling, with shadcn-style components on Base UI in `src/components/ui/`
+- Sonner for toasts
+- React Hook Form, with zod for form validation
+- TanStack Query for API data
 - oxlint (linting), oxfmt (formatting), Husky + lint-staged (git hooks)
 - Vitest + Testing Library (unit tests)
 - Mapbox to draw mangrove site locations.
@@ -25,16 +24,14 @@ The project board for this work can be found [here](https://github.com/Vizzualit
 ## Architectural Decisions and Tradeoffs
 
 - Translation will be provided via Transifex which is configured at `mrtt-ui/public/index.html`. This is unlikely to translate dynamically generated text, so we included a language file (`mrtt-ui/src/language.js`)for easy future translation. We attempted to put all user facing text in the language file, but in some places it is hardcoded in the JSX
-- Theming is configured in two files.
-  - `mrtt-ui/src/styles/themeMui.js` is responsible for setting style defaults for MUI components
-  - `mrtt-ui/src/styles/theme.js` is for all other style tokens. `themeMui.js` should import tokens from `theme.js`
+- Theme tokens (colours, font sizes, layout sizes) live in the Tailwind `@theme` block in `mrtt-ui/src/styles/globals.css`.
 - This project had a very tight timeline, so it was decided that we skip writing front end tests.
 - The various site data items/form questions and answers have numerical ids based on question order on the server side. It was decided that the front end would use descriptive naming for coding these questions and answers. We map the descriptive names to the ids used on the server in the `mrtt-ui/src/library/mapDataForApi.js` file using a a lookup object found here: `mrtt-ui/src/data/questionMapping.js`.
 - In order for the `QuestionNav` (`mrtt-ui/src/components/QuestionNav.js`) component to work properly, this constants file needs to list all the forms by id in order here: `mrtt-ui/src/constants/sectionNames.js`
 - a convienience custom hook is used to load _most_ data for a given form.
   - for forms 1-7, `mrtt-ui/src/library/useInitializeQuestionMappedFormjs`. This hook calls a provided callback function with the server response for supplimental form data parsing.
   - for forms 8-10, `mrtt-ui/src/library/useInitializeMonitoringForm.js`. This hook to-date does not include a callback because those forms happened not to need it.
-- A date picker was created using MUI and Luxon to display and save all dates in UTC. Any timestamps saved should be ignored as false precision. `mrtt-ui/src/components/DatePickerUtcMui.js`
+- The date picker displays and saves all dates in UTC. Any timestamps saved should be ignored as false precision. `mrtt-ui/src/components/DatePickerUtc.tsx`
 
 ## Setting Up and Running a Development Environment
 

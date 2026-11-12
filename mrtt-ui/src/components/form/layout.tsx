@@ -2,8 +2,8 @@ import type { ComponentProps } from 'react'
 
 import { cn } from '@/lib/cn'
 
-// Tailwind versions of the form layout pieces in styles/forms.js, with the same sizes.
-// themeMui.spacing(n) is 5n px. styles.mediaQueryDesktop is 599px.
+// Form layout pieces, ported from the old emotion forms with the same sizes.
+// The old spacing step was 5px; the old desktop breakpoint is 599px.
 
 /** Classes of a question label: sticks under the header and section nav while its question scrolls. */
 const stickyFormLabelClassName =

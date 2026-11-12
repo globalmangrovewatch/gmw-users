@@ -9,9 +9,9 @@ import { getAuthToken, setAuthToken } from '@/lib/auth/token'
 import { getQueryClient } from '@/lib/queryClient'
 
 vi.mock('@/hooks/sso', () => ({
-  exchangeCode: vi.fn(),
-  readAndStripCode: vi.fn(),
-  silentSsoCheck: vi.fn()
+  exchangeCode: vi.fn<typeof exchangeCode>(),
+  readAndStripCode: vi.fn<typeof readAndStripCode>(),
+  silentSsoCheck: vi.fn<typeof silentSsoCheck>()
 }))
 
 const AuthStatus = () => {
@@ -31,9 +31,9 @@ const renderInStrictMode = () =>
 
 describe('AuthProvider bootstrap', () => {
   beforeEach(() => {
-    readAndStripCode.mockReturnValue(null)
-    silentSsoCheck.mockResolvedValue(null)
-    exchangeCode.mockReset()
+    vi.mocked(readAndStripCode).mockReturnValue(null)
+    vi.mocked(silentSsoCheck).mockResolvedValue(null)
+    vi.mocked(exchangeCode).mockReset()
   })
 
   afterEach(() => {
@@ -50,8 +50,11 @@ describe('AuthProvider bootstrap', () => {
   })
 
   it('logs the user in when the silent SSO check returns a code', async () => {
-    silentSsoCheck.mockResolvedValue('sso-code')
-    exchangeCode.mockResolvedValue({ token: 'jwt', user: { email: 'maria@example.com' } })
+    vi.mocked(silentSsoCheck).mockResolvedValue('sso-code')
+    vi.mocked(exchangeCode).mockResolvedValue({
+      token: 'jwt',
+      user: { email: 'maria@example.com' }
+    })
 
     renderInStrictMode()
 
@@ -62,7 +65,7 @@ describe('AuthProvider bootstrap', () => {
 
   it('falls back to logged out when the SSO bootstrap throws', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {})
-    silentSsoCheck.mockRejectedValue(new Error('NEXT_PUBLIC_GMW_URL is not set'))
+    vi.mocked(silentSsoCheck).mockRejectedValue(new Error('NEXT_PUBLIC_GMW_URL is not set'))
 
     renderInStrictMode()
 
@@ -72,8 +75,8 @@ describe('AuthProvider bootstrap', () => {
 
 describe('AuthProvider session changes', () => {
   beforeEach(() => {
-    readAndStripCode.mockReturnValue(null)
-    silentSsoCheck.mockResolvedValue(null)
+    vi.mocked(readAndStripCode).mockReturnValue(null)
+    vi.mocked(silentSsoCheck).mockResolvedValue(null)
   })
 
   afterEach(() => {
@@ -119,7 +122,7 @@ describe('AuthProvider session changes', () => {
       setAuthToken('expired')
     })
 
-    const fetchMock = vi.fn(async () => new Response('{}', { status: 401 }))
+    const fetchMock = vi.fn<typeof fetch>(async () => new Response('{}', { status: 401 }))
     vi.stubGlobal('fetch', fetchMock)
     await api.get('/sites').catch(() => {})
     vi.unstubAllGlobals()

@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect } from 'react'
+
 import { postSilentCallbackResult, SSO_CODE_PARAM } from '@/hooks/sso'
 
-const SsoSilentCallback = () => {
+/** Loaded in the silent SSO iframe: hands the `code` query param back to the parent window. */
+function SsoSilentCallback() {
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const code = params.get(SSO_CODE_PARAM)
+    const code = new URLSearchParams(window.location.search).get(SSO_CODE_PARAM)
     postSilentCallbackResult(code)
   }, [])
 

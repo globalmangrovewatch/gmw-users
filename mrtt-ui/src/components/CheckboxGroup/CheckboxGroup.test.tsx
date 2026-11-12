@@ -2,7 +2,7 @@ import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import CheckboxGroup from './CheckboxGroup'
+import CheckboxGroup, { type CheckboxGroupProps } from './CheckboxGroup'
 
 const options = [
   { label: 'Option 1', value: 'Option 1' },
@@ -44,7 +44,7 @@ describe('CheckboxGroup', () => {
 
   it('reports the next value through onChange without keeping local state', async () => {
     const user = userEvent.setup()
-    const onChange = vi.fn()
+    const onChange = vi.fn<CheckboxGroupProps['onChange']>()
     render(
       <CheckboxGroup
         id='q'
@@ -71,7 +71,7 @@ describe('CheckboxGroup', () => {
 
   it('passes a checkbox-like event when shouldReturnEvent is set', async () => {
     const user = userEvent.setup()
-    const onChange = vi.fn()
+    const onChange = vi.fn<CheckboxGroupProps['onChange']>()
     render(
       <CheckboxGroup
         id='q'
@@ -90,7 +90,7 @@ describe('CheckboxGroup', () => {
 
   it('labels the group and shows the other input only when Other is checked', async () => {
     const user = userEvent.setup()
-    const onChange = vi.fn()
+    const onChange = vi.fn<CheckboxGroupProps['onChange']>()
     render(
       <>
         <span id='q-label'>Protection status</span>
