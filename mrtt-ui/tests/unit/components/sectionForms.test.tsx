@@ -1,5 +1,6 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useEffect, type ReactNode } from 'react'
 import { FormProvider, useForm, useFormContext, type DefaultValues } from 'react-hook-form'
@@ -15,7 +16,7 @@ import {
   projectDetails,
   restorationAims
 } from '@/data/questions'
-import type { RegistrationFormValues } from '@/forms/schemas'
+import { registrationSchema, type RegistrationFormValues } from '@/forms/schemas'
 import language from '@/language'
 import organizeMangroveSpeciesList from '@/library/organizeMangroveSpeciesList'
 
@@ -23,29 +24,41 @@ vi.mock('@/components/QuestionNav', () => ({ default: () => null }))
 vi.mock('next/navigation', () => ({ useParams: () => ({ siteId: '42' }) }))
 // The site area map needs WebGL; these tests are about the questions around it.
 vi.mock('next/dynamic', () => ({ default: () => () => null }))
+// The real list holds every mangrove species (one checkbox each), too slow to render in CI.
+vi.mock('@/library/organizeMangroveSpeciesList', () => ({
+  default: () => ['Avicennia marina', 'Rhizophora apiculata', 'Sonneratia alba']
+}))
 
 const jsonResponse = (body: unknown) =>
   new Response(JSON.stringify(body), { headers: { 'Content-Type': 'application/json' } })
 
-let formValues: () => RegistrationFormValues = () => {
+const notRendered = () => {
   throw new Error('form not rendered')
 }
+let formValues: () => RegistrationFormValues = notRendered
+let validateForm: () => Promise<boolean> = notRendered
 
 function ExposeValues() {
-  const { getValues } = useFormContext<RegistrationFormValues>()
+  const { getValues, trigger } = useFormContext<RegistrationFormValues>()
   useEffect(() => {
     formValues = getValues
-  }, [getValues])
+    validateForm = () => trigger()
+  }, [getValues, trigger])
   return null
 }
 
 const renderSection = (
   section: ReactNode,
-  defaultValues: DefaultValues<RegistrationFormValues> = {}
+  defaultValues: DefaultValues<RegistrationFormValues> = {},
+  // Validate with the app's schema (as FormWrapperProvider does), for tests that check messages.
+  { validate = false } = {}
 ) => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   function Wrapper({ children }: { children: ReactNode }) {
-    const form = useForm<RegistrationFormValues>({ defaultValues })
+    const form = useForm<RegistrationFormValues>({
+      resolver: validate ? zodResolver(registrationSchema) : undefined,
+      defaultValues
+    })
     return (
       <FormProvider {...form}>
         <ExposeValues />
@@ -311,6 +324,27 @@ describe('section forms', () => {
         }
       ])
       expect(await screen.findByText('Nipa palm')).toBeInTheDocument()
+    })
+
+    it('shows the associated species count error under the list', async () => {
+      answers = [
+        { question_id: '1.2', answer_value: [{ properties: { country: 'Indonesia' } }] },
+        { question_id: '6.2', answer_value: { selectedValues: ['Planting'] } },
+        {
+          question_id: '6.2c',
+          answer_value: [
+            { type: 'Nipa palm', count: -1, source: 'Wild', purpose: { purpose: 'Source of food' } }
+          ]
+        }
+      ]
+      renderSection(<SiteInterventionsForm />, {}, { validate: true })
+      await waitFor(() => expect(screen.getByLabelText('Count')).toHaveValue('-1'))
+
+      await act(() => validateForm())
+
+      expect(
+        await screen.findByText(`Nipa palm: ${language.form.error.notNegative}`)
+      ).toBeInTheDocument()
     })
   })
 })
