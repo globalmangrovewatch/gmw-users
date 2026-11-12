@@ -1,0 +1,39 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "unicorn", "oxc", "import", "vitest"],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2022": true
+  },
+  "ignorePatterns": ["build/**", "coverage/**", "public/**"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error",
+    // React Compiler rules from the correctness category. The current code breaks them in the
+    // section forms and views that GMW-1123 / GMW-1124 rewrite, so they warn until then.
+    "react/set-state-in-effect": "warn",
+    "react/immutability": "warn",
+    "react/globals": "warn",
+    // yup's `.when({ is, then, otherwise })` API is not a thenable.
+    "unicorn/no-thenable": "off",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-unused-vars": [
+      "warn",
+      { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_", "caughtErrors": "none" }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["scripts/**"],
+      "rules": { "no-console": "off" }
+    },
+    {
+      "files": ["**/*.test.{js,jsx,ts,tsx}", "vitest.setup.ts"],
+      "env": { "vitest": true }
+    }
+  ]
+}
