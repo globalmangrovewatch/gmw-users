@@ -275,7 +275,10 @@ function PreRestorationAssessmentForm() {
                 onDelete={measurementRemove}
               />
             ))}
-            <ErrorText>{errors.physicalMeasurementsTaken?.message}</ErrorText>
+            <ErrorText>
+              {errors.physicalMeasurementsTaken?.root?.message ??
+                errors.physicalMeasurementsTaken?.message}
+            </ErrorText>
             {showAddMeasurementRow ? (
               <AddPhysicalMeasurementRow
                 // The unit isn't stored: 5.3g rows only hold a type and a value.
