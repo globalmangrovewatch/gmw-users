@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/hooks/useAuth'
-import LoadingIndicator from '@/components/LoadingIndicator'
+import { useEffect, type ReactNode } from 'react'
 
-function ProtectedRoutes({ children }) {
+import LoadingIndicator from '@/components/LoadingIndicator'
+import { useAuth } from '@/hooks/useAuth'
+
+/** Shows its children to signed-in users and sends everyone else to the login page. */
+function ProtectedRoutes({ children }: { children: ReactNode }) {
   const { isLoggedIn, isChecking } = useAuth()
   const router = useRouter()
   const isSignedOut = !isChecking && !isLoggedIn
@@ -19,7 +20,5 @@ function ProtectedRoutes({ children }) {
 
   return <div>{children}</div>
 }
-
-ProtectedRoutes.propTypes = { children: PropTypes.node.isRequired }
 
 export default ProtectedRoutes
