@@ -1,5 +1,6 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useEffect, type ReactNode } from 'react'
 import { FormProvider, useForm, useFormContext, type DefaultValues } from 'react-hook-form'
@@ -8,6 +9,7 @@ import CausesOfDeclineForm from '@/components/CausesOfDeclineForm'
 import CostsForm from '@/components/Costs/CostsForm'
 import PreRestorationAssessmentForm from '@/components/PreRestorationAssessment/PreRestorationAssessmentForm'
 import ProjectDetailsForm from '@/components/ProjectDetailsForm'
+import SiteInterventionsForm from '@/components/SiteInterventions/SiteInterventionsForm'
 import RestorationAimsForm from '@/components/RestorationAimsForm/RestorationAimsForm'
 import {
   causesOfDecline,
@@ -15,7 +17,7 @@ import {
   projectDetails,
   restorationAims
 } from '@/data/questions'
-import type { RegistrationFormValues } from '@/forms/schemas'
+import { registrationSchema, type RegistrationFormValues } from '@/forms/schemas'
 import language from '@/language'
 import organizeMangroveSpeciesList from '@/library/organizeMangroveSpeciesList'
 
@@ -23,29 +25,41 @@ vi.mock('@/components/QuestionNav', () => ({ default: () => null }))
 vi.mock('next/navigation', () => ({ useParams: () => ({ siteId: '42' }) }))
 // The site area map needs WebGL; these tests are about the questions around it.
 vi.mock('next/dynamic', () => ({ default: () => () => null }))
+// The real list holds every mangrove species (one checkbox each), too slow to render in CI.
+vi.mock('@/library/organizeMangroveSpeciesList', () => ({
+  default: () => ['Avicennia marina', 'Rhizophora apiculata', 'Sonneratia alba']
+}))
 
 const jsonResponse = (body: unknown) =>
   new Response(JSON.stringify(body), { headers: { 'Content-Type': 'application/json' } })
 
-let formValues: () => RegistrationFormValues = () => {
+const notRendered = () => {
   throw new Error('form not rendered')
 }
+let formValues: () => RegistrationFormValues = notRendered
+let validateForm: () => Promise<boolean> = notRendered
 
 function ExposeValues() {
-  const { getValues } = useFormContext<RegistrationFormValues>()
+  const { getValues, trigger } = useFormContext<RegistrationFormValues>()
   useEffect(() => {
     formValues = getValues
-  }, [getValues])
+    validateForm = () => trigger()
+  }, [getValues, trigger])
   return null
 }
 
 const renderSection = (
   section: ReactNode,
-  defaultValues: DefaultValues<RegistrationFormValues> = {}
+  defaultValues: DefaultValues<RegistrationFormValues> = {},
+  // Validate with the app's schema (as FormWrapperProvider does), for tests that check messages.
+  { validate = false } = {}
 ) => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   function Wrapper({ children }: { children: ReactNode }) {
-    const form = useForm<RegistrationFormValues>({ defaultValues })
+    const form = useForm<RegistrationFormValues>({
+      resolver: validate ? zodResolver(registrationSchema) : undefined,
+      defaultValues
+    })
     return (
       <FormProvider {...form}>
         <ExposeValues />
@@ -230,6 +244,108 @@ describe('section forms', () => {
         expect(screen.queryByLabelText('Tidal range (cm)')).not.toBeInTheDocument()
       )
       expect(formValues().physicalMeasurementsTaken).toHaveLength(7)
+    })
+  })
+  describe('SiteInterventionsForm', () => {
+    const species = organizeMangroveSpeciesList([{ properties: { country: 'Indonesia' } }])[0]!
+
+    it('loads saved stakeholders, species used and associated species', async () => {
+      answers = [
+        { question_id: '1.2', answer_value: [{ properties: { country: 'Indonesia' } }] },
+        {
+          question_id: '6.1',
+          answer_value: [
+            { stakeholder: 'Local community representatives', stakeholderType: 'Paid' }
+          ]
+        },
+        { question_id: '6.2', answer_value: { selectedValues: ['Planting'] } },
+        {
+          question_id: '6.2b',
+          answer_value: [
+            {
+              type: species,
+              seed: { checked: true, source: ['From a nursery'], count: 40 },
+              propagule: { checked: false, source: [], count: 0 }
+            }
+          ]
+        },
+        {
+          question_id: '6.2c',
+          answer_value: [
+            { type: 'Nipa palm', count: 12, source: 'Wild', purpose: { purpose: 'Source of food' } }
+          ]
+        }
+      ]
+      renderSection(<SiteInterventionsForm />)
+
+      expect(
+        await screen.findByRole('checkbox', { name: 'Local community representatives' })
+      ).toBeChecked()
+      expect(screen.getByRole('checkbox', { name: species })).toBeChecked()
+      expect(screen.getByRole('checkbox', { name: 'Seedling' })).toBeChecked()
+      expect(screen.getByRole('button', { name: 'Remove From a nursery' })).toBeInTheDocument()
+      expect(screen.getByLabelText('Seedling count')).toHaveValue('40')
+      expect(screen.getByText('Nipa palm')).toBeInTheDocument()
+      expect(screen.getByLabelText('Count')).toHaveValue('12')
+    })
+
+    it('adds a species used and an associated species row', async () => {
+      const user = userEvent.setup()
+      answers = [
+        { question_id: '1.2', answer_value: [{ properties: { country: 'Indonesia' } }] },
+        { question_id: '6.2', answer_value: { selectedValues: ['Planting'] } }
+      ]
+      renderSection(<SiteInterventionsForm />)
+
+      await user.click(await screen.findByRole('checkbox', { name: species }))
+      await user.click(screen.getByRole('checkbox', { name: 'Propagule' }))
+      expect(formValues().mangroveSpeciesUsed).toEqual([
+        {
+          type: species,
+          seed: { checked: false, source: [], count: 0 },
+          propagule: { checked: true, source: [], count: 0 }
+        }
+      ])
+
+      await user.click(screen.getByRole('button', { name: '+ Add measurement row' }))
+      await user.type(screen.getByLabelText('Species name'), 'Nipa palm')
+      await user.type(screen.getByLabelText('Number'), '3')
+      await user.click(screen.getByRole('combobox', { name: 'Source' }))
+      await user.click(await screen.findByRole('option', { name: 'Wild' }))
+      await user.click(screen.getByRole('combobox', { name: 'Purpose' }))
+      await user.click(await screen.findByRole('option', { name: 'Coastal defence' }))
+      await user.click(screen.getByRole('button', { name: language.buttons.save }))
+
+      expect(formValues().mangroveAssociatedSpecies).toEqual([
+        {
+          type: 'Nipa palm',
+          count: '3',
+          source: 'Wild',
+          purpose: { purpose: 'Coastal defence', other: '' }
+        }
+      ])
+      expect(await screen.findByText('Nipa palm')).toBeInTheDocument()
+    })
+
+    it('shows the associated species count error under the list', async () => {
+      answers = [
+        { question_id: '1.2', answer_value: [{ properties: { country: 'Indonesia' } }] },
+        { question_id: '6.2', answer_value: { selectedValues: ['Planting'] } },
+        {
+          question_id: '6.2c',
+          answer_value: [
+            { type: 'Nipa palm', count: -1, source: 'Wild', purpose: { purpose: 'Source of food' } }
+          ]
+        }
+      ]
+      renderSection(<SiteInterventionsForm />, {}, { validate: true })
+      await waitFor(() => expect(screen.getByLabelText('Count')).toHaveValue('-1'))
+
+      await act(() => validateForm())
+
+      expect(
+        await screen.findByText(`Nipa palm: ${language.form.error.notNegative}`)
+      ).toBeInTheDocument()
     })
   })
 
