@@ -318,7 +318,7 @@ describe('ui/* components', () => {
     expect(await screen.findByText('Site saved')).toBeInTheDocument()
   })
 
-  it('typography exports the same names as styles/typography.js', () => {
+  it('typography exports the text components', () => {
     expect(Object.keys(Typography).sort()).toEqual(
       [
         'ErrorText',

@@ -7,10 +7,8 @@ import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/cn'
 
 /*
- * Tailwind versions of the exports in src/styles/typography.js, which now re-exports these, so
- * unconverted screens get them too until they import from here (GMW-1123, GMW-1124).
- * themeMui.spacing(1) = 5px → my-1.25; theme.typography.smallFontSize 15px → text-md;
- * xlargeFontSize 30px → text-3xl; theme.color.slub #333333D9.
+ * Text pieces, ported from the old emotion typography with the same sizes: 5px → my-1.25,
+ * 15px → text-md, 30px → text-3xl; the old "slub" grey is #333333D9.
  */
 
 function ErrorText({ className, ...props }: ComponentProps<'span'>) {

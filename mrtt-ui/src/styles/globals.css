@@ -1,20 +1,19 @@
 /*
- * Tailwind 4 runs alongside emotion/MUI until GMW-1125.
- * Preflight is left out on purpose: it would restyle headings, lists and buttons on the
- * emotion screens. Emotion styles are unlayered, so they always win over these layers.
+ * Preflight is left out: the screens were ported from emotion/MUI without it and rely on the
+ * browser defaults for headings, lists and buttons. The base layer below keeps the resets they need.
  */
 @layer theme, base, components, utilities;
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities);
 @import 'tw-animate-css';
 
-/* `class` strategy: only `form-input` etc. get styled, native and MUI inputs are left alone. */
+/* `class` strategy: only `form-input` etc. get styled, native inputs are left alone. */
 @plugin '@tailwindcss/forms' {
   strategy: 'class';
 }
 
 @theme {
-  /* Brand scale aligned with mangrove-atlas. brand-800 = MUI primary. */
+  /* Brand scale aligned with mangrove-atlas. brand-800 = the old MUI primary. */
   --color-brand-100: #f3f5f5;
   --color-brand-400: #00c5bd;
   --color-brand-600: #00afa7;
@@ -34,7 +33,7 @@
   --color-danger: #b20000;
   --color-error: #d00000;
 
-  /* px values from styles/theme.js and themeMui.js, at the 16px root. */
+  /* px values from the old emotion/MUI theme, at the 16px root. */
   --text-2xs: 0.625rem; /* 10px */
   --text-sm: 0.875rem; /* 14px */
   --text-sm--line-height: 1.3125rem; /* 21px */
@@ -52,8 +51,8 @@
   --breakpoint-desktop: 600px;
 
   /*
-   * Spacing stays at Tailwind's 4px step. themeMui.spacing(n) is 5n px, so MUI spacing n
-   * maps to Tailwind n × 1.25 (spacing(2) = 10px = p-2.5). theme.hoverState maps to `hover:`.
+   * Spacing stays at Tailwind's 4px step. The old MUI spacing was 5n px, so old spacing n
+   * maps to Tailwind n × 1.25 (spacing(2) = 10px = p-2.5).
    */
 }
 

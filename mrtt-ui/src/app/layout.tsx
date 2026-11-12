@@ -19,8 +19,8 @@ export const viewport: Viewport = {
   themeColor: '#009b93'
 }
 
-// Self-hosted at build time. The families are exposed as CSS variables, which
-// styles/theme.js (emotion + MUI) and the Tailwind @theme in globals.css read.
+// Self-hosted at build time. The families are exposed as CSS variables, which the
+// Tailwind @theme in globals.css reads.
 // `subsets` only picks what gets preloaded; the other subsets still load on demand.
 const openSans = Open_Sans({
   subsets: ['latin'],

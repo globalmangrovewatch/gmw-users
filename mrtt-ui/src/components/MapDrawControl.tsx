@@ -35,12 +35,14 @@ function MapDrawControl({
     delete: (event: MapboxDraw.DrawDeleteEvent) => handlers.current.onDelete?.(event)
   }))
 
+  // Listeners go on in onAdd, not in the create callback: StrictMode adds, removes and re-adds the
+  // control, and the create callback runs only once, so listeners added there would be lost.
   const draw = useControl<IControl>(
+    () => new MapboxDraw(drawOptions) as unknown as IControl,
     ({ map }) => {
       map.on('draw.create', listeners.create)
       map.on('draw.update', listeners.update)
       map.on('draw.delete', listeners.delete)
-      return new MapboxDraw(drawOptions) as unknown as IControl
     },
     ({ map }) => {
       map.off('draw.create', listeners.create)
