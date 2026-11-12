@@ -1,11 +1,10 @@
 'use client'
 
-import React from 'react'
-import { ContentWrapper } from '@/styles/containers'
-import { PageTitle } from '@/styles/typography'
+import { ContentWrapper } from '@/components/ui/layout'
+import { PageTitle } from '@/components/ui/typography'
 import language from '@/language'
 
-const PageNotFound = () => {
+function PageNotFound() {
   return (
     <ContentWrapper>
       <PageTitle>{language.pages.pageNotFound.title}</PageTitle>
