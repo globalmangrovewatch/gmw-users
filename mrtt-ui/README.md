@@ -22,6 +22,11 @@ The project board for this work can be found [here](https://github.com/Vizzualit
 - [The Global Mangrove Watch API](https://github.com/globalmangrovewatch/gmw-api) to handle data on the server side
 - Transifex for user language translation.
 
+### Packages held back on purpose
+
+- `jsdom` stays on 29 and `lint-staged` on 16: jsdom 31 needs Node 22.22.2 or later and lint-staged 17 needs 22.22.1, but the app pins Node 22.15.0. Upgrade them together with Node.
+- `@types/node` stays on 22 to match the Node version the app runs on.
+
 ## Architectural Decisions and Tradeoffs
 
 - Translation will be provided via Transifex which is configured at `mrtt-ui/public/index.html`. This is unlikely to translate dynamically generated text, so we included a language file (`mrtt-ui/src/language.js`)for easy future translation. We attempted to put all user facing text in the language file, but in some places it is hardcoded in the JSX
