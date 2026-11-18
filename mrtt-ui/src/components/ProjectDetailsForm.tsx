@@ -215,8 +215,7 @@ function ProjectDetailsForm() {
               />
             )}
           />
-          {/* The message sits on siteArea.features, which FormMessage (siteArea) doesn't read. */}
-          <ErrorText>{errors.siteArea?.features?.message}</ErrorText>
+          <ErrorText>{errors.siteArea?.message}</ErrorText>
         </FormQuestionDiv>
       </FormLayout>
     </ContentWrapper>
