@@ -89,7 +89,8 @@ function FormItem({ className, ...props }: ComponentProps<'div'>) {
 
   return (
     <FormItemContext.Provider value={value}>
-      <div data-slot='form-item' className={cn('grid gap-2', className)} {...props} />
+      {/* bg-inherit passes the question row's background down to a sticky label. */}
+      <div data-slot='form-item' className={cn('grid gap-2 bg-inherit', className)} {...props} />
     </FormItemContext.Provider>
   )
 }
