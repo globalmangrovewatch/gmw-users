@@ -30,6 +30,9 @@ const validationSchema = z.object({
 
 type LoginFormValues = z.infer<typeof validationSchema>
 
+// The login page keeps its rounded inputs instead of the forms' 4px MUI fields.
+const roundedInputClassName = 'h-9 rounded-full px-3 text-sm'
+
 const pageLanguage = language.pages.login
 
 function FooterLink({ className, ...props }: ComponentProps<typeof NextLink>) {
@@ -128,6 +131,7 @@ function LoginForm({ isUserNew = false }: LoginFormProps) {
                 label={pageLanguage.email}
                 placeholder='Enter your email'
                 autoComplete='email'
+                inputClassName={roundedInputClassName}
               />
               <FormInput<LoginFormValues, 'password'>
                 name='password'
@@ -135,6 +139,7 @@ function LoginForm({ isUserNew = false }: LoginFormProps) {
                 label={pageLanguage.password}
                 placeholder='Enter your password'
                 autoComplete='current-password'
+                inputClassName={roundedInputClassName}
               />
               <RowFlexEnd>
                 {isSubmitError ? <ErrorText>{language.error.submit}</ErrorText> : null}

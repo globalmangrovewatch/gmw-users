@@ -82,7 +82,7 @@ function LandingHeader({ className, ...props }: LandingHeaderProps) {
         <LandingMenuItems
           onAboutClick={openAbout}
           onContactClick={openContact}
-          itemClassName='flex rounded px-2 py-1.5 text-md capitalize text-white no-underline hover:bg-brand-800/5 hover:text-brand-hover min-[1025px]:text-[#0f2b3b]'
+          itemClassName='flex rounded px-2 py-1.5 text-md whitespace-nowrap capitalize text-white no-underline hover:bg-brand-800/5 hover:text-brand-hover min-[1025px]:text-[#0f2b3b]'
         />
         <LanguagePicker />
       </nav>

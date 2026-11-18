@@ -56,7 +56,10 @@ type FieldOwnedProps =
   | 'ref'
 
 type FormInputProps<T extends FieldValues, TName extends FieldPath<T>> = FieldProps<T, TName> &
-  Omit<ComponentProps<typeof Input>, FieldOwnedProps | 'className'>
+  Omit<ComponentProps<typeof Input>, FieldOwnedProps | 'className'> & {
+    /** Classes for the input itself, e.g. the rounded inputs on the auth pages. */
+    inputClassName?: string
+  }
 
 function FormInput<T extends FieldValues = FieldValues, TName extends FieldPath<T> = FieldPath<T>>({
   name,
@@ -68,6 +71,7 @@ function FormInput<T extends FieldValues = FieldValues, TName extends FieldPath<
   description,
   className,
   labelClassName,
+  inputClassName,
   ...inputProps
 }: FormInputProps<T, TName>) {
   const { control } = useFormContext<T>()
@@ -85,7 +89,12 @@ function FormInput<T extends FieldValues = FieldValues, TName extends FieldPath<
             {label}
           </FormLabel>
           <FormControl>
-            <Input {...inputProps} {...field} value={field.value ?? ''} />
+            <Input
+              {...inputProps}
+              {...field}
+              value={field.value ?? ''}
+              className={inputClassName}
+            />
           </FormControl>
           {description ? <FormDescription>{description}</FormDescription> : null}
           <FormMessage />
