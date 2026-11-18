@@ -64,6 +64,7 @@ function Combobox<T extends string = string>({
           className
         )}>
         <ComboboxPrimitive.Input
+          data-slot='combobox-input'
           id={id}
           placeholder={placeholder}
           aria-invalid={ariaInvalid}
@@ -178,6 +179,8 @@ function MultiCombobox<T extends string = string>({
                 </ComboboxPrimitive.Chip>
               ))}
               <ComboboxPrimitive.Input
+                // data-slot gives the input the app font (globals.css), like the other ui/* fields.
+                data-slot='multi-combobox-input'
                 id={id}
                 placeholder={current.length ? undefined : placeholder}
                 aria-invalid={ariaInvalid}
