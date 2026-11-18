@@ -50,7 +50,25 @@ describe('shared form primitives', () => {
 
     await user.click(trigger)
     await user.click(await screen.findByRole('button', { name: /November 4th, 2026/ }))
+    // Picking a day only previews it; OK saves it.
+    expect(onChange).not.toHaveBeenCalled()
+    expect(screen.getByText('Wed, Nov 4')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'OK' }))
     expect(onChange).toHaveBeenCalledWith('2026-11-04T00:00:00.000Z')
+  })
+
+  it('DatePickerUtc discards the picked day on Cancel', async () => {
+    const onChange = vi.fn<(value: string | null) => void>()
+    const user = userEvent.setup()
+    render(
+      <DatePickerUtc label='Start date' field={{ value: '2026-11-02T00:00:00.000Z', onChange }} />
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Start date' }))
+    await user.click(await screen.findByRole('button', { name: /November 4th, 2026/ }))
+    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    expect(onChange).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: 'Start date' })).toHaveTextContent('2026/11/02')
   })
 
   it('DatePickerUtc shows a legacy offset value on the same day', () => {

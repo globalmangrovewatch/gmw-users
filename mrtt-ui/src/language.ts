@@ -46,7 +46,9 @@ const form = {
     promptText: 'Are you sure you want to delete this form?',
     buttonText: 'Yes, delete this form'
   },
-  dateUtc: 'Dates are UTC'
+  dateUtc: 'Dates are UTC',
+  datePickerTitle: 'Date',
+  datePickerEmpty: 'Select date'
 } as const
 
 const multiselectWithOtherFormQuestion = {
@@ -234,6 +236,7 @@ const pages = {
 
 const buttons = {
   cancel: 'Cancel',
+  ok: 'OK',
   deleting: 'Deleting...',
   edit: 'Edit',
   save: 'Save',
