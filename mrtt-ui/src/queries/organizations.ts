@@ -1,7 +1,7 @@
 import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { api } from '@/lib/api'
-import type { Id, Organization } from '@/types/api'
+import type { Country, Id, Organization, Page } from '@/types/api'
 import { landscapeKeys } from './landscapes'
 
 type OrganizationId = Id | string
@@ -11,11 +11,26 @@ export const organizationKeys = {
   detail: (organizationId: OrganizationId) => ['organizations', String(organizationId)] as const
 }
 
+// /organizations is paginated; the app shows every organization at once, so it reads all pages.
+const ORGANIZATIONS_PER_PAGE = 100
+
+const getAllOrganizations = async (signal: AbortSignal) => {
+  const organizations: Organization[] = []
+  for (let page = 1; ; page++) {
+    const { data, meta } = await api.get<Page<Organization>>(
+      `/organizations?page=${page}&per_page=${ORGANIZATIONS_PER_PAGE}`,
+      { signal }
+    )
+    organizations.push(...data)
+    if (!data.length || organizations.length >= meta.total) return organizations
+  }
+}
+
 export const organizationQueries = {
   list: () =>
     queryOptions({
       queryKey: organizationKeys.all,
-      queryFn: ({ signal }) => api.get<Organization[]>('/organizations', { signal })
+      queryFn: ({ signal }) => getAllOrganizations(signal)
     }),
   detail: (organizationId: OrganizationId) =>
     queryOptions({
@@ -24,7 +39,17 @@ export const organizationQueries = {
     })
 }
 
-export type OrganizationInput = { organization_name: string }
+// The countries an organization can work in. They rarely change, so they're kept for the session.
+export const countryQueries = {
+  list: () =>
+    queryOptions({
+      queryKey: ['countries'] as const,
+      queryFn: ({ signal }) => api.get<Country[]>('/countries', { signal }),
+      staleTime: Infinity
+    })
+}
+
+export type OrganizationInput = { organization_name: string; country_location_ids: string[] }
 
 // Landscapes list their organizations by name, so organization changes refetch them too.
 const useInvalidateOrganizations = () => {
