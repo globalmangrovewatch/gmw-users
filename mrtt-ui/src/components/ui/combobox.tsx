@@ -157,7 +157,7 @@ function MultiCombobox<T extends string = string>({
         ref={chipsRef}
         data-slot='multi-combobox'
         className={cn(
-          'flex min-h-9 w-full flex-wrap items-center gap-1 rounded-3xl border border-black/15 bg-white px-2 py-1 text-sm text-text ring-offset-white focus-within:ring-2 focus-within:ring-brand-800 focus-within:ring-offset-2 has-aria-invalid:border-error has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50',
+          'flex min-h-9 w-full flex-wrap items-center gap-1 rounded border border-black/15 bg-white px-2 py-1 text-sm text-text ring-offset-white focus-within:ring-2 focus-within:ring-brand-800 focus-within:ring-offset-2 has-aria-invalid:border-error has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50',
           className
         )}>
         <ComboboxPrimitive.Value>
