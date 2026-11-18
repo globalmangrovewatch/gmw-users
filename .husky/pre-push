@@ -1,4 +1,6 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+cd mrtt-ui || exit 1
+command -v nvm >/dev/null 2>&1 && nvm use --silent >/dev/null 2>&1
 
-cd ./mrtt-ui &&  npm run lint:fix && npm test -- --watchAll=false
+pnpm exec oxlint && pnpm exec vitest run
