@@ -10,8 +10,9 @@ const alertVariants = cva(
       variant: {
         default: 'border-black/15 bg-white text-text',
         info: 'border-brand-800/30 bg-brand-100 text-brand-900',
+        // MUI's outlined error alert, the form banner the app showed before.
         destructive:
-          'border-error/40 bg-white text-error *:data-[slot=alert-description]:text-error/90'
+          'rounded border-[#ef5350] bg-transparent px-4 py-2 text-[#5f2120] has-[>svg]:grid-cols-[--spacing(5.5)_1fr] [&>svg]:size-5.5 [&>svg]:translate-y-0 [&>svg]:text-[#ef5350] *:data-[slot=alert-title]:text-base *:data-[slot=alert-title]:font-medium *:data-[slot=alert-description]:text-[#5f2120]'
       }
     },
     defaultVariants: {
