@@ -120,12 +120,14 @@ const pages = {
     titleYourOrganizations: 'Your Organizations'
   },
   organizationForm: {
+    labelCountries: 'countries',
     labelName: 'name',
     organization: 'organization',
     titleEdit: 'Edit Organization',
     titleNew: 'New Organization',
     validation: {
-      nameRequired: 'Please enter a name'
+      nameRequired: 'Please enter a name',
+      countriesRequired: 'Please select at least one country'
     }
   },
   sites: {

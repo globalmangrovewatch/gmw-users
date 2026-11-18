@@ -9,6 +9,7 @@ import LandscapeForm from '@/views/LandscapeForm'
 import Landscapes from '@/views/Landscapes'
 import ManageOrganizationUsers from '@/views/ManageOrganizationUsers'
 import NewOrganizationUser from '@/views/NewOrganizationUser'
+import OrganizationForm from '@/views/OrganizationForm'
 import Organizations from '@/views/Organizations'
 import SiteForm from '@/views/SiteForm'
 import SiteQuestionsOverview from '@/views/SiteQuestionsOverview/SiteQuestionsOverview'
@@ -44,6 +45,12 @@ const calls = (method: string) =>
 
 const jsonResponse = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } })
+
+// /organizations is paginated: `{ data, meta }`.
+const organizationsPage = (data: unknown[], page = 1, total = data.length) => ({
+  data,
+  meta: { page, per_page: 100, total }
+})
 
 const renderView = (view: ReactNode) => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
@@ -107,13 +114,31 @@ describe('Sites', () => {
 })
 
 describe('Organizations', () => {
+  it('lists the organizations of every page', async () => {
+    responses['/organizations?page=1&per_page=100'] = organizationsPage(
+      [{ id: 4, organization_name: 'First page org', role: 'org-admin' }],
+      1,
+      2
+    )
+    responses['/organizations?page=2&per_page=100'] = organizationsPage(
+      [{ id: 5, organization_name: 'Second page org', role: 'org-user' }],
+      2,
+      2
+    )
+    renderView(<Organizations />)
+
+    expect(await screen.findByText('Second page org')).toBeInTheDocument()
+    expect(screen.getByText('First page org')).toBeInTheDocument()
+    expect(calls('GET').filter(({ path }) => path.startsWith('/organizations'))).toHaveLength(2)
+  })
+
   it('downloads the picked organization’s data and lets only admins manage users', async () => {
     const user = userEvent.setup()
-    responses['/organizations'] = [
+    responses['/organizations'] = organizationsPage([
       { id: 4, organization_name: 'Admin org', role: 'org-admin' },
       { id: 5, organization_name: 'Member org', role: 'org-user' },
       { id: 6, organization_name: 'Other org' }
-    ]
+    ])
     renderView(<Organizations />)
 
     const memberOrg = (await screen.findByText('Member org')).closest('li')!
@@ -137,6 +162,61 @@ describe('Organizations', () => {
       )
     )
     expect(screen.getByText('Other org')).toBeInTheDocument()
+  })
+})
+
+describe('OrganizationForm', () => {
+  beforeEach(() => {
+    responses['/countries'] = [
+      { location_id: 'kenya', iso: 'KEN', name: 'Kenya', region: 'Africa' },
+      { location_id: 'spain', iso: 'ESP', name: 'Spain', region: 'Europe' }
+    ]
+  })
+
+  it('creates an organization with its name and countries', async () => {
+    const user = userEvent.setup()
+    responses['POST /organizations'] = { id: 5, organization_name: 'test organ2' }
+    renderView(<OrganizationForm />)
+
+    await user.type(screen.getByLabelText(/^name/), 'test organ2')
+    await user.click(screen.getByRole('combobox', { name: /^countries/ }))
+    await user.click(await screen.findByRole('option', { name: 'Kenya' }))
+    await user.keyboard('{Escape}')
+    await user.click(screen.getByRole('button', { name: language.buttons.submit }))
+
+    await waitFor(() => expect(router.push).toHaveBeenCalledWith('/organizations'))
+    expect(calls('POST')).toEqual([
+      {
+        method: 'POST',
+        path: '/organizations',
+        body: { organization_name: 'test organ2', country_location_ids: ['kenya'] }
+      }
+    ])
+  })
+
+  it('asks for a country before saving', async () => {
+    const user = userEvent.setup()
+    renderView(<OrganizationForm />)
+
+    await user.type(screen.getByLabelText(/^name/), 'test organ2')
+    await user.click(screen.getByRole('button', { name: language.buttons.submit }))
+
+    expect(
+      await screen.findByText(language.pages.organizationForm.validation.countriesRequired)
+    ).toBeInTheDocument()
+    expect(calls('POST')).toEqual([])
+  })
+
+  it('loads the countries of the organization being edited', async () => {
+    params = { organizationId: '4' }
+    responses['/organizations/4'] = {
+      id: 4,
+      organization_name: 'Admin org',
+      countries: [{ location_id: 'spain', iso: 'ESP', name: 'Spain' }]
+    }
+    renderView(<OrganizationForm />)
+
+    expect(await screen.findByRole('button', { name: 'Remove Spain' })).toBeInTheDocument()
   })
 })
 
@@ -207,7 +287,9 @@ describe('LandscapeForm', () => {
   it('keeps the landscape’s organizations and saves them as ids', async () => {
     const user = userEvent.setup()
     params = { landscapeId: '3' }
-    responses['/organizations'] = [{ id: 4, organization_name: 'Admin org', role: 'org-admin' }]
+    responses['/organizations'] = organizationsPage([
+      { id: 4, organization_name: 'Admin org', role: 'org-admin' }
+    ])
     responses['/landscapes/3'] = {
       id: 3,
       landscape_name: 'Delta',

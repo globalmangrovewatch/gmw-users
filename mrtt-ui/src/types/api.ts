@@ -21,11 +21,26 @@ export type Site = {
   section_data_visibility?: SectionDataVisibility
 }
 
+/** A country from /countries. `location_id` is what organizations store. */
+export type Country = {
+  location_id: string
+  iso: string
+  name: string
+  region?: string | null
+}
+
 export type Organization = {
   id: Id
   organization_name: string
   /** The current user's role; absent for organizations the user does not belong to. */
   role?: OrganizationRole | null
+  countries?: Pick<Country, 'location_id' | 'iso' | 'name'>[]
+}
+
+/** A page of a paginated list, e.g. /organizations. */
+export type Page<T> = {
+  data: T[]
+  meta: { page: number; per_page: number; total: number }
 }
 
 export type Landscape = {
