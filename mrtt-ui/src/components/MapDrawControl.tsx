@@ -38,7 +38,16 @@ function MapDrawControl({
   // Listeners go on in onAdd, not in the create callback: StrictMode adds, removes and re-adds the
   // control, and the create callback runs only once, so listeners added there would be lost.
   const draw = useControl<IControl>(
-    () => new MapboxDraw(drawOptions) as unknown as IControl,
+    () => {
+      const mapboxDraw = new MapboxDraw(drawOptions)
+      const removeFromMap = mapboxDraw.onRemove.bind(mapboxDraw)
+      // Leaving the page can tear the map down (style destroyed) before the control is removed.
+      // Draw's onRemove then reads its layers off the dead style and throws "Cannot read
+      // properties of undefined (reading 'getOwnLayer')". A map without a style has nothing
+      // left to clean up, so skip it.
+      mapboxDraw.onRemove = (map) => (map.style ? removeFromMap(map) : mapboxDraw)
+      return mapboxDraw as unknown as IControl
+    },
     ({ map }) => {
       map.on('draw.create', listeners.create)
       map.on('draw.update', listeners.update)

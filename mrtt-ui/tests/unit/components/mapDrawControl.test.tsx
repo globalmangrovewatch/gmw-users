@@ -7,22 +7,29 @@ import MapDrawControl from '@/components/MapDrawControl'
 type Listener = (event: unknown) => void
 
 // A map that only tracks controls and draw listeners.
-const { map } = vi.hoisted(() => {
+const { map, drawOnRemove } = vi.hoisted(() => {
   const listeners = new Map<string, Set<Listener>>()
-  const controls = new Set<unknown>()
+  const controls = new Set<{ onRemove: (map: unknown) => unknown }>()
   return {
+    // Draw's own onRemove, which reads its layers off map.style.
+    drawOnRemove: vi.fn<(map: unknown) => unknown>(),
     map: {
       listeners,
       controls,
+      // Set to undefined to mimic a map whose style was already destroyed.
+      style: {} as object | undefined,
       on: (type: string, listener: Listener) => {
         if (!listeners.has(type)) listeners.set(type, new Set())
         listeners.get(type)?.add(listener)
       },
       off: (type: string, listener: Listener) => listeners.get(type)?.delete(listener),
       fire: (type: string, event: unknown) => listeners.get(type)?.forEach((fn) => fn(event)),
-      hasControl: (control: unknown) => controls.has(control),
-      addControl: (control: unknown) => controls.add(control),
-      removeControl: (control: unknown) => controls.delete(control)
+      hasControl: (control: { onRemove: (map: unknown) => unknown }) => controls.has(control),
+      addControl: (control: { onRemove: (map: unknown) => unknown }) => controls.add(control),
+      removeControl(control: { onRemove: (map: unknown) => unknown }) {
+        controls.delete(control)
+        control.onRemove(this)
+      }
     }
   }
 })
@@ -30,6 +37,7 @@ const { map } = vi.hoisted(() => {
 vi.mock('@mapbox/mapbox-gl-draw', () => ({
   default: class {
     getAll = () => ({ type: 'FeatureCollection', features: [] })
+    onRemove = drawOnRemove
   }
 }))
 
@@ -64,6 +72,8 @@ vi.mock('react-map-gl/mapbox', () => ({
 afterEach(() => {
   map.listeners.clear()
   map.controls.clear()
+  map.style = {}
+  drawOnRemove.mockClear()
 })
 
 describe('MapDrawControl', () => {
@@ -90,6 +100,16 @@ describe('MapDrawControl', () => {
     unmount()
 
     expect([...map.listeners.values()].every((set) => set.size === 0)).toBe(true)
+    expect(map.controls.size).toBe(0)
+    expect(drawOnRemove).toHaveBeenCalledOnce()
+  })
+
+  it('skips Draw cleanup when the map style is already gone', () => {
+    const { unmount } = render(<MapDrawControl drawRef={{ current: null }} />)
+    map.style = undefined
+
+    expect(() => unmount()).not.toThrow()
+    expect(drawOnRemove).not.toHaveBeenCalled()
     expect(map.controls.size).toBe(0)
   })
 })
