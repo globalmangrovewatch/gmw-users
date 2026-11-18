@@ -25,7 +25,7 @@ jobs:
         with:
           node-version-file: mrtt-ui/package.json
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
       - name: Create review app
         run: |
 
