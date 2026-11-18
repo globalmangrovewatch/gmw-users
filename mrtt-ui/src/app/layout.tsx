@@ -45,7 +45,12 @@ const transifexSettings = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang='en' className={`${openSans.variable} ${sourceCodePro.variable}`}>
+    // Transifex Live (and browser translators) rewrite <html> attributes such as `lang` before
+    // React hydrates. This only silences attribute mismatches on <html> itself, not its children.
+    <html
+      lang='en'
+      className={`${openSans.variable} ${sourceCodePro.variable}`}
+      suppressHydrationWarning>
       <body>
         {env.NEXT_PUBLIC_TRANSIFEX_API_KEY && (
           <>
