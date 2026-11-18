@@ -134,7 +134,7 @@ function SiteBackgroundForm() {
             question={questions.protectionStatus.question}
             shouldAddOtherOptionWithClarification
           />
-          <ErrorText>{errors.protectionStatus?.selectedValues?.message}</ErrorText>
+          <ErrorText>{errors.protectionStatus?.message}</ErrorText>
         </FormQuestionDiv>
 
         {selectQuestion('areStakeholdersInvolved')}
@@ -147,7 +147,7 @@ function SiteBackgroundForm() {
             question={questions.governmentArrangement.question}
             shouldAddOtherOptionWithClarification
           />
-          <ErrorText>{errors.governmentArrangement?.selectedValues?.message}</ErrorText>
+          <ErrorText>{errors.governmentArrangement?.message}</ErrorText>
         </FormQuestionDiv>
 
         <FormQuestionDiv>
@@ -158,7 +158,7 @@ function SiteBackgroundForm() {
             question={questions.landTenure.question}
             shouldAddOtherOptionWithClarification
           />
-          <ErrorText>{errors.landTenure?.selectedValues?.message}</ErrorText>
+          <ErrorText>{errors.landTenure?.message}</ErrorText>
         </FormQuestionDiv>
 
         {selectQuestion('customaryRights')}

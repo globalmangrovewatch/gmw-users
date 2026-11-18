@@ -141,7 +141,7 @@ function CostsForm() {
             question={questions.supportForActivities.question}
             shouldAddOtherOptionWithClarification={false}
           />
-          <ErrorText>{errors.supportForActivities?.selectedValues?.message}</ErrorText>
+          <ErrorText>{errors.supportForActivities?.message}</ErrorText>
         </FormQuestionDiv>
 
         <FormQuestionDiv>
@@ -271,7 +271,7 @@ function CostsForm() {
               question={questions.nonmonetisedContributions.question}
               shouldAddOtherOptionWithClarification
             />
-            <ErrorText>{errors.nonmonetisedContributions?.selectedValues?.message}</ErrorText>
+            <ErrorText>{errors.nonmonetisedContributions?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
       </FormLayout>

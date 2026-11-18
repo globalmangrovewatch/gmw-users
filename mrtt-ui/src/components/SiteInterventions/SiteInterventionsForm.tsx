@@ -256,7 +256,7 @@ function SiteInterventionsForm() {
             shouldAddOtherOptionWithClarification
             required
           />
-          <ErrorText>{errors.biophysicalInterventionsUsed?.selectedValues?.message}</ErrorText>
+          <ErrorText>{errors.biophysicalInterventionsUsed?.message}</ErrorText>
         </FormQuestionDiv>
 
         {showDuration ? (
@@ -379,7 +379,7 @@ function SiteInterventionsForm() {
               question={questions.organizationsProvidingTraining.question}
               shouldAddOtherOptionWithClarification
             />
-            <ErrorText>{errors.organizationsProvidingTraining?.selectedValues?.message}</ErrorText>
+            <ErrorText>{errors.organizationsProvidingTraining?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
 
@@ -392,7 +392,7 @@ function SiteInterventionsForm() {
             shouldAddOtherOptionWithClarification
             required
           />
-          <ErrorText>{errors.otherActivitiesImplemented?.selectedValues?.message}</ErrorText>
+          <ErrorText>{errors.otherActivitiesImplemented?.message}</ErrorText>
         </FormQuestionDiv>
       </FormLayout>
     </ContentWrapper>

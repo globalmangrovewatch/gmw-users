@@ -164,7 +164,7 @@ function SocioeconomicGovernanceStatusAndOutcomesForm() {
               question={questions.currentGovenance.question}
               shouldAddOtherOptionWithClarification={false}
             />
-            <ErrorText>{errors.currentGovenance?.selectedValues?.message}</ErrorText>
+            <ErrorText>{errors.currentGovenance?.message}</ErrorText>
           </FormQuestionDiv>
         ) : null}
         {selectQuestion('changeInTenureArrangement')}
@@ -178,7 +178,7 @@ function SocioeconomicGovernanceStatusAndOutcomesForm() {
                 question={questions.currentLandOwnership.question}
                 shouldAddOtherOptionWithClarification
               />
-              <ErrorText>{errors.currentLandOwnership?.selectedValues?.message}</ErrorText>
+              <ErrorText>{errors.currentLandOwnership?.message}</ErrorText>
             </FormQuestionDiv>
             {selectQuestion('rightsToLandInLaw')}
           </>

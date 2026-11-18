@@ -179,9 +179,7 @@ function PreRestorationAssessmentForm() {
                 question={questions.previousBiophysicalInterventions.question}
                 shouldAddOtherOptionWithClarification
               />
-              <ErrorText>
-                {errors.previousBiophysicalInterventions?.selectedValues?.message}
-              </ErrorText>
+              <ErrorText>{errors.previousBiophysicalInterventions?.message}</ErrorText>
             </FormQuestionDiv>
             <FormQuestionDiv>
               <CheckboxGroupWithLabelAndController
@@ -191,9 +189,7 @@ function PreRestorationAssessmentForm() {
                 question={questions.whyUnsuccessfulRestorationAttempt.question}
                 shouldAddOtherOptionWithClarification
               />
-              <ErrorText>
-                {errors.whyUnsuccessfulRestorationAttempt?.selectedValues?.message}
-              </ErrorText>
+              <ErrorText>{errors.whyUnsuccessfulRestorationAttempt?.message}</ErrorText>
             </FormQuestionDiv>
           </>
         ) : null}
@@ -208,7 +204,7 @@ function PreRestorationAssessmentForm() {
                 options={[...questions.siteAssessmentType.options]}
                 question={questions.siteAssessmentType.question}
               />
-              <ErrorText>{errors.siteAssessmentType?.selectedValues?.message}</ErrorText>
+              <ErrorText>{errors.siteAssessmentType?.message}</ErrorText>
             </FormQuestionDiv>
             {selectQuestion('referenceSite')}
             {yearQuestion('lostMangrovesYear', 'enter year')}
