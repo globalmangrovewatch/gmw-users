@@ -27,6 +27,11 @@ export function toUtcIsoDay(date: Date): string {
   ).toISOString()
 }
 
+/** Today's UTC calendar day at midnight, the default for new date answers. */
+export function todayUtcIsoDay(): string {
+  return toUtcIsoDay(new Date())
+}
+
 /** `yyyy/MM/dd` for the UTC calendar day of `date`. */
 export function formatIsoDay(date: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0')

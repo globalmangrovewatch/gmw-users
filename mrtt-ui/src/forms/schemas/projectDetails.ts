@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import emptyFeatureCollection from '@/data/emptyFeatureCollection'
+import { todayUtcIsoDay } from '@/lib/dates'
 import {
   addIssue,
   booleanLike,
@@ -54,9 +55,9 @@ export const refine: SectionRefine = (values, ctx) => {
 }
 
 export const defaultValues = {
-  projectStartDate: new Date().toISOString(),
+  projectStartDate: todayUtcIsoDay(),
   hasProjectEndDate: false,
-  projectEndDate: new Date().toISOString(),
+  projectEndDate: todayUtcIsoDay(),
   countries: undefined,
   siteArea: emptyFeatureCollection
 }

@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import type { FieldKey, SectionKey } from '@/data/questionMapping'
 import language from '@/language'
+import { parseIsoDay } from '@/lib/dates'
 
 // Every mapped question of a section must have a schema, and nothing else may.
 export type SectionShape<S extends SectionKey> = Record<FieldKey<S>, z.ZodType>
@@ -12,15 +13,13 @@ export type SectionRefine = (values: Record<string, unknown>, ctx: z.RefinementC
 
 export const isEmpty = (value: unknown) => value === undefined || value === null || value === ''
 
-// The forms hold dates as ISO strings from the date pickers, but a value may also be a Date or
-// a luxon DateTime, whose string form is ISO. Returns undefined for empty or unparseable values.
-export const toDate = (value: unknown): Date | undefined => {
-  if (isEmpty(value)) return undefined
-  const date = value instanceof Date ? value : new Date(String(value))
-  return Number.isNaN(date.getTime()) ? undefined : date
-}
+// The forms hold dates as ISO strings from the date pickers. Compared as calendar days (see
+// `parseIsoDay`), so a legacy value saved with an offset sits on the day it was written for.
+// Returns undefined for empty or unparseable values.
+export const toDate = (value: unknown): Date | undefined =>
+  isEmpty(value) ? undefined : parseIsoDay(value)
 
-export type DateInput = string | Date | { toISO(): string | null }
+export type DateInput = string | Date
 
 // Required dates are checked in the section's `refine` (see `requireDate`): a missing object key
 // fails before a field schema can pick its message, and a failing `z.custom` stops the refines.

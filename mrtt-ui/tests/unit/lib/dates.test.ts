@@ -1,4 +1,4 @@
-import { formatIsoDay, parseIsoDay, toUtcIsoDay } from '@/lib/dates'
+import { formatIsoDay, parseIsoDay, todayUtcIsoDay, toUtcIsoDay } from '@/lib/dates'
 
 describe('dates', () => {
   it('reads the calendar day as written, ignoring the offset', () => {
@@ -21,5 +21,14 @@ describe('dates', () => {
     const day = new Date(Date.UTC(2026, 10, 4, 15, 30))
     expect(toUtcIsoDay(day)).toBe('2026-11-04T00:00:00.000Z')
     expect(formatIsoDay(day)).toBe('2026/11/04')
+  })
+
+  it("defaults to today's UTC day at midnight", () => {
+    vi.useFakeTimers({ now: new Date('2026-11-18T23:30:00.000Z') })
+    try {
+      expect(todayUtcIsoDay()).toBe('2026-11-18T00:00:00.000Z')
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })

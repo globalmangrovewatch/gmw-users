@@ -32,6 +32,7 @@ import SECTION_NAMES, {
 } from '@/constants/sectionNames'
 import language from '@/language'
 import { cn } from '@/lib/cn'
+import { todayUtcIsoDay } from '@/lib/dates'
 import { useGetMonitorsForms } from '@/library/question-mapped-form/monitors'
 import { useGetSectionTarget } from '@/library/question-mapped-form/sections-hook'
 import { useSaveRegistrationSection } from '@/library/question-mapped-form/useInitializeQuestionMappedForm'
@@ -127,7 +128,7 @@ function QuestionNav({
         form.setValue(dateField, monitor.monitoring_date, { shouldDirty: false })
       }
     } else if (!monitorIdUrl) {
-      form.setValue(dateField, new Date().toISOString(), { shouldDirty: false })
+      form.setValue(dateField, todayUtcIsoDay(), { shouldDirty: false })
     }
   }, [sectionTarget, sectionFromUrl, monitorIdUrl, monitorForms]) // eslint-disable-line react-hooks/exhaustive-deps
 

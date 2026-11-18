@@ -1,7 +1,14 @@
 import { RowSpaceBetween, TableAlertnatingRows, WideTh } from '@/components/ui/layout'
 import { Link, SmallUpperCase } from '@/components/ui/typography'
 import MONITORING_FORM_CONSTANTS from '@/constants/monitoringFormConstants'
+import { formatIsoDay, parseIsoDay } from '@/lib/dates'
 import type { MonitoringForm } from '@/types/api'
+
+/** `yyyy/MM/dd`, like the date pickers; falls back to the raw value if it isn't a date. */
+const formatMonitoringDate = (value: string) => {
+  const day = parseIsoDay(value)
+  return day ? formatIsoDay(day) : value
+}
 
 type MonitoringFormsListProps = {
   monitoringFormsSortedByDate: Pick<MonitoringForm, 'id' | 'form_type' | 'monitoring_date'>[]
@@ -20,7 +27,7 @@ function MonitoringFormsList({ monitoringFormsSortedByDate, siteId }: Monitoring
               <WideTh>
                 <RowSpaceBetween>
                   <Link href={`/sites/${siteId}/form/${urlSegment}/${id}`}>{label}</Link>
-                  <SmallUpperCase>{monitoring_date}</SmallUpperCase>
+                  <SmallUpperCase>{formatMonitoringDate(monitoring_date)}</SmallUpperCase>
                 </RowSpaceBetween>
               </WideTh>
             </tr>
