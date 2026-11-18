@@ -61,7 +61,7 @@ function DatePickerUtc({ field, label, onChange, className, ...triggerProps }: D
           aria-label={label}
           data-slot='date-picker-trigger'
           className={cn(
-            'flex h-14 w-full max-w-80 cursor-pointer items-center justify-between gap-2 rounded border border-black/25 bg-white px-3.5 text-left text-base text-text hover:border-black/90 focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:outline-none aria-invalid:border-error disabled:cursor-not-allowed disabled:opacity-50',
+            'flex h-14 w-full max-w-80 cursor-pointer items-center justify-between gap-2 rounded border border-black/25 bg-transparent px-3.5 text-left text-base text-text hover:border-black/90 focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:outline-none aria-invalid:border-error disabled:cursor-not-allowed disabled:opacity-50',
             className
           )}
           {...triggerProps}>
