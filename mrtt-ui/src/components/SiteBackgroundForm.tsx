@@ -102,6 +102,8 @@ function SiteBackgroundForm() {
                     <FormInput<RegistrationFormValues, `stakeholders.${number}.stakeholderName`>
                       name={`stakeholders.${index}.stakeholderName`}
                       label='Name'
+                      labelClassName='sr-only'
+                      placeholder='Name'
                       defaultValue=''
                       className='mt-2 max-w-80'
                     />
