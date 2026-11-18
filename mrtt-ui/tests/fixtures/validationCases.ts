@@ -40,6 +40,17 @@ const projectDateCases: ValidationCase[] = [
     expected: { projectEndDate: "End date can't be before start date" }
   },
   {
+    // A legacy value saved in local time with an offset is an earlier instant on the same day.
+    name: 'legacy offset end date on the start day is not before it',
+    values: {
+      ...projectDetails,
+      hasProjectEndDate: true,
+      projectStartDate: '2024-03-05T00:00:00.000Z',
+      projectEndDate: '2024-03-05T00:00:00.000+02:00'
+    },
+    expected: { projectEndDate: null }
+  },
+  {
     name: 'end date required when hasProjectEndDate is true',
     values: { ...projectDetails, projectEndDate: null },
     expected: { projectEndDate: 'Please select an end date' }

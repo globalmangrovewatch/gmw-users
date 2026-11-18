@@ -5,11 +5,12 @@ import { StrictMode, useMemo, useEffect } from 'react'
 import MapDrawControl from '@/components/MapDrawControl'
 
 type Listener = (event: unknown) => void
+type Control = { onRemove: (map: unknown) => unknown }
 
 // A map that only tracks controls and draw listeners.
 const { map, drawOnRemove } = vi.hoisted(() => {
   const listeners = new Map<string, Set<Listener>>()
-  const controls = new Set<{ onRemove: (map: unknown) => unknown }>()
+  const controls = new Set<Control>()
   return {
     // Draw's own onRemove, which reads its layers off map.style.
     drawOnRemove: vi.fn<(map: unknown) => unknown>(),
@@ -24,9 +25,9 @@ const { map, drawOnRemove } = vi.hoisted(() => {
       },
       off: (type: string, listener: Listener) => listeners.get(type)?.delete(listener),
       fire: (type: string, event: unknown) => listeners.get(type)?.forEach((fn) => fn(event)),
-      hasControl: (control: { onRemove: (map: unknown) => unknown }) => controls.has(control),
-      addControl: (control: { onRemove: (map: unknown) => unknown }) => controls.add(control),
-      removeControl(control: { onRemove: (map: unknown) => unknown }) {
+      hasControl: (control: Control) => controls.has(control),
+      addControl: (control: Control) => controls.add(control),
+      removeControl(control: Control) {
         controls.delete(control)
         control.onRemove(this)
       }
@@ -45,7 +46,7 @@ vi.mock('@mapbox/mapbox-gl-draw', () => ({
 // effect (calling onAdd) and removed in its cleanup (calling onRemove).
 vi.mock('react-map-gl/mapbox', () => ({
   useControl: (
-    onCreate: (context: { map: typeof map }) => unknown,
+    onCreate: (context: { map: typeof map }) => Control,
     arg1?: unknown,
     arg2?: unknown
   ) => {
