@@ -3,7 +3,7 @@
 import { Combobox as ComboboxPrimitive } from '@base-ui/react/combobox'
 import { useRef, type ComponentProps } from 'react'
 import { LuCheck, LuX } from 'react-icons/lu'
-import { MdArrowDropDown } from 'react-icons/md'
+import { MdArrowDropDown, MdCancel } from 'react-icons/md'
 
 import { fieldClassName } from '@/components/ui/input'
 import { cn } from '@/lib/cn'
@@ -157,7 +157,8 @@ function MultiCombobox<T extends string = string>({
         ref={chipsRef}
         data-slot='multi-combobox'
         className={cn(
-          'flex min-h-9 w-full flex-wrap items-center gap-1 rounded border border-black/15 bg-white px-2 py-1 text-sm text-text ring-offset-white focus-within:ring-2 focus-within:ring-brand-800 focus-within:ring-offset-2 has-aria-invalid:border-error has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50',
+          fieldClassName,
+          'relative flex min-h-14 flex-wrap items-center gap-1 py-2.25 pr-10 pl-2.25 focus-within:border-brand-800 focus-within:shadow-[inset_0_0_0_1px_var(--color-brand-800)] has-aria-invalid:border-error has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50',
           className
         )}>
         <ComboboxPrimitive.Value>
@@ -167,12 +168,12 @@ function MultiCombobox<T extends string = string>({
                 <ComboboxPrimitive.Chip
                   key={option.value}
                   aria-label={option.label}
-                  className='flex items-center gap-1 rounded-full bg-brand-100 py-0.5 pr-1 pl-2.5 text-sm text-brand-900 outline-none data-highlighted:bg-brand-800 data-highlighted:text-white'>
+                  className='flex h-8 items-center gap-1 rounded-full bg-black/8 pr-1.25 pl-3 text-[0.8125rem] text-black/87 outline-none data-highlighted:bg-black/12'>
                   {option.label}
                   <ComboboxPrimitive.ChipRemove
                     aria-label={`Remove ${option.label}`}
-                    className='flex size-5 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-current hover:bg-black/10'>
-                    <LuX className='size-3.5 shrink-0' aria-hidden='true' />
+                    className='flex size-5.5 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-black/26 hover:text-black/40'>
+                    <MdCancel className='size-5.5 shrink-0' aria-hidden='true' />
                   </ComboboxPrimitive.ChipRemove>
                 </ComboboxPrimitive.Chip>
               ))}
@@ -183,11 +184,16 @@ function MultiCombobox<T extends string = string>({
                 aria-label={ariaLabel}
                 aria-labelledby={ariaLabelledBy}
                 aria-describedby={ariaDescribedBy}
-                className='h-7 min-w-12 flex-1 border-0 bg-transparent px-1 outline-none placeholder:text-black/60'
+                className='h-9.5 min-w-12 flex-1 border-0 bg-transparent px-1.25 outline-none placeholder:text-black/60'
               />
             </>
           )}
         </ComboboxPrimitive.Value>
+        <ComboboxPrimitive.Trigger
+          aria-label='Show options'
+          className='absolute top-1/2 right-2 flex size-6 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-text'>
+          <MdArrowDropDown className='size-6 text-black/54 shrink-0' aria-hidden='true' />
+        </ComboboxPrimitive.Trigger>
       </ComboboxPrimitive.Chips>
 
       <ComboboxPrimitive.Portal>
