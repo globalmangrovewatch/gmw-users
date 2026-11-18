@@ -25,7 +25,7 @@ function PhysicalMeasurementRow({ index, label, onDelete }: PhysicalMeasurementR
       <FormInput<RegistrationFormValues, `physicalMeasurementsTaken.${number}.measurementValue`>
         name={`physicalMeasurementsTaken.${index}.measurementValue`}
         label={label}
-        placeholder='value'
+        placeholder='Value'
         className='max-w-60'
       />
       <Button

@@ -55,7 +55,7 @@ function SocioeconomicOutcomesRow({ index, outcome, aims }: SocioeconomicOutcome
           <FormInput<RegistrationFormValues, `${typeof name}.unit`>
             name={`${name}.unit`}
             label='Unit'
-            placeholder='unit'
+            placeholder='Unit'
           />
           <FormSelect<RegistrationFormValues, `${typeof name}.comparison`>
             name={`${name}.comparison`}

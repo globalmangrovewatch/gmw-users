@@ -24,7 +24,7 @@ function BreakdownOfCostRow({ index, label }: BreakdownOfCostRowProps) {
           name={`${name}.cost`}
           label={`${label}: cost`}
           labelClassName='sr-only'
-          placeholder='cost'
+          placeholder='Cost'
           inputMode='decimal'
           className='w-52'
         />
@@ -32,7 +32,7 @@ function BreakdownOfCostRow({ index, label }: BreakdownOfCostRowProps) {
           name={`${name}.currency`}
           label={`${label}: currency`}
           labelClassName='sr-only'
-          placeholder='currency'
+          placeholder='Currency'
           options={currencyOptions}
           className='w-32'
         />

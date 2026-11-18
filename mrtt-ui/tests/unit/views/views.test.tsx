@@ -178,7 +178,7 @@ describe('OrganizationForm', () => {
     responses['POST /organizations'] = { id: 5, organization_name: 'test organ2' }
     renderView(<OrganizationForm />)
 
-    await user.type(screen.getByLabelText(/^name/), 'test organ2')
+    await user.type(screen.getByLabelText(/^Name/), 'test organ2')
     await user.click(screen.getByRole('combobox', { name: /^countries/ }))
     await user.click(await screen.findByRole('option', { name: 'Kenya' }))
     await user.keyboard('{Escape}')
@@ -198,7 +198,7 @@ describe('OrganizationForm', () => {
     const user = userEvent.setup()
     renderView(<OrganizationForm />)
 
-    await user.type(screen.getByLabelText(/^name/), 'test organ2')
+    await user.type(screen.getByLabelText(/^Name/), 'test organ2')
     await user.click(screen.getByRole('button', { name: language.buttons.submit }))
 
     expect(

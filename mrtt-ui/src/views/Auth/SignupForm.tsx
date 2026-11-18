@@ -93,12 +93,14 @@ function SignupForm() {
           <FormInput<SignupFormInput, 'name'>
             name='name'
             label={signUpFormLanguage.name}
+            placeholder={signUpFormLanguage.name}
             autoComplete='name'
           />
           <FormInput<SignupFormInput, 'email'>
             name='email'
             type='email'
             label={signUpFormLanguage.email}
+            placeholder={signUpFormLanguage.email}
             autoComplete='email'
             required
           />
@@ -106,6 +108,7 @@ function SignupForm() {
             name='password'
             type='password'
             label={signUpFormLanguage.password}
+            placeholder={signUpFormLanguage.password}
             autoComplete='new-password'
             required
           />
@@ -113,6 +116,7 @@ function SignupForm() {
             name='confirmationPassword'
             type='password'
             label={signUpFormLanguage.confirmPassword}
+            placeholder={signUpFormLanguage.confirmPassword}
             autoComplete='new-password'
             required
           />

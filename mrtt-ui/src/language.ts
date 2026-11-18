@@ -92,8 +92,8 @@ const pages = {
     }
   },
   resetPassword: {
-    confirmPassword: 'Re-type  new password',
-    password: ' New password',
+    confirmPassword: 'Re-type new password',
+    password: 'New password',
     success: 'Your password has been reset. Please use it to log in.',
     title: 'Reset Password',
     validation: {
@@ -121,7 +121,7 @@ const pages = {
   },
   organizationForm: {
     labelCountries: 'countries',
-    labelName: 'name',
+    labelName: 'Name',
     organization: 'organization',
     titleEdit: 'Edit Organization',
     titleNew: 'New Organization',

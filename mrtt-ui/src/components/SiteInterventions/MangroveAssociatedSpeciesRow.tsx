@@ -61,6 +61,7 @@ function MangroveAssociatedSpeciesRow({
       <FormInput<RegistrationFormValues, `${typeof name}.count`>
         name={`${name}.count`}
         label='Count'
+        placeholder='Count'
         inputMode='numeric'
         className='max-w-60'
       />
@@ -80,6 +81,7 @@ function MangroveAssociatedSpeciesRow({
         <FormInput<RegistrationFormValues, `${typeof name}.purpose.other`>
           name={`${name}.purpose.other`}
           label='Other purpose'
+          placeholder='Other purpose'
           className='max-w-60'
         />
       ) : null}

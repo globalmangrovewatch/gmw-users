@@ -122,6 +122,7 @@ function SiteBackgroundForm() {
           <FormInput<RegistrationFormValues, 'managementArea'>
             name='managementArea'
             label={questions.managementArea.question}
+            placeholder='Management area name'
             labelClassName={stickyFormLabelClassName}
           />
         </FormQuestionDiv>
