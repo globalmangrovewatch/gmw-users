@@ -124,7 +124,7 @@ function ManageOrganizationUsers() {
                       aria-label={`${pageLanguage.delete}: ${name}`}
                       disabled={isCurrentUser}
                       onClick={() => setUserToDelete(user)}>
-                      <LuUserMinus className='size-5' aria-hidden='true' />
+                      <LuUserMinus className='size-5 shrink-0' aria-hidden='true' />
                     </Button>
                   </TdCenter>
                 </tr>

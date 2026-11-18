@@ -167,7 +167,7 @@ function ProjectAreaMap({
           )
         })}>
         <input {...getInputProps()} aria-label={language.projectAreaMap.dropzoneText} />
-        <LuUpload className='size-6 text-brand-800' aria-hidden='true' />
+        <LuUpload className='size-6 text-brand-800 shrink-0' aria-hidden='true' />
         <span>{language.projectAreaMap.dropzoneText}</span>
       </div>
       {uploadedFileName ? (
@@ -178,7 +178,7 @@ function ProjectAreaMap({
             onClick={onRemoveUpload}
             aria-label={`Remove ${uploadedFileName}`}
             className='flex size-6 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-text hover:bg-brand-100'>
-            <LuX className='size-4' aria-hidden='true' />
+            <LuX className='size-4 shrink-0' aria-hidden='true' />
           </button>
         </div>
       ) : null}

@@ -36,11 +36,12 @@ function AddMonitoringSectionMenu({ siteId }: AddMonitoringSectionMenuProps) {
   return (
     <div className='mb-4'>
       <DropdownMenu>
-        <DropdownMenuTrigger render={<Button />}>
+        <DropdownMenuTrigger render={<Button className='w-full' />}>
           {pageLanguage.addMonitoringSectionButton}
-          <LuChevronDown className='size-5' aria-hidden='true' />
+          <LuChevronDown className='size-5 shrink-0' aria-hidden='true' />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        {/* Same width as the button and flush under it. */}
+        <DropdownMenuContent sideOffset={0} className='w-(--anchor-width) rounded-t-none'>
           {monitoringSections.map(({ path, label }) => (
             <DropdownMenuItem key={path} render={<Link href={`/sites/${siteId}/form/${path}`} />}>
               {label}

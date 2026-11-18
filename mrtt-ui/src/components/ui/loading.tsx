@@ -35,7 +35,7 @@ function Loading({
       <LuLoaderCircle
         aria-hidden='true'
         className={cn(
-          'animate-spin text-brand-800',
+          'shrink-0 animate-spin text-brand-800',
           !hasSizeClass(iconClassName) && 'size-4',
           iconClassName
         )}

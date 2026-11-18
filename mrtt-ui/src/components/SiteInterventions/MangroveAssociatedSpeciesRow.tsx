@@ -44,7 +44,7 @@ function MangroveAssociatedSpeciesRow({
           className='bg-transparent'
           aria-label={`${language.form.tabularDeletePrompt.title}${type}`}
           onClick={() => setIsDeleteConfirmPromptOpen(true)}>
-          <LuTrash2 className='size-5' aria-hidden='true' />
+          <LuTrash2 className='size-5 shrink-0' aria-hidden='true' />
         </Button>
         <ConfirmPrompt
           isOpen={isDeleteConfirmPromptOpen}

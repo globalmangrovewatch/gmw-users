@@ -3,7 +3,9 @@
 import { Select as SelectPrimitive } from '@base-ui/react/select'
 import type { ComponentProps } from 'react'
 import { LuCheck, LuChevronDown, LuChevronUp } from 'react-icons/lu'
+import { MdArrowDropDown } from 'react-icons/md'
 
+import { fieldClassName, fieldFocusClassName } from '@/components/ui/input'
 import { cn } from '@/lib/cn'
 
 /** Pass `items` ({ label, value }[]) so <SelectValue> shows the label instead of the raw value. */
@@ -29,13 +31,15 @@ function SelectTrigger({
     <SelectPrimitive.Trigger
       data-slot='select-trigger'
       className={cn(
-        'flex h-9 w-full cursor-pointer items-center justify-between gap-2 rounded-3xl border border-black/15 bg-transparent px-3 py-2 text-left text-sm whitespace-nowrap text-text ring-offset-white focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2 focus-visible:outline-none aria-invalid:border-error data-disabled:cursor-not-allowed data-disabled:opacity-50',
+        fieldClassName,
+        fieldFocusClassName,
+        'flex h-14 cursor-pointer items-center justify-between gap-2 pr-2 pl-3.5 text-left whitespace-nowrap data-disabled:cursor-not-allowed data-disabled:opacity-50 data-popup-open:border-brand-800 data-popup-open:shadow-[inset_0_0_0_1px_var(--color-brand-800)]',
         className
       )}
       {...props}>
       {children}
       <SelectPrimitive.Icon className='flex'>
-        <LuChevronDown className='size-4 shrink-0 opacity-60' aria-hidden='true' />
+        <MdArrowDropDown className='size-6 shrink-0 text-black/54' aria-hidden='true' />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )
@@ -77,13 +81,13 @@ function SelectContent({
           )}
           {...props}>
           <SelectPrimitive.ScrollUpArrow className='top-0 z-10 flex w-full cursor-default items-center justify-center bg-white py-1'>
-            <LuChevronUp className='size-4' aria-hidden='true' />
+            <LuChevronUp className='size-4 shrink-0' aria-hidden='true' />
           </SelectPrimitive.ScrollUpArrow>
           <SelectPrimitive.List className='max-h-(--available-height) scroll-my-1 overflow-y-auto p-1'>
             {children}
           </SelectPrimitive.List>
           <SelectPrimitive.ScrollDownArrow className='bottom-0 z-10 flex w-full cursor-default items-center justify-center bg-white py-1'>
-            <LuChevronDown className='size-4' aria-hidden='true' />
+            <LuChevronDown className='size-4 shrink-0' aria-hidden='true' />
           </SelectPrimitive.ScrollDownArrow>
         </SelectPrimitive.Popup>
       </SelectPrimitive.Positioner>
@@ -116,7 +120,7 @@ function SelectItem({
       {...props}>
       <span className='absolute right-2 flex size-3.5 items-center justify-center'>
         <SelectPrimitive.ItemIndicator>
-          <LuCheck className='size-4 text-brand-800' aria-hidden='true' />
+          <LuCheck className='size-4 text-brand-800 shrink-0' aria-hidden='true' />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

@@ -5,11 +5,13 @@ import { LuCircleCheck, LuCircleX, LuInfo, LuLoaderCircle, LuTriangleAlert } fro
 import { Toaster as Sonner, toast, type ToasterProps } from 'sonner'
 
 const icons: ToasterProps['icons'] = {
-  success: <LuCircleCheck className='size-4 text-brand-800' aria-hidden='true' />,
-  info: <LuInfo className='size-4 text-brand-800' aria-hidden='true' />,
-  warning: <LuTriangleAlert className='size-4 text-danger' aria-hidden='true' />,
-  error: <LuCircleX className='size-4 text-error' aria-hidden='true' />,
-  loading: <LuLoaderCircle className='size-4 animate-spin text-brand-800' aria-hidden='true' />
+  success: <LuCircleCheck className='size-4 text-brand-800 shrink-0' aria-hidden='true' />,
+  info: <LuInfo className='size-4 text-brand-800 shrink-0' aria-hidden='true' />,
+  warning: <LuTriangleAlert className='size-4 text-danger shrink-0' aria-hidden='true' />,
+  error: <LuCircleX className='size-4 text-error shrink-0' aria-hidden='true' />,
+  loading: (
+    <LuLoaderCircle className='size-4 animate-spin text-brand-800 shrink-0' aria-hidden='true' />
+  )
 }
 
 function Toaster(props: ToasterProps) {

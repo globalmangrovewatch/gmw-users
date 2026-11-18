@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
-import { LuSettings } from 'react-icons/lu'
+import { MdSettings } from 'react-icons/md'
 
 import DownloadDataMenu from '@/components/DownloadDataMenu'
 import ItemDoesntExist from '@/components/ItemDoesntExist'
@@ -108,7 +108,7 @@ function SiteOverview() {
         <ButtonContainer>
           <DownloadDataMenu label={pageLanguage.downloadSiteData} onSelect={handleDownload} />
           <LinkLooksLikeButtonSecondary href={`/sites/${siteId}/edit`}>
-            <LuSettings className='size-4' aria-hidden='true' /> {pageLanguage.settings}
+            <MdSettings className='size-6 shrink-0' aria-hidden='true' /> {pageLanguage.settings}
           </LinkLooksLikeButtonSecondary>
         </ButtonContainer>
       </TitleAndActionContainer>

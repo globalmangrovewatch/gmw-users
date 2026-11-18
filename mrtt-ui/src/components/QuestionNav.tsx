@@ -230,14 +230,14 @@ function QuestionNav({
             <LinkLooksLikeButtonSecondary
               href={`/sites/${siteId}/overview`}
               className={navLinkClassName}>
-              <LuArrowLeft aria-hidden='true' />
+              <LuArrowLeft className='shrink-0' aria-hidden='true' />
               <span className={navButtonTextClassName}>{componentLanguage.returnToSite}</span>
             </LinkLooksLikeButtonSecondary>
             {sectionLink(
               previousSection,
               'previous',
               <>
-                <LuChevronLeft aria-hidden='true' />
+                <LuChevronLeft className='shrink-0' aria-hidden='true' />
                 <span className={navButtonTextClassName}>{componentLanguage.previousSection}</span>
               </>
             )}
@@ -246,7 +246,7 @@ function QuestionNav({
               'next',
               <>
                 <span className={navButtonTextClassName}>{componentLanguage.nextSection}</span>
-                <LuChevronRight aria-hidden='true' />
+                <LuChevronRight className='shrink-0' aria-hidden='true' />
               </>
             )}
           </div>

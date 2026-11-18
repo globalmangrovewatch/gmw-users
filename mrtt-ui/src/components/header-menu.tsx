@@ -24,7 +24,8 @@ function HeaderMenu({ className, align = 'end', ...contentProps }: HeaderMenuPro
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isContactOpen, setIsContactOpen] = useState(false)
   const router = useRouter()
-  const { logout } = useAuth()
+  const { currentUser, logout } = useAuth()
+  const userName = currentUser?.name || currentUser?.email
 
   async function handleLogoutOnClick() {
     setIsMenuOpen(false)
@@ -44,7 +45,7 @@ function HeaderMenu({ className, align = 'end', ...contentProps }: HeaderMenuPro
         <PopoverTrigger
           aria-label='Menu'
           className='mr-2 flex size-10 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none'>
-          <LuMenu className='size-6' aria-hidden='true' />
+          <LuMenu className='size-6 shrink-0' aria-hidden='true' />
         </PopoverTrigger>
         <PopoverContent
           align={align}
@@ -70,7 +71,9 @@ function HeaderMenu({ className, align = 'end', ...contentProps }: HeaderMenuPro
             </div>
           </div>
           <div className='flex flex-col gap-1.25'>
-            <span className={itemClassName}>Profile Placeholder</span>
+            {userName && (
+              <span className={cn(itemClassName, 'normal-case break-words')}>{userName}</span>
+            )}
             <div>
               <Button variant='outline' onClick={handleLogoutOnClick}>
                 {language.header.logout}

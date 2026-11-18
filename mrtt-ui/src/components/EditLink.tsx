@@ -7,7 +7,7 @@ import language from '@/language'
 function EditLink(props: Omit<ComponentProps<typeof LinkLooksLikeButtonSecondary>, 'children'>) {
   return (
     <LinkLooksLikeButtonSecondary {...props}>
-      <LuPencil className='size-4' aria-hidden='true' /> {language.buttons.edit}
+      <LuPencil className='size-4 shrink-0' aria-hidden='true' /> {language.buttons.edit}
     </LinkLooksLikeButtonSecondary>
   )
 }

@@ -37,7 +37,7 @@ function MobileFooter({ className, ...props }: Omit<ComponentProps<'footer'>, 'c
                 'flex flex-col items-center no-underline hover:text-brand-hover min-[599px]:flex-row min-[599px]:gap-2.5 min-[599px]:px-2.5 min-[599px]:py-1.25',
                 isActive ? 'text-[#009b93]' : 'text-text'
               )}>
-              <Icon className='size-6' aria-hidden='true' />
+              <Icon className='size-6 shrink-0' aria-hidden='true' />
               <span>{label}</span>
             </Link>
           )

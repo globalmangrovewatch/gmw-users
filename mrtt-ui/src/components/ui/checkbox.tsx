@@ -34,7 +34,7 @@ function Checkbox({
       {...props}>
       {children ?? (
         <CheckboxIndicator>
-          <LuCheck className='size-3.5' strokeWidth={3} aria-hidden='true' />
+          <LuCheck className='size-3.5 shrink-0' strokeWidth={3} aria-hidden='true' />
         </CheckboxIndicator>
       )}
     </CheckboxPrimitive.Root>

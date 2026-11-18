@@ -80,7 +80,7 @@ function NewOrganizationUser() {
     <ContentWrapper>
       <PageTitle>{pageLanguage.getTitle(organizationName)}</PageTitle>
       <Link href={`/organizations/${organizationId}/users`} className='items-center gap-1'>
-        <LuArrowLeft aria-hidden='true' />
+        <LuArrowLeft className='shrink-0' aria-hidden='true' />
         {pageLanguage.backToUsers}
       </Link>
       <Form {...form}>

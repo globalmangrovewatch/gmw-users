@@ -46,7 +46,7 @@ function DialogContent({ className, children, showClose = true, ...props }: Dial
             data-slot='dialog-close'
             aria-label='Close dialog'
             className='absolute top-4 right-4 flex size-8 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-text hover:bg-brand-100 focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:outline-none'>
-            <LuX className='size-5' aria-hidden='true' />
+            <LuX className='size-5 shrink-0' aria-hidden='true' />
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>

@@ -2,8 +2,10 @@
 
 import { Combobox as ComboboxPrimitive } from '@base-ui/react/combobox'
 import { useRef, type ComponentProps } from 'react'
-import { LuCheck, LuChevronsUpDown, LuX } from 'react-icons/lu'
+import { LuCheck, LuX } from 'react-icons/lu'
+import { MdArrowDropDown } from 'react-icons/md'
 
+import { fieldClassName } from '@/components/ui/input'
 import { cn } from '@/lib/cn'
 
 type ComboboxOption<T extends string = string> = {
@@ -57,7 +59,8 @@ function Combobox<T extends string = string>({
       <ComboboxPrimitive.InputGroup
         data-slot='combobox'
         className={cn(
-          'relative flex h-9 w-full items-center rounded-3xl border border-black/15 bg-white text-sm text-text ring-offset-white focus-within:ring-2 focus-within:ring-brand-800 focus-within:ring-offset-2 has-aria-invalid:border-error has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50',
+          fieldClassName,
+          'relative flex h-14 items-center bg-white focus-within:border-brand-800 focus-within:shadow-[inset_0_0_0_1px_var(--color-brand-800)] has-aria-invalid:border-error has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50',
           className
         )}>
         <ComboboxPrimitive.Input
@@ -67,18 +70,18 @@ function Combobox<T extends string = string>({
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledBy}
           aria-describedby={ariaDescribedBy}
-          className='h-full w-full min-w-0 rounded-3xl border-0 bg-transparent pr-16 pl-3 outline-none placeholder:text-black/60'
+          className='h-full w-full min-w-0 rounded border-0 bg-transparent pr-16 pl-3.5 outline-none placeholder:text-black/60'
         />
         <div className='absolute right-2 flex items-center gap-1'>
           <ComboboxPrimitive.Clear
             aria-label='Clear selection'
             className='flex size-6 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-text hover:bg-brand-100'>
-            <LuX className='size-4' aria-hidden='true' />
+            <LuX className='size-4 shrink-0' aria-hidden='true' />
           </ComboboxPrimitive.Clear>
           <ComboboxPrimitive.Trigger
             aria-label='Show options'
             className='flex size-6 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-text'>
-            <LuChevronsUpDown className='size-4 opacity-60' aria-hidden='true' />
+            <MdArrowDropDown className='size-6 text-black/54 shrink-0' aria-hidden='true' />
           </ComboboxPrimitive.Trigger>
         </div>
       </ComboboxPrimitive.InputGroup>
@@ -98,7 +101,7 @@ function Combobox<T extends string = string>({
                   value={option}
                   className='grid cursor-default grid-cols-[1rem_1fr] items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none data-highlighted:bg-brand-100 data-highlighted:text-brand-900'>
                   <ComboboxPrimitive.ItemIndicator className='col-start-1'>
-                    <LuCheck className='size-4 text-brand-800' aria-hidden='true' />
+                    <LuCheck className='size-4 text-brand-800 shrink-0' aria-hidden='true' />
                   </ComboboxPrimitive.ItemIndicator>
                   <span className='col-start-2'>{option.label}</span>
                 </ComboboxPrimitive.Item>
@@ -169,7 +172,7 @@ function MultiCombobox<T extends string = string>({
                   <ComboboxPrimitive.ChipRemove
                     aria-label={`Remove ${option.label}`}
                     className='flex size-5 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-current hover:bg-black/10'>
-                    <LuX className='size-3.5' aria-hidden='true' />
+                    <LuX className='size-3.5 shrink-0' aria-hidden='true' />
                   </ComboboxPrimitive.ChipRemove>
                 </ComboboxPrimitive.Chip>
               ))}
@@ -206,7 +209,7 @@ function MultiCombobox<T extends string = string>({
                   value={option}
                   className='grid cursor-default grid-cols-[1rem_1fr] items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none data-highlighted:bg-brand-100 data-highlighted:text-brand-900'>
                   <ComboboxPrimitive.ItemIndicator className='col-start-1'>
-                    <LuCheck className='size-4 text-brand-800' aria-hidden='true' />
+                    <LuCheck className='size-4 text-brand-800 shrink-0' aria-hidden='true' />
                   </ComboboxPrimitive.ItemIndicator>
                   <span className='col-start-2'>{option.label}</span>
                 </ComboboxPrimitive.Item>

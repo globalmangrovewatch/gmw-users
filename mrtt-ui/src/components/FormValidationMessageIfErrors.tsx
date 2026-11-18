@@ -22,7 +22,7 @@ function FormValidationMessageIfErrors({
 
   return (
     <Alert role='alert' {...props} variant='destructive'>
-      <LuCircleAlert aria-hidden='true' />
+      <LuCircleAlert className='shrink-0' aria-hidden='true' />
       <AlertTitle>{language.form.validationAlert.title}</AlertTitle>
       <AlertDescription>{language.form.validationAlert.description}</AlertDescription>
     </Alert>
