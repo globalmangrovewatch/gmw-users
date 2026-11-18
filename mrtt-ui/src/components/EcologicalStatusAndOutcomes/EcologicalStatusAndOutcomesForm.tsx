@@ -239,6 +239,7 @@ function EcologicalStatusAndOutcomesForm() {
                     >
                       name={`preAndPostRestorationActivities.${area}`}
                       label={`Area ${label}`}
+                      placeholder='Area'
                     />
                     <FormSelect<
                       RegistrationFormValues,
@@ -246,7 +247,7 @@ function EcologicalStatusAndOutcomesForm() {
                     >
                       name={`preAndPostRestorationActivities.${unit}`}
                       label={`Unit ${label}`}
-                      placeholder='select unit'
+                      placeholder='Select unit'
                       options={unitSelectOptions}
                     />
                     {prePost?.[unit] === 'other' ? (
@@ -256,7 +257,7 @@ function EcologicalStatusAndOutcomesForm() {
                       >
                         name={`preAndPostRestorationActivities.${otherUnit}`}
                         label={`Other unit ${label}`}
-                        placeholder='specify other unit'
+                        placeholder='Specify other unit'
                       />
                     ) : null}
                   </div>

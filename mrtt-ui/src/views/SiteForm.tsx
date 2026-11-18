@@ -144,6 +144,7 @@ function SiteForm() {
             <FormInput<SiteFormValues, 'site_name'>
               name='site_name'
               label={pageLanguage.labelName}
+              placeholder={pageLanguage.labelName}
               required
             />
           </QuestionWrapper>

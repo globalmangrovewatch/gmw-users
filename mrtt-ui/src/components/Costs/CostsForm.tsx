@@ -157,7 +157,7 @@ function CostsForm() {
               name='projectInterventionFunding.other'
               label='Other finance mechanism'
               labelClassName='sr-only'
-              placeholder='please state other'
+              placeholder='Please state other'
               className='mt-4 max-w-80'
             />
           ) : null}
@@ -205,7 +205,7 @@ function CostsForm() {
                   name='costOfProjectActivities.cost'
                   label='Total cost'
                   labelClassName='sr-only'
-                  placeholder='enter cost'
+                  placeholder='Enter cost'
                   inputMode='decimal'
                   defaultValue={0}
                   className='w-52'
@@ -214,7 +214,7 @@ function CostsForm() {
                   name='costOfProjectActivities.currency'
                   label='Total cost currency'
                   labelClassName='sr-only'
-                  placeholder='currency'
+                  placeholder='Currency'
                   options={currencyOptions}
                   className='w-32'
                 />

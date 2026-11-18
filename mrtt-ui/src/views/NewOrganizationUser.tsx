@@ -89,6 +89,7 @@ function NewOrganizationUser() {
             name='email'
             type='email'
             label={pageLanguage.email}
+            placeholder='Email'
             required
           />
           <FormRadioGroup<NewOrganizationUserValues, 'role'>

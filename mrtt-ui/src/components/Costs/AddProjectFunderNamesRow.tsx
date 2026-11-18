@@ -55,7 +55,7 @@ function AddProjectFunderNamesRow({
         <Input
           id={`${id}-name`}
           className='max-w-60'
-          placeholder='name'
+          placeholder='Name'
           value={funderName}
           onChange={(event) => setFunderName(event.target.value)}
         />
@@ -67,7 +67,7 @@ function AddProjectFunderNamesRow({
           value={funderType || null}
           onValueChange={(next) => setFunderType(next ?? '')}>
           <SelectTrigger id={`${id}-type`} className='max-w-60'>
-            <SelectValue placeholder='type' />
+            <SelectValue placeholder='Type' />
           </SelectTrigger>
           <SelectContent>
             {funderTypeOptions.map((option) => (

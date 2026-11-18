@@ -70,7 +70,7 @@ function AddMangroveAssociatedSpeciesRow({
         value={value || null}
         onValueChange={(next) => onChange(next ?? '')}>
         <SelectTrigger id={`${id}-${key}`} className='max-w-60'>
-          <SelectValue placeholder={label.toLowerCase()} />
+          <SelectValue placeholder={label} />
         </SelectTrigger>
         <SelectContent>
           {options.map((option) => (
@@ -89,6 +89,7 @@ function AddMangroveAssociatedSpeciesRow({
       <Input
         id={`${id}-${key}`}
         className='max-w-60'
+        placeholder={label}
         value={value}
         onChange={(event) => onChange(event.target.value)}
       />

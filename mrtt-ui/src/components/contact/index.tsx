@@ -112,15 +112,22 @@ function ContactForm({ isOpen, setIsOpen }: ContactFormProps) {
             onSubmit={form.handleSubmit(handleSubmit)}
             noValidate
             className='flex flex-col gap-4'>
-            <FormInput<ContactFormValues, 'name'> name='name' label='Name' required />
+            <FormInput<ContactFormValues, 'name'>
+              name='name'
+              label='Name'
+              placeholder='Name'
+              required
+            />
             <FormInput<ContactFormValues, 'organization'>
               name='organization'
               label='Organization'
+              placeholder='Organization'
             />
             <FormInput<ContactFormValues, 'email'>
               name='email'
               type='email'
               label='Email'
+              placeholder='Email'
               autoComplete='email'
               required
             />
@@ -134,6 +141,7 @@ function ContactForm({ isOpen, setIsOpen }: ContactFormProps) {
             <FormTextarea<ContactFormValues, 'message'>
               name='message'
               label='Message'
+              placeholder='Message'
               rows={4}
               required
             />

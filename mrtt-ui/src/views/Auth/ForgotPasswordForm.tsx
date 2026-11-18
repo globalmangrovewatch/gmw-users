@@ -61,6 +61,7 @@ function ForgotPasswordForm() {
             name='email'
             type='email'
             label={pageLanguage.email}
+            placeholder={pageLanguage.email}
             autoComplete='email'
             required
           />

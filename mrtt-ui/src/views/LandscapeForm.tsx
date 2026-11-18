@@ -152,6 +152,7 @@ function LandscapeForm() {
             <FormInput<LandscapeFormValues, 'landscape_name'>
               name='landscape_name'
               label={pageLanguage.labelName}
+              placeholder={pageLanguage.labelName}
               required
             />
             <FormField

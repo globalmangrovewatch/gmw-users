@@ -57,7 +57,7 @@ const formalManagementAreaInput = (label: string, labelClassName?: string) => (
     name='nameOfFormalManagementArea'
     label={label}
     labelClassName={labelClassName}
-    placeholder='enter name'
+    placeholder='Enter name'
     className='max-w-80'
   />
 )

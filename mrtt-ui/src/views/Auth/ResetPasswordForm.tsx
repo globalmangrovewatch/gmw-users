@@ -81,6 +81,7 @@ function ResetPasswordForm() {
             name='password'
             type='password'
             label={pageLanguage.password}
+            placeholder={pageLanguage.password}
             autoComplete='new-password'
             required
           />
@@ -88,6 +89,7 @@ function ResetPasswordForm() {
             name='confirmationPassword'
             type='password'
             label={pageLanguage.confirmPassword}
+            placeholder={pageLanguage.confirmPassword}
             autoComplete='new-password'
             required
           />

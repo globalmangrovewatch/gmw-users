@@ -14,9 +14,9 @@ type AddPhysicalMeasurementRowProps = {
 }
 
 const fields = [
-  { key: 'type', label: 'Measurement type', placeholder: 'type' },
-  { key: 'value', label: 'Value', placeholder: 'value' },
-  { key: 'unit', label: 'Unit', placeholder: 'unit' }
+  { key: 'type', label: 'Measurement type', placeholder: 'Type' },
+  { key: 'value', label: 'Value', placeholder: 'Value' },
+  { key: 'unit', label: 'Unit', placeholder: 'Unit' }
 ] as const
 
 type FieldKey = (typeof fields)[number]['key']

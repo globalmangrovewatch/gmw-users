@@ -16,7 +16,7 @@ function PercentageSplitOfActivitiesRow({ index, label }: PercentageSplitOfActiv
       name={`percentageSplitOfActivities.${index}.percentage`}
       label={label}
       labelClassName='font-bold'
-      placeholder='percentage'
+      placeholder='Percentage'
       inputMode='decimal'
       className='mt-4 max-w-60'
     />

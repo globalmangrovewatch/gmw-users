@@ -133,6 +133,7 @@ function OrganizationForm() {
           <FormInput<OrganizationFormValues, 'organization_name'>
             name='organization_name'
             label={pageLanguage.labelName}
+            placeholder={pageLanguage.labelName}
             required
           />
           <FormField

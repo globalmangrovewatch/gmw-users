@@ -55,7 +55,7 @@ function ProjectFunderNamesRow({ index, label, onDelete }: ProjectFunderNamesRow
           name={`${name}.funderType`}
           label={`${label}: funder type`}
           labelClassName='sr-only'
-          placeholder='type'
+          placeholder='Type'
           options={funderTypeOptions}
           className='w-60'
         />
