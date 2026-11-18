@@ -287,7 +287,7 @@ function EcologicalStatusAndOutcomesForm() {
                 question={questions.causeOfLowSurvival.question}
                 shouldAddOtherOptionWithClarification
               />
-              <ErrorText>{errors.causeOfLowSurvival?.selectedValues?.message}</ErrorText>
+              <ErrorText>{errors.causeOfLowSurvival?.message}</ErrorText>
             </FormQuestionDiv>
           </>
         ) : null}

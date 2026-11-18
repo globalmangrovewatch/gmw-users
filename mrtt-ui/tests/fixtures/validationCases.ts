@@ -238,9 +238,10 @@ const countryAndAreaCases: ValidationCase[] = [
     expected: { countries: 'countries field must have at least 1 items' }
   },
   {
+    // The form starts with no countries (undefined), so this is what saving an untouched 1.2 sees.
     name: 'countries: not answered',
     values: { ...projectDetails, countries: undefined },
-    expected: { countries: null }
+    expected: { countries: 'countries field must have at least 1 items' }
   },
   {
     name: 'countries: null',

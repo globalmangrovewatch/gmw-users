@@ -74,7 +74,7 @@ function RestorationAimsForm() {
               question={questions[fieldName].question}
               showAsterisk={required}
             />
-            <ErrorText>{errors[fieldName]?.selectedValues?.message}</ErrorText>
+            <ErrorText>{errors[fieldName]?.message}</ErrorText>
           </FormQuestionDiv>
         ))}
       </FormLayout>
