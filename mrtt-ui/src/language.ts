@@ -110,11 +110,15 @@ const pages = {
   organizations: {
     allData: 'All Data',
     downloadOrganizationSites: 'Download Data',
+    filterCountry: 'Country',
+    filterRegion: 'Region',
     manageUsers: 'Manage users',
     newOrganizationButton: 'New Org',
     noOtherOrganizations: 'There are no other organizations',
+    noMatches: 'No organizations match your search',
     noYourOrganizations: 'You dont have any organizations',
     publicData: 'Public Data',
+    searchPlaceholder: 'Search organizations',
     title: 'Organizations',
     titleOtherOrganizations: 'Other Organizations',
     titleYourOrganizations: 'Your Organizations'

@@ -1,9 +1,12 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 
 import DownloadDataMenu from '@/components/DownloadDataMenu'
 import LoadingIndicator from '@/components/LoadingIndicator'
+import { Combobox } from '@/components/ui/combobox'
+import { Input } from '@/components/ui/input'
 import {
   ButtonContainer,
   Card,
@@ -25,7 +28,12 @@ import USER_ROLES from '@/constants/userRoles'
 import { useLoadErrorToast } from '@/hooks/useLoadErrorToast'
 import language from '@/language'
 import { saveBlob } from '@/lib/download'
-import { downloadOrganizationReport, organizationQueries } from '@/queries/organizations'
+import {
+  countryQueries,
+  downloadOrganizationReport,
+  organizationQueries,
+  regionQueries
+} from '@/queries/organizations'
 import type { Id } from '@/types/api'
 
 const pageLanguage = language.pages.organizations
@@ -36,9 +44,37 @@ const handleDownload = (organizationId: Id) => (publicOnly: boolean) => {
     .catch(() => toast.error(language.error.apiLoad))
 }
 
+// Wait for a pause in typing before searching, so each keystroke doesn't send a request.
+const SEARCH_DELAY_MS = 300
+
+const useDebouncedValue = <T,>(value: T, delay: number) => {
+  const [debounced, setDebounced] = useState(value)
+  useEffect(() => {
+    const timeout = setTimeout(() => setDebounced(value), delay)
+    return () => clearTimeout(timeout)
+  }, [value, delay])
+  return debounced
+}
+
 function Organizations() {
-  const { data: organizations = [], isPending, error } = useQuery(organizationQueries.list())
+  const [search, setSearch] = useState('')
+  const [region, setRegion] = useState<string | null>(null)
+  const [country, setCountry] = useState<string | null>(null)
+  const q = useDebouncedValue(search, SEARCH_DELAY_MS)
+  const isFiltered = Boolean(q.trim() || region || country)
+
+  const {
+    data: organizations = [],
+    isPending,
+    error
+  } = useQuery({
+    ...organizationQueries.list({ q, region: region ?? undefined, country: country ?? undefined }),
+    // Keep showing the last results while the next filter loads, instead of a blank page.
+    placeholderData: keepPreviousData
+  })
   useLoadErrorToast(error)
+  const { data: regions = [] } = useQuery(regionQueries.list())
+  const { data: countries = [] } = useQuery(countryQueries.list())
   const yourOrganizations = organizations.filter((organization) => organization.role)
   const otherOrganizations = organizations.filter((organization) => !organization.role)
 
@@ -53,6 +89,30 @@ function Organizations() {
         </LinkLooksLikeButtonPrimary>
       </TitleAndActionContainer>
       <PaddedSection>
+        <div className='grid gap-4 sm:grid-cols-3'>
+          <Input
+            type='search'
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder={pageLanguage.searchPlaceholder}
+            aria-label={pageLanguage.searchPlaceholder}
+          />
+          <Combobox
+            options={regions.map((name) => ({ label: name, value: name }))}
+            value={region}
+            onChange={setRegion}
+            placeholder={pageLanguage.filterRegion}
+            aria-label={pageLanguage.filterRegion}
+          />
+          <Combobox
+            options={countries.map(({ name, iso }) => ({ label: name, value: iso }))}
+            value={country}
+            onChange={setCountry}
+            placeholder={pageLanguage.filterCountry}
+            aria-label={pageLanguage.filterCountry}
+          />
+        </div>
+
         <H2>{pageLanguage.titleYourOrganizations}</H2>
         {yourOrganizations.length ? (
           <UlUndecorated>
@@ -76,7 +136,7 @@ function Organizations() {
             ))}
           </UlUndecorated>
         ) : (
-          pageLanguage.noYourOrganizations
+          <p>{isFiltered ? pageLanguage.noMatches : pageLanguage.noYourOrganizations}</p>
         )}
 
         <H2>{pageLanguage.titleOtherOrganizations}</H2>
@@ -87,7 +147,7 @@ function Organizations() {
             ))}
           </UlAlternating>
         ) : (
-          pageLanguage.noOtherOrganizations
+          <p>{isFiltered ? pageLanguage.noMatches : pageLanguage.noOtherOrganizations}</p>
         )}
       </PaddedSection>
     </ContentWrapper>
