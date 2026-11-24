@@ -35,6 +35,8 @@ export type Organization = {
   /** The current user's role; absent for organizations the user does not belong to. */
   role?: OrganizationRole | null
   countries?: Pick<Country, 'location_id' | 'iso' | 'name'>[]
+  /** M49 regions of the organization's countries, A to Z. */
+  regions?: string[]
 }
 
 /** A page of a paginated list, e.g. /organizations. */
