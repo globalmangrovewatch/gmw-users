@@ -163,6 +163,54 @@ describe('Organizations', () => {
     )
     expect(screen.getByText('Other org')).toBeInTheDocument()
   })
+
+  it('searches organizations by name and filters them by region and country', async () => {
+    const user = userEvent.setup()
+    responses['/regions'] = ['Africa', 'Europe']
+    responses['/countries'] = [
+      { location_id: 'kenya', iso: 'KEN', name: 'Kenya', region: 'Africa' },
+      { location_id: 'spain', iso: 'ESP', name: 'Spain', region: 'Europe' }
+    ]
+    responses['/organizations?page=1&per_page=100'] = organizationsPage([
+      { id: 4, organization_name: 'Mangrove trust' },
+      { id: 5, organization_name: 'Coastal org' }
+    ])
+    responses['/organizations?page=1&per_page=100&q=mang'] = organizationsPage([
+      { id: 4, organization_name: 'Mangrove trust' }
+    ])
+    responses['/organizations?page=1&per_page=100&q=mang&region=Africa'] = organizationsPage([
+      { id: 4, organization_name: 'Mangrove trust' }
+    ])
+    responses['/organizations?page=1&per_page=100&q=mang&region=Africa&country=ESP'] =
+      organizationsPage([])
+    renderView(<Organizations />)
+    const pageLanguage = language.pages.organizations
+
+    expect(await screen.findByText('Coastal org')).toBeInTheDocument()
+
+    await user.type(screen.getByRole('searchbox', { name: pageLanguage.searchPlaceholder }), 'mang')
+    await waitFor(() => expect(screen.queryByText('Coastal org')).not.toBeInTheDocument())
+    expect(screen.getByText('Mangrove trust')).toBeInTheDocument()
+    // Debounced: one request for the whole word, not one per letter.
+    expect(
+      calls('GET').filter(({ path }) => path.startsWith('/organizations?page=1&per_page=100&q='))
+    ).toHaveLength(1)
+
+    await user.click(screen.getByRole('combobox', { name: pageLanguage.filterRegion }))
+    await user.click(await screen.findByRole('option', { name: 'Africa' }))
+    await waitFor(() =>
+      expect(calls('GET').map(({ path }) => path)).toContain(
+        '/organizations?page=1&per_page=100&q=mang&region=Africa'
+      )
+    )
+
+    await user.click(screen.getByRole('combobox', { name: pageLanguage.filterCountry }))
+    await user.click(await screen.findByRole('option', { name: 'Spain' }))
+    expect(await screen.findAllByText(pageLanguage.noMatches)).toHaveLength(2)
+    expect(calls('GET').map(({ path }) => path)).toContain(
+      '/organizations?page=1&per_page=100&q=mang&region=Africa&country=ESP'
+    )
+  })
 })
 
 describe('OrganizationForm', () => {
