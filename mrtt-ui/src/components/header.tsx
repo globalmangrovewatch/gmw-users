@@ -18,7 +18,7 @@ function Header({ isLanding = false, className, ...props }: HeaderProps) {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 z-3 flex h-header w-screen items-center justify-between bg-secondary text-white',
+        'fixed top-0 left-0 z-3 flex h-header w-full items-center justify-between bg-secondary text-white',
         className
       )}
       {...props}>

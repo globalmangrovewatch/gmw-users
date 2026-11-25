@@ -297,6 +297,16 @@ const sectionPrivacy = {
   public: 'Public'
 } as const
 
+const sidebar = {
+  trainingEnvironment: 'Training env.'
+} as const
+
+const trainingEnvironment = {
+  title: 'Training environment',
+  description:
+    'You are in the training environment. Sites, landscapes and organizations created here are for practice and do not affect real data. Turn it off from the sidebar.'
+} as const
+
 export default {
   buttons,
   error,
@@ -307,5 +317,7 @@ export default {
   projectAreaMap,
   questionNav,
   sectionPrivacy,
-  success
+  sidebar,
+  success,
+  trainingEnvironment
 }

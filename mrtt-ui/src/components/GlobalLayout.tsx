@@ -4,6 +4,7 @@ import type { ComponentProps } from 'react'
 
 import Header from '@/components/header'
 import MobileFooter from '@/components/MobileFooter/MobileFooter'
+import TrainingEnvironmentFrame from '@/components/TrainingEnvironmentFrame'
 import { useAuth } from '@/hooks/useAuth'
 import { cn } from '@/lib/cn'
 
@@ -26,11 +27,13 @@ function GlobalLayout({ children, isLanding = false, className, ...props }: Glob
 
   return (
     // The nav sits on the left from 599px (theme.layout.mediaQueryDesktop) up.
-    <div className={cn('flex flex-col min-[599px]:ml-nav', className)} {...props}>
-      <Header />
-      <main className='mt-header mb-5'>{children}</main>
-      {isLoggedIn && <MobileFooter />}
-    </div>
+    <TrainingEnvironmentFrame>
+      <div className={cn('flex flex-col min-[599px]:ml-nav', className)} {...props}>
+        <Header />
+        <main className='mt-header mb-5'>{children}</main>
+        {isLoggedIn && <MobileFooter />}
+      </div>
+    </TrainingEnvironmentFrame>
   )
 }
 

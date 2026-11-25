@@ -6,6 +6,7 @@ import type { ComponentProps } from 'react'
 import type { IconType } from 'react-icons'
 import { LuGlobe, LuMap, LuUsers } from 'react-icons/lu'
 
+import SidebarSettings from '@/components/MobileFooter/SidebarSettings'
 import { cn } from '@/lib/cn'
 
 const links: { href: string; label: string; Icon: IconType }[] = [
@@ -21,11 +22,11 @@ function MobileFooter({ className, ...props }: Omit<ComponentProps<'footer'>, 'c
   return (
     <footer
       className={cn(
-        'fixed bottom-0 z-2 flex w-full justify-around border-t border-[#009b93] bg-white py-0.5 uppercase min-[599px]:top-header min-[599px]:left-0 min-[599px]:w-nav min-[599px]:flex-col min-[599px]:justify-start min-[599px]:border-t-0 min-[599px]:border-r',
+        'fixed bottom-0 z-2 flex w-full justify-around border-t border-[#009b93] bg-white py-0.5 uppercase min-[599px]:top-header min-[599px]:left-0 min-[599px]:w-nav min-[599px]:flex-col min-[599px]:justify-between min-[599px]:border-t-0 min-[599px]:border-r min-[599px]:py-2',
         className
       )}
       {...props}>
-      <nav aria-label='Main' className='contents'>
+      <nav aria-label='Main' className='contents min-[599px]:flex min-[599px]:flex-col'>
         {links.map(({ href, label, Icon }) => {
           const isActive = pathname.startsWith(href)
           return (
@@ -43,6 +44,7 @@ function MobileFooter({ className, ...props }: Omit<ComponentProps<'footer'>, 'c
           )
         })}
       </nav>
+      <SidebarSettings />
     </footer>
   )
 }
