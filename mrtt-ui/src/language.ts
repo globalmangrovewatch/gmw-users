@@ -304,7 +304,22 @@ const sidebar = {
 const trainingEnvironment = {
   title: 'Training environment',
   description:
-    'You are in the training environment. Sites, landscapes and organizations created here are for practice and do not affect real data. Turn it off from the sidebar.'
+    'You are in the training environment. Sites, landscapes and organizations created here are for practice and do not affect real data. Turn it off from the sidebar.',
+  dialog: {
+    purposeTitle: 'Purpose of the sandbox environment',
+    purpose:
+      'The training environment is a sandbox for learning the MRTT. It works like the real tool, but sites, landscapes and organizations you create or edit here are kept apart from real data, so you can practise recording restoration projects, try out the forms and run training sessions without affecting anyone else. When you are ready to record real projects, leave the training environment from the sidebar.',
+    documentationTitle: 'Relevant documentation',
+    userGuidesTitle: 'MRTT user guides',
+    userGuides:
+      'give step-by-step instructions for entering data, describe the question types and give an overview of each question.',
+    userGuideButton: 'User guide',
+    aboutTitle: 'About the MRTT',
+    about: 'explains what the tool is for and what it records across a restoration project.',
+    aboutButton: 'Learn more',
+    access: 'Access the training environment',
+    leave: 'Leave the training environment'
+  }
 } as const
 
 export default {

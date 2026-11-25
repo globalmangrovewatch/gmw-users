@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import SidebarSettings from '@/components/MobileFooter/SidebarSettings'
@@ -63,14 +63,49 @@ describe('TrainingEnvironmentFrame', () => {
 })
 
 describe('SidebarSettings', () => {
-  it('switches training mode from the sidebar', async () => {
+  const dialog = language.trainingEnvironment.dialog
+
+  it('opens the training dialog from the switch and only changes mode from its button', async () => {
     const user = userEvent.setup()
     render(<SidebarSettings />)
     const toggle = screen.getByRole('switch', { name: language.sidebar.trainingEnvironment })
 
     expect(toggle).not.toBeChecked()
     await user.click(toggle)
-    expect(toggle).toBeChecked()
+    const dialogElement = await screen.findByRole('dialog', {
+      name: language.trainingEnvironment.title
+    })
+    expect(within(dialogElement).getByText(dialog.purpose)).toBeInTheDocument()
+    expect(
+      within(dialogElement).getByRole('link', { name: dialog.userGuideButton })
+    ).toHaveAttribute('target', '_blank')
+    // Opening the dialog doesn't switch yet.
+    expect(isTrainingMode()).toBe(false)
+    expect(toggle).not.toBeChecked()
+
+    await user.click(within(dialogElement).getByRole('button', { name: dialog.access }))
     expect(isTrainingMode()).toBe(true)
+    expect(toggle).toBeChecked()
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+  })
+
+  it('leaves training mode from the dialog', async () => {
+    const user = userEvent.setup()
+    act(() => setTrainingMode(true))
+    render(<SidebarSettings />)
+
+    await user.click(screen.getByRole('switch', { name: language.sidebar.trainingEnvironment }))
+    await user.click(await screen.findByRole('button', { name: dialog.leave }))
+    expect(isTrainingMode()).toBe(false)
+  })
+
+  it('closes without changing mode', async () => {
+    const user = userEvent.setup()
+    render(<SidebarSettings />)
+
+    await user.click(screen.getByRole('switch', { name: language.sidebar.trainingEnvironment }))
+    await user.click(await screen.findByRole('button', { name: 'Close dialog' }))
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    expect(isTrainingMode()).toBe(false)
   })
 })
