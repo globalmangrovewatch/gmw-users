@@ -1,7 +1,7 @@
 'use client'
 
 import { Select as SelectPrimitive } from '@base-ui/react/select'
-import type { ComponentProps } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 import { LuCheck, LuChevronDown, LuChevronUp } from 'react-icons/lu'
 import { MdArrowDropDown } from 'react-icons/md'
 
@@ -22,11 +22,12 @@ function SelectValue({ className, ...props }: ComponentProps<typeof SelectPrimit
   )
 }
 
-function SelectTrigger({
-  className,
-  children,
-  ...props
-}: ComponentProps<typeof SelectPrimitive.Trigger>) {
+type SelectTriggerProps = ComponentProps<typeof SelectPrimitive.Trigger> & {
+  /** Replaces the default drop-down arrow. */
+  icon?: ReactNode
+}
+
+function SelectTrigger({ className, children, icon, ...props }: SelectTriggerProps) {
   return (
     <SelectPrimitive.Trigger
       data-slot='select-trigger'
@@ -39,7 +40,7 @@ function SelectTrigger({
       {...props}>
       {children}
       <SelectPrimitive.Icon className='flex'>
-        <MdArrowDropDown className='size-6 shrink-0 text-black/54' aria-hidden='true' />
+        {icon ?? <MdArrowDropDown className='size-6 shrink-0 text-black/54' aria-hidden='true' />}
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )

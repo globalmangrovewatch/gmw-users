@@ -1,5 +1,6 @@
 import { getAuthToken } from '@/lib/auth/token'
 import { env } from '@/lib/env'
+import { getApiUrl } from '@/lib/trainingMode'
 
 // A non-2xx response. `body` is the parsed JSON error (e.g. `{ error: 'Record not found' }`),
 // or the raw text when the response is not JSON.
@@ -96,8 +97,8 @@ export function createClient({ baseUrl, auth = false, credentials }: ClientConfi
 
 export type ApiClient = ReturnType<typeof createClient>
 
-// The MRTT API, with the signed-in user's token.
-export const api = createClient({ baseUrl: () => env.NEXT_PUBLIC_API_URL, auth: true })
+// The MRTT API, with the signed-in user's token. In training mode it is the training API.
+export const api = createClient({ baseUrl: getApiUrl, auth: true })
 
 // The MRTT auth endpoints (sign in, sign up, password reset), which take no token.
 export const authApi = createClient({ baseUrl: () => env.NEXT_PUBLIC_AUTH_URL })
